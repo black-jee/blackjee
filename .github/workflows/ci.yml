@@ -1,5 +1,7 @@
 name: CI
 
+# Run deterministic quality gates against the formatted source tree.
+
 on:
   pull_request:
   push:
