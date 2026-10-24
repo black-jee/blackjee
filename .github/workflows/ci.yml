@@ -67,5 +67,11 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/001_reconstructed_table_shapes.sql
       - name: Replay reconstructed RLS policies
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/002_reconstructed_rls_policies.sql
+      - name: Replay reconstructed RPC definitions
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/003_reconstructed_rpc_definitions.sql
+      - name: Replay reconstructed access grants
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/004_reconstructed_access_grants.sql
       - name: Assert reconstructed catalog
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/001_reconstruction_catalog_smoke.sql
+      - name: Assert reconstructed RPC and access security
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/003_security_regression_assertions.sql
