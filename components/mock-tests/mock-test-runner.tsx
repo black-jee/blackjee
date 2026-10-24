@@ -73,7 +73,7 @@ export function MockTestRunner({ shifts, activeAttempts }: { shifts: Shift[]; ac
   const [error, setError] = useState<string | null>(null);
   const submitLock = useRef(false);
 
-  const questions = attempt?.questions ?? [];
+  const questions = useMemo(() => attempt?.questions ?? [], [attempt]);
   const current = questions[currentIndex];
   const options = useMemo(() => toPyqOptions(current?.options), [current]);
   const attemptedCount = questions.filter((question) => Boolean(answers[question.id]?.trim())).length;
