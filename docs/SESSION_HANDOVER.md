@@ -38,6 +38,10 @@
 - Vercel project linkage, active deployed commit, environment-variable presence, and production smoke behavior remain unverified. Never print secret values.
 - The source archive lists 75 question slots (47 marked content_added, 28 needs_review); reconcile each against an authoritative source before import or publication.
 
+## Single exact next action
+
+Continue free recovery searches for the seven missing applied migration bodies using the owner's local Termux folders, older clones, archives, and backups. If no original is found, prepare a separately labelled reconstruction for review; do not touch the live Supabase database or create paid infrastructure.
+
 ## Safe operating rules
 
 1. Treat live Supabase checks as read-only until a separately reviewed change is explicitly approved.
