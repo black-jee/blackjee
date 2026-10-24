@@ -320,7 +320,7 @@ begin
 
   -- Check representative high-impact nullability/defaults against the live
   -- catalog snapshot. Expand this list as more metadata is recovered.
-  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, cols.column_name), ', ')
+  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, expected.column_name), ', ')
     into missing
   from (values
     ('public','jee_pyq_questions','id','NO','gen_random_uuid()'),
