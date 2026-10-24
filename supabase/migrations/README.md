@@ -11,9 +11,12 @@ Known applied baseline versions:
 - `20261024081603_secure_daily_attempt_sessions`
 - `20261024081731_restrict_anon_rpc_execution`
 
-The first new repository-managed migration is:
+The repository-managed migrations added so far are:
 
 - `20261024095050_harden_public_schedule_rpc_and_index.sql`
+- `20261024100007_daily_challenge_question_assets.sql`
+- `20261024100245_pyq_question_image_paths.sql`
+- `20261024100341_question_image_path_read_grants.sql`
 
 ## Important current limitation
 
