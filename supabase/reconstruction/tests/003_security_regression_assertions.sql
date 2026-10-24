@@ -53,6 +53,19 @@ BEGIN
     RAISE EXCEPTION 'Privileged RPC attributes/ACL mismatch: %', v_missing;
   END IF;
 
+  -- The anonymous schedule RPC must remain invoker-rights and metadata-only.
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_proc p
+    WHERE p.pronamespace = 'public'::regnamespace
+      AND p.proname = 'get_current_daily_challenge'
+      AND NOT p.prosecdef
+      AND has_function_privilege('anon', p.oid, 'EXECUTE')
+      AND pg_get_functiondef(p.oid) NOT LIKE '%statement%'
+      AND pg_get_functiondef(p.oid) NOT LIKE '%options%'
+  ) THEN
+    RAISE EXCEPTION 'Anonymous daily-challenge schedule RPC is missing or exposes question content';
+  END IF;
+
   -- Admin authoring/review RPCs must keep a server-managed role check.
   SELECT string_agg(e.name, ', ' ORDER BY e.name)
   INTO v_missing
@@ -154,4 +167,4 @@ BEGIN
 END;
 $security$;
 
-SELECT 'PASS: privileged RPC attributes, admin guards, private-schema isolation, and column grants' AS security_regression_assertions;
+SELECT 'PASS: privileged RPC attributes, schedule RPC, admin guards, private-schema isolation, and column grants' AS security_regression_assertions;
