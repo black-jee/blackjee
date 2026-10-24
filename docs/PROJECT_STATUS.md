@@ -63,6 +63,13 @@
 - **Verified:** prescribed checks passed and evidence is recorded.
 - **Blocked:** missing source, permissions, configuration or authoritative content prevents safe completion.
 
+## Continuity implementation — 2026-10-24
+
+- **Implemented:** added `docs/CONTINUITY_SYSTEM_PROMPT.md`, `docs/SESSION_HANDOVER.md`, and `docs/VERIFICATION_LOG.md`; created `scripts/check-continuity.mjs` to require core continuity files, detect duplicate permanent task IDs, and ensure the active handover task exists in the ledger; added the validator to GitHub Actions CI.
+- **Verified:** the Supabase migration API currently returns 20 applied versions. Prior docs that reported 21 were inconsistent and have been corrected where found.
+- **CI warning:** run `40090784800` for commit `ec2f7ce1bfb25a0b1e96f3168ab82959c8a5af1e` failed at Prettier format check; lint, typecheck, Vitest and Playwright passed, and build was skipped. Current continuity changes require a fresh CI run before the system can be marked tested.
+- **Not yet verified:** continuity validator execution and latest full CI, authenticated student/admin journeys, Vercel linkage/runtime, clean isolated migration replay.
+
 ## Continued work — 2026-10-24
 
 - **Implemented (runtime verification pending):** protected `/admin/pyq` authoring and review workspace; Zod-validated server actions call database-owned admin RPCs; the dashboard lists recent question metadata without selecting private answer-key records; draft save, approve-as-draft, publish-with-confirmation, and unpublish controls are available.
