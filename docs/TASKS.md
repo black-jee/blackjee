@@ -18,8 +18,8 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **Status:** IN_PROGRESS
 - **Acceptance:** clean isolated database replay reproduces target schema, constraints, grants, RLS, functions, and indexes; diff against live target reviewed.
 - **Risk:** six original migration bodies absent from Git; live history has 20 versions. Repository migration directory has version drift: live `20261024112132_require_pyq_source_page_before_publish` is missing while `20261024112500` and `20261024120000` files are not recorded as applied.
-- **Evidence:** read-only comparison documented in [`docs/MIGRATION_RECONCILIATION.md`](./MIGRATION_RECONCILIATION.md); public columns, partial routine definitions, public policies and indexes inspected. CI run `40092001380` passed all configured checks.
-- **Next:** complete schema/grant/storage inventory and retrieve authoritative historical migration bodies; build and replay a reviewed chain only in isolated staging. Do not reset or alter the target project.
+- **Evidence:** read-only comparison documented in [`docs/MIGRATION_RECONCILIATION.md`](./MIGRATION_RECONCILIATION.md); public columns, constraints/FKs, RLS, public policies, table grants, partial routine definitions/ACLs, private tables, triggers and storage bucket/policy counts inspected. No app triggers, private-schema policies or storage buckets were found. The reference repo has a different migration sequence and is not authoritative for the six missing versioned bodies. CI run `40092920061` passed all configured checks on its tested commit; later documentation changes have a new run pending.
+- **Next:** locate authoritative historical migration bodies and resolve the `20261024112132` / `20261024112500` / `20261024120000` drift. Obtain owner approval for possible Supabase development-branch charges or use a separately provisioned local disposable PostgreSQL instance; then replay and compare in isolation. Never reset or alter the target project.
 
 ## P1 — critical workflows and deployment confidence
 
