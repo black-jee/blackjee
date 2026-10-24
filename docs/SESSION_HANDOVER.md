@@ -25,15 +25,15 @@
 
 ## Single exact next action
 
-Continue BJ-DB-001 by completing a full read-only inventory of constraints, foreign keys, triggers, grants, private-schema objects, and storage policies; then retrieve authoritative historical migration bodies if available. Resolve the live `20261024112132` versus repository `20261024112500` / `20261024120000` drift before drafting a canonical reconstruction chain. Replay only in isolated staging; do not reset or alter the target Supabase project.
+Continue BJ-DB-001 by locating authoritative historical migration bodies and resolving the live `20261024112132` versus repository `20261024112500` / `20261024120000` drift. Initial read-only inventory now covers public columns, constraints/FKs, public policies, table grants, function ACLs/definitions (partial), RLS status, private tables, triggers, and storage bucket/policy counts. No application triggers, explicit private-schema policies, or storage buckets were found. Before creating an isolated Supabase development branch, obtain owner approval for any possible usage charges; alternatively use a separately provisioned local disposable PostgreSQL environment. Never reset or alter target Supabase.
 
 ## Verification steps
 
-1. Re-query Supabase migration history and enumerate the six missing baseline versions from the live migration table.
-2. Inspect schema-only exports and function/policy/grant definitions; map each live object to the migration that created it where possible.
-3. Reconstruct missing SQL in a separate branch or reviewable files without changing the target database.
-4. Provision an isolated disposable database and test ordered migration replay; compare resulting schema, RLS, grants, functions, and indexes.
-5. Update BJ-DB-001, `docs/DATABASE_PLAN.md`, and this handover with evidence; request owner approval before any risky target-project migration.
+1. Migration history re-queried: 20 applied versions, including six missing baseline bodies.
+2. Read-only inventory findings recorded in `docs/MIGRATION_RECONCILIATION.md`; no target DDL/data writes were performed.
+3. Search the legacy/reference repository only for comparison; it contains a different migration sequence and is not authoritative for the new target's six versioned bodies.
+4. Resolve version drift and locate authoritative history/backup. Provision isolated replay only after owner approves any possible Supabase branch costs, or use a local disposable PostgreSQL instance.
+5. Run complete replay and schema/security diff before proposing changes. Latest successful CI run: [40092920061](https://github.com/black-jee/blackjee/actions/runs/40092920061); verify newer runs if additional commits are made.
 
 ## Blockers / owner action
 
