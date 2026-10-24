@@ -1,8 +1,10 @@
 # Supabase migration discipline
 
-The target Supabase project already had six applied migrations before the new GitHub repository was scaffolded. Their names and versions are visible in Supabase migration history, but their original SQL files were not present in the new repository.
+The target Supabase project has **20 applied migration versions** in its live ledger. The repository currently contains 15 SQL migration files, but only 13 exact filename/version matches. Seven applied SQL bodies are missing from the repository; two repository migration files are not recorded as applied. See [the migration chain inventory](../../docs/MIGRATION_CHAIN_INVENTORY.md) for the version-by-version ledger.
 
-Known applied baseline versions:
+## Applied versions whose SQL bodies are missing
+
+Six early baseline bodies and one later publication-gate body are missing:
 
 - `20261024080824_foundation_schema`
 - `20261024080924_tighten_rpc_grants_and_policy`
@@ -10,29 +12,31 @@ Known applied baseline versions:
 - `20261024081337_numeric_answers_and_admin_review`
 - `20261024081603_secure_daily_attempt_sessions`
 - `20261024081731_restrict_anon_rpc_execution`
+- `20261024112132_require_pyq_source_page_before_publish`
 
-The repository-managed migrations added so far are:
+Do not recreate these under their original version identifiers unless the original SQL is recovered. Any replacement inferred from live definitions must be explicitly labelled a reconstruction, not original historical SQL.
 
-- `20261024095050_harden_public_schedule_rpc_and_index.sql`
-- `20261024100007_daily_challenge_question_assets.sql`
-- `20261024100245_pyq_question_image_paths.sql`
-- `20261024100341_question_image_path_read_grants.sql`
-- `20261024100524_admin_save_daily_challenge.sql`
-- `20261024101157_secure_mock_test_attempts.sql`
-- `20261024101243_resume_mock_test_attempt.sql`
-- `20261024101313_pyq_mock_metadata_read_grants.sql`
-- `20261024101531_preserve_pyq_source_provenance.sql`
-- `20261024102206_require_auth_for_daily_solution.sql`
-- `20261024102525_stable_mock_question_order.sql`
+## Repository migration files not present in live history
+
+- `20261024112500_require_pyq_source_page_before_publish.sql`
+- `20261024120000_require_pyq_source_and_solution_before_publish.sql`
+
+These overlap with the applied publication-gate migration's purpose, but they are not proof of what the applied `20261024112132` body contained. Do not apply, rename, delete, or mark these as applied until their intent and the canonical migration sequence are reviewed.
 
 ## Important current limitation
 
-**Do not run `supabase db reset` against this incomplete local migration directory.** The original six SQL bodies need to be reconstructed from the live schema and reviewed before this repo can be used to recreate a clean database from zero. The live target project is currently intact; this documentation does not pretend that the missing migration files have been recovered.
+**Do not run `supabase db reset` against this incomplete migration directory.** The chain cannot currently recreate the live database from zero. The live target project has not been reset or repaired as part of this reconstruction work.
 
 ## Required reconciliation procedure
 
-1. Export/inspect current table definitions, constraints, indexes, policies, grants, functions and storage state from the target project.
-2. Reconstruct a clean, ordered baseline migration chain that reproduces the current schema on an empty staging database.
-3. Compare the recreated schema against the live target and verify all six existing migration versions.
-4. Keep future changes in versioned SQL files, apply to staging first, and run SQL negative-permission tests plus Supabase advisors.
-5. Never edit or re-run an already-applied migration against the live project; use a new additive migration for changes.
+1. Recover original SQL bodies from authoritative Git history, a local clone, archive, backup, or captured migration artifacts where possible.
+2. Read-only inspect and record current table definitions, constraints, indexes, policies, grants, function definitions/owners/configuration/ACLs, triggers, extensions, and storage configuration.
+3. If original bodies are unavailable, write separately labelled reconstructed baseline SQL from verified live object definitions; never present it as recovered original history.
+4. Reconcile the two local-only publication-gate files with the applied `20261024112132` version before preparing a canonical ordered chain.
+5. Replay only in a disposable, no-cost PostgreSQL-compatible environment. Do not create a paid Supabase branch/project; the owner has no budget for paid infrastructure.
+6. Compare the replayed schema and ACLs to the recorded target snapshot, then run anonymous/student/owner/admin negative-permission tests and Supabase advisors.
+7. Never reset, repair, or apply reconstruction migrations to the live target during this work. Any future production change must be separately reviewed and explicitly approved.
+
+## Current status
+
+**Inventory: verified read-only. Historical SQL recovery: blocked/not found in accessible repository history. Clean replay: unverified.** No production database changes, migration repairs, resets, question publication, or paid infrastructure were used for this inventory.
