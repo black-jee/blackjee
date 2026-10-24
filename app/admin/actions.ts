@@ -8,10 +8,7 @@ import { isValidIstLocalDateTime, istLocalDateTimeToIso } from "@/lib/time/ist-l
 const localDateTime = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "Use a valid date and time.")
-  .refine(
-    (value) => !Number.isNaN(Date.parse(`${value}:00+05:30`)),
-    "Use a real calendar date and time.",
-  );
+  .refine(isValidIstLocalDateTime, "Use a real calendar date and time.");
 
 const challengeFormSchema = z.object({
   challengeDate: z.string().date(),
