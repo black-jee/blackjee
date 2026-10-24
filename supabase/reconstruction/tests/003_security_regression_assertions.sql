@@ -41,6 +41,7 @@ BEGIN
            WHERE oid IS NULL OR NOT prosecdef
               OR NOT coalesce(proconfig @> ARRAY['search_path=""'], false)
               OR public_execute OR anon_execute
+              OR pg_get_functiondef(oid) NOT LIKE '%auth.uid()%'
          )
   INTO v_count, v_missing
   FROM observed;
