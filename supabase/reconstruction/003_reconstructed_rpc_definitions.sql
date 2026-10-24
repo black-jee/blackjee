@@ -115,6 +115,31 @@ begin
   if p_options is null or jsonb_typeof(p_options) <> 'array' then
     raise exception 'Options must be a JSON array' using errcode = '22023';
   end if;
+  if jsonb_array_length(p_options) > 12 then
+    raise exception 'A daily challenge can have at most 12 options' using errcode = '22023';
+  end if;
+  if jsonb_array_length(p_options) > 0 and exists (
+    select 1
+    from jsonb_array_elements(p_options) as o(item)
+    where nullif(btrim(o.item->>'label'), '') is null
+  ) then
+    raise exception 'Daily challenge options need non-empty labels' using errcode = '22023';
+  end if;
+  if exists (
+    select 1
+    from jsonb_array_elements(p_options) as o(item)
+    group by upper(btrim(o.item->>'label'))
+    having count(*) > 1
+  ) then
+    raise exception 'Daily challenge option labels must be unique' using errcode = '22023';
+  end if;
+  if jsonb_array_length(p_options) > 0 and not exists (
+    select 1
+    from jsonb_array_elements(p_options) as o(item)
+    where upper(btrim(o.item->>'label')) = upper(btrim(p_correct_answer))
+  ) then
+    raise exception 'Correct answer must match one of the option labels' using errcode = '22023';
+  end if;
 
   if p_challenge_id is null then
     insert into public.daily_challenges (
