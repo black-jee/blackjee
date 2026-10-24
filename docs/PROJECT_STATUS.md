@@ -23,6 +23,7 @@
 - **Verified:** Target Supabase project metadata, tables/columns, six migration records, deployed Edge Functions list and security/performance advisor findings.
 - **Implemented:** Initial Next.js/React/TypeScript/Tailwind scaffold, Supabase SSR/browser client helpers, Zod question schema, shared safe prose/KaTeX renderer, email/Google sign-in, OAuth callback, password reset/update, initial daily challenge route/server actions, Vitest/Playwright tests and CI workflow committed to `main`.
 - **Implemented and database-verified:** `get_current_daily_challenge()` now uses invoker privileges; anonymous role can read only schedule columns, not question statement; session `user_id` index added. New migration version `20261024095050` is recorded in Supabase and its SQL is checked into the repository.
+- **Tested:** SQL regression assertions for the schedule RPC security and index passed against the target Supabase project. This does not substitute for application runtime or browser tests.
 - **Blocked for local runtime checks:** this execution environment cannot resolve `github.com`, so the repository could not be cloned and dependencies could not be installed; no npm test/build result is claimed.
 - **Not started:** Full app migration, database compatibility migrations, content import, browser tests and staging deployment.
 
@@ -40,7 +41,7 @@
 ## Next actions
 
 1. Finish the source page/RPC/dependency map.
-2. Capture the target Supabase baseline DDL, grants, policies and function definitions in version control.
+2. Reconstruct the six pre-existing target Supabase migration bodies and capture baseline DDL, grants, policies and function definitions in version control.
 3. Complete the Next.js foundation and CI; run type/lint/test/build checks.
 4. Complete baseline migration reconstruction and add the shared KaTeX question renderer.
 5. Reconcile database naming and permissions before feature-by-feature migration.
