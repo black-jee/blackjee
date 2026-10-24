@@ -9,7 +9,7 @@
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | New GitHub repository   | `black-jee/blackjee`, public, default branch `main`                                                                             |
 | New Supabase            | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region                                                          |
-| Supabase migrations     | 17 applied entries; 11 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
+| Supabase migrations     | 18 applied entries; 12 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
 | Supabase data           | 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported          |
 | Supabase tables         | 9 inspected public/private tables; no student attempts or mock-test attempts                                                    |
 | Supabase Edge Functions | Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)             |
@@ -29,8 +29,8 @@
 - **Implemented and database-verified:** Mock-test schema/RPCs now support shift/focused test selection, ownership-bound resume/submission, server-side marking, private responses, and the exact 75-question shift validation rule (20 MCQ + 5 numerical per subject). With an empty bank, start is rejected as expected.
 - **Tested:** SQL regression assertions for public schedule security, private-table access, admin RPC permissions, mock-test permissions and function ownership checks passed against the target Supabase project.
 - **Imported as drafts:** The first 5 Physics questions from the source manifest and their 5 answer keys were imported. They are not published. Their question images are not yet copied into the new application.
-- **CI run 40086464478:** ESLint passed, strict TypeScript passed, 2 Vitest files passed, 2 Playwright browser tests passed, and the Next.js production build passed. The final Prettier check failed because 41 tracked files need formatting. These checks ran on the code at commit `d50c6a7`; subsequent documentation changes have not yet been rerun through CI.
-- **Dependency reproducibility:** CI succeeds with `npm install`, but `package-lock.json` is not yet committed. A lockfile is required before production release.
+- **CI run 40087443743:** ESLint, strict TypeScript, Vitest, Playwright browser tests, and the Next.js production build passed. The final Prettier check failed for `docs/PROJECT_STATUS.md` and `tsconfig.json`. A second formatting pass and a fresh full CI run are pending.
+- **Dependency reproducibility:** `package-lock.json` is committed and CI uses `npm ci`; final confirmation is pending from a fresh CI run.
 - **Not verified:** Browser behavior, real authenticated student/admin workflows, file upload/storage, full question import, and staging deployment.
 
 ## Important findings / blockers
@@ -50,7 +50,7 @@
 2. Migrate the 21 image assets, validate every reference, and add a storage-access model that does not leak daily challenge content before release.
 3. Reconstruct the six original migration bodies into a replayable, version-controlled baseline and test on an isolated staging database.
 4. Complete PYQ authoring/review/publishing, admin moderation, student practice, chapter filters and mock-test persistence.
-5. Apply a reviewed Prettier formatting-only commit for the 41 reported files and rerun CI; commit a reproducible npm lockfile.
+5. Resolve the remaining Prettier gate on the current tree, then rerun all CI checks against the exact final commit.
 6. Obtain a real staging deployment, configure environment variables, and run authenticated student/admin E2E tests plus storage/security-negative tests.
 7. Prepare rollback and production-launch checklist. Do not switch the live site without approval.
 
@@ -68,7 +68,7 @@
 - **Implemented (runtime verification pending):** protected `/admin/pyq` authoring and review workspace; Zod-validated server actions call database-owned admin RPCs; the dashboard lists recent question metadata without selecting private answer-key records; draft save, approve-as-draft, publish-with-confirmation, and unpublish controls are available.
 - **Reconciled:** reconstructed the already-applied `admin_pyq_authoring_review` database function definitions into `supabase/migrations/20261024103715_admin_pyq_authoring_review.sql` so the admin authoring backend is represented in Git.
 - **Verified:** inspected target RLS policy for PYQs: students/anonymous users can select only approved published questions, while admin queue reads are gated by `app_metadata.role = admin`; the answer-key table remains private.
-- **CI:** ran the one-time repository formatter; it formatted tracked files, removed its temporary workflow, and generated a committed `package-lock.json`. A fresh CI run is required against the formatted commit. The earlier pre-format run passed ESLint, strict TypeScript, Vitest, Playwright smoke tests, and production build but failed the Prettier gate.
+- **CI:** a one-time repository formatting commit and `package-lock.json` are present. CI run `40087443743` passed lint, typecheck, unit tests, Playwright smoke tests and build, but the final format check still flagged `docs/PROJECT_STATUS.md` and `tsconfig.json`; these must be formatted and rechecked.
 - **Not verified:** admin PYQ authoring and review actions have not yet been exercised in a real authenticated browser session. No question has been published as part of this work.
 
 
