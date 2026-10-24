@@ -36,7 +36,8 @@ If an older clone or downloaded archive may exist on the owner's device, run the
 find "$HOME" -type f \( -name '20261024080824*' -o -name '20261024080924*' -o -name '20261024081041*' -o -name '20261024081337*' -o -name '20261024081603*' -o -name '20261024081731*' -o -name '20261024112132*' \) -print 2>/dev/null
 
 # If Android shared storage permission was already granted, search Downloads too.
-find "$HOME/storage/shared/Download" -type f \( -iname '*.zip' -o -iname '*.tar' -o -iname '*.tar.gz' -o -iname '*.tgz' -o -iname '*.7z' -o -name '20261024*.sql' \) -print 2>/dev/null```
+find "$HOME/storage/shared/Download" -type f \( -iname '*.zip' -o -iname '*.tar' -o -iname '*.tar.gz' -o -iname '*.tgz' -o -iname '*.7z' -o -name '20261024*.sql' \) -print 2>/dev/null
+```
 
 If the shared Download folder does not exist, do not change permissions just for this check; run `termux-setup-storage` only if the owner chooses to grant Termux shared-storage access. Inspect candidate archives before extracting them, and do not upload secrets or `.env` files. A matching filename is only a candidate: compare SQL content and provenance before treating it as original history.
 
