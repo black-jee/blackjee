@@ -13,6 +13,11 @@ const checks = [
     pattern: /security\s+definer[\s\S]*?set\s+search_path\s+to\s+''/i,
   },
   {
+    file: "supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql",
+    description: "daily challenge RPC enforces solution and option integrity",
+    pattern: /A live challenge must include a worked solution[\\s\\S]*?A daily challenge can have at most 12 options[\\s\\S\\S]*?Daily challenge options need non-empty labels[\\s\\S]*?Daily challenge option labels must be unique[\\s\\S]*?Correct answer must match one of the option labels/i,
+  },
+  {
     file: "supabase/migrations/20261025100000_enforce_unique_pyq_option_labels.sql",
     description: "PYQ option integrity guard checks non-empty labels",
     pattern: /Single-correct options need non-empty labels/,
