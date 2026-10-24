@@ -4,6 +4,7 @@ import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { getChallengeResult, startChallenge, submitChallenge } from "@/app/challenge/actions";
 import { renderQuestionText } from "@/lib/questions/render";
+import { isSafeAssetPath } from "@/lib/questions/schema";
 
 type Schedule = { id: string; title: string; subject: string; starts_at: string; ends_at: string; solution_release_at: string };
 type Option = { id: string; label: string; text: string; imagePath?: string };
@@ -103,7 +104,7 @@ export function ChallengeAttempt({ schedule }: { schedule: Schedule }) {
                   <span className="grid size-6 shrink-0 place-items-center rounded-full border border-[var(--border)] text-xs font-semibold">{option.label}</span>
                   <span className="min-w-0 flex-1">
                     {option.text ? <span dangerouslySetInnerHTML={{ __html: renderQuestionText(option.text) }} /> : null}
-                    {option.imagePath ? <span className="mt-2 block break-all text-xs text-[var(--muted)]">Image option asset: {option.imagePath}</span> : null}
+                    {option.imagePath && isSafeAssetPath(option.imagePath) ? <img src={`/${option.imagePath}`} alt={`Option ${option.label}`} loading="lazy" decoding="async" className="mt-3 h-auto max-h-64 max-w-full rounded-lg border border-[var(--border)] object-contain" /> : null}
                   </span>
                 </label>
               ))}
