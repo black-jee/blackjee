@@ -12,7 +12,8 @@
 ## Artifacts
 
 - `001_reconstructed_table_shapes.sql`: labelled nine-table structural draft, including selected catalog-confirmed constraints and secondary indexes.
-- `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay. It checks the nine tables, every reconstructed column's presence, RLS flags, catalog-observed foreign keys and selected check/unique constraints, and observed secondary indexes. It does not insert application data or prove full production parity.
+- `002_reconstructed_rls_policies.sql`: review draft of the 10 catalog-observed public-table RLS policies. It deliberately does not add table/column grants or private-table policies.
+- `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay after applying drafts 001 and 002. It checks the nine tables, every reconstructed column, RLS flags, the 10 policy names, catalog-observed foreign keys, selected check/unique constraints, and observed secondary indexes. It does not insert application data or prove full production parity.
 
 ## What was inspected
 
