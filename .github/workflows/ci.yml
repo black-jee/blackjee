@@ -78,6 +78,10 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/003_reconstructed_rpc_definitions.sql
       - name: Replay reconstructed access grants
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/004_reconstructed_access_grants.sql
+      - name: Apply mock-test NULL validation hardening
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261024130000_harden_mock_test_input_nulls.sql
+      - name: Test mock-test NULL validation
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/mock_test_null_validation.sql
       - name: Assert reconstructed catalog
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/001_reconstruction_catalog_smoke.sql
       - name: Assert reconstructed RPC and access security
