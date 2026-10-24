@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -22,7 +23,7 @@ export default async function ProfilePage() {
   if (!user) {
     return (
       <main className="mx-auto flex min-h-screen max-w-3xl flex-col justify-center px-5 py-12">
-        <a href="/" className="mb-8 text-sm font-bold tracking-[0.18em]">BLACK-JEE</a>
+        <Link href="/" className="mb-8 text-sm font-bold tracking-[0.18em]">BLACK-JEE</Link>
         <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-7">
           <h1 className="text-3xl font-semibold tracking-tight">Your profile</h1>
           <p className="mt-3 text-sm leading-6 text-[var(--muted)]">Sign in to see your challenge history and account details.</p>
@@ -44,7 +45,7 @@ export default async function ProfilePage() {
   return (
     <main className="mx-auto min-h-screen max-w-4xl px-5 py-6 sm:px-8 lg:py-12">
       <header className="mb-8 flex items-center justify-between border-b border-[var(--border)] pb-5">
-        <a href="/" className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">BJ</span><span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span></a>
+        <Link href="/" className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">BJ</span><span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span></Link>
         <SignOutButton />
       </header>
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--muted)]">Student account</p>
