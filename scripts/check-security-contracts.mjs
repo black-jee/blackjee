@@ -33,6 +33,16 @@ const checks = [
     pattern: /coalesce\(p_is_live,\s*false\)[\s\S]*?nullif\(btrim\(p_solution\),\s*''\)\s+is\s+null[\s\S]*?A live challenge must include a worked solution/i,
   },
   {
+    file: "supabase/reconstruction/003_reconstructed_rpc_definitions.sql",
+    description: "daily challenge RPC validates option count, unique labels and answer match",
+    pattern: /jsonb_array_length\(p_options\)\s*>\s*12[\s\S]*?Daily challenge option labels must be unique[\s\S]*?Correct answer must match one of the option labels/i,
+  },
+  {
+    file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
+    description: "daily challenge RPC regressions cover duplicate labels and mismatched answers",
+    pattern: /daily challenge RPC rejects duplicate option labels[\s\S]*?daily challenge RPC rejects answer not present in options/i,
+  },
+  {
     file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
     description: "direct RPC regression covers blank live-challenge solutions",
     pattern: /live daily challenge cannot be saved without a worked solution[\s\S]*?A live challenge must include a worked solution/i,
