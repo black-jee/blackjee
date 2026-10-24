@@ -45,3 +45,11 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Schema inspected:** public base table/column inventory, public routines (definitions truncated for initial scan), public RLS policies, and public indexes. This is not yet a complete schema export.
 - **Safety:** no DDL, migration apply, reset, row mutation, publication, or deployment action was performed.
 - **CI:** run [40092001380](https://github.com/black-jee/blackjee/actions/runs/40092001380) succeeded, including continuity validation, lint, typecheck, unit tests, Playwright E2E, format check, and production build on workflow-triggering SHA `2195242d7b78cf52447ea2cd4fab83d30c834440`.
+
+
+## 2026-10-24 — CI formatter repair and schema inventory
+
+- **CI run:** [40092920061](https://github.com/black-jee/blackjee/actions/runs/40092920061) — PASS on workflow commit `7ee443192d6740d1892978dc09d8c3fe226a1c8f`. Continuity validation, npm ci, lint, typecheck, unit tests, Playwright E2E, format check, and production build all completed successfully.
+- **Cause of intervening CI failures:** first the expanded database documents were not included in the formatter list; after widening the list, the staging command used a quoted Git pathspec that matched no files. The workflow now formats all root and `docs/` Markdown files and stages the formatter-only changes with `git add -A` in the clean CI checkout.
+- **Read-only database findings:** all four public application tables and five private application tables have RLS enabled (not forced); no non-internal application triggers were found; no explicit private-schema policies were found; and `storage.buckets` contains zero rows with no storage policies. See `docs/MIGRATION_RECONCILIATION.md`.
+- **Status:** migration reconstruction and replay remain UNVERIFIED. No target DDL/data changes were made. An isolated Supabase development branch has not been created because branch provisioning may incur charges and requires owner cost approval.
