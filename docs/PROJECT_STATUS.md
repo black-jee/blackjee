@@ -95,3 +95,14 @@
 - **CI evidence:** [Run 40090330071](https://github.com/black-jee/blackjee/actions/runs/40090330071) passed for commit `57d04ed9d3db332e0aafe71d69423be5723c7ff5`. Documentation commits after that SHA triggered additional workflows; those latest runs must be checked before claiming the current HEAD is green.
 - **Production verification:** the supplied URL `https://blackjee.vercel.app/` could not be fetched by the available web retrieval path. Vercel project linkage, deployed commit and runtime behavior remain unverified.
 - **Next action:** verify the queued current-head CI; continue catalog-backed reconstruction without changing the live migration ledger; then perform a replay only when a no-cost disposable database is available. Production deployment linkage/runtime and real authenticated workflows remain unverified.
+
+
+## Reconstruction branch checkpoint — 2026-10-24 (latest read-only verification)
+
+- **Current branch:** `chore/schema-reconstruction`; draft PR [#2](https://github.com/black-jee/blackjee/pull/2) remains unmerged.
+- **Latest observed CI run:** [40114721534](https://github.com/black-jee/blackjee/actions/runs/40114721534) — disposable `reconstruction-replay` **PASS**; `quality` was still **IN_PROGRESS** at the latest poll. Do not mark the whole run green until the quality job completes.
+- **Latest Vercel status:** **FAIL / deployment unverified**, with the provider status linking to a build-rate-limit page. No paid upgrade was initiated.
+- **Live Supabase recheck:** migration API returns 20 applied versions, including `20261024112132_require_pyq_source_page_before_publish`; no migration repair was attempted. The import Edge Function is listed active with JWT verification but its current handler returns HTTP 410 (retired).
+- **Advisor review:** five private tables have RLS enabled without policies, consistent with the existing no-browser-USAGE/no-direct-table-access model; eleven authenticated-callable SECURITY DEFINER RPCs remain review notices. A missing index on `private.mock_test_responses.question_id` is a performance candidate, not an automatic production change. Seven indexes are flagged unused; do not drop without workload evidence.
+- **Remaining release blockers:** recover the seven missing historical migration bodies or approve a separate canonical-baseline strategy; complete real authenticated student/admin browser tests; implement and verify Storage access safely; validate image mapping and source provenance; verify a real staging/production runtime. Source-content gaps remain blocked on authoritative evidence and QA—do not fabricate or publish.
+- **Safety:** all latest Supabase queries were read-only. No live schema/data changes, Storage buckets, migration repair, content publication, paid infrastructure, or PR merge occurred.
