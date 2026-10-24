@@ -96,7 +96,6 @@
 - **Production verification:** the supplied URL `https://blackjee.vercel.app/` could not be fetched by the available web retrieval path. Vercel project linkage, deployed commit and runtime behavior remain unverified.
 - **Next action:** verify the queued current-head CI; continue catalog-backed reconstruction without changing the live migration ledger; then perform a replay only when a no-cost disposable database is available. Production deployment linkage/runtime and real authenticated workflows remain unverified.
 
-
 ## Reconstruction branch checkpoint — 2026-10-24 (latest read-only verification)
 
 - **Current branch:** `chore/schema-reconstruction`; draft PR [#2](https://github.com/black-jee/blackjee/pull/2) remains unmerged.
