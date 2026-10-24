@@ -25,7 +25,7 @@
 
 ## Disposable replay in CI
 
-The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies drafts 001–004, and runs both the catalog smoke test and security catalog assertions. CI run `40113487978` passed both the quality job and disposable replay job, including RPC definition fingerprints and four negative authorization tests. This is a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, or replace real-user end-to-end authorization tests.
+The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies drafts 001–004, and runs both the catalog smoke test and security catalog assertions. CI run `40113487978` passed both the quality job and disposable replay job, including RPC definition fingerprints and four negative authorization tests. The latest branch-head run `40113673941` (#353) also passed both `quality` and `reconstruction-replay`. This is a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, or replace real-user end-to-end authorization tests.
 
 ## Migration-history reconciliation — read-only inventory (2026-10-24)
 
@@ -47,7 +47,7 @@ The migration source review also found the repository's `20261024111533` functio
 
 ## What was inspected
 
-Read-only catalog inspection of Supabase project `phdssyexhfyxsmhmmcgb` covered the nine known application tables, RLS policies, table grants, indexes, constraints, function signatures/ACLs/security-definer flags, triggers, and Supabase security/performance advisors.
+Read-only catalog inspection of Supabase project `phdssyexhfyxsmhmmcgb` covered the nine known application tables, RLS policies, table grants, indexes, constraints, function signatures/ACLs/security-definer flags, triggers, and Supabase security/performance advisors. A follow-up metadata inventory found no Storage buckets or Storage policies, no views/materialized views or sequences in `public`/`private`, and no non-internal triggers in the BLACK-JEE `public` or `private` schemas. The only non-internal triggers returned were Supabase-managed Storage internals. The `private` schema is owned by `postgres` and has no `USAGE` for `anon`, `authenticated`, or `service_role`; `public` is owned by `pg_database_owner`. These are read-only findings, not schema changes.
 
 ## Improvements made in this branch
 
