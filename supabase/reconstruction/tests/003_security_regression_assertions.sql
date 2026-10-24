@@ -110,6 +110,35 @@ BEGIN
     RAISE EXCEPTION 'Expected exactly 10 public RLS policies; found %', v_count;
   END IF;
 
+  -- Check all observed policy names, tables, commands, and role sets, not only
+  -- the three highest-impact read/ownership predicates checked below.
+  SELECT string_agg(e.tablename || '.' || e.policyname, ', ' ORDER BY e.policyname)
+  INTO v_missing
+  FROM (VALUES
+    ('daily_challenge_attempts', 'Users read their own challenge attempts', 'SELECT', ARRAY['authenticated']::name[]),
+    ('daily_challenges', 'Admins delete challenges', 'DELETE', ARRAY['authenticated']::name[]),
+    ('daily_challenges', 'Admins insert challenges', 'INSERT', ARRAY['authenticated']::name[]),
+    ('daily_challenges', 'Admins update challenges', 'UPDATE', ARRAY['authenticated']::name[]),
+    ('daily_challenges', 'Live challenge schedule is readable', 'SELECT', ARRAY['anon','authenticated']::name[]),
+    ('jee_pyq_questions', 'Admins delete PYQs', 'DELETE', ARRAY['authenticated']::name[]),
+    ('jee_pyq_questions', 'Admins insert PYQs', 'INSERT', ARRAY['authenticated']::name[]),
+    ('jee_pyq_questions', 'Admins update PYQs', 'UPDATE', ARRAY['authenticated']::name[]),
+    ('jee_pyq_questions', 'Published PYQs and admin review queue are readable', 'SELECT', ARRAY['anon','authenticated']::name[]),
+    ('mock_test_attempts', 'Users can read own mock test attempts', 'SELECT', ARRAY['authenticated']::name[])
+  ) AS e(tablename, policyname, cmd, expected_roles)
+  LEFT JOIN pg_policies p
+    ON p.schemaname = 'public'
+   AND p.tablename = e.tablename
+   AND p.policyname = e.policyname
+  WHERE p.policyname IS NULL
+     OR p.cmd <> e.cmd
+     OR cardinality(p.roles) <> cardinality(e.expected_roles)
+     OR NOT (p.roles @> e.expected_roles);
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'RLS policy name/table/command/role mismatch: %', v_missing;
+  END IF;
+
   IF NOT EXISTS (
     SELECT 1 FROM pg_policies
     WHERE schemaname = 'public'
