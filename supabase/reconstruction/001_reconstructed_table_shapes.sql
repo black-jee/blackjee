@@ -121,7 +121,7 @@ create table private.daily_challenge_sessions (
 
 create table private.mock_test_responses (
   attempt_id uuid not null references public.mock_test_attempts(id) on delete cascade,
-  question_id uuid not null references public.jee_pyq_questions(id) on delete cascade,
+  question_id uuid not null references public.jee_pyq_questions(id) on delete restrict,
   selected_answer text,
   is_correct boolean not null default false,
   marks_awarded integer not null default 0,
