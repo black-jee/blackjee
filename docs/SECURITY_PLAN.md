@@ -22,7 +22,7 @@ Protect student identity and history, unpublished questions, answer keys, challe
 
 Supabase security advisors reported:
 1. **Remediated in migration `20261024095050`:** `public.get_current_daily_challenge()` now runs as `SECURITY INVOKER`; anonymous access is limited to the schedule metadata columns and RLS restricts rows. Verification confirmed `anon` cannot select the question `statement` column.
-2. Five `SECURITY DEFINER` RPCs are executable by authenticated users; inspect each function body and intended public contract before changing grants.
+2. Five `SECURITY DEFINER` RPCs are executable by authenticated users. `get_daily_challenge_result` enforces the solution-release timestamp; `grade_jee_pyq`, `start_daily_challenge`, and `submit_daily_challenge` bind activity to `auth.uid()`; `admin_save_daily_challenge` checks the server-managed admin role. These are intentional trusted operations and are covered by function-body/grant review; continue negative testing after changes.
 3. Four private tables have RLS enabled with no policies. The inspected table ACLs grant table privileges only to `postgres`; browser roles have no direct table grants. Recheck this whenever policies/grants change.
 4. The new project has no Edge Functions deployed, while the source relies on `admin-cleanup` and `released-solution` workflows.
 
