@@ -1,7 +1,7 @@
 -- RECONSTRUCTION DRAFT — generated from read-only catalog column metadata on 2026-10-24.
 -- NOT original historical SQL. NOT a production migration. NOT a complete baseline:
--- grants, policies, indexes, functions, owners, storage, and exact constraint actions
--- must be captured and compared before replay. Apply only in a disposable database.
+-- grants, policies, functions, owners, storage, and full exactness still require
+-- capture and replay comparison. Apply only in a disposable database.
 begin;
 
 create schema if not exists private;
@@ -128,6 +128,51 @@ create table private.mock_test_responses (
   answered_at timestamptz not null default now(),
   primary key (attempt_id, question_id)
 );
+
+-- Catalog-confirmed constraints omitted from the initial shape-only draft.
+-- These definitions were observed in the live catalog; they are reconstructed
+-- definitions, not recovered migration history.
+alter table public.jee_pyq_questions
+  add constraint jee_pyq_marks_check check (marks_correct > 0 and marks_wrong <= 0),
+  add constraint published_questions_must_be_approved check (not is_published or review_status = 'approved');
+
+alter table public.daily_challenges
+  add constraint daily_challenges_check
+  check (starts_at < ends_at and ends_at <= solution_release_at);
+
+alter table public.daily_challenge_attempts
+  add constraint daily_challenge_attempts_challenge_id_user_id_key unique (challenge_id, user_id);
+
+alter table public.mock_test_attempts
+  add constraint mock_test_attempts_check
+  check ((status = 'in_progress' and submitted_at is null) or (status = 'submitted' and submitted_at is not null));
+
+-- Catalog-confirmed secondary indexes. Primary/unique indexes are created by
+-- the table constraints above and are not duplicated here.
+create index daily_attempt_user_idx
+  on public.daily_challenge_attempts (user_id, submitted_at desc);
+create index daily_challenges_created_by_idx
+  on public.daily_challenges (created_by);
+create index daily_challenges_live_idx
+  on public.daily_challenges (is_live, starts_at, ends_at);
+create index jee_pyq_created_by_idx
+  on public.jee_pyq_questions (created_by);
+create index jee_pyq_paper_lookup_idx
+  on public.jee_pyq_questions (year, session, subject, question_type)
+  where is_published = true and review_status = 'approved';
+create index jee_pyq_review_queue_idx
+  on public.jee_pyq_questions (review_status, created_at desc);
+create index jee_pyq_reviewed_by_idx
+  on public.jee_pyq_questions (reviewed_by);
+create index jee_pyq_subject_year_idx
+  on public.jee_pyq_questions (subject, year desc)
+  where is_published;
+create index daily_challenge_sessions_user_id_idx
+  on private.daily_challenge_sessions (user_id);
+create index jee_pyq_answer_attempts_question_idx
+  on private.jee_pyq_answer_attempts (question_id);
+create index mock_test_responses_question_idx
+  on private.mock_test_responses (question_id);
 
 alter table public.jee_pyq_questions enable row level security;
 alter table public.daily_challenges enable row level security;
