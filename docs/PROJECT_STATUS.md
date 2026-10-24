@@ -10,7 +10,7 @@
 - **Supabase migrations:** 20 applied entries; 15 SQL migration files are checked into Git; seven live migration versions lack same-version files, and two overlapping repository migration files are absent from the live ledger
 - **Supabase data:** 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported
 - **Supabase tables:** 9 inspected public/private tables; no student attempts or mock-test attempts
-- **Reconstruction replay:** CI now has a disposable PostgreSQL 17 job to apply reconstructed table/policy drafts and run catalog assertions; the first replay result is pending.
+- **Reconstruction replay:** CI run `40113101703` passed on commit `fc2e143`; disposable PostgreSQL 17 replay applied table shapes, 10 RLS policies, 12 current RPC definitions, and access grants, then passed schema and security catalog assertions.
 - **Supabase Edge Functions:** Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)
 - **Legacy source ZIP:** Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files
 - **Live website comparison:** Blocked/incomplete; direct fetch did not return page content
@@ -83,7 +83,7 @@
 - **Not verified:** admin PYQ authoring and review actions have not yet been exercised in a real authenticated browser session. No question has been published as part of this work.
 
 - **Engineering improvement:** the repository has a committed npm lockfile and CI uses `npm ci` for reproducible dependency installation.
-- **Latest reconstruction CI:** run `40112374432` passed continuity validation, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build on commit `f2831f8`. Later commits updated RLS assertions and status documentation; run `40112662944` is queued for current HEAD `d15ba7d`.
+- **Latest reconstruction CI:** run `40113101703` passed both jobs on commit `fc2e143`: quality gates (continuity validation, lint, typecheck, unit tests, Playwright E2E, Prettier, production build) and disposable PostgreSQL replay/security assertions.
 
 ## Constitution reconciliation — 2026-10-24
 
