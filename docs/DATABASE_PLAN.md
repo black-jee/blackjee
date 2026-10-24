@@ -4,7 +4,7 @@
 
 Project: `phdssyexhfyxsmhmmcgb` (Tokyo / `ap-northeast-1`, PostgreSQL 17.11).
 
-The target project had six applied migration records before the new repository was scaffolded. Ten additional migrations are now recorded and checked into the repository:
+The target project had six applied migration records before the new repository was scaffolded. Eleven additional migrations are now recorded and checked into the repository:
 
 - `20261024095050_harden_public_schedule_rpc_and_index`
 - `20261024100007_daily_challenge_question_assets`
@@ -16,6 +16,7 @@ The target project had six applied migration records before the new repository w
 - `20261024101313_pyq_mock_metadata_read_grants`
 - `20261024101531_preserve_pyq_source_provenance`
 - `20261024102206_require_auth_for_daily_solution`
+- `20261024102525_stable_mock_question_order`
 
 The original six migration SQL bodies were not present in the new repository and still need to be reconstructed. Do not reset the target project until a replayable baseline is checked in and verified on an isolated database.
 
@@ -45,7 +46,7 @@ All inspected tables have RLS enabled. Private tables have no browser-role polic
 - Daily challenge results: `get_daily_challenge_result(uuid)` requires `auth.uid()` and enforces the configured release time.
 - PYQ practice: `grade_jee_pyq(uuid,text)` is authenticated and enforces the answer/solution gate.
 - Admin challenge authoring: `admin_save_daily_challenge(...)` checks server-managed `app_metadata.role = admin` and writes challenge content plus its private answer key atomically.
-- Mock tests: `start_mock_test(...)`, `resume_mock_test(uuid)`, `submit_mock_test(uuid,jsonb)`, and `get_mock_test_result(uuid)` are ownership-bound. The server chooses the question IDs, checks the 75-question shift structure, computes marks, and withholds answers until submission.
+- Mock tests: `start_mock_test(...)`, `resume_mock_test(uuid)`, `submit_mock_test(uuid,jsonb)`, and `get_mock_test_result(uuid)` are ownership-bound. Focused-test JSON order is now tied explicitly to the stored question-ID order. The server chooses the question IDs, checks the 75-question shift structure, computes marks, and withholds answers until submission.
 
 ## Source schema mismatch
 
