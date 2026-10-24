@@ -66,17 +66,17 @@ expect_denial \\
   "A live challenge must include a worked solution" \\
   "$blank_live_solution_sql"
 
-# Database RPC must reject option labels that are blank, duplicated, or inconsistent with the answer.
+# Database RPC must reject option labels that are duplicated or inconsistent with the answer.
 invalid_options_prefix="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\\"sub\\\":\\\"$user_b\\\",\\\"app_metadata\\\":{\\\"role\\\":\\\"admin\\\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, CURRENT_DATE, 'Synthetic replay fixture', 'Physics', 'Synthetic test statement', NULL::text, "
 invalid_options_suffix=", now(), now() + interval '1 hour', now() + interval '2 hours', 'A', 'Worked synthetic solution', false);"
 expect_denial \\
   "daily challenge RPC rejects duplicate option labels" \\
   "Daily challenge option labels must be unique" \\
-  "${invalid_options_prefix}'[{\\"label\\":\\"A\\",\\"text\\":\\"one\\"},{\\"label\\":\\"a\\",\\"text\\":\\"two\\"}]'::jsonb${invalid_options_suffix}"
+  "${invalid_options_prefix}jsonb_build_array(jsonb_build_object('label','A','text','one'),jsonb_build_object('label','a','text','two'))${invalid_options_suffix}"
 expect_denial \\
   "daily challenge RPC rejects answer not present in options" \\
   "Correct answer must match one of the option labels" \\
-  "${invalid_options_prefix}'[{\\"label\\":\\"A\\",\\"text\\":\\"one\\"},{\\"label\\":\\"B\\",\\"text\\":\\"two\\"}]'::jsonb${invalid_options_suffix}"
+  "${invalid_options_prefix}jsonb_build_array(jsonb_build_object('label','A','text','one'),jsonb_build_object('label','B','text','two'))${invalid_options_suffix}"
 
 cross_user_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.resume_mock_test('$attempt_id'::uuid);"
 expect_denial \
