@@ -68,4 +68,3 @@ This is useful catalog evidence, not a disposable replay: it confirms that the c
 - Performance advisor also lists seven indexes as unused. With only five draft PYQ records and no student/mock-test attempts, usage statistics are too small to justify dropping them.
 
 References: [RLS-enabled tables without policies](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy), [authenticated SECURITY DEFINER advisory](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable), and [unindexed foreign-key advisory](https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys).
-
