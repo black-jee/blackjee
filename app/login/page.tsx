@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/auth/login-form";
 
@@ -7,10 +8,10 @@ export const metadata: Metadata = { title: "Sign in" };
 export default function LoginPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-5 py-12">
-      <a href="/" className="mb-8 flex items-center gap-3">
+      <Link href="/" className="mb-8 flex items-center gap-3">
         <span className="grid size-10 place-items-center rounded-xl bg-[var(--accent)] text-sm font-black text-[var(--accent-foreground)]">BJ</span>
         <span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span>
-      </a>
+      </Link>
       <div className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">Your practice space</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight">Sign in</h1>
