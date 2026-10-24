@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { gradePyqQuestion } from "@/app/pyq/actions";
 import { QuestionContent } from "@/components/questions/question-content";
 import { renderQuestionText } from "@/lib/questions/render";
-import type { QuestionContent as QuestionData } from "@/lib/questions/schema";
+import { isSafeAssetPath, type QuestionContent as QuestionData } from "@/lib/questions/schema";
 
 type Props = {
   id: string;
@@ -58,7 +58,7 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
               <span className="grid size-6 shrink-0 place-items-center rounded-full border border-[var(--border)] text-xs font-semibold">{option.label}</span>
               <span className="min-w-0 flex-1">
                 {option.text ? <span dangerouslySetInnerHTML={{ __html: renderQuestionText(option.text) }} /> : null}
-                {option.imagePath ? <span className="mt-2 block break-all text-xs text-[var(--muted)]">Image option path: {option.imagePath}</span> : null}
+                {option.imagePath && isSafeAssetPath(option.imagePath) ? <img src={`/${option.imagePath}`} alt={`Option ${option.label}`} loading="lazy" decoding="async" className="mt-3 h-auto max-h-64 max-w-full rounded-lg border border-[var(--border)] object-contain" /> : null}
               </span>
             </label>
           ))}
