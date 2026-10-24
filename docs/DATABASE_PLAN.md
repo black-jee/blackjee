@@ -3,7 +3,7 @@
 ## New project baseline observed
 
 Project: `phdssyexhfyxsmhmmcgb` (Tokyo / `ap-northeast-1`, PostgreSQL 17.11).  
-Observed migration history before hardening: six entries, versions from `20261024080824` to `20261024081731`. A seventh migration `20261024095050_harden_public_schedule_rpc_and_index` is now applied and verified.  
+Observed migration history before hardening: six entries, versions from `20261024080824` to `20261024081731`. The seventh migration `20261024095050_harden_public_schedule_rpc_and_index` and eighth migration `20261024100007_daily_challenge_question_assets` are now applied and verified. The latter adds a safe optional question-diagram path and returns it from the challenge-start RPC.  
 Observed tables: 3 public tables and 4 private tables; all reported empty. RLS is enabled on the inspected tables. No Edge Functions are deployed in this project at the time of inspection.
 
 ### Public tables
