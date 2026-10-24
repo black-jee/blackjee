@@ -79,3 +79,8 @@ The source ZIP contains 75 question slots for JEE Main 2026, April 4 Shift 1, al
 - Test start/resume/submit with seeded staging questions and real authenticated sessions.
 - Verify storage buckets, access policies, and admin moderation functions.
 - Verify no service-role or secret key is committed or returned to the browser.
+
+
+## Reconciliation update — 2026-10-24
+
+Read-only comparison is documented in [`MIGRATION_RECONCILIATION.md`](./MIGRATION_RECONCILIATION.md). Live migration history contains 20 applied versions. The six original baseline SQL bodies remain absent. The current repository has a migration-history drift: the live source-page guard is version `20261024112132`, while the repo has `20261024112500` and an additional `20261024120000` duplicate not present in live history. Do not apply, rename, or delete these files until the intended chain is reviewed. Initial live table columns, public routines (partial), public RLS policies, and public indexes have been inspected; full constraints, grants, triggers, private schema and storage inventory remains outstanding. No target-project writes were performed.
