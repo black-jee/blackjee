@@ -68,5 +68,8 @@
 - **Implemented (runtime verification pending):** protected `/admin/pyq` authoring and review workspace; Zod-validated server actions call database-owned admin RPCs; the dashboard lists recent question metadata without selecting private answer-key records; draft save, approve-as-draft, publish-with-confirmation, and unpublish controls are available.
 - **Reconciled:** reconstructed the already-applied `admin_pyq_authoring_review` database function definitions into `supabase/migrations/20261024103715_admin_pyq_authoring_review.sql` so the admin authoring backend is represented in Git.
 - **Verified:** inspected target RLS policy for PYQs: students/anonymous users can select only approved published questions, while admin queue reads are gated by `app_metadata.role = admin`; the answer-key table remains private.
-- **CI:** latest CI run is in progress for the current changes. The previous completed run passed ESLint, strict TypeScript, Vitest, Playwright smoke tests, and production build but failed the Prettier gate because 41 tracked files (including the Prettier config) are not formatted. Formatting is unresolved and must not be reported as passing.
+- **CI:** ran the one-time repository formatter; it formatted tracked files, removed its temporary workflow, and generated a committed `package-lock.json`. A fresh CI run is required against the formatted commit. The earlier pre-format run passed ESLint, strict TypeScript, Vitest, Playwright smoke tests, and production build but failed the Prettier gate.
 - **Not verified:** admin PYQ authoring and review actions have not yet been exercised in a real authenticated browser session. No question has been published as part of this work.
+
+
+- **Engineering improvement:** the repository now has a committed npm lockfile. CI is being switched to `npm ci` so dependency installation is reproducible.
