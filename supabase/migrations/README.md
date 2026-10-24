@@ -18,6 +18,11 @@ The repository-managed migrations added so far are:
 - `20261024100245_pyq_question_image_paths.sql`
 - `20261024100341_question_image_path_read_grants.sql`
 - `20261024100524_admin_save_daily_challenge.sql`
+- `20261024101157_secure_mock_test_attempts.sql`
+- `20261024101243_resume_mock_test_attempt.sql`
+- `20261024101313_pyq_mock_metadata_read_grants.sql`
+- `20261024101531_preserve_pyq_source_provenance.sql`
+- `20261024102206_require_auth_for_daily_solution.sql`
 
 ## Important current limitation
 
