@@ -7,26 +7,30 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 ## P0 — release safety and security
 
 ### BJ-SEC-001 — Preserve PYQ publish gate
+
 - **Status:** TESTED (database definition and grants inspected; authenticated browser publishing not tested)
 - **Acceptance:** publish requires source document + page, non-empty statement, private answer key, worked solution, and valid option label for single-correct questions; anonymous execution denied.
 - **Evidence:** live Supabase function definition includes source-page and private-key/solution checks; anon execute=false, authenticated execute=true. Five PYQs remain unpublished.
 - **Next:** run a safe negative/positive integration test with a dedicated admin test account and disposable draft; never publish real content during the test.
 
 ### BJ-DB-001 — Reconstruct the six original migration bodies
+
 - **Status:** IN_PROGRESS
 - **Acceptance:** clean isolated database replay reproduces target schema, constraints, grants, RLS, functions, and indexes; diff against live target reviewed.
-- **Risk:** six original migration bodies absent from Git; 21 versions recorded in Supabase and 15 migration files currently in repository.
+- **Risk:** six original migration bodies absent from Git; 20 versions recorded in Supabase and 15 migration files currently in repository.
 - **Next:** export schema metadata/definitions from the target and reconstruct/review baseline; do not reset target project.
 
 ## P1 — critical workflows and deployment confidence
 
 ### BJ-REL-001 — Verify active Vercel deployment
+
 - **Status:** DISCOVERED
 - **Acceptance:** confirm Vercel project/repository linkage, deployed commit, build result, environment variable presence (never print values), and production smoke tests.
 - **Evidence:** owner supplied https://blackjee.vercel.app/; linkage and runtime not yet independently verified.
 - **Next:** inspect available deployment metadata and perform non-invasive HTTP/browser smoke tests.
 
 ### BJ-E2E-001 — Verify authenticated student/admin journeys
+
 - **Status:** IN_PROGRESS
 - **Acceptance:** dedicated test accounts prove auth redirects, student ownership isolation, admin denial for ordinary users, safe PYQ review, and key withholding.
 - **Evidence:** CI has Playwright smoke tests, but real authenticated student/admin workflows remain unverified.
@@ -35,18 +39,21 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 ## P2 — content, storage, and administration
 
 ### BJ-CONTENT-001 — Import April 4 Shift 1 questions safely
+
 - **Status:** BLOCKED
 - **Acceptance:** all 75 question slots reconciled against authoritative source, source page, statement, options/figures, answer key, worked solution, and independent QA; all records remain drafts until verified.
 - **Evidence:** archive manifest has 75 slots (47 marked content_added, 28 needs_review); official source PDF missing; 5 questions currently exist in target as drafts, 0 published.
 - **Next:** prepare source-to-target mapping and import validation tooling; do not fabricate missing content or publish.
 
 ### BJ-ASSET-001 — Migrate and validate question images
+
 - **Status:** PLANNED
 - **Acceptance:** each referenced image resolves to a reviewed asset with dimensions/type checks and correct access rules; unreleased content remains private.
 - **Evidence:** source archive includes image files, but target asset migration and visual verification are incomplete.
 - **Next:** inventory each source image against manifest IDs and design a safe upload path.
 
 ### BJ-ADMIN-001 — Verify PYQ authoring workflow
+
 - **Status:** IMPLEMENTED
 - **Acceptance:** draft save, approve-as-draft, publish/unpublish are tested as admin and denied for non-admin; errors are actionable and answer keys never enter public payloads.
 - **Evidence:** `app/admin/pyq` and guarded RPCs exist; runtime browser verification remains pending.
@@ -55,6 +62,7 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 ## P3 — documentation and discoverability
 
 ### BJ-DOC-001 — Maintain constitution-required project records
+
 - **Status:** IN_PROGRESS (continuity artifacts and CI validator committed; CI verification pending)
 - **Acceptance:** context, status, feature inventory, architecture, database, security, decisions, tasks, test plan, releases, SEO/growth, changelog, continuity startup prompt, session handover, and verification log are present and reconciled; CI checks required files and handover/task consistency.
 - **Evidence:** added `docs/CONTINUITY_SYSTEM_PROMPT.md`, `docs/SESSION_HANDOVER.md`, `docs/VERIFICATION_LOG.md`, `scripts/check-continuity.mjs`, and a CI validation step. Direct Supabase migration listing returned 20 applied versions. HEAD CI for the prior docs commit failed at Prettier format check; new CI run is pending.
