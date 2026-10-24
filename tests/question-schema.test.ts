@@ -11,15 +11,25 @@ describe("questionContentSchema", () => {
       sourceId: "BJ-JM-2026-S1-PHY-032",
       statement: "Find the value of \\(v^2\\).",
       subject: "Physics",
-      options: [{ id: "a", label: "A", text: "Option A", imagePath: "assets/q32-a.png" }],
+      options: [
+        {
+          id: "a",
+          label: "A",
+          text: "Option A",
+          imagePath: "assets/q32-a.png",
+        },
+      ],
     });
     expect(result.success).toBe(true);
   });
 
   it("rejects empty statements and invalid subjects", () => {
     expect(
-      questionContentSchema.safeParse({ sourceId: "q1", statement: "", subject: "Biology" })
-        .success,
+      questionContentSchema.safeParse({
+        sourceId: "q1",
+        statement: "",
+        subject: "Biology",
+      }).success,
     ).toBe(false);
   });
 });
@@ -63,7 +73,9 @@ describe("India-local schedule datetime validation", () => {
   });
 
   it("converts a valid India-local datetime to UTC", () => {
-    expect(istLocalDateTimeToIso("2026-10-24T16:30")).toBe("2026-10-24T11:00:00.000Z");
+    expect(istLocalDateTimeToIso("2026-10-24T16:30")).toBe(
+      "2026-10-24T11:00:00.000Z",
+    );
   });
 
   it("throws rather than normalizing an invalid datetime", () => {
