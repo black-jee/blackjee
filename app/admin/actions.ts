@@ -26,10 +26,6 @@ const challengeFormSchema = z.object({
   isLive: z.boolean(),
 });
 
-function istIso(value: string): string {
-  return new Date(`${value}:00+05:30`).toISOString();
-}
-
 export type SaveChallengeResult = { ok: true; id: string } | { ok: false; error: string };
 
 export async function saveDailyChallenge(formData: FormData): Promise<SaveChallengeResult> {
