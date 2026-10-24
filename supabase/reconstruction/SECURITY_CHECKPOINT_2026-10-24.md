@@ -42,3 +42,15 @@ The committed regression file `tests/003_security_regression_assertions.sql` has
 3. Keep migration replay blocked until a truly disposable, no-cost environment is available. Do not create a paid Supabase branch.
 4. Build a reviewed Storage bucket/policy plan before copying image assets.
 5. Add authenticated negative tests for non-admin writes and cross-user attempt access before production readiness.
+
+## Publication-readiness aggregate (read-only)
+
+An aggregate-only query inspected counts, not question text or answers:
+
+- Total question records: 5.
+- Published questions: 0.
+- Approved questions: 0.
+- Records missing a source document, positive source page, non-empty statement, private answer key, or worked solution: 0 in each category.
+
+This does not make the records publish-ready by itself. They remain drafts; approval, option/answer consistency, asset checks, and real workflow tests are separate gates.
+
