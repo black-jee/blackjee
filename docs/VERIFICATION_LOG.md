@@ -75,7 +75,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Migration recovery:** `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md` records seven applied migration bodies not found in the checked repository history/indexed search. No SQL was inferred from migration names; clean replay remains **UNVERIFIED**.
 - **Safety:** documentation-only changes. No target DDL/data changes, migration apply/repair/reset, publication, or paid infrastructure.
 
-
 ## 2026-10-24 — current reconstruction branch and live advisor recheck
 
 - **GitHub Actions CI:** [run 40114452358](https://github.com/black-jee/blackjee/actions/runs/40114452358) on reconstruction HEAD `696f965918f18b4629ceca912b00fbf58466b140` — **PASS**. Both `quality` and `reconstruction-replay` jobs completed successfully. The replay uses disposable PostgreSQL in GitHub Actions, not the live Supabase project.
