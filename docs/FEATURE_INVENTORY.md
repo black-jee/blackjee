@@ -13,7 +13,7 @@
 | Challenge attempt, timer, answer submission | `attempt.html`, source SQL/migrations | Start session server-side, enforce one attempt, calculate elapsed time, submit once | Not started | Unit/integration tests for timing, duplicate submission and boundaries |
 | Challenge history/results | `archive.html`, `profile.html` | Student-specific history; result and solution release at configured time | Not started | Cross-user access tests and release-window tests |
 | Optional solution photo | `attempt.html`, Supabase storage policies and Edge Function source | Private upload, validated file type/size, owner/admin-only access until approved | Not started | Upload limits, storage RLS and signed URL tests |
-| Student profile / authentication | `profile.html`, all auth-dependent pages | Supabase Auth, secure session, user-owned records | In progress — email/Google sign-in, OAuth callback, password reset/update routes; profile/logout still pending | Sign-in/out, session expiry and IDOR tests |
+| Student profile / authentication | `profile.html`, all auth-dependent pages | Supabase Auth, secure session, user-owned records | In progress — email/Google sign-in, OAuth callback, password reset/update, profile/history and sign-out routes; runtime verification pending | Sign-in/out, session expiry and IDOR tests |
 | Preparation/resources | `prep.html` | Resources and practice entry points | Not started | Link, responsive and accessibility tests |
 
 ## PYQ, practice and mock tests
