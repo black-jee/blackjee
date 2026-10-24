@@ -99,6 +99,7 @@ jobs:
       - name: Run application security regression assertions
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/private_table_access.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/public_schedule_rpc_security.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/jee_pyq_publish_gate.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/mock_test_security.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_save_challenge_authorization.sql
