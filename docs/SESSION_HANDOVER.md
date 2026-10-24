@@ -14,14 +14,16 @@
 - GitHub Pages workflow for the preceding HEAD [40093109452](https://github.com/black-jee/blackjee/actions/runs/40093109452) passed. This is not verification of the owner-supplied Vercel deployment.
 - Supabase quote for a development branch: **$0.01344/hour** (about $9.68 for 30 days continuously running, excluding other possible charges). Owner said they do not have money. **Do not create a branch or incur any cost.**
 - Live Supabase migration listing confirms 20 applied versions. No target DDL, migration apply, reset, row mutation, question publication, or deployment action was performed.
-- Searches for six missing baseline migration identifiers and the missing `20261024112132` migration did not find historical SQL in the new repository. Branch listing returned only `main`.
+- Searches for the six missing baseline migration identifiers and the missing `20261024112132` migration did not find historical SQL in the new repository. Branch listing returned only `main`.
 - Local runtime has no `psql`, `postgres`, `docker`, or `podman` executable available for disposable replay.
 
 ## Current state
 
+- Latest CI for commit [`78e6c72b`](https://github.com/black-jee/blackjee/actions/runs/40101029806) passed all configured quality steps, including lint, typecheck, unit tests, Playwright E2E, formatting, and production build. GitHub Pages workflow [40101029607](https://github.com/black-jee/blackjee/actions/runs/40101029607) also succeeded; this does not prove Vercel linkage or production runtime.
+
 - Required project records and continuity checks are in the repository.
 - Read-only catalog inventory is documented in `docs/MIGRATION_RECONCILIATION.md`. Four public application tables and five private application tables have RLS enabled but not forced; no non-internal app triggers, explicit private-schema policies, or storage buckets/policies were found in inspected catalogs.
-- Applied chain and repository migration directory remain inconsistent: six original baseline bodies are absent; live `20261024112132_require_pyq_source_page_before_publish` is missing from the repository while `20261024112500` and `20261024120000` files are not recorded as applied.
+- Applied chain and repository migration directory remain inconsistent: seven applied migration bodies are absent from the repository (six baseline bodies plus live `20261024112132_require_pyq_source_page_before_publish`) while `20261024112500` and `20261024120000` files are not recorded as applied.
 - Five PYQs are drafts; zero published. The April 4 Shift 1 official source PDF is still missing. Do not publish unverified content.
 - Vercel project linkage, active deployed commit, and production runtime remain unverified.
 
