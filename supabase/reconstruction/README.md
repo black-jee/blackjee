@@ -15,6 +15,18 @@
 - `002_reconstructed_rls_policies.sql`: review draft of the 10 catalog-observed public-table RLS policies. It deliberately does not add table/column grants or private-table policies.
 - `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay after applying drafts 001 and 002. It checks the nine tables, all expected columns and an exact total of 93 columns, key column defaults/nullability, RLS flags, the 10 policy names, all 14 foreign-key names plus delete/update/match actions and validation/deferrability flags, all 49 observed constraint names and kinds plus an exact total of 49 constraints, selected check/unique constraints, and all 11 observed secondary indexes. It does not insert application data or prove full production parity.
 
+
+## Migration-history reconciliation — read-only inventory (2026-10-24)
+
+A fresh comparison of the live Supabase migration ledger (20 entries) against `supabase/migrations/` (15 SQL files) found:
+
+- **7 live migration versions have no same-version SQL file in the repository:** `20261024080824` (`foundation_schema`), `20261024080924` (`tighten_rpc_grants_and_policy`), `20261024081041` (`daily_solution_release_rpc`), `20261024081337` (`numeric_answers_and_admin_review`), `20261024081603` (`secure_daily_attempt_sessions`), `20261024081731` (`restrict_anon_rpc_execution`), and `20261024112132` (`require_pyq_source_page_before_publish`).
+- **2 repository SQL files are not present in the live ledger:** `20261024112500_require_pyq_source_page_before_publish.sql` and `20261024120000_require_pyq_source_and_solution_before_publish.sql`. Their overlapping publication-validation intent requires review; do not apply or delete them merely to reconcile counts.
+- The other 13 repository SQL files match versions in the live ledger.
+
+This is a version/name inventory only; it does not recover the seven missing historical SQL bodies or prove that the overlapping files are equivalent. Preserve the live ledger and production schema. Reconstruct missing bodies from verified catalog/function definitions and repository history, label inferred SQL clearly, and only validate replay in a disposable database.
+
+
 ## What was inspected
 
 Read-only catalog inspection of Supabase project `phdssyexhfyxsmhmmcgb` covered the nine known application tables, RLS policies, table grants, indexes, constraints, function signatures/ACLs/security-definer flags, triggers, and Supabase security/performance advisors.
