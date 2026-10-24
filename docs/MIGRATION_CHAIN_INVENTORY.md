@@ -70,10 +70,10 @@ The applied version `20261024112132` and local-only versions `20261024112500` / 
 
 ## Current result
 
-**Inventory: VERIFIED read-only. Historical SQL recovery: BLOCKED / not yet found. Clean replay: UNVERIFIED.** No database changes, migration repairs, resets, question publication, or paid infrastructure were used to produce this manifest.
+**Inventory: VERIFIED read-only. Historical SQL recovery: not found in accessible GitHub branches/commit search. Reconstructed disposable replay: VERIFIED in CI; replay of the complete original historical chain and full Supabase Auth/runtime parity remain UNVERIFIED.** No database changes, migration repairs, resets, question publication, or paid infrastructure were used to produce this manifest.
 
 ## Additional recovery check — Git path history
 
-A follow-up query checked GitHub commit history for each of the seven expected missing migration paths (the six baseline files and the live `20261024112132_require_pyq_source_page_before_publish.sql` path). All seven exact-path history queries returned no commits. Commit-message searches for `foundation_schema`, `tighten_rpc_grants_and_policy`, and `20261024112132` also returned no matches in this repository. This makes recovery from the currently accessible repository history less likely; it does **not** rule out an external backup, local clone, artifact, or another repository.
+A follow-up query checked GitHub commit history for each of the seven expected missing migration paths (the six baseline files and the live `20261024112132_require_pyq_source_page_before_publish.sql` path). All seven exact-path history queries returned no commits. Commit-message searches for `foundation_schema`, `tighten_rpc_grants_and_policy`, and `20261024112132` also returned no matches in this repository. The other accessible branch, `chore/sql-security-test-plan`, was also checked for the seven exact missing paths; none was present. This makes recovery from the currently accessible GitHub repository less likely; it does **not** rule out an external backup, local clone, artifact, or another repository. CI run `40114187027` (#357) has passed the reconstruction replay job; its quality job was still in progress at the time of this update.
 
 No SQL was inferred or fabricated from these names. The clean-replay gate remains blocked until authoritative bodies are recovered or separately labelled reconstructed equivalents are assembled and reviewed.
