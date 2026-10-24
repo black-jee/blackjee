@@ -171,9 +171,6 @@ create index daily_challenge_sessions_user_id_idx
   on private.daily_challenge_sessions (user_id);
 create index jee_pyq_answer_attempts_question_idx
   on private.jee_pyq_answer_attempts (question_id);
-create index mock_test_responses_question_idx
-  on private.mock_test_responses (question_id);
-
 alter table public.jee_pyq_questions enable row level security;
 alter table public.daily_challenges enable row level security;
 alter table public.daily_challenge_attempts enable row level security;
