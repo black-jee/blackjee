@@ -1,5 +1,5 @@
--- Require source provenance and a worked solution before publishing a JEE PYQ.
--- The private answer key is checked only inside this administrator-only RPC.
+-- Require source provenance, a source page, a private answer key, and a worked solution before publishing a JEE PYQ.
+-- Keep this later migration at least as strict as the source-page gate migration.
 CREATE OR REPLACE FUNCTION public.admin_review_jee_pyq_question(
   p_question_id uuid,
   p_approve boolean,
@@ -23,28 +23,17 @@ begin
   if p_publish and not p_approve then
     raise exception 'A question must be approved before publishing' using errcode = '22023';
   end if;
-
-  select * into v_question
-  from public.jee_pyq_questions q
-  where q.id = p_question_id
-  for update;
-  if not found then
-    raise exception 'Question not found' using errcode = 'P0002';
-  end if;
-
+  select * into v_question from public.jee_pyq_questions q where q.id = p_question_id for update;
+  if not found then raise exception 'Question not found' using errcode = 'P0002'; end if;
   if p_publish then
-    if nullif(btrim(v_question.source_pdf), '') is null then
-      raise exception 'Cannot publish without a source reference' using errcode = '22023';
+    if nullif(btrim(v_question.source_pdf), '') is null or coalesce(v_question.source_page, 0) < 1 then
+      raise exception 'Cannot publish without a source document and page number' using errcode = '22023';
     end if;
     if nullif(btrim(v_question.statement), '') is null then
       raise exception 'Cannot publish an empty question' using errcode = '22023';
     end if;
-
-    select k.correct_answer, k.solution
-      into v_answer, v_solution
-    from private.jee_pyq_answer_keys k
-    where k.question_id = p_question_id;
-
+    select k.correct_answer, k.solution into v_answer, v_solution
+    from private.jee_pyq_answer_keys k where k.question_id = p_question_id;
     if not found or nullif(btrim(v_answer), '') is null then
       raise exception 'Cannot publish without a private answer key' using errcode = '22023';
     end if;
@@ -52,14 +41,12 @@ begin
       raise exception 'Cannot publish without a worked solution' using errcode = '22023';
     end if;
     if v_question.question_type = 'single_correct' and not exists (
-      select 1
-      from jsonb_array_elements(v_question.options) as o(item)
+      select 1 from jsonb_array_elements(v_question.options) as o(item)
       where upper(coalesce(o.item->>'label', o.item->>'letter', '')) = upper(btrim(v_answer))
     ) then
       raise exception 'Private answer key does not match any option label' using errcode = '22023';
     end if;
   end if;
-
   update public.jee_pyq_questions
   set review_status = case when p_approve then 'approved' else 'draft' end,
       is_published = p_publish,
@@ -70,14 +57,8 @@ begin
       review_notes = coalesce(p_review_notes, review_notes),
       updated_at = now()
   where id = p_question_id;
-
-  return jsonb_build_object(
-    'id', p_question_id,
-    'review_status', case when p_approve then 'approved' else 'draft' end,
-    'is_published', p_publish
-  );
+  return jsonb_build_object('id', p_question_id, 'review_status', case when p_approve then 'approved' else 'draft' end, 'is_published', p_publish);
 end;
 $function$;
-
 REVOKE ALL ON FUNCTION public.admin_review_jee_pyq_question(uuid, boolean, boolean, text[]) FROM public, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.admin_review_jee_pyq_question(uuid, boolean, boolean, text[]) TO authenticated;
