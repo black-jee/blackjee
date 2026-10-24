@@ -97,3 +97,9 @@ A grouped read-only query of `information_schema.role_table_grants`, `column_pri
 - The five private tables do not appear in client table-grant output. Continue routing answer/session access through the reviewed RPCs.
 
 These are current catalog observations, not a proposed grant migration. The SQL inventory script can regenerate detailed per-column output. No grants were changed. Grant replay is still pending in a disposable database.
+
+## Constraint/index exactness pass — read-only checkpoint (2026-10-24)
+
+A full live catalog inventory returned 49 constraints across the nine reconstructed tables: 23 CHECK, 14 FOREIGN KEY, 9 PRIMARY KEY, and 3 UNIQUE. Comparing names against the SQL draft exposed three auto-generated constraint-name mismatches on the two answer-key nonempty checks and the two statement-image path safety checks; these are now explicitly named to match the catalog. The same comparison found the secondary index `mock_test_attempts_user_created_idx` missing from the draft; it has been added on `(user_id, created_at DESC)`.
+
+The smoke test now asserts all 49 observed constraint names and kinds, and the complete 11-index secondary-index set. This is a source-level/catalog comparison only: the updated draft and test have not been executed against a disposable database. Foreign-key names are checked in the broad test and delete actions are described in the table draft, but a full definition-by-definition replay diff remains outstanding.
