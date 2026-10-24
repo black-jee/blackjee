@@ -31,7 +31,7 @@ export default async function AdminPage() {
     <main className="mx-auto min-h-screen max-w-6xl px-5 py-6 sm:px-8 lg:py-12">
       <header className="mb-8 flex items-center justify-between border-b border-[var(--border)] pb-5">
         <Link href="/" className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">BJ</span><span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE ADMIN</span></Link>
-        <a href="/profile" className="text-sm text-[var(--muted)] underline underline-offset-4">Account</a>
+        <nav className="flex gap-4 text-sm text-[var(--muted)]"><Link href="/admin/pyq" className="underline underline-offset-4">PYQ workbench</Link><a href="/profile" className="underline underline-offset-4">Account</a></nav>
       </header>
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">Restricted workspace</p>
       <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Admin dashboard</h1>
