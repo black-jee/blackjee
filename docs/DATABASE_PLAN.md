@@ -3,7 +3,7 @@
 ## New project baseline observed
 
 Project: `phdssyexhfyxsmhmmcgb` (Tokyo / `ap-northeast-1`, PostgreSQL 17.11).  
-Observed migration history: six entries, versions from `20261024080824` to `20261024081731`.  
+Observed migration history before hardening: six entries, versions from `20261024080824` to `20261024081731`. A seventh migration `20261024095050_harden_public_schedule_rpc_and_index` is now applied and verified.  
 Observed tables: 3 public tables and 4 private tables; all reported empty. RLS is enabled on the inspected tables. No Edge Functions are deployed in this project at the time of inspection.
 
 ### Public tables
@@ -47,10 +47,10 @@ The uploaded original `supabase/schema.sql` defines `daily_questions`, `active_q
 7. Re-run security and performance advisors after each database stage.
 8. Seed only fixtures or content with provenance. Never seed invented answer keys or treat unresolved source assets as verified.
 
-## Current advisor findings (baseline)
+## Current advisor findings (after first hardening migration)
 
-- Security: private tables have RLS enabled but no policies (acceptable only if direct grants are absent and private schema is not exposed; verify grants). Five security-definer RPCs are callable by browser roles and require per-function grant/body review. The anon role can call `get_current_daily_challenge()`.
-- Performance: `private.daily_challenge_sessions.user_id` foreign key lacks a covering index. Several unused-index notices may be expected on an empty project; evaluate after representative queries before removing indexes.
+- Security: private tables have RLS enabled but no policies; verified grants show only `postgres` has table privileges on those four private tables. Four security-definer RPCs remain callable by authenticated users and require per-function grant/body review. The public schedule RPC was changed to invoker security and the advisor warning for anon-executable security-definer was removed.
+- Performance: added `private.daily_challenge_sessions(user_id)` index for its foreign key. Unused-index notices may be expected on an empty project; evaluate after representative queries before removing indexes.
 
 ## Required next checks
 
