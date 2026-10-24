@@ -39,3 +39,27 @@ Known open points: `get_daily_challenge_result` was observed to expose released 
 5. Keep reconstructed SQL outside `supabase/migrations/` until separately reviewed.
 
 No production database, ledger, schema, policy, grant, storage, or data changes. Draft PR #2 remains unmerged.
+
+
+## Exact filename reconciliation (verified 2026-10-24)
+
+Live ledger versions without an exact matching repository filename:
+
+- `20261024080824_foundation_schema.sql`
+- `20261024080924_tighten_rpc_grants_and_policy.sql`
+- `20261024081041_daily_solution_release_rpc.sql`
+- `20261024081337_numeric_answers_and_admin_review.sql`
+- `20261024081603_secure_daily_attempt_sessions.sql`
+- `20261024081731_restrict_anon_rpc_execution.sql`
+- `20261024112132_require_pyq_source_page_before_publish.sql`
+
+Repository migration files without an exact matching live ledger entry:
+
+- `20261024112500_require_pyq_source_page_before_publish.sql`
+- `20261024120000_require_pyq_source_and_solution_before_publish.sql`
+
+The 20261024112500 file has the same source-page publication gate as the missing 20261024112132 ledger version, but the version differs; do not silently rename it or treat it as proven original history. The 20261024120000 file implements a similar source/page/answer-key/solution gate to the 20261024111533 migration. This is a potential duplicate/overlap in repository history that requires Git history and intended sequencing review before any repository migration edits. No files were renamed or deleted in this reconciliation.
+
+## CI snapshot
+
+For the previously identified workflow run `40114721534`, the `reconstruction-replay` job reports success and the `quality` job reports cancelled. Therefore the replay job succeeded, but this run does not establish that the complete CI suite passed. The combined commit status also reports a Vercel failure linked to a build-rate-limit/upgrade page; no paid upgrade was attempted.
