@@ -1,13 +1,15 @@
 # BLACK-JEE session handover
 
 **Updated:** 2026-10-24  
-**Active task:** BJ-DOC-001 — finish and verify the repository continuity system  
+**Active task:** BJ-DB-001 — reconstruct the missing migration baseline in isolated staging  
 **Branch:** `main`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
 **Production URL supplied by owner:** https://blackjee.vercel.app/ (deployment linkage/runtime not verified)
 
 ## Last session completed
+
+- Completed and tested BJ-DOC-001. The continuity validator and full configured CI passed in [run 40091830452](https://github.com/black-jee/blackjee/actions/runs/40091830452); the formatter committed changes as `b6bb46d81ce81b803296aa6c9421ca611b03f8b3`.
 
 - Added project context, task ledger, decisions, releases, SEO/growth, changelog, and reconciled project status.
 - Confirmed latest observed repository HEAD before this handover was `ec2f7ce1bfb25a0b1e96f3168ab82959c8a5af1e`.
@@ -23,15 +25,15 @@
 
 ## Single exact next action
 
-Verify the latest CI run on current `main`; inspect any Prettier failures, fix them without broad unrelated rewrites, and confirm the continuity validator passes. Then update this handover, task ledger, verification log, and project status with the resulting commit and evidence.
+Inspect the six missing baseline migration versions and compare live schema/function/grant definitions to repository migration files; create a reviewed reconstruction plan and replay it only in an isolated database. Do not reset or alter the target Supabase project.
 
 ## Verification steps
 
-1. Confirm all required continuity documents exist and are non-empty.
-2. Run the continuity validator and record its actual result.
-3. Check `npm run format:check`, lint, typecheck, unit tests, E2E, and build from GitHub Actions; fix formatting failures rather than describing the run as green.
-4. Re-query Supabase migration history and update the count consistently across docs.
-5. Revisit BJ-DB-001 only after the continuity task is verified; inspect definitions and reconstruct migration baseline only in an isolated database.
+1. Re-query Supabase migration history and enumerate the six missing baseline versions from the live migration table.
+2. Inspect schema-only exports and function/policy/grant definitions; map each live object to the migration that created it where possible.
+3. Reconstruct missing SQL in a separate branch or reviewable files without changing the target database.
+4. Provision an isolated disposable database and test ordered migration replay; compare resulting schema, RLS, grants, functions, and indexes.
+5. Update BJ-DB-001, `docs/DATABASE_PLAN.md`, and this handover with evidence; request owner approval before any risky target-project migration.
 
 ## Blockers / owner action
 
