@@ -26,7 +26,7 @@ for (const path of required) {
 if (failures.length === 0) {
   const tasks = readFileSync("docs/TASKS.md", "utf8");
   const handover = readFileSync("docs/SESSION_HANDOVER.md", "utf8");
-  const taskIds = [...tasks.matchAll(/^### (BJ-[A-Z]+-\\d+) —/gm)].map(
+  const taskIds = [...tasks.matchAll(/^### (BJ-[A-Z]+-\d+) —/gm)].map(
     (match) => match[1],
   );
   const duplicateIds = taskIds.filter(
@@ -40,7 +40,7 @@ if (failures.length === 0) {
   }
 
   const activeTask = handover.match(
-    /^\\*\\*Active task:\\*\\* (BJ-[A-Z]+-\\d+)/m,
+    /^\*\*Active task:\*\* (BJ-[A-Z]+-\d+)/m,
   )?.[1];
 
   if (!activeTask) {
@@ -53,7 +53,7 @@ if (failures.length === 0) {
     );
   }
 
-  if (!/^## Single exact next action\\s*$/m.test(handover)) {
+  if (!/^## Single exact next action\s*$/m.test(handover)) {
     failures.push(
       "SESSION_HANDOVER.md must contain the heading 'Single exact next action'.",
     );
