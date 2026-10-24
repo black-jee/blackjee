@@ -36,3 +36,36 @@ describe("isSafeAssetPath", () => {
     expect(isSafeAssetPath(path)).toBe(false);
   });
 });
+
+
+import { isValidIstLocalDateTime, istLocalDateTimeToIso } from "../lib/time/ist-local-date-time";
+
+describe("India-local schedule datetime validation", () => {
+  it.each([
+    "2026-10-24T16:30",
+    "2024-02-29T00:00",
+    "2000-02-29T23:59",
+  ])("accepts valid datetime %s", (value) => {
+    expect(isValidIstLocalDateTime(value)).toBe(true);
+  });
+
+  it.each([
+    "2026-02-29T12:00",
+    "2026-04-31T12:00",
+    "2026-13-01T12:00",
+    "2026-10-24T24:00",
+    "2026-10-24T12:60",
+    "2026-10-24",
+    "2026-10-24T12:00:00",
+  ])("rejects invalid datetime %s", (value) => {
+    expect(isValidIstLocalDateTime(value)).toBe(false);
+  });
+
+  it("converts a valid India-local datetime to UTC", () => {
+    expect(istLocalDateTimeToIso("2026-10-24T16:30")).toBe("2026-10-24T11:00:00.000Z");
+  });
+
+  it("throws rather than normalizing an invalid datetime", () => {
+    expect(() => istLocalDateTimeToIso("2026-02-31T12:00")).toThrow();
+  });
+});
