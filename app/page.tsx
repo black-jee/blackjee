@@ -1,3 +1,4 @@
+import Link from "next/link";
 const modules = [
   { number: "01", title: "Daily challenge", description: "A focused attempt with server-enforced timing and results release.", status: "In progress" },
   { number: "02", title: "Previous-year questions", description: "Browse exam questions with reviewed solutions, diagrams and formulas.", status: "In progress" },
@@ -9,10 +10,10 @@ export default function HomePage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 py-6 sm:px-8 lg:px-12">
       <header className="flex items-center justify-between border-b border-[var(--border)] pb-5">
-        <a href="/" aria-label="BLACK-JEE home" className="flex items-center gap-3">
+        <Link href="/" aria-label="BLACK-JEE home" className="flex items-center gap-3">
           <span className="grid size-10 place-items-center rounded-xl bg-[var(--accent)] text-sm font-black tracking-tight text-[var(--accent-foreground)]">BJ</span>
           <span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span>
-        </a>
+        </Link>
         <nav aria-label="Main navigation" className="flex items-center gap-4 text-xs text-[var(--muted)] sm:gap-5"><a href="/challenge" className="hover:text-[var(--text)]">Challenge</a><a href="/pyq" className="hover:text-[var(--text)]">PYQs</a><a href="/chapterwise" className="hover:text-[var(--text)]">Chapters</a><a href="/mock-tests" className="hover:text-[var(--text)]">Mock tests</a><a href="/profile" className="hover:text-[var(--text)]">Profile</a><a href="/admin" className="hover:text-[var(--text)]">Admin</a><a href="/login" className="rounded-full border border-[var(--border)] px-3 py-1.5 hover:text-[var(--text)]">Sign in</a></nav>
       </header>
 
