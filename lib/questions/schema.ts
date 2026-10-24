@@ -23,7 +23,7 @@ export type QuestionOption = z.infer<typeof questionOptionSchema>;
 
 /** Keep content paths relative and prevent URL/path traversal in imported manifests. */
 export function isSafeAssetPath(path: string): boolean {
-  if (!path || path.startsWith("/") || path.includes("\\") || path.includes("://")) return false;
+  if (!path || path.startsWith("/") || !/^[A-Za-z0-9._/-]+$/.test(path)) return false;
   const parts = path.split("/");
   return parts.every((part) => part.length > 0 && part !== "." && part !== "..");
 }
