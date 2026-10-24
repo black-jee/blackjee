@@ -17,7 +17,12 @@
 - `002_reconstructed_rls_policies.sql`: review draft of the 10 catalog-observed public-table RLS policies. It deliberately does not add table/column grants or private-table policies.
 - `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay after applying drafts 001 and 002. It checks the nine tables, all expected columns and an exact total of 93 columns, key column defaults/nullability, RLS flags, the 10 policy names, all 14 foreign-key names plus delete/update/match actions and validation/deferrability flags, all 49 observed constraint names and kinds plus an exact total of 49 constraints, selected check/unique constraints, and all 11 observed secondary indexes. It does not insert application data or prove full production parity.
 - `tests/002_security_catalog_inventory.sql`: read-only inventory of schema/table/column grants, function ACLs/security attributes, policies, and triggers.
+- `tests/bootstrap_supabase_compat.sql`: minimal auth schema/roles used only by CI's disposable PostgreSQL service; it is not a production Supabase bootstrap.
 - `tests/003_security_regression_assertions.sql`: read-only catalog assertions for the 11 known privileged RPCs, empty search paths, no anon/PUBLIC execution, in-function authentication/admin guards, all 10 public policy identities/commands/roles plus key predicates, column-level access boundaries, and browser-role isolation from the private schema. The full script has passed against the live catalog; this is static catalog validation, not a disposable replay or live negative RPC testing.
+
+## Disposable replay in CI
+
+The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface needed by the reconstructed tables/policies, applies reconstruction drafts 001 and 002, and runs the read-only catalog smoke assertions. This is a no-cost ephemeral CI container, not a paid Supabase branch and not a production connection. It tests structural replay compatibility but does not emulate Supabase Auth fully, replay the missing historical migrations, validate RPC definitions, or replace real-user security tests.
 
 ## Migration-history reconciliation — read-only inventory (2026-10-24)
 
