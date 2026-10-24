@@ -228,15 +228,21 @@ export function PyqAuthoringForm() {
           className={inputClass}
         />
       </label>
-      <label className={labelClass}>
-        Options (one per line: <code>Label|text|optional/image.png</code>)
-        <textarea
-          value={optionsText}
-          onChange={(event) => setOptionsText(event.target.value)}
-          rows={5}
-          className={inputClass}
-        />
-      </label>
+      {questionType === "single_correct" ? (
+        <label className={labelClass}>
+          Options (one per line: <code>Label|text|optional/image.png</code>)
+          <textarea
+            value={optionsText}
+            onChange={(event) => setOptionsText(event.target.value)}
+            rows={5}
+            className={inputClass}
+          />
+        </label>
+      ) : (
+        <p className="text-sm text-[var(--muted)]">
+          Numerical questions use a numeric answer and do not need multiple-choice options.
+        </p>
+      )}
       <div className="grid gap-4 sm:grid-cols-2">
         <label className={labelClass}>
           Correct answer / numerical answer
