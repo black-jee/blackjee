@@ -1,20 +1,10 @@
-import katex from "katex";
 import { isSafeAssetPath, type QuestionContent } from "@/lib/questions/schema";
+import { renderQuestionText } from "@/lib/questions/render";
 
 type Props = {
   question: QuestionContent;
   className?: string;
 };
-
-function renderMathText(source: string): string {
-  return katex.renderToString(source, {
-    displayMode: false,
-    throwOnError: false,
-    strict: "warn",
-    trust: false,
-    output: "htmlAndMathml",
-  });
-}
 
 function SafeAsset({ path, alt }: { path?: string; alt: string }) {
   if (!path || !isSafeAssetPath(path)) {
@@ -43,7 +33,7 @@ export function QuestionContent({ question, className }: Props) {
     <article className={className}>
       <div
         className="question-statement text-base leading-8"
-        dangerouslySetInnerHTML={{ __html: renderMathText(question.statement) }}
+        dangerouslySetInnerHTML={{ __html: renderQuestionText(question.statement) }}
       />
       {question.statementImagePath ? (
         <SafeAsset path={question.statementImagePath} alt="Question diagram" />
@@ -61,7 +51,7 @@ export function QuestionContent({ question, className }: Props) {
               </span>
               <div className="min-w-0 flex-1">
                 {option.text ? (
-                  <div dangerouslySetInnerHTML={{ __html: renderMathText(option.text) }} />
+                  <div dangerouslySetInnerHTML={{ __html: renderQuestionText(option.text) }} />
                 ) : null}
                 {option.imagePath ? <SafeAsset path={option.imagePath} alt={`Option ${option.label} image`} /> : null}
               </div>
