@@ -151,6 +151,7 @@ begin
     ('public','jee_pyq_questions','jee_pyq_review_queue_idx'),
     ('public','jee_pyq_questions','jee_pyq_reviewed_by_idx'),
     ('public','jee_pyq_questions','jee_pyq_subject_year_idx'),
+    ('public','mock_test_attempts','mock_test_attempts_user_created_idx'),
     ('private','daily_challenge_sessions','daily_challenge_sessions_user_id_idx'),
     ('private','jee_pyq_answer_attempts','jee_pyq_answer_attempts_question_idx')
   ) expected(schema_name, table_name, index_name)
