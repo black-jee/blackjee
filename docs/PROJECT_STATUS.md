@@ -10,7 +10,7 @@
 - **Supabase migrations:** 20 applied entries; 15 SQL migration files are checked into Git; seven live migration versions lack same-version files, and two overlapping repository migration files are absent from the live ledger
 - **Supabase data:** 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported
 - **Supabase tables:** 9 inspected public/private tables; no student attempts or mock-test attempts
-- **Reconstruction replay:** CI run `40113303240` passed on commit `7f81a08`; disposable PostgreSQL 17 replay applied table shapes, 10 RLS policies, 12 current RPC definitions, and access grants, then passed schema/security assertions and four negative authorization checks.
+- **Reconstruction replay:** CI run `40113487978` passed on commit `63c099c`; disposable PostgreSQL 17 replay applied table shapes, 10 RLS policies, 12 current RPC definitions, and access grants, then passed schema/security assertions, RPC definition fingerprint checks, and four negative authorization checks.
 - **Supabase Edge Functions:** Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)
 - **Legacy source ZIP:** Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files
 - **Live website comparison:** Blocked/incomplete; direct fetch did not return page content
