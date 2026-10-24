@@ -9,7 +9,7 @@
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | New GitHub repository   | `black-jee/blackjee`, public, default branch `main`                                                                             |
 | New Supabase            | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region                                                          |
-| Supabase migrations     | 21 applied entries; 15 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
+| Supabase migrations     | 20 applied entries; 15 migration files are checked into Git, while six original migration bodies remain to be reconstructed (the repository includes one additional duplicate/overlapping migration file not in live history) |
 | Supabase data           | 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported          |
 | Supabase tables         | 9 inspected public/private tables; no student attempts or mock-test attempts                                                    |
 | Supabase Edge Functions | Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)             |
@@ -76,3 +76,14 @@
 
 - **Engineering improvement:** the repository has a committed npm lockfile and CI uses `npm ci` for reproducible dependency installation.
 - **Latest CI:** run `40088170829` on current `main` passed all configured gates before the publication-gate migration. The new migration has triggered a fresh CI run; verify that run before treating the latest commit as fully green.
+
+
+## Constitution reconciliation — 2026-10-24
+
+- **Implemented:** Added `docs/PROJECT_CONTEXT.md`, `docs/TASKS.md`, `docs/DECISIONS.md`, `docs/RELEASES.md`, `docs/SEO_AND_GROWTH.md`, and `CHANGELOG.md` to align the repository with the owner's engineering constitution.
+- **Verified against live Supabase:** 20 migration versions are recorded by the project migration API; 15 SQL migration files exist in the repository. Six original baseline migration bodies remain missing, and the repo has an extra publication-gate migration file that is not present in live migration history. Do not reset the target database.
+- **Verified against live Supabase:** PYQ review RPC requires a source document and page, reads the private answer key, and requires a worked solution. Anonymous execute privilege is false; authenticated execute privilege is true, with admin role enforced inside the function.
+- **Verified against live data:** 5 PYQ records total, 0 published, 5 unpublished. No content was imported or published during this reconciliation.
+- **CI evidence:** [Run 40090330071](https://github.com/black-jee/blackjee/actions/runs/40090330071) passed for commit `57d04ed9d3db332e0aafe71d69423be5723c7ff5`. Documentation commits after that SHA triggered additional workflows; those latest runs must be checked before claiming the current HEAD is green.
+- **Production verification:** the supplied URL `https://blackjee.vercel.app/` could not be fetched by the available web retrieval path. Vercel project linkage, deployed commit and runtime behavior remain unverified.
+- **Next action:** inspect the current head CI runs; then verify production deployment linkage/runtime non-invasively, and continue reconstructing the baseline migration chain on an isolated database.
