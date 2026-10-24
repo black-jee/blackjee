@@ -1,1 +1,0 @@
-Terminal connected to GitHub
