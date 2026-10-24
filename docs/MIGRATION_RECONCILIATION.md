@@ -127,3 +127,19 @@ A targeted read-only query captured all 12 application routines in `public` with
 Routine list: `admin_review_jee_pyq_question`, `admin_save_daily_challenge`, `admin_save_jee_pyq_question`, `get_current_daily_challenge`, `get_daily_challenge_result`, `get_mock_test_result`, `grade_jee_pyq`, `resume_mock_test`, `start_daily_challenge`, `start_mock_test`, `submit_daily_challenge`, `submit_mock_test`.
 
 This inventory confirms the routine-level ACL/configuration summary, but it is not a full semantic security review of all function bodies. Body-by-body checks and tests with disposable anonymous/student/admin identities remain required before declaring security verification complete.
+
+## Latest security-advisor and CI follow-up — 2026-10-24
+
+### Advisor results (read-only)
+
+- Security advisor: five `rls_enabled_no_policy` informational findings for private tables (`private.daily_challenge_answer_keys`, `private.daily_challenge_sessions`, `private.jee_pyq_answer_attempts`, `private.jee_pyq_answer_keys`, and `private.mock_test_responses`). RLS is enabled and the inspected ACLs do not grant direct table access to `anon` or `authenticated`. Keep them private; do not add broad policies just to silence the linter. Re-check schema and grants whenever functions change. Reference: https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy
+- Security advisor: 11 authenticated-callable `SECURITY DEFINER` functions. These are intended RPC entry points, not automatically exploitable; their function bodies need role/ownership checks. Read-only body inspection confirmed `auth.uid()` checks in the six inspected student-facing routines (`get_daily_challenge_result`, `get_mock_test_result`, `grade_jee_pyq`, `resume_mock_test`, `start_daily_challenge`, and `submit_daily_challenge`). Mock-test RPC ownership checks and PYQ admin role checks also have existing SQL regression assertions. This does not replace live role-based negative tests. Reference: https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable
+- Performance advisor: one missing covering index on `private.mock_test_responses.question_id` (`mock_test_responses_question_id_fkey`). Add only after reviewing query/foreign-key access patterns and incorporating the index into the reviewed migration chain; do not apply an ad hoc production DDL change while migration history is inconsistent. Reference: https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys
+- Performance advisor also reports seven indexes as unused. The project has very little attempt/question traffic, so these are not evidence that the indexes should be dropped. Retain until query patterns and production-like statistics justify a reviewed change.
+
+### CI and code follow-up
+
+- Formatting corrections were committed in `lib/time/ist-local-date-time.ts` and `tests/question-schema.test.ts` (commit `26288c3e44a39ddcd28c3cb5a34f96c8313237f3`).
+- GitHub Pages workflow [40097368965](https://github.com/black-jee/blackjee/actions/runs/40097368965) completed successfully for that commit.
+- CI workflow [40097368791](https://github.com/black-jee/blackjee/actions/runs/40097368791) was still running when this entry was written. Do not describe CI as green until its final conclusion is `success`.
+- No production database writes, DDL, migration repairs, content publication, paid infrastructure, or deployment changes were performed during this follow-up.
