@@ -10,7 +10,7 @@
 ## Latest verified state
 
 - Current observed `main` HEAD: `468e7bd2d84d44cff94fb973d2c18b054a1c7456` (`docs: refresh handover with verified CI and migration search`).
-- CI run [40094385439](https://github.com/black-jee/blackjee/actions/runs/40094385439) completed successfully on that exact HEAD. All configured quality gates passed.
+- Current documentation HEAD has advanced since the previous handover. CI run [40094861867](https://github.com/black-jee/blackjee/actions/runs/40094861867) passed on `c4392e11ff34435577409c9c1aa89ed610a4e5cd`; the formatter-created follow-up commit is `7e28a30afea75aaf39823d6292773f9bb53f3410`, whose Pages workflow [40094885333](https://github.com/black-jee/blackjee/actions/runs/40094885333) passed. Verify a CI run for the formatter follow-up before claiming the current HEAD has full CI coverage.
 - GitHub Pages workflow for the preceding HEAD [40093109452](https://github.com/black-jee/blackjee/actions/runs/40093109452) passed. This is not verification of the owner-supplied Vercel deployment.
 - Supabase quote for a development branch: **$0.01344/hour** (about $9.68 for 30 days continuously running, excluding other possible charges). Owner said they do not have money. **Do not create a branch or incur any cost.**
 - Live Supabase migration listing confirms 20 applied versions. No target DDL, migration apply, reset, row mutation, question publication, or deployment action was performed.
@@ -24,6 +24,13 @@
 - Applied chain and repository migration directory remain inconsistent: six original baseline bodies are absent; live `20261024112132_require_pyq_source_page_before_publish` is missing from the repository while `20261024112500` and `20261024120000` files are not recorded as applied.
 - Five PYQs are drafts; zero published. The April 4 Shift 1 official source PDF is still missing. Do not publish unverified content.
 - Vercel project linkage, active deployed commit, and production runtime remain unverified.
+
+## Additional verification — 2026-10-24
+
+- CI passed on `c4392e11ff34435577409c9c1aa89ed610a4e5cd` (run [40094861867](https://github.com/black-jee/blackjee/actions/runs/40094861867)); GitHub Pages workflow passed on formatter follow-up commit `7e28a30afea75aaf39823d6292773f9bb53f3410` (run [40094885333](https://github.com/black-jee/blackjee/actions/runs/40094885333)). Do not assume CI passed on the formatter follow-up until its own run is checked.
+- A non-invasive fetch of the owner-supplied `https://blackjee.vercel.app/` could not retrieve content (cache miss); Vercel linkage and live behavior remain unverified.
+- Additional read-only catalog counts are recorded in `docs/MIGRATION_RECONCILIATION.md`: 9 application tables, 93 columns, 49 constraints, 23 indexes, 10 policies, 12 functions, and 0 non-internal triggers; RLS enabled on all nine tables, not forced.
+- No paid infrastructure was created and no production database writes were performed.
 
 ## Single exact next action
 
