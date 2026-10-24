@@ -30,7 +30,7 @@ jobs:
           import subprocess
           from pathlib import Path
           extensions = {".ts", ".tsx", ".js", ".mjs", ".json", ".css", ".md", ".yml", ".yaml", ".html"}
-          paths = subprocess.check_output(["git", "ls-files", "-z").split(b"\\0")
+          paths = subprocess.check_output(["git", "ls-files", "-z"]).split(b"\0")
           for raw_path in paths:
               if not raw_path:
                   continue
