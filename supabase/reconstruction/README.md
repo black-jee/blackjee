@@ -17,7 +17,6 @@
 - `tests/002_security_catalog_inventory.sql`: read-only inventory of schema/table/column grants, function ACLs/security attributes, policies, and triggers.
 - `tests/003_security_regression_assertions.sql`: read-only catalog assertions for the 11 known privileged RPCs, empty search paths, no anon/PUBLIC execution, in-function authentication/admin guards, exact public-policy count and key RLS predicates, and browser-role isolation from the private schema. This is static catalog validation, not live negative RPC testing; it is not yet executed against a disposable replay.
 
-
 ## Migration-history reconciliation — read-only inventory (2026-10-24)
 
 A fresh comparison of the live Supabase migration ledger (20 entries) against `supabase/migrations/` (15 SQL files) found:
@@ -28,8 +27,6 @@ A fresh comparison of the live Supabase migration ledger (20 entries) against `s
 
 This is a version/name inventory only; it does not recover the seven missing historical SQL bodies or prove that the overlapping files are equivalent. Preserve the live ledger and production schema. Reconstruct missing bodies from verified catalog/function definitions and repository history, label inferred SQL clearly, and only validate replay in a disposable database.
 
-
-
 ## Security checkpoint — read-only live-catalog comparison (2026-10-24)
 
 A fresh live catalog query confirmed all 11 expected privileged RPCs exist once each, are `SECURITY DEFINER`, pin an empty `search_path`, have no `anon` or `PUBLIC` execute grant, and contain an `auth.uid()` authentication check. The three admin authoring/review RPCs also contain the server-managed `app_metadata` admin-role guard. Browser roles still have no `USAGE` on `private`; direct private-table access remains blocked by the current privilege model.
@@ -37,7 +34,6 @@ A fresh live catalog query confirmed all 11 expected privileged RPCs exist once 
 These results support the current live catalog review, not a claim that the new regression script passed. It still needs execution against a disposable replay and real negative tests with anon, ordinary authenticated, owner, and admin identities. Do not revoke authenticated execution from the RPCs wholesale: the intended pattern is authenticated invocation plus authorization enforced inside each function.
 
 The migration source review also found the repository's `20261024111533` function body checks for a non-empty source PDF but not a positive source page, while `20261024112500` and `20261024120000` both require a source document and page plus a private answer key and worked solution. The latter two are not in the live migration ledger under those exact versions; do not apply them just to align history. Confirm the actual live function body and ledger ordering before resolving these overlapping files.
-
 
 ## What was inspected
 
@@ -100,11 +96,9 @@ This remains a catalog observation, not a migration recommendation. No productio
 
 The live public-function inventory exposes `get_current_daily_challenge()` to `anon` and `authenticated`, plus authenticated grading/mock-test/challenge RPCs. The frontend PYQ and mock-test pages also query `public.jee_pyq_questions` directly. Table-level `SELECT` checks return false, but column-level grants exist: `anon` and `authenticated` can select the 25 public question columns used for published question content/metadata. For `public.daily_challenges`, `anon` can select only eight schedule/metadata columns, not `statement` or `options`; the authenticated challenge flow obtains the question through `start_daily_challenge()`. This matches the inspected frontend access patterns. Preserve column-level access and do not add broad table grants; verify requested columns whenever frontend queries change.
 
-
 ## Expanded metadata checks — read-only checkpoint (2026-10-24)
 
 A live `information_schema.columns` query confirmed the reconstructed column counts per table: 31 PYQ question columns, 13 daily-challenge columns, 7 challenge-attempt columns, 19 mock-test-attempt columns, and 3/4/6/4/6 columns across the five private tables. The smoke test now rejects extra as well as missing columns by requiring exactly 93 columns across the nine-table set. It also checks representative high-impact defaults and nullability. This is still not a full column-by-column type/default parity proof, and it has not been run against a disposable replay.
-
 
 ## Foreign-key cross-check — read-only checkpoint (2026-10-24)
 
