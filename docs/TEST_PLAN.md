@@ -2,7 +2,7 @@
 
 ## Test status
 
-No application test is marked passing until it is actually executed against the current implementation. The new SQL regression assertions for the public schedule RPC, restricted anonymous column grants, and private-table browser-role privileges have been run successfully against the target Supabase project. The legacy ZIP contains static security checks, inline-JS checks, question-manifest audits, a crop processor and a SQL regression test; these are useful references but do not constitute end-to-end coverage for the new application.
+No application test is marked passing until it is actually executed against the current implementation. The new SQL regression assertions for the public schedule RPC, restricted anonymous column grants, private-table browser-role privileges, admin challenge-save RPC, and mock-test ownership/private-response privileges have been run successfully against the target Supabase project. Mock-test start/resume/submit were also exercised against an empty question bank and correctly rejected unavailable test attempts. No app build, Vitest, Playwright, or real signed-in browser flow has been run yet. The legacy ZIP contains static security checks, inline-JS checks, question-manifest audits, a crop processor and a SQL regression test; these are useful references but do not constitute end-to-end coverage for the new application.
 
 ## Automated gates
 
@@ -26,6 +26,7 @@ No application test is marked passing until it is actually executed against the 
 - PYQ import validation, source ID uniqueness, draft invisibility, review and publish.
 - Question statement, options, image options, diagrams, chemistry notation and KaTeX formulas.
 - Chapter filters, pagination, navigation, mock-test timer and results.
+- Mock-test exact 75-question shift validation, attempt ownership, resume isolation, late submission rejection, answer-key non-disclosure before submission, marking and result ownership.
 - Admin create/edit/preview/schedule/publish, review queue, CSV export and safe destructive confirmation.
 - Crop/image mapping and manifest checks; missing asset fallback.
 - Accessibility basics: keyboard operation, focus visibility, labels, contrast and reduced-motion behavior.
