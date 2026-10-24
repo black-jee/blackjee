@@ -27,8 +27,8 @@
 - **Implemented and database-verified:** Mock-test schema/RPCs now support shift/focused test selection, ownership-bound resume/submission, server-side marking, private responses, and the exact 75-question shift validation rule (20 MCQ + 5 numerical per subject). With an empty bank, start is rejected as expected.
 - **Tested:** SQL regression assertions for public schedule security, private-table access, admin RPC permissions, mock-test permissions and function ownership checks passed against the target Supabase project.
 - **Imported as drafts:** The first 5 Physics questions from the source manifest and their 5 answer keys were imported. They are not published. Their question images are not yet copied into the new application.
-- **CI run 40088044408 (commit `b02b2c5`): PASS.** `npm ci`, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build all completed successfully.
-- **Dependency reproducibility:** `package-lock.json` is committed and CI uses `npm ci`; final confirmation is pending from a fresh CI run.
+- **CI run 40112374432 (commit `f2831f8`, 2026-10-24): PASS.** `npm ci`, continuity validation, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build all completed successfully.
+- **Dependency reproducibility:** `package-lock.json` is committed and `npm ci` passed in CI run `40112374432`.
 - **Not verified:** Browser behavior, real authenticated student/admin workflows, file upload/storage, full question import, and staging deployment.
 
 ## Important findings / blockers
