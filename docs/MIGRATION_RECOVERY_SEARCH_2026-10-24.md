@@ -27,6 +27,31 @@ Record the exact recovery checks performed for the BLACK-JEE Supabase migration 
 
 These checks do not search private repositories, local device folders, unuploaded archives, backups, deployment artifacts, or other collaborators' clones. A no-result code search is not proof that no copy exists elsewhere.
 
+## Optional local recovery check (Termux / Android)
+
+If an older clone or downloaded archive may exist on the owner's device, run these read-only commands in Termux. They only print matching paths; they do not edit or upload files.
+
+```sh
+# Search Termux home for the exact missing migration filenames.
+find "$HOME" -type f \(
+  -name '20261024080824*' -o
+  -name '20261024080924*' -o
+  -name '20261024081041*' -o
+  -name '20261024081337*' -o
+  -name '20261024081603*' -o
+  -name '20261024081731*' -o
+  -name '20261024112132*'
+\) -print 2>/dev/null
+
+# If Android shared storage permission was already granted, search Downloads too.
+find "$HOME/storage/shared/Download" -type f \(
+  -iname '*.zip' -o -iname '*.tar' -o -iname '*.tar.gz' -o
+  -iname '*.tgz' -o -iname '*.7z' -o -name '20261024*.sql'
+\) -print 2>/dev/null
+```
+
+If the shared Download folder does not exist, do not change permissions just for this check; run `termux-setup-storage` only if the owner chooses to grant Termux shared-storage access. Inspect candidate archives before extracting them, and do not upload secrets or `.env` files. A matching filename is only a candidate: compare SQL content and provenance before treating it as original history.
+
 ## Missing applied bodies
 
 - `20261024080824` — `foundation_schema`
