@@ -29,7 +29,8 @@
 - **Implemented and database-verified:** Mock-test schema/RPCs now support shift/focused test selection, ownership-bound resume/submission, server-side marking, private responses, and the exact 75-question shift validation rule (20 MCQ + 5 numerical per subject). With an empty bank, start is rejected as expected.
 - **Tested:** SQL regression assertions for public schedule security, private-table access, admin RPC permissions, mock-test permissions and function ownership checks passed against the target Supabase project.
 - **Imported as drafts:** The first 5 Physics questions from the source manifest and their 5 answer keys were imported. They are not published. Their question images are not yet copied into the new application.
-- **Blocked for local runtime checks:** This execution environment cannot resolve `github.com`, so the repository could not be cloned and dependencies could not be installed. No npm test, TypeScript, lint, or production-build result is claimed.
+- **CI run 40086464478:** ESLint passed, strict TypeScript passed, 2 Vitest files passed, 2 Playwright browser tests passed, and the Next.js production build passed. The final Prettier check failed because 41 tracked files need formatting. These checks ran on the code at commit `d50c6a7`; subsequent documentation changes have not yet been rerun through CI.
+- **Dependency reproducibility:** CI succeeds with `npm install`, but `package-lock.json` is not yet committed. A lockfile is required before production release.
 - **Not verified:** Browser behavior, real authenticated student/admin workflows, file upload/storage, full question import, and staging deployment.
 
 ## Important findings / blockers
@@ -49,8 +50,9 @@
 2. Migrate the 21 image assets, validate every reference, and add a storage-access model that does not leak daily challenge content before release.
 3. Reconstruct the six original migration bodies into a replayable, version-controlled baseline and test on an isolated staging database.
 4. Complete PYQ authoring/review/publishing, admin moderation, student practice, chapter filters and mock-test persistence.
-5. Obtain a real staging deployment, configure environment variables, and run lint, type checks, unit tests, Playwright, security-negative tests and production build.
-6. Prepare rollback and production-launch checklist. Do not switch the live site without approval.
+5. Apply a reviewed Prettier formatting-only commit for the 41 reported files and rerun CI; commit a reproducible npm lockfile.
+6. Obtain a real staging deployment, configure environment variables, and run authenticated student/admin E2E tests plus storage/security-negative tests.
+7. Prepare rollback and production-launch checklist. Do not switch the live site without approval.
 
 ## Status vocabulary
 
