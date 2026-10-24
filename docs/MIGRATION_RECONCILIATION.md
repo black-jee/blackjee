@@ -92,3 +92,21 @@ A follow-up catalog query found:
 ### Remaining caveats
 
 This is catalog inspection, not a schema dump. Full function bodies were truncated in some tool output and must be captured per function; column-level grants, sequence grants, schema ACLs, extension versions, storage API configuration, and auth/storage platform configuration still need validation. A disposable database has not yet been provisioned, so migration replay equivalence remains untested.
+
+## Follow-up read-only catalog pass — 2026-10-24
+
+A subsequent aggregate catalog query against the same target confirmed the following counts for the `public` and `private` application schemas:
+
+| Catalog item | Observed |
+| --- | ---: |
+| Base tables | 9 |
+| Columns | 93 |
+| Constraints | 49 |
+| Indexes | 23 |
+| RLS policies | 10 |
+| Functions | 12 |
+| Non-internal triggers | 0 |
+
+RLS is enabled on all nine application tables; `FORCE ROW LEVEL SECURITY` is false on all nine. Installed extensions observed were `pg_stat_statements 1.11`, `pgcrypto 1.3`, `plpgsql 1.0`, `supabase_vault 0.3.1`, and `uuid-ossp 1.1`.
+
+The query was read-only. These counts improve the inventory baseline but do not establish replay equivalence: full function bodies, ACLs/grants, sequences, auth/storage platform configuration, and a clean isolated replay still require review. The owner has no budget for a billable Supabase branch, so no paid branch/project is to be provisioned. Continue exploring no-cost replay options only.
