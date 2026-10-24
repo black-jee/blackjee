@@ -36,7 +36,9 @@ jobs:
       - name: Show Prettier diff when formatting fails
         if: steps.format-check.outcome == 'failure'
         run: npx prettier docs/MIGRATION_RECONCILIATION_2026-10-24.md | diff -u docs/MIGRATION_RECONCILIATION_2026-10-24.md - || true
-      - run: npm run build
+      - name: Build application
+        if: success() || steps.format-check.outcome == 'failure'
+        run: npm run build
 
   reconstruction-replay:
     runs-on: ubuntu-latest
