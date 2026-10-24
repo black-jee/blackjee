@@ -1,7 +1,7 @@
 # BLACK-JEE project status
 
 **Last updated:** 2026-10-24  
-**Overall status:** In progress — audit and foundation. Not production-ready.
+**Overall status:** In progress — foundation committed; database reconciliation and runtime verification remain open. Not production-ready.
 
 ## Environment
 
@@ -9,7 +9,7 @@
 |---|---|
 | New GitHub repository | `black-jee/blackjee`, public, default branch `main`; empty before this foundation commit |
 | New Supabase | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region |
-| Supabase migrations | 6 existing migration-history entries |
+| Supabase migrations | 7 entries after first hardening migration; migration SQL is being reconciled into Git |
 | Supabase tables | 7 inspected public/private tables; empty at inspection |
 | Supabase Edge Functions | None deployed at inspection |
 | Legacy source ZIP | Readable; 84 files total |
@@ -21,7 +21,9 @@
 - **Verified:** Identified 17 HTML pages, SQL schema/migrations, two Edge Function sources, manifests, question images, Python audits and GitHub workflows.
 - **Verified:** Read `docs/SYSTEM_MAP.md`, buyer due-diligence notes, import standard, source schema and question-package notes.
 - **Verified:** Target Supabase project metadata, tables/columns, six migration records, deployed Edge Functions list and security/performance advisor findings.
-- **In progress:** New repository scaffold and required project documentation.
+- **Implemented:** Initial Next.js/React/TypeScript/Tailwind scaffold, Supabase SSR/browser client helpers, Zod question schema, Vitest/Playwright smoke tests and CI workflow committed to `main`.
+- **Implemented and database-verified:** `get_current_daily_challenge()` now uses invoker privileges; anonymous role can read only schedule columns, not question statement; session `user_id` index added. New migration version `20261024095050` is recorded in Supabase and its SQL is checked into the repository.
+- **Blocked for local runtime checks:** this execution environment cannot resolve `github.com`, so the repository could not be cloned and dependencies could not be installed; no npm test/build result is claimed.
 - **Not started:** Full app migration, database compatibility migrations, content import, browser tests and staging deployment.
 
 ## Important findings / blockers
@@ -40,7 +42,7 @@
 1. Finish the source page/RPC/dependency map.
 2. Capture the target Supabase baseline DDL, grants, policies and function definitions in version control.
 3. Complete the Next.js foundation and CI; run type/lint/test/build checks.
-4. Add a safe question renderer and initial smoke tests.
+4. Complete baseline migration reconstruction and add the shared KaTeX question renderer.
 5. Reconcile database naming and permissions before feature-by-feature migration.
 
 ## Status vocabulary
