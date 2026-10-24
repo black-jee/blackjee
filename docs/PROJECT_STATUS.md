@@ -29,7 +29,7 @@
 - **Implemented and database-verified:** Mock-test schema/RPCs now support shift/focused test selection, ownership-bound resume/submission, server-side marking, private responses, and the exact 75-question shift validation rule (20 MCQ + 5 numerical per subject). With an empty bank, start is rejected as expected.
 - **Tested:** SQL regression assertions for public schedule security, private-table access, admin RPC permissions, mock-test permissions and function ownership checks passed against the target Supabase project.
 - **Imported as drafts:** The first 5 Physics questions from the source manifest and their 5 answer keys were imported. They are not published. Their question images are not yet copied into the new application.
-- **CI run 40087443743:** ESLint, strict TypeScript, Vitest, Playwright browser tests, and the Next.js production build passed. The final Prettier check failed for `docs/PROJECT_STATUS.md` and `tsconfig.json`. A second formatting pass and a fresh full CI run are pending.
+- **CI run 40088044408 (commit `b02b2c5`): PASS.** `npm ci`, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build all completed successfully.
 - **Dependency reproducibility:** `package-lock.json` is committed and CI uses `npm ci`; final confirmation is pending from a fresh CI run.
 - **Not verified:** Browser behavior, real authenticated student/admin workflows, file upload/storage, full question import, and staging deployment.
 
@@ -50,7 +50,7 @@
 2. Migrate the 21 image assets, validate every reference, and add a storage-access model that does not leak daily challenge content before release.
 3. Reconstruct the six original migration bodies into a replayable, version-controlled baseline and test on an isolated staging database.
 4. Complete PYQ authoring/review/publishing, admin moderation, student practice, chapter filters and mock-test persistence.
-5. Resolve the remaining Prettier gate on the current tree, then rerun all CI checks against the exact final commit.
+5. Keep the green CI gates required on every change; next priority is completing the remaining legacy workflows and migrating the remaining question content/assets.
 6. Obtain a real staging deployment, configure environment variables, and run authenticated student/admin E2E tests plus storage/security-negative tests.
 7. Prepare rollback and production-launch checklist. Do not switch the live site without approval.
 
@@ -68,7 +68,7 @@
 - **Implemented (runtime verification pending):** protected `/admin/pyq` authoring and review workspace; Zod-validated server actions call database-owned admin RPCs; the dashboard lists recent question metadata without selecting private answer-key records; draft save, approve-as-draft, publish-with-confirmation, and unpublish controls are available.
 - **Reconciled:** reconstructed the already-applied `admin_pyq_authoring_review` database function definitions into `supabase/migrations/20261024103715_admin_pyq_authoring_review.sql` so the admin authoring backend is represented in Git.
 - **Verified:** inspected target RLS policy for PYQs: students/anonymous users can select only approved published questions, while admin queue reads are gated by `app_metadata.role = admin`; the answer-key table remains private.
-- **CI:** a one-time repository formatting commit and `package-lock.json` are present. CI run `40087443743` passed lint, typecheck, unit tests, Playwright smoke tests and build, but the final format check still flagged `docs/PROJECT_STATUS.md` and `tsconfig.json`; these must be formatted and rechecked.
+- **CI:** one-time formatting and the lockfile are committed. The final formatting issue was caused by the TypeScript config shape; adding Next.js dev type paths and running formatting before E2E/build fixed it. Full CI run `40088044408` passed all gates.
 - **Not verified:** admin PYQ authoring and review actions have not yet been exercised in a real authenticated browser session. No question has been published as part of this work.
 
 - **Engineering improvement:** the repository now has a committed npm lockfile. CI is being switched to `npm ci` so dependency installation is reproducible.
