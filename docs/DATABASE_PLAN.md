@@ -2,59 +2,79 @@
 
 ## New project baseline observed
 
-Project: `phdssyexhfyxsmhmmcgb` (Tokyo / `ap-northeast-1`, PostgreSQL 17.11).  
-Observed migration history before hardening: six entries, versions from `20261024080824` to `20261024081731`. The seventh through eleventh migrations are now applied and verified: `20261024095050_harden_public_schedule_rpc_and_index`, `20261024100007_daily_challenge_question_assets`, `20261024100245_pyq_question_image_paths`, and `20261024100341_question_image_path_read_grants`, and `20261024100524_admin_save_daily_challenge`. These harden the public schedule RPC, add safe diagram-path columns to daily challenges and PYQs, scope image-path grants, and provide an admin-only transaction to save challenge content and its private answer key.  
-Observed tables: 3 public tables and 4 private tables; all reported empty. RLS is enabled on the inspected tables. No Edge Functions are deployed in this project at the time of inspection.
+Project: `phdssyexhfyxsmhmmcgb` (Tokyo / `ap-northeast-1`, PostgreSQL 17.11).
 
-### Public tables
+The target project had six applied migration records before the new repository was scaffolded. Ten additional migrations are now recorded and checked into the repository:
+
+- `20261024095050_harden_public_schedule_rpc_and_index`
+- `20261024100007_daily_challenge_question_assets`
+- `20261024100245_pyq_question_image_paths`
+- `20261024100341_question_image_path_read_grants`
+- `20261024100524_admin_save_daily_challenge`
+- `20261024101157_secure_mock_test_attempts`
+- `20261024101243_resume_mock_test_attempt`
+- `20261024101313_pyq_mock_metadata_read_grants`
+- `20261024101531_preserve_pyq_source_provenance`
+- `20261024102206_require_auth_for_daily_solution`
+
+The original six migration SQL bodies were not present in the new repository and still need to be reconstructed. Do not reset the target project until a replayable baseline is checked in and verified on an isolated database.
+
+## Current logical tables
+
+### Public schema
 
 - `public.daily_challenges`
 - `public.daily_challenge_attempts`
 - `public.jee_pyq_questions`
+- `public.mock_test_attempts`
 
-### Private tables
+### Private schema
 
 - `private.daily_challenge_answer_keys`
 - `private.daily_challenge_sessions`
 - `private.jee_pyq_answer_attempts`
 - `private.jee_pyq_answer_keys`
+- `private.mock_test_responses`
 
-Five public security-definer RPCs were found: `get_current_daily_challenge()`, `get_daily_challenge_result(uuid)`, `grade_jee_pyq(uuid,text)`, `start_daily_challenge(uuid)`, and `submit_daily_challenge(uuid,text)`.
+All inspected tables have RLS enabled. Private tables have no browser-role policies and no direct browser-role table grants; trusted RPCs perform the needed operations.
+
+## RPC contracts
+
+- Public schedule metadata: `get_current_daily_challenge()` runs as invoker and does not return question content.
+- Daily challenge attempts: `start_daily_challenge(uuid)` and `submit_daily_challenge(uuid,text)` validate the signed-in user, active schedule and attempt rules.
+- Daily challenge results: `get_daily_challenge_result(uuid)` requires `auth.uid()` and enforces the configured release time.
+- PYQ practice: `grade_jee_pyq(uuid,text)` is authenticated and enforces the answer/solution gate.
+- Admin challenge authoring: `admin_save_daily_challenge(...)` checks server-managed `app_metadata.role = admin` and writes challenge content plus its private answer key atomically.
+- Mock tests: `start_mock_test(...)`, `resume_mock_test(uuid)`, `submit_mock_test(uuid,jsonb)`, and `get_mock_test_result(uuid)` are ownership-bound. The server chooses the question IDs, checks the 75-question shift structure, computes marks, and withholds answers until submission.
 
 ## Source schema mismatch
 
-The uploaded original `supabase/schema.sql` defines `daily_questions`, `active_question_links`, and `attempt_submissions`; its migration history includes 18 SQL migrations plus schema and Edge Function source. The new project has a different, already-applied six-migration baseline. Do not apply the original schema blindly and do not assume the original database rows/users/uploads exist.
+The uploaded original `supabase/schema.sql` defines `daily_questions`, `active_question_links`, and `attempt_submissions`; its migration history includes 18 SQL migrations plus schema and Edge Function source. The new project has a different baseline. Do not apply the original schema blindly and do not assume the original database rows/users/uploads exist.
 
-## Target logical model (to finalize after schema mapping)
+## PYQ import state
 
-- Identity/roles: Supabase Auth plus server-managed administrator role.
-- Daily challenges: schedule, question statement/options/assets, publication state, start/end times and solution-release time.
-- Private challenge answer keys and attempt sessions: inaccessible directly to browser roles; exposed only through vetted RPCs.
-- Challenge attempts/submissions: one per eligible student/challenge where required; private photo path; review and publication state.
-- PYQ question bank: source identifiers, exam/year/shift, subject/chapter/topic, question content, typed options, asset references, review state, publication state and audit metadata.
-- Private PYQ answer keys and grading attempts: no direct browser reads of answer keys; grading RPC enforces retry/solution-release rules.
-- Content audit trail: actor, action, target, timestamp and minimal safe metadata for sensitive admin operations.
-- Storage metadata / ownership where needed; private uploads use non-guessable paths and policy-enforced access.
+The source ZIP contains 75 question slots for JEE Main 2026, April 4 Shift 1, along with source metadata, review notes, answer data and image references. Five Physics questions have been imported into the new database as `draft` rows with five answer keys in the private schema. **No question is published.** The remaining 70 rows and all image files still need migration. Source items marked `needs_review` must remain blocked and their answer keys withheld until reviewed.
 
 ## Migration rules
 
-1. Commit each migration to `supabase/migrations/` before applying it.
-2. Never drop or rename existing tables/columns until dependent functions, grants, policies and app consumers have been inventoried.
-3. Keep all exposed-schema tables RLS-enabled and grant only necessary Data API privileges. Supabase no longer automatically exposes every new table in all project configurations; check Data API exposure explicitly.
-4. Prefer invoker-security functions. Where `SECURITY DEFINER` is required to enforce trusted logic across private tables, use a fixed empty/known `search_path`, fully qualify object names, validate `auth.uid()` and role, and explicitly revoke/grant execute privileges.
-5. Test policies as anonymous, ordinary authenticated student, owner/admin, and a different student.
-6. Add indexes based on access patterns and foreign keys, not blindly based on advisor suggestions.
+1. Keep all schema changes in version-controlled SQL migration files.
+2. Do not reset the live target until the six missing baseline bodies are reconstructed and replay-tested elsewhere.
+3. Never drop or rename existing tables/columns until dependent functions, grants, policies and app consumers have been inventoried.
+4. Keep all exposed-schema tables RLS-enabled and grant only necessary Data API privileges.
+5. Prefer invoker-security functions. Where `SECURITY DEFINER` is required to protect private tables, use a fixed `search_path`, fully qualify objects, validate `auth.uid()` and role, and explicitly revoke/grant execute.
+6. Test policies as anonymous, ordinary authenticated student, owner/admin, and a different student.
 7. Re-run security and performance advisors after each database stage.
-8. Seed only fixtures or content with provenance. Never seed invented answer keys or treat unresolved source assets as verified.
+8. Seed only content with provenance. Never publish unresolved questions or treat missing assets as verified.
 
-## Current advisor findings (after first hardening migration)
+## Current advisor findings
 
-- Security: private tables have RLS enabled but no policies; verified grants show only `postgres` has table privileges on those four private tables. Four security-definer RPCs remain callable by authenticated users and require per-function grant/body review. The public schedule RPC was changed to invoker security and the advisor warning for anon-executable security-definer was removed.
-- Performance: added `private.daily_challenge_sessions(user_id)` index for its foreign key. Unused-index notices may be expected on an empty project; evaluate after representative queries before removing indexes.
+- **Security:** the advisor reports five private tables with RLS enabled and no policies (intentional because browser roles have no direct grants) and nine authenticated-callable `SECURITY DEFINER` RPCs. Each RPC has an explicit authenticated-user check; the admin save RPC also checks the server-managed admin role. These warnings remain documented and require ongoing review after each change.
+- **Performance:** the daily challenge session foreign-key index and PYQ shift lookup index are present. Unused-index notices may be expected while the project is empty; evaluate after representative queries before removing indexes.
 
 ## Required next checks
 
-- Export definitions of all baseline tables, policies, grants, constraints, triggers, functions and storage buckets into a reproducible migration baseline.
-- Compare baseline to the original source schema and the actual HTML/RPC consumers.
-- Add the next additive migration only after the target mapping is agreed and regression tests exist.
+- Reconstruct and replay the missing six baseline migrations on an isolated staging database.
+- Complete the 70-question draft import and copy/verify image assets.
+- Test start/resume/submit with seeded staging questions and real authenticated sessions.
+- Verify storage buckets, access policies, and admin moderation functions.
 - Verify no service-role or secret key is committed or returned to the browser.
