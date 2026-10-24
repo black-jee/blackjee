@@ -38,6 +38,12 @@
 | Diagram audit and crop review | `diagram-audit.html`, `draft-image-review.html`, `image-crop-studio.html` | Crop, associate, inspect and verify images without auto-publishing | Not started | Image association, crop processor and UI tests |
 | Bulk cleanup / CSV export | `admin.html`, `supabase/functions/admin-cleanup/index.ts` | Explicit confirmation, export-before-delete, remove associated private assets | Not started | Admin-only tests and storage cleanup checks |
 
+## Backend contracts discovered by source scan
+
+The legacy browser code references these RPCs: `get_challenge_archive`, `admin_get_live_question`, `start_challenge_attempt`, `restore_submitted_challenge_attempt`, `submit_challenge_answer`, and `grade_jee_pyq`. It references the legacy tables `daily_questions`, `active_question_links`, `attempt_submissions`, and `jee_pyq_questions`, plus private answer-key access in admin workflows. The new project currently has different daily-challenge RPC names: `get_current_daily_challenge`, `get_daily_challenge_result`, `start_daily_challenge`, and `submit_daily_challenge`; its PYQ grading RPC is `grade_jee_pyq`.
+
+**Migration requirement:** create a documented source-to-target contract map and either migrate the client callers to the target RPCs or add compatible server APIs. Do not assume similarly named functions have the same return shape or authorization behavior.
+
 ## Engineering / integrations
 
 | Area | Source files | Status / notes |
