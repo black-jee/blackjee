@@ -12,7 +12,7 @@
 ## Artifacts
 
 - `001_reconstructed_table_shapes.sql`: labelled nine-table structural draft, including selected catalog-confirmed constraints and secondary indexes.
-- `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay. It does not insert application data and does not prove full production parity.
+- `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay. It checks the nine tables, every reconstructed column's presence, RLS flags, selected constraints, and observed secondary indexes. It does not insert application data or prove full production parity.
 
 ## What was inspected
 
