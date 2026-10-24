@@ -62,6 +62,7 @@ BEGIN
       AND has_function_privilege('anon', p.oid, 'EXECUTE')
       AND pg_get_functiondef(p.oid) NOT LIKE '%statement%'
       AND pg_get_functiondef(p.oid) NOT LIKE '%options%'
+      AND pg_get_functiondef(p.oid) NOT LIKE '%statement_image_path%'
   ) THEN
     RAISE EXCEPTION 'Anonymous daily-challenge schedule RPC is missing or exposes question content';
   END IF;
@@ -157,6 +158,11 @@ BEGIN
      OR has_column_privilege('authenticated', 'public.daily_challenges', 'statement', 'SELECT')
      OR has_column_privilege('authenticated', 'public.daily_challenges', 'options', 'SELECT') THEN
     RAISE EXCEPTION 'Daily-challenge statement/options must not be directly readable by browser roles';
+  END IF;
+
+  IF has_column_privilege('anon', 'public.daily_challenges', 'statement_image_path', 'SELECT')
+     OR NOT has_column_privilege('authenticated', 'public.daily_challenges', 'statement_image_path', 'SELECT') THEN
+    RAISE EXCEPTION 'Daily-challenge image path must be hidden from anon and available only to authenticated flow';
   END IF;
 
   -- Private tables currently have no policies because browser roles have no
