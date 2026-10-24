@@ -9,7 +9,7 @@
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | New GitHub repository   | `black-jee/blackjee`, public, default branch `main`                                                                             |
 | New Supabase            | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region                                                          |
-| Supabase migrations     | 18 applied entries; 12 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
+| Supabase migrations     | 19 applied entries; 13 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
 | Supabase data           | 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported          |
 | Supabase tables         | 9 inspected public/private tables; no student attempts or mock-test attempts                                                    |
 | Supabase Edge Functions | Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)             |
@@ -69,6 +69,9 @@
 - **Reconciled:** reconstructed the already-applied `admin_pyq_authoring_review` database function definitions into `supabase/migrations/20261024103715_admin_pyq_authoring_review.sql` so the admin authoring backend is represented in Git.
 - **Verified:** inspected target RLS policy for PYQs: students/anonymous users can select only approved published questions, while admin queue reads are gated by `app_metadata.role = admin`; the answer-key table remains private.
 - **CI:** one-time formatting and the lockfile are committed. The final formatting issue was caused by the TypeScript config shape; adding Next.js dev type paths and running formatting before E2E/build fixed it. Full CI run `40088044408` passed all gates.
+- **Security hardening applied:** publishing a PYQ now requires a non-empty source reference, private answer key, and worked solution; the single-correct answer must still match an option. The migration is applied to the target Supabase project and checked into Git as `20261024120000_require_pyq_source_and_solution_before_publish.sql`.
+- **Verified:** target RLS permits anonymous/student reads only for published approved PYQs; the private answer-key table has no direct `anon` or `authenticated` table grants; the two admin RPCs are executable by `authenticated` only among browser roles and enforce admin app metadata inside the function.
 - **Not verified:** admin PYQ authoring and review actions have not yet been exercised in a real authenticated browser session. No question has been published as part of this work.
 
-- **Engineering improvement:** the repository now has a committed npm lockfile. CI is being switched to `npm ci` so dependency installation is reproducible.
+- **Engineering improvement:** the repository has a committed npm lockfile and CI uses `npm ci` for reproducible dependency installation.
+- **Latest CI:** run `40088170829` on current `main` passed all configured gates before the publication-gate migration. The new migration has triggered a fresh CI run; verify that run before treating the latest commit as fully green.
