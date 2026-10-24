@@ -1,6 +1,6 @@
 name: CI
 
-# Run deterministic quality gates against the formatted source tree.
+# CI verifies committed source; it never formats or commits to the branch.
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
@@ -25,23 +25,6 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
-      - name: Format maintained source and documentation on main
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: >-
-          npx prettier --write "*.md" "docs/**/*.md" scripts/check-continuity.mjs
-          lib/time/ist-local-date-time.ts tests/question-schema.test.ts
-      - name: Commit formatting corrections
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          if git diff --quiet; then
-            echo "No formatting changes to commit."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "style: apply Prettier formatting to maintained files"
-          git push
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test
