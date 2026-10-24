@@ -1,6 +1,7 @@
 -- BLACK-JEE reconstructed-schema smoke tests.
--- Run ONLY against a disposable database after applying reconstruction files
--- 001 and 002. Read-only assertions; inserts no application data.
+-- Designed for a disposable replay after applying reconstruction files 001/002.
+-- Catalog-only and read-only; it does not change schema or application data.
+-- It may also audit the live catalog, but never apply reconstruction DDL there.
 -- This validates selected catalog invariants, not full production parity.
 
 do $test$
