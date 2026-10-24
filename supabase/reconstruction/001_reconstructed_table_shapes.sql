@@ -26,7 +26,7 @@ create table public.jee_pyq_questions (
   reviewed_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
-  statement_image_path text check (statement_image_path is null or statement_image_path !~ '(^/|//|(^|/)[.][.](/|$)|[^A-Za-z0-9._/-])'),
+  statement_image_path text constraint jee_pyq_questions_statement_image_path_safe check (statement_image_path is null or statement_image_path !~ '(^/|//|(^|/)[.][.](/|$)|[^A-Za-z0-9._/-])'),
   session text,
   question_type text not null default 'single_correct' check (question_type in ('single_correct','numerical')),
   marks_correct integer not null default 4,
@@ -53,7 +53,7 @@ create table public.daily_challenges (
   is_live boolean not null default false,
   created_by uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now(),
-  statement_image_path text check (statement_image_path is null or statement_image_path !~ '(^/|//|(^|/)[.][.](/|$)|[^A-Za-z0-9._/-])')
+  statement_image_path text constraint daily_challenges_statement_image_path_safe check (statement_image_path is null or statement_image_path !~ '(^/|//|(^|/)[.][.](/|$)|[^A-Za-z0-9._/-])')
 );
 
 create table public.daily_challenge_attempts (
@@ -90,7 +90,7 @@ create table public.mock_test_attempts (
 
 create table private.jee_pyq_answer_keys (
   question_id uuid primary key references public.jee_pyq_questions(id) on delete cascade,
-  correct_answer text not null check (length(trim(correct_answer)) > 0),
+  correct_answer text not null constraint jee_pyq_answer_keys_correct_answer_nonempty check (length(trim(correct_answer)) > 0),
   solution text,
   updated_at timestamptz not null default now()
 );
@@ -107,7 +107,7 @@ create table private.jee_pyq_answer_attempts (
 
 create table private.daily_challenge_answer_keys (
   challenge_id uuid primary key references public.daily_challenges(id) on delete cascade,
-  correct_answer text not null check (length(trim(correct_answer)) > 0),
+  correct_answer text not null constraint daily_challenge_answer_keys_correct_answer_nonempty check (length(trim(correct_answer)) > 0),
   solution text
 );
 
@@ -171,6 +171,8 @@ create index daily_challenge_sessions_user_id_idx
   on private.daily_challenge_sessions (user_id);
 create index jee_pyq_answer_attempts_question_idx
   on private.jee_pyq_answer_attempts (question_id);
+create index mock_test_attempts_user_created_idx
+  on public.mock_test_attempts (user_id, created_at desc);
 alter table public.jee_pyq_questions enable row level security;
 alter table public.daily_challenges enable row level security;
 alter table public.daily_challenge_attempts enable row level security;
