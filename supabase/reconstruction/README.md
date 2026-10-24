@@ -21,10 +21,11 @@
 - `tests/002_security_catalog_inventory.sql`: read-only inventory of schema/table/column grants, function ACLs/security attributes, policies, and triggers.
 - `tests/bootstrap_supabase_compat.sql`: minimal auth schema/roles used only by CI's disposable PostgreSQL service; it is not a production Supabase bootstrap.
 - `tests/003_security_regression_assertions.sql`: read-only catalog assertions for the 11 known privileged RPCs, empty search paths, no anon/PUBLIC execution, in-function authentication/admin guards, all 10 public policy identities/commands/roles plus key predicates, column-level access boundaries, and browser-role isolation from the private schema. The full script passed against both the live catalog and the disposable replay; it is static catalog validation, not a real-user negative RPC test.
+- `tests/run_rpc_negative_tests.sh`: executes four real denial checks inside the disposable replay for anon RPC execution, non-admin authoring, cross-user mock-attempt access, and direct private-schema access. It uses synthetic IDs and an empty attempt fixture, not JEE content.
 
 ## Disposable replay in CI
 
-The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies drafts 001–004, and runs both the catalog smoke test and security catalog assertions. CI run `40113101703` passed both the quality job and disposable replay job. This is a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, or replace real-user end-to-end authorization tests.
+The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies drafts 001–004, and runs both the catalog smoke test and security catalog assertions. CI run `40113303240` passed both the quality job and disposable replay job, including four negative authorization tests. This is a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, or replace real-user end-to-end authorization tests.
 
 ## Migration-history reconciliation — read-only inventory (2026-10-24)
 
