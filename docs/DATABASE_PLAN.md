@@ -69,7 +69,7 @@ The source ZIP contains 75 question slots for JEE Main 2026, April 4 Shift 1, al
 
 ## Current advisor findings
 
-- **Security:** the advisor reports five private tables with RLS enabled and no policies (intentional because browser roles have no direct grants) and nine authenticated-callable `SECURITY DEFINER` RPCs. Each RPC has an explicit authenticated-user check; the admin save RPC also checks the server-managed admin role. These warnings remain documented and require ongoing review after each change.
+- **Security:** the advisor reports five private tables with RLS enabled and no policies (intentional because browser roles have no direct grants) and 11 authenticated-callable `SECURITY DEFINER` RPCs. The reviewed functions check the signed-in user; all three admin authoring/review RPCs also check the server-managed admin role. These warnings remain documented and require ongoing review after each change.
 - **Performance:** the daily challenge session foreign-key index and PYQ shift lookup index are present. Unused-index notices may be expected while the project is empty; evaluate after representative queries before removing indexes.
 
 ## Required next checks
