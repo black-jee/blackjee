@@ -71,5 +71,4 @@
 - **CI:** a one-time repository formatting commit and `package-lock.json` are present. CI run `40087443743` passed lint, typecheck, unit tests, Playwright smoke tests and build, but the final format check still flagged `docs/PROJECT_STATUS.md` and `tsconfig.json`; these must be formatted and rechecked.
 - **Not verified:** admin PYQ authoring and review actions have not yet been exercised in a real authenticated browser session. No question has been published as part of this work.
 
-
 - **Engineering improvement:** the repository now has a committed npm lockfile. CI is being switched to `npm ci` so dependency installation is reproducible.
