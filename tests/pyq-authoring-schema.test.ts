@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { questionSchema } from "@/lib/questions/pyq-authoring-schema";
+import { questionSchema } from "../lib/questions/pyq-authoring-schema";
 
 const baseQuestion = {
   questionId: null,
