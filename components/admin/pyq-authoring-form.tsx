@@ -52,7 +52,7 @@ export function PyqAuthoringForm() {
       .split("\n")
       .map((v) => v.trim())
       .filter(Boolean);
-    const options = parseOptions(optionsText);
+    const options = questionType === "numerical" ? [] : parseOptions(optionsText);
     const correctAnswer = String(formData.get("correctAnswer") ?? "").trim();
     if (
       questionType === "single_correct" &&
