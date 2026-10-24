@@ -81,7 +81,7 @@ begin
 end;
 $function$;
 
--- Live definition fingerprint: ebdff78aa677719515c9e500fc576562
+-- Original live definition fingerprint before reconstruction-only hardening: ebdff78aa677719515c9e500fc576562
 CREATE OR REPLACE FUNCTION public.admin_save_daily_challenge(p_challenge_id uuid, p_challenge_date date, p_title text, p_subject text, p_statement text, p_statement_image_path text, p_options jsonb, p_starts_at timestamp with time zone, p_ends_at timestamp with time zone, p_solution_release_at timestamp with time zone, p_correct_answer text, p_solution text, p_is_live boolean)
  RETURNS uuid
  LANGUAGE plpgsql
@@ -100,6 +100,12 @@ begin
      or nullif(btrim(p_statement), '') is null
      or nullif(btrim(p_correct_answer), '') is null then
     raise exception 'Title, statement and correct answer are required' using errcode = '22023';
+  end if;
+
+  -- Reconstructed hardening: enforce publication completeness at the RPC boundary,
+  -- not only in the web form, because administrators can call this RPC directly.
+  if coalesce(p_is_live, false) and nullif(btrim(p_solution), '') is null then
+    raise exception 'A live challenge must include a worked solution' using errcode = '22023';
   end if;
 
   if p_starts_at >= p_ends_at or p_ends_at > p_solution_release_at then
