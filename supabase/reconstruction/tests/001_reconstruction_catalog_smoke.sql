@@ -1,6 +1,6 @@
 -- BLACK-JEE reconstructed-schema smoke tests.
--- Run ONLY against a disposable database after applying the labelled
--- reconstruction draft. Read-only assertions; inserts no application data.
+-- Run ONLY against a disposable database after applying reconstruction files
+-- 001 and 002. Read-only assertions; inserts no application data.
 -- This validates selected catalog invariants, not full production parity.
 
 do $test$
@@ -62,6 +62,30 @@ begin
   where not c.relrowsecurity;
   if missing is not null then
     raise exception 'RLS is not enabled on expected tables: %', missing;
+  end if;
+
+  select string_agg(expected.policy_name, ', ')
+    into missing
+  from (values
+    ('public','daily_challenge_attempts','Users read their own challenge attempts'),
+    ('public','daily_challenges','Admins delete challenges'),
+    ('public','daily_challenges','Admins insert challenges'),
+    ('public','daily_challenges','Admins update challenges'),
+    ('public','daily_challenges','Live challenge schedule is readable'),
+    ('public','jee_pyq_questions','Admins delete PYQs'),
+    ('public','jee_pyq_questions','Admins insert PYQs'),
+    ('public','jee_pyq_questions','Admins update PYQs'),
+    ('public','jee_pyq_questions','Published PYQs and admin review queue are readable'),
+    ('public','mock_test_attempts','Users can read own mock test attempts')
+  ) expected(schema_name, table_name, policy_name)
+  where not exists (
+    select 1 from pg_policies p
+    where p.schemaname = expected.schema_name
+      and p.tablename = expected.table_name
+      and p.policyname = expected.policy_name
+  );
+  if missing is not null then
+    raise exception 'Missing reconstructed RLS policies: %', missing;
   end if;
 
   select string_agg(expected.constraint_name, ', ')
