@@ -3,6 +3,7 @@ DO $$
 DECLARE
   v_message text;
   v_id uuid;
+  v_numerical_id uuid;
 BEGIN
   BEGIN
     INSERT INTO public.jee_pyq_questions
@@ -43,5 +44,15 @@ BEGIN
   RETURNING id INTO v_id;
 
   DELETE FROM public.jee_pyq_questions WHERE id = v_id;
+
+  -- Numerical questions intentionally have no multiple-choice options.
+  INSERT INTO public.jee_pyq_questions
+    (source_id, title, statement, subject, question_type, options)
+  VALUES
+    ('BJ-CI-NUMERICAL-' || gen_random_uuid()::text, 'Synthetic validation fixture',
+     'Synthetic validation fixture only', 'Mathematics', 'numerical', '[]'::jsonb)
+  RETURNING id INTO v_numerical_id;
+
+  DELETE FROM public.jee_pyq_questions WHERE id = v_numerical_id;
 END;
 $$;
