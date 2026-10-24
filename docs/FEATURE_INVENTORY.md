@@ -32,7 +32,7 @@
 | Feature | Source files | Expected behavior | Migration status | Verification method |
 |---|---|---|---|---|
 | Owner dashboard | `owner-dashboard.html` | Admin entry point and overview | Not started | Role-denial and admin smoke tests |
-| Daily challenge admin | `admin.html`, `attempt.html?admin=1` | Create/edit/preview/schedule/publish; moderate submissions; export and cleanup | Not started | Full admin CRUD workflow and audit-log checks |
+| Daily challenge admin | `admin.html`, `attempt.html?admin=1` | Create/edit/preview/schedule/publish; moderate submissions; export and cleanup | In progress — protected admin route, create/schedule form and database-guarded save RPC; edit, moderation, export and cleanup pending | Full admin CRUD workflow and audit-log checks |
 | PYQ administration | `pyq-admin.html` | Search, import, draft/review/publish | Not started | Draft isolation and authorization tests |
 | Shift workbench | `shift-workbench.html` | Track paper slots and review states | Not started | Manifest count/order assertions |
 | Diagram audit and crop review | `diagram-audit.html`, `draft-image-review.html`, `image-crop-studio.html` | Crop, associate, inspect and verify images without auto-publishing | Not started | Image association, crop processor and UI tests |
