@@ -272,6 +272,29 @@ begin
     raise exception 'Missing catalog-confirmed constraints or wrong constraint kinds: %', missing;
   end if;
 
+
+  -- Require the reconstructed table set to contain exactly the observed 49
+  -- constraints; presence-only assertions above would otherwise allow extras.
+  if (
+    select count(*)
+    from pg_constraint con
+    join pg_class c on c.oid = con.conrelid
+    join pg_namespace n on n.oid = c.relnamespace
+    where (n.nspname, c.relname) in (
+      ('public','jee_pyq_questions'),
+      ('public','daily_challenges'),
+      ('public','daily_challenge_attempts'),
+      ('public','mock_test_attempts'),
+      ('private','jee_pyq_answer_keys'),
+      ('private','jee_pyq_answer_attempts'),
+      ('private','daily_challenge_answer_keys'),
+      ('private','daily_challenge_sessions'),
+      ('private','mock_test_responses')
+    )
+  ) <> 49 then
+    raise exception 'Expected exactly 49 constraints across the nine reconstructed tables';
+  end if;
+
 end
 $test$;
 
