@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { QuestionContent } from "@/components/questions/question-content";
+import { PyqPracticeCard } from "@/components/pyq/pyq-practice-card";
 import type { QuestionContent as QuestionContentData, QuestionOption } from "@/lib/questions/schema";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -92,16 +92,15 @@ export default async function PyqPage({ searchParams }: { searchParams: SearchPa
       {!error && rows.length === 0 ? <section className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6"><p className="font-semibold">No published questions found</p><p className="mt-2 text-sm leading-6 text-[var(--muted)]">The new question bank is empty until reviewed content is imported and approved. Drafts remain private.</p></section> : null}
       <section className="mt-6 space-y-4" aria-label="Question results">
         {rows.map((row, index) => (
-          <article key={row.id} className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-7">
-            <div className="mb-5 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
-              <span className="rounded-full border border-[var(--border)] px-2.5 py-1">{row.subject}</span>
-              <span>{row.exam} {row.year ?? ""}</span>
-              {row.chapter ? <span>· {row.chapter}</span> : null}
-              <span className="ml-auto">Question {index + 1}</span>
-            </div>
-            <h2 className="mb-4 text-lg font-semibold">{row.title}</h2>
-            <QuestionContent question={toQuestion(row)} />
-          </article>
+          <PyqPracticeCard
+            key={row.id}
+            id={row.id}
+            number={index + 1}
+            title={row.title}
+            exam={row.exam}
+            year={row.year}
+            question={toQuestion(row)}
+          />
         ))}
       </section>
       {!error && rows.length === 20 ? <p className="mt-6 text-center text-xs text-[var(--muted)]">Showing the first 20 matching questions. Pagination will be expanded with the full PYQ module.</p> : null}
