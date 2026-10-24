@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { isSafeAssetPath } from "@/lib/questions/schema";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { isValidIstLocalDateTime, istLocalDateTimeToIso } from "@/lib/time/ist-local-date-time";
 
 const localDateTime = z
   .string()
@@ -58,9 +59,9 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
     return { ok: false, error: "The question image path must be a safe relative path." };
   }
 
-  const startsAt = istIso(values.startsAt);
-  const endsAt = istIso(values.endsAt);
-  const solutionReleaseAt = istIso(values.solutionReleaseAt);
+  const startsAt = istLocalDateTimeToIso(values.startsAt);
+  const endsAt = istLocalDateTimeToIso(values.endsAt);
+  const solutionReleaseAt = istLocalDateTimeToIso(values.solutionReleaseAt);
   if (!(
     Date.parse(startsAt) < Date.parse(endsAt) && Date.parse(endsAt) <= Date.parse(solutionReleaseAt)
   )) {
