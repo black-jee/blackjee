@@ -33,7 +33,7 @@
 
 ## Important findings / blockers
 
-1. **Migration history gap:** The new repository does not contain the six original SQL migration bodies already recorded in the target project. The gap is documented in `supabase/migrations/README.md`. Do not reset the database until a clean replayable baseline is reconstructed.
+1. **Migration history gap:** The repository lacks seven applied migration bodies (six early baseline bodies and one later publication-gate body) already recorded in the target project. The gap is documented in `supabase/migrations/README.md`. Do not reset the database until a clean replayable baseline is reconstructed.
 2. **Source/target schema mismatch:** The original source uses `daily_questions` and `attempt_submissions`; the new target uses `daily_challenges`, `daily_challenge_attempts`, and `jee_pyq_questions`. A source-to-target compatibility map is required.
 3. **Content import incomplete:** The ZIP has 75 question slots; only 5 are in the target so far. All imported records are drafts, and no content is published. The manifest marks 28 questions as `needs_review`; their answer keys must stay withheld until review.
 4. **Image assets not migrated:** 21 PNG/JPG files and manifest references were found in the ZIP. They need to be copied to the new app or new Storage bucket and visually verified before any dependent question is published.
@@ -46,7 +46,7 @@
 
 1. Finish the draft-only import of the remaining 70 question records and preserve source/QA metadata; keep all unresolved items unpublished.
 2. Migrate the 21 image assets, validate every reference, and add a storage-access model that does not leak daily challenge content before release.
-3. Reconstruct the six original migration bodies into a replayable, version-controlled baseline and test on an isolated staging database.
+3. Recover or clearly label reconstructions for the seven missing applied migration bodies, then validate a baseline in an isolated disposable database.
 4. Complete PYQ authoring/review/publishing, admin moderation, student practice, chapter filters and mock-test persistence.
 5. Keep the green CI gates required on every change; next priority is completing the remaining legacy workflows and migrating the remaining question content/assets.
 6. Obtain a real staging deployment, configure environment variables, and run authenticated student/admin E2E tests plus storage/security-negative tests.
@@ -87,7 +87,7 @@
 ## Constitution reconciliation — 2026-10-24
 
 - **Implemented:** Added `docs/PROJECT_CONTEXT.md`, `docs/TASKS.md`, `docs/DECISIONS.md`, `docs/RELEASES.md`, `docs/SEO_AND_GROWTH.md`, and `CHANGELOG.md` to align the repository with the owner's engineering constitution.
-- **Verified against live Supabase:** 20 migration versions are recorded by the project migration API; 15 SQL migration files exist in the repository. Six original baseline migration bodies remain missing, and the repo has an extra publication-gate migration file that is not present in live migration history. Do not reset the target database.
+- **Verified against live Supabase:** 20 migration versions are recorded by the project migration API; 15 SQL migration files exist in the repository. Seven applied migration bodies remain missing from the repository, and two local publication-gate files are absent from live migration history. Do not reset the target database.
 - **Verified against live Supabase:** PYQ review RPC requires a source document and page, reads the private answer key, and requires a worked solution. Anonymous execute privilege is false; authenticated execute privilege is true, with admin role enforced inside the function.
 - **Verified against live data:** 5 PYQ records total, 0 published, 5 unpublished. No content was imported or published during this reconciliation.
 - **CI evidence:** [Run 40090330071](https://github.com/black-jee/blackjee/actions/runs/40090330071) passed for commit `57d04ed9d3db332e0aafe71d69423be5723c7ff5`. Documentation commits after that SHA triggered additional workflows; those latest runs must be checked before claiming the current HEAD is green.
