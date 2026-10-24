@@ -12,6 +12,7 @@
 ## Artifacts
 
 - `SECURITY_CHECKPOINT_2026-10-24.md`: read-only live security/catalog findings, assertion execution results, and explicit remaining gates.
+- `STORAGE_SECURITY_PLAN_2026-10-24.md`: design-only separation of public approved-PYQ images and private challenge assets, with signed-URL gates and negative tests; it creates no buckets or policies.
 - `MIGRATION_RECONCILIATION_2026-10-24.md`: verified facts and clearly labelled inference for the publication-gate migration mismatch.
 - `001_reconstructed_table_shapes.sql`: labelled nine-table structural draft, including selected catalog-confirmed constraints and secondary indexes.
 - `002_reconstructed_rls_policies.sql`: review draft of the 10 catalog-observed public-table RLS policies. It deliberately does not add table/column grants or private-table policies.
