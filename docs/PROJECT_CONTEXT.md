@@ -26,9 +26,9 @@ Next.js App Router, React, strict TypeScript, Tailwind CSS, Supabase Auth/Postgr
 
 ## Evidence and unknowns
 - The target Supabase currently has five PYQ records and zero published PYQs; all five are unpublished drafts.
-- Migration history contains 21 applied versions, while the checked-in migration directory has 15 SQL migration files. Six original baseline SQL bodies remain unreconstructed; never run a reset against this incomplete chain.
+- Migration history contains 20 applied versions, while the checked-in migration directory has 15 SQL migration files. Six original baseline SQL bodies remain unreconstructed; never run a reset against this incomplete chain.
 - The source archive's April 4 Shift 1 package describes 75 question slots; the official source PDF is not present in that archive. No bulk import or publication is authorized by this evidence.
-- Latest verified CI run at reconciliation: run 40090330071, commit `57d04ed9d3db332e0aafe71d69423be5723c7ff5`, conclusion success.
+- Latest older successful CI run: run 40090330071, commit `57d04ed9d3db332e0aafe71d69423be5723c7ff5`. The run for HEAD `ec2f7ce1bfb25a0b1e96f3168ab82959c8a5af1e` failed Prettier format check; the production build was skipped. See `docs/VERIFICATION_LOG.md`.
 - Authenticated student/admin browser journeys and Vercel production behavior remain unverified.
 
 ## Product priorities
