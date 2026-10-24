@@ -13,9 +13,11 @@ This checkpoint records read-only catalog inspection of Supabase project `phdssy
 - Column-level access boundaries match the frontend contract: browser roles can select the public PYQ statement column, but cannot directly select `daily_challenges.statement` or `daily_challenges.options`.
 - `get_current_daily_challenge()` is invoker-rights, executable by `anon`, and its definition returns schedule metadata rather than question statement/options.
 - The app schemas `public` and `private` have no non-internal triggers and no sequences in the current catalog.
-- No Storage buckets or Storage RLS policies currently exist. Supabase-managed internal triggers in the `storage` schema are not BLACK-JEE application triggers.
+- No Storage buckets or Storage RLS policies currently exist. Supabase-managed internal triggers in the `storage` schema are not BLACK-JEE application triggers. No views/materialized views or sequences were found in `public`/`private`; the only non-internal triggers found were Supabase-managed triggers on `storage.buckets` and `storage.objects`. Schema ownership/usage was also checked: `private` is owned by `postgres` and has no `USAGE` for `anon`, `authenticated`, or `service_role`; `public` is owned by `pg_database_owner`; `storage` and `auth` are Supabase-managed.
 
 ## Assertion execution
+
+A fresh read-only metadata inventory also returned empty results for Storage buckets, Storage policies, application-schema views/materialized views, and application-schema sequences. The only triggers returned were Supabase-managed Storage internals; no BLACK-JEE application triggers were found.
 
 A catalog-only assertion block was executed against the live database and returned:
 
@@ -25,7 +27,7 @@ A second read-only check returned:
 
 `PASS: anonymous schedule RPC remains metadata-only; column-level grants preserve challenge content boundary`
 
-The committed regression file `tests/003_security_regression_assertions.sql` returned PASS against the live catalog and the disposable PostgreSQL 17 replay in CI run `40113487978`, including the daily-challenge image-path boundary and pinned function-definition fingerprints. CI also passed four negative authorization checks against the disposable replay. Real Supabase-issued user-token tests remain outstanding.
+The committed regression file `tests/003_security_regression_assertions.sql` returned PASS against the live catalog and the disposable PostgreSQL 17 replay in CI run `40113487978`, including the daily-challenge image-path boundary and pinned function-definition fingerprints. CI also passed four negative authorization checks against the disposable replay. The current branch head `c22031f07c688a47a046b83d65866a6e3155fdf3` was subsequently verified in CI run `40113673941` (#353): both `quality` and `reconstruction-replay` completed successfully. Real Supabase-issued user-token tests remain outstanding.
 
 ## What this does not prove
 
@@ -33,15 +35,15 @@ The committed regression file `tests/003_security_regression_assertions.sql` ret
 - No negative RPC calls were made against the live Supabase project or with real Supabase-issued user tokens. CI now performs four negative checks against the disposable replay using synthetic identities and stub auth functions.
 - No Storage bucket or access policy exists yet, so asset migration and its security model remain unfinished.
 - The seven missing historical migration bodies remain unrecovered. Do not manufacture a false historical chain or alter the live migration ledger to make counts match.
-- Latest CI must be checked after the current branch commits. A previous run failed only at Prettier for `docs/PROJECT_STATUS.md` and `supabase/reconstruction/README.md`; earlier lint, typecheck, unit, and browser smoke tests passed, while build was skipped.
+- CI run `40113673941` (#353) on the current branch head completed successfully for both jobs. This confirms the configured CI suite, not full Supabase Auth/runtime parity or production readiness.
 
 ## Next safe steps
 
-1. Resolve the two Markdown formatting failures and confirm a fresh complete CI run.
-2. Review all seven missing migration versions and repository migration overlaps against current function/table definitions; label inferred SQL as reconstruction, not recovered history.
-3. Keep migration replay blocked until a truly disposable, no-cost environment is available. Do not create a paid Supabase branch.
-4. Build a reviewed Storage bucket/policy plan before copying image assets.
-5. Add authenticated negative tests for non-admin writes and cross-user attempt access before production readiness.
+1. Keep the seven missing historical migration bodies and two overlapping repository migration files explicitly unresolved until authoritative source bodies or verifiable history are found.
+2. Design and review a Storage bucket/policy plan before copying any of the 21 source image assets; the live project currently has no buckets or Storage policies.
+3. Add real Supabase-issued user-token tests for non-admin writes, cross-user attempt access, and private answer isolation; disposable stub-auth tests are not a substitute.
+4. Review `private.mock_test_responses.question_id` indexing and the seven unused-index advisor findings using workload evidence before changing indexes.
+5. Keep all production schema and migration-ledger changes blocked until reviewed, isolated replay and explicit approval.
 
 ## Publication-readiness aggregate (read-only)
 
