@@ -162,7 +162,7 @@ export function MockTestRunner({ shifts, activeAttempts }: { shifts: Shift[]; ac
     setReviewIds([]);
     setCurrentIndex(0);
     setResult(null);
-    setRemaining(Math.max(0, Math.floor((Date.parse(next.started_at) + next.duration_seconds * 1000 - Date.now()) / 1000)));
+    setRemaining(next.duration_seconds);
   }
 
   const finish = useCallback(async (automatic = false) => {
