@@ -73,6 +73,11 @@ const checks = [
     pattern: /Numerical questions intentionally have no multiple-choice options[\s\S]*?'numerical',\s*'\[\]'::jsonb/i,
   },
   {
+    file: "supabase/tests/public_schedule_rpc_security.sql",
+    description: "challenge statement and options are not directly selectable by browser roles",
+    pattern: /Browser roles must not directly read challenge statements or options/,
+  },
+  {
     file: ".github/workflows/ci.yml",
     description: "CI executes database option-integrity and authorization regressions",
     pattern: /supabase\/tests\/pyq_option_label_validation\.sql[\s\S]*?run_rpc_negative_tests\.sh/,
