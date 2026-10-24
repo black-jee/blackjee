@@ -86,6 +86,10 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261024130000_harden_mock_test_input_nulls.sql
       - name: Test mock-test NULL validation
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/mock_test_null_validation.sql
+      - name: Apply PYQ option-label integrity guard
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025100000_enforce_unique_pyq_option_labels.sql
+      - name: Test PYQ option-label integrity
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/pyq_option_label_validation.sql
       - name: Run application security regression assertions
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/private_table_access.sql
