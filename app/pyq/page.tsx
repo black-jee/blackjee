@@ -1,56 +1,14 @@
 import type { Metadata } from "next";
-import { PyqPracticeCard } from "@/components/pyq/pyq-practice-card";
-import type { QuestionContent as QuestionContentData, QuestionOption } from "@/lib/questions/schema";
+import { PyqQuestionList } from "@/components/pyq/pyq-question-list";
+import type { PyqRow } from "@/lib/questions/pyq-adapter";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Previous-year questions" };
 export const dynamic = "force-dynamic";
 
 type SearchParams = Promise<{ q?: string; subject?: string }>;
-type Row = {
-  id: string;
-  source_id: string | null;
-  title: string;
-  exam: string;
-  year: number | null;
-  subject: "Physics" | "Chemistry" | "Mathematics";
-  chapter: string | null;
-  difficulty: "Main" | "Advanced" | "Mixed";
-  statement: string;
-  statement_image_path: string | null;
-  options: unknown;
-  tags: string[] | null;
-  asset_paths: string[] | null;
-};
-
+type Row = PyqRow;
 const subjects = ["Physics", "Chemistry", "Mathematics"] as const;
-
-function toOptions(raw: unknown): QuestionOption[] {
-  if (!Array.isArray(raw)) return [];
-  return raw.slice(0, 12).map((item, index) => {
-    const fallback = String.fromCharCode(65 + index);
-    if (typeof item === "string") return { id: String(index), label: fallback, text: item };
-    const value = item && typeof item === "object" ? item as Record<string, unknown> : {};
-    return {
-      id: typeof value.id === "string" ? value.id : String(index),
-      label: typeof value.label === "string" ? value.label : typeof value.letter === "string" ? value.letter : fallback,
-      text: typeof value.text === "string" ? value.text : typeof value.value === "string" ? value.value : "",
-      imagePath: typeof value.imagePath === "string" ? value.imagePath : typeof value.image_path === "string" ? value.image_path : undefined,
-    };
-  });
-}
-
-function toQuestion(row: Row): QuestionContentData {
-  return {
-    sourceId: row.source_id || row.id,
-    statement: row.statement,
-    statementImagePath: row.statement_image_path ?? undefined,
-    options: toOptions(row.options),
-    subject: row.subject,
-    chapter: row.chapter ?? undefined,
-    assetPaths: row.asset_paths ?? [],
-  };
-}
 
 export default async function PyqPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
@@ -90,19 +48,7 @@ export default async function PyqPage({ searchParams }: { searchParams: SearchPa
 
       {error ? <p role="alert" className="mt-6 rounded-xl border border-red-400/30 bg-red-400/10 p-4 text-sm text-red-200">The question bank could not be loaded. Please try again shortly.</p> : null}
       {!error && rows.length === 0 ? <section className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6"><p className="font-semibold">No published questions found</p><p className="mt-2 text-sm leading-6 text-[var(--muted)]">The new question bank is empty until reviewed content is imported and approved. Drafts remain private.</p></section> : null}
-      <section className="mt-6 space-y-4" aria-label="Question results">
-        {rows.map((row, index) => (
-          <PyqPracticeCard
-            key={row.id}
-            id={row.id}
-            number={index + 1}
-            title={row.title}
-            exam={row.exam}
-            year={row.year}
-            question={toQuestion(row)}
-          />
-        ))}
-      </section>
+      <PyqQuestionList rows={rows} />
       {!error && rows.length === 20 ? <p className="mt-6 text-center text-xs text-[var(--muted)]">Showing the first 20 matching questions. Pagination will be expanded with the full PYQ module.</p> : null}
     </main>
   );
