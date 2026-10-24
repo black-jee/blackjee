@@ -296,6 +296,28 @@ begin
   end if;
 
 
+
+  -- Require the reconstructed table set to contain exactly the 93 columns
+  -- observed in the live catalog; checking presence alone permits extras.
+  if (
+    select count(*)
+    from information_schema.columns
+    where (table_schema, table_name) in (
+      ('public','jee_pyq_questions'),
+      ('public','daily_challenges'),
+      ('public','daily_challenge_attempts'),
+      ('public','mock_test_attempts'),
+      ('private','jee_pyq_answer_keys'),
+      ('private','jee_pyq_answer_attempts'),
+      ('private','daily_challenge_answer_keys'),
+      ('private','daily_challenge_sessions'),
+      ('private','mock_test_responses')
+    )
+  ) <> 93 then
+    raise exception 'Expected exactly 93 columns across the nine reconstructed tables';
+  end if;
+
+
   -- Check representative high-impact nullability/defaults against the live
   -- catalog snapshot. Expand this list as more metadata is recovered.
   select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, expected.column_name), ', ')
