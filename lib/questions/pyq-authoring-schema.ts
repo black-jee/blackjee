@@ -11,7 +11,7 @@ const optionSchema = z
   )
   .max(12);
 
-const questionSchema = z.object({
+export const questionSchema = z.object({
   questionId: z.string().uuid().nullable(),
   sourceId: z.string().trim().max(160),
   title: z.string().trim().min(3).max(240),
