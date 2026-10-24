@@ -55,7 +55,7 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 ## P3 — documentation and discoverability
 
 ### BJ-DOC-001 — Maintain constitution-required project records
-- **Status:** IN_PROGRESS
-- **Acceptance:** context, status, feature inventory, architecture, database, security, decisions, tasks, test plan, releases, SEO/growth, and changelog are present and reconciled.
-- **Evidence:** missing records were identified at 2026-10-24 session start.
-- **Next:** create missing records and reconcile status after each verified milestone.
+- **Status:** IN_PROGRESS (continuity artifacts and CI validator committed; CI verification pending)
+- **Acceptance:** context, status, feature inventory, architecture, database, security, decisions, tasks, test plan, releases, SEO/growth, changelog, continuity startup prompt, session handover, and verification log are present and reconciled; CI checks required files and handover/task consistency.
+- **Evidence:** added `docs/CONTINUITY_SYSTEM_PROMPT.md`, `docs/SESSION_HANDOVER.md`, `docs/VERIFICATION_LOG.md`, `scripts/check-continuity.mjs`, and a CI validation step. Direct Supabase migration listing returned 20 applied versions. HEAD CI for the prior docs commit failed at Prettier format check; new CI run is pending.
+- **Next:** inspect current CI logs, fix formatting as required, verify validator and full CI on the latest commit, then mark this task TESTED with evidence.
