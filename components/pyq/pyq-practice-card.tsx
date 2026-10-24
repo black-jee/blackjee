@@ -1,3 +1,4 @@
+/* eslint @next/next/no-img-element: off -- preserve exact aspect ratios for exam diagrams. */
 "use client";
 
 import { useState, useTransition } from "react";
