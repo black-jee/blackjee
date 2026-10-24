@@ -10,7 +10,7 @@
 - **Supabase migrations:** 20 applied entries; 15 SQL migration files are checked into Git; seven live migration versions lack same-version files, and two overlapping repository migration files are absent from the live ledger
 - **Supabase data:** 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported
 - **Supabase tables:** 9 inspected public/private tables; no student attempts or mock-test attempts
-- **Reconstruction replay:** CI run `40113487978` passed on commit `63c099c`; disposable PostgreSQL 17 replay applied table shapes, 10 RLS policies, 12 current RPC definitions, and access grants, then passed schema/security assertions, RPC definition fingerprint checks, and four negative authorization checks.
+- **Reconstruction replay:** CI run `40113487978` passed on commit `63c099c`; the later branch-head run `40113673941` (#353) also passed both quality and reconstruction-replay jobs. Disposable PostgreSQL 17 replay applies table shapes, 10 RLS policies, 12 current RPC definitions, and access grants, then passes schema/security assertions, RPC definition fingerprint checks, and four negative authorization checks.
 - **Supabase Edge Functions:** Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)
 - **Legacy source ZIP:** Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files
 - **Live website comparison:** Blocked/incomplete; direct fetch did not return page content
@@ -30,6 +30,7 @@
 - **Imported as drafts:** The first 5 Physics questions from the source manifest and their 5 answer keys were imported. They are not published. Their question images are not yet copied into the new application.
 - **CI run 40112374432 (commit `f2831f8`, 2026-10-24): PASS.** `npm ci`, continuity validation, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build all completed successfully.
 - **Dependency reproducibility:** `package-lock.json` is committed and `npm ci` passed in CI run `40112374432`.
+- **Read-only storage/object audit:** No Storage buckets or Storage RLS policies currently exist. No views/materialized views or sequences were found in `public`/`private`, and no non-internal triggers were found in the BLACK-JEE application schemas. Only Supabase-managed Storage triggers appeared. No schema or storage changes were made.
 - **Not verified:** Browser behavior, real authenticated student/admin workflows, file upload/storage, full question import, and staging deployment.
 
 ## Important findings / blockers
