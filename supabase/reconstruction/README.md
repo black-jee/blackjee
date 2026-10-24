@@ -79,3 +79,7 @@ The live public-function inventory exposes `get_current_daily_challenge()` to `a
 ## Foreign-key cross-check — read-only checkpoint (2026-10-24)
 
 A fresh catalog query enumerated 14 foreign-key constraints across the nine reconstructed tables. The reconstruction draft includes the observed relationships and delete behavior: user-owned attempts cascade with user deletion; answer-key/session rows cascade with their parent question/challenge; mock-test responses cascade with attempt deletion and restrict question deletion; author/reviewer references on public content become null when a user is deleted. The smoke test now asserts the presence of all 14 observed foreign-key constraint names, alongside column, RLS, selected check/unique constraint, and index checks. It does not yet compare every FK's exact referenced relation and delete action, so the disposable replay remains necessary.
+
+## Security catalog inventory query
+
+`tests/002_security_catalog_inventory.sql` is a read-only report for schema privileges, table grants, column grants, function execute ACLs and security attributes, RLS policy expressions, and non-internal triggers. Run it against the disposable replay first and compare output with the saved live-catalog checkpoint. It intentionally reports rather than mutates; do not infer that a grant is safe or unsafe without checking the actual frontend call path and function authorization logic.
