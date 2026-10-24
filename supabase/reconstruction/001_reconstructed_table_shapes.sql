@@ -21,8 +21,8 @@ create table public.jee_pyq_questions (
   asset_paths text[] not null default '{}'::text[],
   review_status text not null default 'draft' check (review_status in ('draft','in_review','approved','rejected')),
   is_published boolean not null default false,
-  created_by uuid references auth.users(id),
-  reviewed_by uuid references auth.users(id),
+  created_by uuid references auth.users(id) on delete set null,
+  reviewed_by uuid references auth.users(id) on delete set null,
   reviewed_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
@@ -51,15 +51,15 @@ create table public.daily_challenges (
   ends_at timestamptz not null,
   solution_release_at timestamptz not null,
   is_live boolean not null default false,
-  created_by uuid references auth.users(id),
+  created_by uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now(),
   statement_image_path text check (statement_image_path is null or statement_image_path !~ '(^/|//|(^|/)[.][.](/|$)|[^A-Za-z0-9._/-])')
 );
 
 create table public.daily_challenge_attempts (
   id uuid primary key default gen_random_uuid(),
-  challenge_id uuid not null references public.daily_challenges(id),
-  user_id uuid not null references auth.users(id),
+  challenge_id uuid not null references public.daily_challenges(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   selected_answer text not null,
   is_correct boolean not null,
   elapsed_seconds integer not null check (elapsed_seconds >= 0 and elapsed_seconds <= 86400),
@@ -68,7 +68,7 @@ create table public.daily_challenge_attempts (
 
 create table public.mock_test_attempts (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users(id),
+  user_id uuid not null references auth.users(id) on delete cascade,
   mode text not null check (mode in ('shift','focused')),
   exam_year integer,
   session text,
@@ -89,15 +89,15 @@ create table public.mock_test_attempts (
 );
 
 create table private.jee_pyq_answer_keys (
-  question_id uuid primary key references public.jee_pyq_questions(id),
+  question_id uuid primary key references public.jee_pyq_questions(id) on delete cascade,
   correct_answer text not null check (length(trim(correct_answer)) > 0),
   solution text,
   updated_at timestamptz not null default now()
 );
 
 create table private.jee_pyq_answer_attempts (
-  user_id uuid not null references auth.users(id),
-  question_id uuid not null references public.jee_pyq_questions(id),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  question_id uuid not null references public.jee_pyq_questions(id) on delete cascade,
   wrong_attempts integer not null default 0 check (wrong_attempts >= 0 and wrong_attempts <= 2),
   first_attempt_at timestamptz not null default now(),
   last_attempt_at timestamptz not null default now(),
@@ -106,22 +106,22 @@ create table private.jee_pyq_answer_attempts (
 );
 
 create table private.daily_challenge_answer_keys (
-  challenge_id uuid primary key references public.daily_challenges(id),
+  challenge_id uuid primary key references public.daily_challenges(id) on delete cascade,
   correct_answer text not null check (length(trim(correct_answer)) > 0),
   solution text
 );
 
 create table private.daily_challenge_sessions (
-  challenge_id uuid not null references public.daily_challenges(id),
-  user_id uuid not null references auth.users(id),
+  challenge_id uuid not null references public.daily_challenges(id) on delete cascade,
+  user_id uuid not null references auth.users(id) on delete cascade,
   started_at timestamptz not null default now(),
   submitted_at timestamptz,
   primary key (challenge_id, user_id)
 );
 
 create table private.mock_test_responses (
-  attempt_id uuid not null references public.mock_test_attempts(id),
-  question_id uuid not null references public.jee_pyq_questions(id),
+  attempt_id uuid not null references public.mock_test_attempts(id) on delete cascade,
+  question_id uuid not null references public.jee_pyq_questions(id) on delete cascade,
   selected_answer text,
   is_correct boolean not null default false,
   marks_awarded integer not null default 0,
@@ -142,10 +142,10 @@ alter table private.mock_test_responses enable row level security;
 commit;
 
 -- IMPORTANT REVIEW GATES:
--- 1. Catalog metadata does not reveal FK ON DELETE/UPDATE actions; defaults above
---    may not match production. Compare pg_constraint definitions before using.
--- 2. NOT NULL choices were inferred from current API table metadata and must be
---    checked against information_schema/catalog before calling this replay-ready.
+-- 1. Foreign-key delete actions have been updated from a read-only catalog query;
+--    re-check them during replay comparison and capture any ON UPDATE behavior too.
+-- 2. Column nullability/defaults were cross-checked against information_schema;
+--    CHECK/UNIQUE/FK definitions still require full catalog comparison.
 -- 3. No RLS policies, table/column grants, sequence grants, indexes beyond primary/
 --    unique constraints, function definitions/ACLs, storage config, or seed data
 --    are included. This is a structural draft only, not a secure runnable app.
