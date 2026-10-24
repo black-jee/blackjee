@@ -1,6 +1,6 @@
 # BLACK-JEE project status
 
-**Last updated:** 2026-10-24  
+**Last updated:** 2026-10-24
 **Overall status:** In progress — core application routes and secure database workflows are being built. Not production-ready.
 
 ## Environment
@@ -67,7 +67,7 @@
 
 - **Implemented:** added `docs/CONTINUITY_SYSTEM_PROMPT.md`, `docs/SESSION_HANDOVER.md`, and `docs/VERIFICATION_LOG.md`; created `scripts/check-continuity.mjs` to require core continuity files, detect duplicate permanent task IDs, and ensure the active handover task exists in the ledger; added the validator to GitHub Actions CI.
 - **Verified:** the Supabase migration API currently returns 20 applied versions. Prior docs that reported 21 were inconsistent and have been corrected where found.
-- **CI warning:** run `40090784800` for commit `ec2f7ce1bfb25a0b1e96f3168ab82959c8a5af1e` failed at Prettier format check; lint, typecheck, Vitest and Playwright passed, and build was skipped. Current continuity changes require a fresh CI run before the system can be marked tested.
+- **CI warning:** run `40091156887` for commit `db8f98a439c80d8d822c0a0a73a3b5174da6aaf6` failed at Prettier format check on seven Markdown files and `scripts/check-continuity.mjs`; lint, typecheck, Vitest, Playwright, and the continuity validator passed, and build was skipped. Formatting remediation is the next action.
 - **Not yet verified:** continuity validator execution and latest full CI, authenticated student/admin journeys, Vercel linkage/runtime, clean isolated migration replay.
 
 ## Continued work — 2026-10-24
@@ -83,7 +83,6 @@
 
 - **Engineering improvement:** the repository has a committed npm lockfile and CI uses `npm ci` for reproducible dependency installation.
 - **Latest CI:** run `40088170829` on current `main` passed all configured gates before the publication-gate migration. The new migration has triggered a fresh CI run; verify that run before treating the latest commit as fully green.
-
 
 ## Constitution reconciliation — 2026-10-24
 
