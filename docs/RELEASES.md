@@ -11,8 +11,8 @@
 
 ## Release history
 
-| Date | Identifier | Change | Verification | Deployment |
-|---|---|---|---|---|
+| Date       | Identifier                                 | Change                                                 | Verification                        | Deployment                                          |
+| ---------- | ------------------------------------------ | ------------------------------------------------------ | ----------------------------------- | --------------------------------------------------- |
 | 2026-10-24 | `57d04ed9d3db332e0aafe71d69423be5723c7ff5` | Source-page PYQ publish-gate test/documentation update | GitHub CI run 40090330071 succeeded | Not established; do not infer production deployment |
 
 ## Release gates

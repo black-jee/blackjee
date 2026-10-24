@@ -22,4 +22,5 @@
 - Measure baseline before proposing performance budgets or growth experiments.
 
 ## Next audit
+
 Verify production response status and rendered metadata; inspect `app/robots.ts`, `app/sitemap.ts`, route metadata and public/private route boundaries. Record each finding in `docs/TASKS.md` with evidence.

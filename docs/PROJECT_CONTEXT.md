@@ -4,6 +4,7 @@
 **Status:** In progress; not production-ready.
 
 ## Mission
+
 Build a reliable, secure, mobile-first JEE Main and JEE Advanced preparation platform. Educational correctness, student privacy, answer-key confidentiality, accessibility, and traceable verification take precedence over cosmetic polish.
 
 ## Active targets
@@ -14,6 +15,7 @@ Build a reliable, secure, mobile-first JEE Main and JEE Advanced preparation pla
 - **Legacy reference only:** https://github.com/bhavishyacodz/BLACK-JEE and https://bhavishyacodz.github.io/BLACK-JEE/. Do not modify these as part of new-system work unless explicitly requested.
 
 ## Architecture currently present
+
 Next.js App Router, React, strict TypeScript, Tailwind CSS, Supabase Auth/Postgres, server actions, Zod validation, KaTeX, Vitest, Playwright, and GitHub Actions. Verify individual routes and flows before calling them complete.
 
 ## Stable constraints
@@ -35,4 +37,5 @@ Next.js App Router, React, strict TypeScript, Tailwind CSS, Supabase Auth/Postgr
 - Authenticated student/admin browser journeys and Vercel production behavior remain unverified.
 
 ## Product priorities
+
 P0 security/data loss/answer leakage; P1 critical student flows, scoring, auth and deployments; P2 missing workflows, integrity, admin, accessibility and performance; P3 usability/content improvements; P4 experiments. See `docs/TASKS.md` for the authoritative task ledger.

@@ -5,16 +5,16 @@
 
 ## Environment
 
-| Item                    | Observed status                                                                                                                 |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| New GitHub repository   | `black-jee/blackjee`, public, default branch `main`                                                                             |
-| New Supabase            | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region                                                          |
+| Item                    | Observed status                                                                                                                                                                                                               |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| New GitHub repository   | `black-jee/blackjee`, public, default branch `main`                                                                                                                                                                           |
+| New Supabase            | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region                                                                                                                                                        |
 | Supabase migrations     | 20 applied entries; 15 migration files are checked into Git, while six original migration bodies remain to be reconstructed (the repository includes one additional duplicate/overlapping migration file not in live history) |
-| Supabase data           | 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported          |
-| Supabase tables         | 9 inspected public/private tables; no student attempts or mock-test attempts                                                    |
-| Supabase Edge Functions | Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)             |
-| Legacy source ZIP       | Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files                        |
-| Live website comparison | Blocked/incomplete; direct fetch did not return page content                                                                    |
+| Supabase data           | 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported                                                                                                        |
+| Supabase tables         | 9 inspected public/private tables; no student attempts or mock-test attempts                                                                                                                                                  |
+| Supabase Edge Functions | Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)                                                                                                           |
+| Legacy source ZIP       | Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files                                                                                                                      |
+| Live website comparison | Blocked/incomplete; direct fetch did not return page content                                                                                                                                                                  |
 
 ## Work log
 
