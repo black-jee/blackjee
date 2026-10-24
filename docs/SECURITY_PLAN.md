@@ -21,9 +21,9 @@ Protect student identity and history, unpublished questions, answer keys, challe
 ## Baseline risks observed (2026-10-24)
 
 Supabase security advisors reported:
-1. `public.get_current_daily_challenge()` is `SECURITY DEFINER` and callable by `anon` and `authenticated`.
+1. **Remediated in migration `20261024095050`:** `public.get_current_daily_challenge()` now runs as `SECURITY INVOKER`; anonymous access is limited to the schedule metadata columns and RLS restricts rows. Verification confirmed `anon` cannot select the question `statement` column.
 2. Five `SECURITY DEFINER` RPCs are executable by authenticated users; inspect each function body and intended public contract before changing grants.
-3. Four private tables have RLS enabled with no policies. This is not automatically a vulnerability if browser roles have no direct privileges, but grants and schema exposure must be verified.
+3. Four private tables have RLS enabled with no policies. The inspected table ACLs grant table privileges only to `postgres`; browser roles have no direct table grants. Recheck this whenever policies/grants change.
 4. The new project has no Edge Functions deployed, while the source relies on `admin-cleanup` and `released-solution` workflows.
 
 These findings are tracked, not silently “fixed” by blanket revocation, because student challenge start/submission and grading legitimately require narrowly controlled server functions.
