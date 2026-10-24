@@ -40,7 +40,6 @@ Known open points: `get_daily_challenge_result` was observed to expose released 
 
 No production database, ledger, schema, policy, grant, storage, or data changes. Draft PR #2 remains unmerged.
 
-
 ## Exact filename reconciliation (verified 2026-10-24)
 
 Live ledger versions without an exact matching repository filename:
@@ -64,7 +63,6 @@ The 20261024112500 file has the same source-page publication gate as the missing
 
 For the previously identified workflow run `40114721534`, the `reconstruction-replay` job reports success and the `quality` job reports cancelled. Therefore the replay job succeeded, but this run does not establish that the complete CI suite passed. The combined commit status also reports a Vercel failure linked to a build-rate-limit/upgrade page; no paid upgrade was attempted.
 
-
 ## Follow-up Git history review (2026-10-24)
 
 Git history confirms:
@@ -74,7 +72,6 @@ Git history confirms:
 - A history query for the missing ledger filename `20261024112132_require_pyq_source_page_before_publish.sql` returned no commits.
 
 Conclusion: the current branch has two separately versioned migrations with overlapping publication-gate logic, while the live ledger contains a third version/name pair that is absent from repository path history. Do not rename or delete either migration automatically: first establish the intended ledger lineage and whether the live ledger recorded a file that was later renamed outside Git history. These commits show branch history, not the exact SQL that was applied to production.
-
 
 ## Early missing migration history and schema-generation comparison (2026-10-24)
 
@@ -88,14 +85,14 @@ A path-specific GitHub commit-history query returned no commits for each of thes
 
 The ten historical SQL files preserved in the Library are from a different schema generation. They operate on legacy objects such as `public.daily_questions`, `public.attempt_submissions`, `public.active_question_links`, and `private.challenge_attempt_sessions`; the current live catalog instead includes `public.jee_pyq_questions`, `public.daily_challenges`, `public.daily_challenge_attempts`, `public.mock_test_attempts`, and `private.daily_challenge_sessions`. Therefore those old files are useful for security intent and design lessons, but are not replacements for the six missing current-generation migrations.
 
-| Missing live-ledger version | Evidence available | Recovery classification |
-| --- | --- | --- |
-| `20261024080824` foundation schema | Current catalog shape snapshot and reconstructed table-shape SQL exist; no matching path history found | Catalog reconstruction only; original migration body unresolved |
-| `20261024080924` grants/policies | Current RLS and privilege snapshots exist; no matching path history found | Current-state evidence only; original migration body unresolved |
-| `20261024081041` daily solution release RPC | Current RPC definitions snapshot exists, but its current challenge schema is not the legacy daily-question schema | Current-state evidence only; historical equivalence unproven |
-| `20261024081337` numeric answers/admin review | Current PYQ schema supports numerical question types and current admin RPC definitions exist | Current-state evidence only; original migration body unresolved |
-| `20261024081603` daily attempt sessions | Current schema has `private.daily_challenge_sessions`; historical source uses `private.challenge_attempt_sessions` | Different schema generation; do not transplant |
-| `20261024081731` anon RPC execution restrictions | Current function ACL snapshot exists; no matching path history found | Current-state evidence only; original migration body unresolved |
+| Missing live-ledger version                      | Evidence available                                                                                                 | Recovery classification                                         |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| `20261024080824` foundation schema               | Current catalog shape snapshot and reconstructed table-shape SQL exist; no matching path history found             | Catalog reconstruction only; original migration body unresolved |
+| `20261024080924` grants/policies                 | Current RLS and privilege snapshots exist; no matching path history found                                          | Current-state evidence only; original migration body unresolved |
+| `20261024081041` daily solution release RPC      | Current RPC definitions snapshot exists, but its current challenge schema is not the legacy daily-question schema  | Current-state evidence only; historical equivalence unproven    |
+| `20261024081337` numeric answers/admin review    | Current PYQ schema supports numerical question types and current admin RPC definitions exist                       | Current-state evidence only; original migration body unresolved |
+| `20261024081603` daily attempt sessions          | Current schema has `private.daily_challenge_sessions`; historical source uses `private.challenge_attempt_sessions` | Different schema generation; do not transplant                  |
+| `20261024081731` anon RPC execution restrictions | Current function ACL snapshot exists; no matching path history found                                               | Current-state evidence only; original migration body unresolved |
 
 These classifications are conservative and do not claim that GitHub history proves the files never existed elsewhere. The live migration ledger records versions/names, not the exact SQL text that ran. The reconstruction files remain explicitly non-original and outside `supabase/migrations/`.
 
