@@ -17,6 +17,7 @@ The repository-managed migrations added so far are:
 - `20261024100007_daily_challenge_question_assets.sql`
 - `20261024100245_pyq_question_image_paths.sql`
 - `20261024100341_question_image_path_read_grants.sql`
+- `20261024100524_admin_save_daily_challenge.sql`
 
 ## Important current limitation
 
