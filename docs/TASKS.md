@@ -17,8 +17,9 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 
 - **Status:** IN_PROGRESS
 - **Acceptance:** clean isolated database replay reproduces target schema, constraints, grants, RLS, functions, and indexes; diff against live target reviewed.
-- **Risk:** six original migration bodies absent from Git; 20 versions recorded in Supabase and 15 migration files currently in repository.
-- **Next:** export schema metadata/definitions from the target and reconstruct/review baseline; do not reset target project.
+- **Risk:** six original migration bodies absent from Git; live history has 20 versions. Repository migration directory has version drift: live `20261024112132_require_pyq_source_page_before_publish` is missing while `20261024112500` and `20261024120000` files are not recorded as applied.
+- **Evidence:** read-only comparison documented in [`docs/MIGRATION_RECONCILIATION.md`](./MIGRATION_RECONCILIATION.md); public columns, partial routine definitions, public policies and indexes inspected. CI run `40092001380` passed all configured checks.
+- **Next:** complete schema/grant/storage inventory and retrieve authoritative historical migration bodies; build and replay a reviewed chain only in isolated staging. Do not reset or alter the target project.
 
 ## P1 — critical workflows and deployment confidence
 
