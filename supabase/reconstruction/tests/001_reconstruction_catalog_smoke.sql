@@ -20,7 +20,7 @@ begin
   end if;
 
   -- Check every column represented in the reconstructed table draft.
-  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, expected.column_name), ', ')
+  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, cols.column_name), ', ')
     into missing
   from (values
     ('public','jee_pyq_questions',array['id','source_id','title','exam','year','subject','chapter','difficulty','statement','options','tags','asset_paths','review_status','is_published','created_by','reviewed_by','reviewed_at','created_at','updated_at','statement_image_path','session','question_type','marks_correct','marks_wrong','source_page','source_pdf','source_reference','quality_checks','review_notes','source_status','publication_block_reason']::text[]),
@@ -320,7 +320,7 @@ begin
 
   -- Check representative high-impact nullability/defaults against the live
   -- catalog snapshot. Expand this list as more metadata is recovered.
-  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, expected.column_name), ', ')
+  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, cols.column_name), ', ')
     into missing
   from (values
     ('public','jee_pyq_questions','id','NO','gen_random_uuid()'),
