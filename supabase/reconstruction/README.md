@@ -1,6 +1,6 @@
 # BLACK-JEE schema reconstruction status
 
-**Status: incomplete, reconstructed, and not replay-verified.** This folder is a best-effort reconstruction from read-only catalog inspection; it is not recovered historical migration SQL.
+**Status: incomplete; disposable replay verified, but not production verified.** This folder is a best-effort reconstruction from read-only catalog inspection; it is not recovered historical migration SQL.
 
 ## Safety boundaries
 
