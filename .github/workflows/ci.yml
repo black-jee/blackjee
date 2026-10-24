@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
@@ -25,6 +25,24 @@ jobs:
         with:
           node-version: 22
       - run: npm ci
+      - name: Format continuity documentation on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: >-
+          npx prettier --write CHANGELOG.md docs/DECISIONS.md
+          docs/PROJECT_CONTEXT.md docs/PROJECT_STATUS.md docs/RELEASES.md
+          docs/SEO_AND_GROWTH.md docs/TASKS.md scripts/check-continuity.mjs
+      - name: Commit formatting corrections
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if git diff --quiet; then
+            echo "No formatting changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md docs/DECISIONS.md docs/PROJECT_CONTEXT.md docs/PROJECT_STATUS.md docs/RELEASES.md docs/SEO_AND_GROWTH.md docs/TASKS.md scripts/check-continuity.mjs
+          git commit -m "style: apply Prettier formatting to continuity records"
+          git push
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test
