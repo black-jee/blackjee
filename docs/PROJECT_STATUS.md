@@ -9,7 +9,7 @@
 |---|---|
 | New GitHub repository | `black-jee/blackjee`, public, default branch `main`; empty before this foundation commit |
 | New Supabase | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region |
-| Supabase migrations | 7 entries after first hardening migration; migration SQL is being reconciled into Git |
+| Supabase migrations | 8 applied entries; the two new migrations are checked into Git, while six original migration bodies remain to be reconstructed |
 | Supabase tables | 7 inspected public/private tables; empty at inspection |
 | Supabase Edge Functions | None deployed at inspection |
 | Legacy source ZIP | Readable; 84 files total |
@@ -22,7 +22,8 @@
 - **Verified:** Read `docs/SYSTEM_MAP.md`, buyer due-diligence notes, import standard, source schema and question-package notes.
 - **Verified:** Target Supabase project metadata, tables/columns, six migration records, deployed Edge Functions list and security/performance advisor findings.
 - **Implemented:** Initial Next.js/React/TypeScript/Tailwind scaffold, Supabase SSR/browser client helpers, Zod question schema, shared safe prose/KaTeX renderer, email/Google sign-in, OAuth callback, password reset/update, initial daily challenge route/server actions, Vitest/Playwright tests and CI workflow committed to `main`.
-- **Implemented and database-verified:** `get_current_daily_challenge()` now uses invoker privileges; anonymous role can read only schedule columns, not question statement; session `user_id` index added. New migration version `20261024095050` is recorded in Supabase and its SQL is checked into the repository.
+- **Implemented and database-verified:** `get_current_daily_challenge()` now uses invoker privileges; anonymous role can read only schedule columns, not question statement; session `user_id` index added. Migration `20261024095050` is checked into the repository.
+- **Implemented and database-verified:** added optional `daily_challenges.statement_image_path`, a safe relative-path constraint, and updated the challenge-start RPC to return the path. Migration `20261024100007` is checked into the repository; a direct schema/RPC verification query passed.
 - **Tested:** SQL regression assertions for the schedule RPC security/index and private-table access controls passed against the target Supabase project. These do not substitute for application runtime or browser tests.
 - **Blocked for local runtime checks:** this execution environment cannot resolve `github.com`, so the repository could not be cloned and dependencies could not be installed; no npm test/build result is claimed.
 - **Not started:** Full app migration, database compatibility migrations, content import, browser tests and staging deployment.
