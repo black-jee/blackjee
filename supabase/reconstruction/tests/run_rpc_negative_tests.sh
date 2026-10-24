@@ -79,6 +79,16 @@ expect_denial \
   "Correct answer must match one of the option labels" \
   "${invalid_options_prefix}jsonb_build_array(jsonb_build_object('label','A','text','one'),jsonb_build_object('label','B','text','two'))${invalid_answer_suffix}"
 
+expect_denial \
+  "daily challenge RPC rejects blank option labels" \
+  "Daily challenge options need non-empty labels" \
+  "${invalid_options_prefix}jsonb_build_array(jsonb_build_object('label',' ','text','one'))${invalid_options_suffix}"
+
+expect_denial \
+  "daily challenge RPC rejects more than 12 options" \
+  "A daily challenge can have at most 12 options" \
+  "${invalid_options_prefix}(SELECT jsonb_agg(jsonb_build_object('label', chr(64 + n), 'text', 'option') ORDER BY n) FROM generate_series(1,13) AS g(n))${invalid_options_suffix}"
+
 cross_user_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.resume_mock_test('$attempt_id'::uuid);"
 expect_denial \
   "user cannot resume another user's mock attempt" \
