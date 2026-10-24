@@ -61,7 +61,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Still unverified:** migration replay equivalence, authenticated browser student/admin journeys, deployment runtime, and end-to-end cross-user negative tests. The SQL contract file is a manually runnable database regression assertion; it is not yet wired into the standard npm CI because CI has no disposable PostgreSQL/Supabase service.
 - **Safety:** no DDL, migration apply/repair, row mutation, question publication, paid infrastructure, or production deployment was performed.
 
-
 ## 2026-10-24 — latest main-branch verification
 
 - **CI:** [run 40098020175](https://github.com/black-jee/blackjee/actions/runs/40098020175) — **PASS** on `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`; quality job completed successfully.
