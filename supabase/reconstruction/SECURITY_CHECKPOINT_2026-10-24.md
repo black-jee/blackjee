@@ -25,7 +25,7 @@ A second read-only check returned:
 
 `PASS: anonymous schedule RPC remains metadata-only; column-level grants preserve challenge content boundary`
 
-The committed regression file `tests/003_security_regression_assertions.sql` was then executed in full against the live catalog after its latest source edit and returned PASS. This verifies the catalog assertions on the live project only; it is not a disposable replay or real-user negative RPC test.
+The committed regression file `tests/003_security_regression_assertions.sql` was executed in full against the live catalog after its latest source edit, including the daily-challenge image-path boundary, and returned PASS. This verifies catalog assertions on the live project only; it is not a disposable replay or real-user negative RPC test.
 
 ## What this does not prove
 
