@@ -67,6 +67,37 @@ begin
   select string_agg(expected.constraint_name, ', ')
     into missing
   from (values
+    ('public','jee_pyq_questions','jee_pyq_questions_created_by_fkey'),
+    ('public','jee_pyq_questions','jee_pyq_questions_reviewed_by_fkey'),
+    ('public','daily_challenges','daily_challenges_created_by_fkey'),
+    ('public','daily_challenge_attempts','daily_challenge_attempts_challenge_id_fkey'),
+    ('public','daily_challenge_attempts','daily_challenge_attempts_user_id_fkey'),
+    ('public','mock_test_attempts','mock_test_attempts_user_id_fkey'),
+    ('private','jee_pyq_answer_keys','jee_pyq_answer_keys_question_id_fkey'),
+    ('private','jee_pyq_answer_attempts','jee_pyq_answer_attempts_user_id_fkey'),
+    ('private','jee_pyq_answer_attempts','jee_pyq_answer_attempts_question_id_fkey'),
+    ('private','daily_challenge_answer_keys','daily_challenge_answer_keys_challenge_id_fkey'),
+    ('private','daily_challenge_sessions','daily_challenge_sessions_challenge_id_fkey'),
+    ('private','daily_challenge_sessions','daily_challenge_sessions_user_id_fkey'),
+    ('private','mock_test_responses','mock_test_responses_attempt_id_fkey'),
+    ('private','mock_test_responses','mock_test_responses_question_id_fkey')
+  ) expected(schema_name, table_name, constraint_name)
+  where not exists (
+    select 1 from pg_constraint con
+    join pg_class c on c.oid = con.conrelid
+    join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = expected.schema_name
+      and c.relname = expected.table_name
+      and con.conname = expected.constraint_name
+      and con.contype = 'f'
+  );
+  if missing is not null then
+    raise exception 'Missing catalog-confirmed foreign keys: %', missing;
+  end if;
+
+  select string_agg(expected.constraint_name, ', ')
+    into missing
+  from (values
     ('public','jee_pyq_questions','jee_pyq_marks_check'),
     ('public','jee_pyq_questions','published_questions_must_be_approved'),
     ('public','daily_challenges','daily_challenges_check'),
