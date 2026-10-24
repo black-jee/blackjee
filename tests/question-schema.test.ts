@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { isSafeAssetPath, questionContentSchema } from "../lib/questions/schema";
+import { isValidIstLocalDateTime, istLocalDateTimeToIso } from "../lib/time/ist-local-date-time";
 
 describe("questionContentSchema", () => {
   it("accepts a basic question with math-bearing text and image options", () => {
@@ -36,9 +37,6 @@ describe("isSafeAssetPath", () => {
     expect(isSafeAssetPath(path)).toBe(false);
   });
 });
-
-
-import { isValidIstLocalDateTime, istLocalDateTimeToIso } from "../lib/time/ist-local-date-time";
 
 describe("India-local schedule datetime validation", () => {
   it.each([
