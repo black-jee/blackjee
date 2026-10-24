@@ -3,7 +3,7 @@
 ## New project baseline observed
 
 Project: `phdssyexhfyxsmhmmcgb` (Tokyo / `ap-northeast-1`, PostgreSQL 17.11).  
-Observed migration history before hardening: six entries, versions from `20261024080824` to `20261024081731`. The seventh through tenth migrations are now applied and verified: `20261024095050_harden_public_schedule_rpc_and_index`, `20261024100007_daily_challenge_question_assets`, `20261024100245_pyq_question_image_paths`, and `20261024100341_question_image_path_read_grants`. These harden the public schedule RPC, add safe diagram-path columns to daily challenges and PYQs, and scope grants so anonymous users can read published PYQ image paths but not unpublished daily challenge diagram paths.  
+Observed migration history before hardening: six entries, versions from `20261024080824` to `20261024081731`. The seventh through eleventh migrations are now applied and verified: `20261024095050_harden_public_schedule_rpc_and_index`, `20261024100007_daily_challenge_question_assets`, `20261024100245_pyq_question_image_paths`, and `20261024100341_question_image_path_read_grants`, and `20261024100524_admin_save_daily_challenge`. These harden the public schedule RPC, add safe diagram-path columns to daily challenges and PYQs, scope image-path grants, and provide an admin-only transaction to save challenge content and its private answer key.  
 Observed tables: 3 public tables and 4 private tables; all reported empty. RLS is enabled on the inspected tables. No Edge Functions are deployed in this project at the time of inspection.
 
 ### Public tables
