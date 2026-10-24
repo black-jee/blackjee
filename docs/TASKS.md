@@ -13,6 +13,13 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **Evidence:** live Supabase function definition includes source-page and private-key/solution checks; anon execute=false, authenticated execute=true. Five PYQs remain unpublished.
 - **Next:** run a safe negative/positive integration test with a dedicated admin test account and disposable draft; never publish real content during the test.
 
+### BJ-SEC-002 — Verify SECURITY DEFINER RPC boundary
+
+- **Status:** IN_PROGRESS
+- **Acceptance:** all exposed privileged RPCs have a pinned search path, no anonymous execution, server-side authorization, and cross-user/release-boundary tests for student workflows.
+- **Evidence:** read-only catalog review is recorded in [`docs/SECURITY_DEFINER_REVIEW_2026-10-24.md`](./SECURITY_DEFINER_REVIEW_2026-10-24.md). Eleven public SECURITY DEFINER functions are owned by `postgres`, pin an empty `search_path`, and have no anonymous execute grant. The three admin RPCs check server-managed `app_metadata.role = admin`; direct SELECT/INSERT checks for the five private answer/session tables deny `anon`, `authenticated`, and `service_role`. Existing SQL catalog contract assertions passed previously, but authenticated cross-user and release-boundary runtime tests remain unverified.
+- **Next:** add isolated tests proving student A cannot read, resume, submit, or retrieve results for student B; verify anonymous denial, ordinary-user admin denial, and daily-solution/PYQ release boundaries. Do not mutate production data or publish test content.
+
 ### BJ-DB-001 — Reconstruct the six original migration bodies
 
 - **Status:** IN_PROGRESS
