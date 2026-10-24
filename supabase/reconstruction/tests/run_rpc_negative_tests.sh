@@ -46,6 +46,18 @@ expect_denial \
   "Active mock test not found for this user" \
   "$cross_user_sql"
 
+cross_user_submit_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\"sub\\":\\"$user_b\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.submit_mock_test('$attempt_id'::uuid, '[]'::jsonb);"
+expect_denial \
+  "user cannot submit another user's mock attempt" \
+  "Mock test not found for this user" \
+  "$cross_user_submit_sql"
+
+cross_user_result_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\"sub\\":\\"$user_b\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.get_mock_test_result('$attempt_id'::uuid);"
+expect_denial \
+  "user cannot retrieve another user's mock-test result" \
+  "Submitted test not found for this user" \
+  "$cross_user_result_sql"
+
 expect_denial \
   "authenticated user cannot query private answer-key schema directly" \
   "permission denied for schema private" \
