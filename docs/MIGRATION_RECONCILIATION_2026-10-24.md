@@ -108,3 +108,19 @@ The ten historical SQL files preserved in the Library are from a different schem
 These classifications are conservative and do not claim that GitHub history proves the files never existed elsewhere. The live migration ledger records versions/names, not the exact SQL text that ran. The reconstruction files remain explicitly non-original and outside `supabase/migrations/`.
 
 No production SQL was executed for this investigation; the Supabase calls used were catalog/list reads. No question/answer rows were opened or reviewed.
+
+
+## Latest verification update (2026-10-25)
+
+The latest completed GitHub Actions run for the working branch is [run 40142341490](https://github.com/black-jee/blackjee/actions/runs/40142341490).
+
+- **Disposable database reconstruction/replay: passed.** This includes the reconstructed catalog/RPC/access checks, mock-test NULL-input regression, PYQ option-label integrity guard, daily-challenge authoring integrity migration and contract test, application security regression assertions, and RPC authorization-denial tests.
+- **Application quality: passed** for the static security-contract checker, dependency install, lint, type checking, unit tests, Playwright end-to-end tests, and production build.
+- **Overall run: failed only at the formatting check.** This is a known issue intentionally left unchanged by the project owner; CI remains strict about formatting.
+- No production database changes were made. The new migrations were exercised only in the disposable CI database. Draft PR #2 remains unmerged.
+
+New forward-only hardening files on the working branch:
+- `supabase/migrations/20261025100000_enforce_unique_pyq_option_labels.sql`
+- `supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql`
+
+The daily-challenge RPC now checks live-solution completeness and option integrity at the database boundary, with regression coverage. The existing solution-release behavior is intentionally unchanged: the RPC releases the answer and worked solution after the configured release timestamp to any authenticated caller. Whether release should additionally require a submitted attempt remains an unresolved product/security decision; do not change this behavior without confirming the intended access rule.
