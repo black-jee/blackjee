@@ -21,11 +21,11 @@
 | Feature | Source files / assets | Expected behavior | Migration status | Verification method |
 |---|---|---|---|---|
 | PYQ browse/search/filter | `pyq.html`, question manifests | Browse approved questions; filter by exam/year/subject/chapter; paginate | In progress — initial `/pyq` published-question browse, subject/text filters, authenticated grading and two-wrong-answer solution gate; runtime verification pending | Query tests and browser filtering tests |
-| Chapter-wise navigation | `chapterwise.html` | Subject → chapter/topic → questions | Not started | Navigation and empty-state tests |
-| Chapter practice / grading | `chapter-practice.html`, source SQL migrations | Answer, grade on server, protect answer keys/solutions, per-user attempt rules | Not started | Anonymous/authenticated and cross-user SQL tests |
-| Mock tests / CBT | `mock-tests.html` | Timed question navigation, answer selection, submission/results where present | Not started | Timer, navigation, persistence and mobile tests |
+| Chapter-wise navigation | `chapterwise.html` | Subject → chapter/topic → questions | In progress — `/chapterwise` derives chapter index from approved published PYQ metadata; runtime verification pending | Navigation and empty-state tests |
+| Chapter practice / grading | `chapter-practice.html`, source SQL migrations | Answer, grade on server, protect answer keys/solutions, per-user attempt rules | In progress — `/chapter-practice` uses published chapter filters and the protected PYQ grading card; runtime verification pending | Anonymous/authenticated and cross-user SQL tests |
+| Mock tests / CBT | `mock-tests.html` | Timed question navigation, answer selection, submission/results where present | In progress — `/mock-tests` runner plus server-owned attempt/question assignment, resume, timer enforcement, scoring and private responses; question bank empty and runtime verification pending | Timer, navigation, persistence and mobile tests |
 | Question bank import/review | `pyq-admin.html`, manifests, audit scripts | Import to draft, validate data and assets, review before publication | Not started | Zod/CSV validation and import fixtures |
-| April 4 2026 Shift 1 content | `assets/questions/jee-main-2026-apr-4-shift-1/` | 75 tracking slots; exact question/source/answer/solution/asset reconciliation | Blocked for publication | Source crosswalk, batch audit, manual paper comparison, rendered tests |
+| April 4 2026 Shift 1 content | `assets/questions/jee-main-2026-apr-4-shift-1/` | 75 tracking slots; exact question/source/answer/solution/asset reconciliation | In progress / blocked for publication — first 5 Physics questions imported as drafts with private keys; 70 records and image files remain; all imported rows stay unpublished | Source crosswalk, batch audit, manual paper comparison, rendered tests |
 
 ## Admin and content production
 
