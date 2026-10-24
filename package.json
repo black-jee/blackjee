@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm run typecheck && npm run test && npm run build"
+    "check:security-contracts": "node scripts/check-security-contracts.mjs",
+    "check": "npm run check:security-contracts && npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.0",
