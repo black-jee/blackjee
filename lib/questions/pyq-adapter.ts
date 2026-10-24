@@ -1,4 +1,7 @@
-import type { QuestionContent as QuestionContentData, QuestionOption } from "@/lib/questions/schema";
+import type {
+  QuestionContent as QuestionContentData,
+  QuestionOption,
+} from "@/lib/questions/schema";
 
 export type PyqRow = {
   id: string;
@@ -21,12 +24,27 @@ export function toPyqOptions(raw: unknown): QuestionOption[] {
   return raw.slice(0, 12).map((item, index) => {
     const fallback = String.fromCharCode(65 + index);
     if (typeof item === "string") return { id: String(index), label: fallback, text: item };
-    const value = item && typeof item === "object" ? item as Record<string, unknown> : {};
+    const value = item && typeof item === "object" ? (item as Record<string, unknown>) : {};
     return {
       id: typeof value.id === "string" ? value.id : String(index),
-      label: typeof value.label === "string" ? value.label : typeof value.letter === "string" ? value.letter : fallback,
-      text: typeof value.text === "string" ? value.text : typeof value.value === "string" ? value.value : "",
-      imagePath: typeof value.imagePath === "string" ? value.imagePath : typeof value.image_path === "string" ? value.image_path : undefined,
+      label:
+        typeof value.label === "string"
+          ? value.label
+          : typeof value.letter === "string"
+            ? value.letter
+            : fallback,
+      text:
+        typeof value.text === "string"
+          ? value.text
+          : typeof value.value === "string"
+            ? value.value
+            : "",
+      imagePath:
+        typeof value.imagePath === "string"
+          ? value.imagePath
+          : typeof value.image_path === "string"
+            ? value.image_path
+            : undefined,
     };
   });
 }

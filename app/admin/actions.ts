@@ -4,7 +4,13 @@ import { z } from "zod";
 import { isSafeAssetPath } from "@/lib/questions/schema";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-const localDateTime = z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "Use a valid date and time.").refine((value) => !Number.isNaN(Date.parse(`${value}:00+05:30`)), "Use a real calendar date and time.");
+const localDateTime = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "Use a valid date and time.")
+  .refine(
+    (value) => !Number.isNaN(Date.parse(`${value}:00+05:30`)),
+    "Use a real calendar date and time.",
+  );
 
 const challengeFormSchema = z.object({
   challengeDate: z.string().date(),
@@ -44,7 +50,8 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
   };
 
   const parsed = challengeFormSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Check the form values." };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Check the form values." };
 
   const values = parsed.data;
   if (values.statementImagePath && !isSafeAssetPath(values.statementImagePath)) {
@@ -54,11 +61,21 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
   const startsAt = istIso(values.startsAt);
   const endsAt = istIso(values.endsAt);
   const solutionReleaseAt = istIso(values.solutionReleaseAt);
-  if (!(Date.parse(startsAt) < Date.parse(endsAt) && Date.parse(endsAt) <= Date.parse(solutionReleaseAt))) {
-    return { ok: false, error: "Schedule must start before it ends, and the solution release must be at or after the end." };
+  if (!(
+    Date.parse(startsAt) < Date.parse(endsAt) && Date.parse(endsAt) <= Date.parse(solutionReleaseAt)
+  )) {
+    return {
+      ok: false,
+      error:
+        "Schedule must start before it ends, and the solution release must be at or after the end.",
+    };
   }
 
-  const optionLines = values.optionsText.split("\n").map((line) => line.trim()).filter(Boolean).slice(0, 12);
+  const optionLines = values.optionsText
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 12);
   const options = optionLines.map((text, index) => ({
     id: String.fromCharCode(97 + index),
     label: String.fromCharCode(65 + index),
@@ -66,7 +83,7 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
   }));
   const correctAnswer = values.correctAnswer.trim().toUpperCase();
   if (options.length > 0 && !options.some((option) => option.label === correctAnswer)) {
-    return { ok: false, error: "Correct answer must match one of the option labels (A, B, C…)."};
+    return { ok: false, error: "Correct answer must match one of the option labels (A, B, C…)." };
   }
 
   const supabase = await createSupabaseServerClient();
@@ -91,6 +108,10 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
     p_is_live: values.isLive,
   });
 
-  if (error || typeof data !== "string") return { ok: false, error: "Challenge could not be saved. Check the date, schedule, and administrator role." };
+  if (error || typeof data !== "string")
+    return {
+      ok: false,
+      error: "Challenge could not be saved. Check the date, schedule, and administrator role.",
+    };
   return { ok: true, id: data };
 }

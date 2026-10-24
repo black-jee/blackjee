@@ -10,8 +10,7 @@ const answerSchema = z.object({
 });
 
 export type ChallengeActionResult =
-  | { ok: true; data: Record<string, unknown> }
-  | { ok: false; error: string; code?: string };
+  { ok: true; data: Record<string, unknown> } | { ok: false; error: string; code?: string };
 
 async function requireUser() {
   const supabase = await createSupabaseServerClient();
@@ -27,13 +26,19 @@ export async function startChallenge(challengeId: string): Promise<ChallengeActi
   const { supabase, error: authError } = await requireUser();
   if (authError) return { ok: false, error: authError, code: "AUTH_REQUIRED" };
 
-  const { data, error } = await supabase.rpc("start_daily_challenge", { p_challenge_id: parsed.data });
+  const { data, error } = await supabase.rpc("start_daily_challenge", {
+    p_challenge_id: parsed.data,
+  });
   if (error) return { ok: false, error: "Could not start this challenge.", code: error.code };
-  if (!data || typeof data !== "object" || Array.isArray(data)) return { ok: false, error: "The challenge response was invalid." };
+  if (!data || typeof data !== "object" || Array.isArray(data))
+    return { ok: false, error: "The challenge response was invalid." };
   return { ok: true, data: data as Record<string, unknown> };
 }
 
-export async function submitChallenge(challengeId: string, answer: string): Promise<ChallengeActionResult> {
+export async function submitChallenge(
+  challengeId: string,
+  answer: string,
+): Promise<ChallengeActionResult> {
   const parsed = answerSchema.safeParse({ challengeId, answer });
   if (!parsed.success) return { ok: false, error: "Choose a valid answer before submitting." };
 
@@ -44,8 +49,14 @@ export async function submitChallenge(challengeId: string, answer: string): Prom
     p_challenge_id: parsed.data.challengeId,
     p_answer: parsed.data.answer,
   });
-  if (error) return { ok: false, error: "Could not submit this answer. Check whether the attempt is still open.", code: error.code };
-  if (!data || typeof data !== "object" || Array.isArray(data)) return { ok: false, error: "The submission response was invalid." };
+  if (error)
+    return {
+      ok: false,
+      error: "Could not submit this answer. Check whether the attempt is still open.",
+      code: error.code,
+    };
+  if (!data || typeof data !== "object" || Array.isArray(data))
+    return { ok: false, error: "The submission response was invalid." };
   return { ok: true, data: data as Record<string, unknown> };
 }
 
@@ -56,8 +67,12 @@ export async function getChallengeResult(challengeId: string): Promise<Challenge
   const { supabase, error: authError } = await requireUser();
   if (authError) return { ok: false, error: authError, code: "AUTH_REQUIRED" };
 
-  const { data, error } = await supabase.rpc("get_daily_challenge_result", { p_challenge_id: parsed.data });
-  if (error) return { ok: false, error: "Could not load the official solution yet.", code: error.code };
-  if (!data || typeof data !== "object" || Array.isArray(data)) return { ok: false, error: "The result response was invalid." };
+  const { data, error } = await supabase.rpc("get_daily_challenge_result", {
+    p_challenge_id: parsed.data,
+  });
+  if (error)
+    return { ok: false, error: "Could not load the official solution yet.", code: error.code };
+  if (!data || typeof data !== "object" || Array.isArray(data))
+    return { ok: false, error: "The result response was invalid." };
   return { ok: true, data: data as Record<string, unknown> };
 }

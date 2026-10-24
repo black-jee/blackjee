@@ -21,6 +21,7 @@ Protect student identity and history, unpublished questions, answer keys, challe
 ## Baseline risks observed (2026-10-24)
 
 Supabase security advisors reported:
+
 1. **Remediated in migration `20261024095050`:** `public.get_current_daily_challenge()` now runs as `SECURITY INVOKER`; anonymous access is limited to the schedule metadata columns and RLS restricts rows. Verification confirmed `anon` cannot select the question `statement` column.
 2. Nine `SECURITY DEFINER` RPCs are executable by authenticated users. The challenge, PYQ grading, and mock-test functions explicitly check `auth.uid()`; the admin challenge-save function additionally checks server-managed `app_metadata.role = admin`. Mock-test start/resume/submit/result functions bind the attempt to the signed-in owner and keep answer keys out of the pre-submit payload. These are intentional trusted operations and remain subject to negative testing and advisor review after changes.
 3. Four private tables have RLS enabled with no policies. The inspected table ACLs grant table privileges only to `postgres`; browser roles have no direct table grants. Recheck this whenever policies/grants change.

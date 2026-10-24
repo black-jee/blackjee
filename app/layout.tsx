@@ -6,7 +6,8 @@ export const metadata: Metadata = {
     default: "BLACK-JEE — Train with intent",
     template: "%s | BLACK-JEE",
   },
-  description: "A focused JEE preparation platform for daily challenges, previous-year questions, chapter practice, and mock tests.",
+  description:
+    "A focused JEE preparation platform for daily challenges, previous-year questions, chapter practice, and mock tests.",
   applicationName: "BLACK-JEE",
 };
 

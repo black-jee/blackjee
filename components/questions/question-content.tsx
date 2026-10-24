@@ -53,7 +53,9 @@ export function QuestionContent({ question, className }: Props) {
                 {option.text ? (
                   <div dangerouslySetInnerHTML={{ __html: renderQuestionText(option.text) }} />
                 ) : null}
-                {option.imagePath ? <SafeAsset path={option.imagePath} alt={`Option ${option.label} image`} /> : null}
+                {option.imagePath ? (
+                  <SafeAsset path={option.imagePath} alt={`Option ${option.label} image`} />
+                ) : null}
               </div>
             </li>
           ))}

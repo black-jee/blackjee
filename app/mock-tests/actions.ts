@@ -13,14 +13,17 @@ const startSchema = z.object({
   durationSeconds: z.number().int().min(0).max(10800),
 });
 
-const answerSchema = z.array(z.object({
-  question_id: z.string().uuid(),
-  answer: z.string().max(100),
-})).max(75);
+const answerSchema = z
+  .array(
+    z.object({
+      question_id: z.string().uuid(),
+      answer: z.string().max(100),
+    }),
+  )
+  .max(75);
 
 export type MockTestActionResult =
-  | { ok: true; data: Record<string, unknown> }
-  | { ok: false; error: string; code?: string };
+  { ok: true; data: Record<string, unknown> } | { ok: false; error: string; code?: string };
 
 async function getAuthenticatedClient() {
   const supabase = await createSupabaseServerClient();
@@ -48,8 +51,16 @@ export async function startMockTest(input: unknown): Promise<MockTestActionResul
     p_question_count: parsed.data.questionCount,
     p_duration_seconds: parsed.data.durationSeconds,
   });
-  if (error) return { ok: false, error: error.message.includes("verified 75-question") ? error.message : "A test could not be started. The selected bank may not have enough reviewed questions with verified answer keys.", code: error.code };
-  if (!data || typeof data !== "object" || Array.isArray(data)) return { ok: false, error: "The test response was invalid." };
+  if (error)
+    return {
+      ok: false,
+      error: error.message.includes("verified 75-question")
+        ? error.message
+        : "A test could not be started. The selected bank may not have enough reviewed questions with verified answer keys.",
+      code: error.code,
+    };
+  if (!data || typeof data !== "object" || Array.isArray(data))
+    return { ok: false, error: "The test response was invalid." };
   return { ok: true, data: data as Record<string, unknown> };
 }
 
@@ -60,14 +71,19 @@ export async function resumeMockTest(attemptId: string): Promise<MockTestActionR
   if (!userId) return { ok: false, error: "Sign in to resume this test.", code: "AUTH_REQUIRED" };
   const { data, error } = await supabase.rpc("resume_mock_test", { p_attempt_id: parsedId.data });
   if (error) return { ok: false, error: "This mock test is no longer available to resume." };
-  if (!data || typeof data !== "object" || Array.isArray(data)) return { ok: false, error: "The resume response was invalid." };
+  if (!data || typeof data !== "object" || Array.isArray(data))
+    return { ok: false, error: "The resume response was invalid." };
   return { ok: true, data: data as Record<string, unknown> };
 }
 
-export async function submitMockTest(attemptId: string, answers: unknown): Promise<MockTestActionResult> {
+export async function submitMockTest(
+  attemptId: string,
+  answers: unknown,
+): Promise<MockTestActionResult> {
   const parsedId = z.string().uuid().safeParse(attemptId);
   const parsedAnswers = answerSchema.safeParse(answers);
-  if (!parsedId.success || !parsedAnswers.success) return { ok: false, error: "The submitted answers were invalid." };
+  if (!parsedId.success || !parsedAnswers.success)
+    return { ok: false, error: "The submitted answers were invalid." };
 
   const { supabase, userId } = await getAuthenticatedClient();
   if (!userId) return { ok: false, error: "Sign in to submit this test.", code: "AUTH_REQUIRED" };
@@ -76,7 +92,12 @@ export async function submitMockTest(attemptId: string, answers: unknown): Promi
     p_attempt_id: parsedId.data,
     p_answers: parsedAnswers.data,
   });
-  if (error) return { ok: false, error: "The test could not be submitted. Its server-side time limit may have passed." };
-  if (!data || typeof data !== "object" || Array.isArray(data)) return { ok: false, error: "The results response was invalid." };
+  if (error)
+    return {
+      ok: false,
+      error: "The test could not be submitted. Its server-side time limit may have passed.",
+    };
+  if (!data || typeof data !== "object" || Array.isArray(data))
+    return { ok: false, error: "The results response was invalid." };
   return { ok: true, data: data as Record<string, unknown> };
 }

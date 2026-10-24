@@ -4,12 +4,17 @@ import { z } from "zod";
 import { isSafeAssetPath } from "@/lib/questions/schema";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-const optionSchema = z.array(z.object({
-  id: z.string().trim().min(1).max(20),
-  label: z.string().trim().min(1).max(12),
-  text: z.string().max(4000).default(""),
-  imagePath: z.string().trim().max(500).optional(),
-})).min(2).max(12);
+const optionSchema = z
+  .array(
+    z.object({
+      id: z.string().trim().min(1).max(20),
+      label: z.string().trim().min(1).max(12),
+      text: z.string().max(4000).default(""),
+      imagePath: z.string().trim().max(500).optional(),
+    }),
+  )
+  .min(2)
+  .max(12);
 
 const questionSchema = z.object({
   questionId: z.string().uuid().nullable(),
@@ -48,12 +53,19 @@ async function getAdminClient() {
 
 export async function savePyqQuestion(input: unknown): Promise<PyqActionResult> {
   const parsed = questionSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message ?? "Check the question fields." };
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.message ?? "Check the question fields." };
   const q = parsed.data;
-  if (q.statementImagePath && !isSafeAssetPath(q.statementImagePath)) return { ok: false, error: "Question image path must be a safe relative path." };
-  if (q.assetPaths.some((path) => !isSafeAssetPath(path))) return { ok: false, error: "An asset path is unsafe." };
-  if (q.options.some((option) => option.imagePath && !isSafeAssetPath(option.imagePath))) return { ok: false, error: "An option image path is unsafe." };
-  if (q.questionType === "single_correct" && !q.options.some((option) => option.label.toUpperCase() === q.correctAnswer.toUpperCase())) {
+  if (q.statementImagePath && !isSafeAssetPath(q.statementImagePath))
+    return { ok: false, error: "Question image path must be a safe relative path." };
+  if (q.assetPaths.some((path) => !isSafeAssetPath(path)))
+    return { ok: false, error: "An asset path is unsafe." };
+  if (q.options.some((option) => option.imagePath && !isSafeAssetPath(option.imagePath)))
+    return { ok: false, error: "An option image path is unsafe." };
+  if (
+    q.questionType === "single_correct" &&
+    !q.options.some((option) => option.label.toUpperCase() === q.correctAnswer.toUpperCase())
+  ) {
     return { ok: false, error: "The answer key must match an option label." };
   }
 
@@ -82,19 +94,26 @@ export async function savePyqQuestion(input: unknown): Promise<PyqActionResult> 
     p_asset_paths: q.assetPaths,
     p_review_notes: q.reviewNotes,
   });
-  if (error || typeof data !== "string") return { ok: false, error: "Question was not saved. Confirm the source ID is unique and all fields are valid." };
+  if (error || typeof data !== "string")
+    return {
+      ok: false,
+      error: "Question was not saved. Confirm the source ID is unique and all fields are valid.",
+    };
   return { ok: true, id: data };
 }
 
 export async function reviewPyqQuestion(input: unknown): Promise<PyqActionResult> {
-  const parsed = z.object({
-    questionId: z.string().uuid(),
-    approve: z.boolean(),
-    publish: z.boolean(),
-    reviewNotes: z.array(z.string().trim().min(1).max(1000)).max(30),
-  }).safeParse(input);
+  const parsed = z
+    .object({
+      questionId: z.string().uuid(),
+      approve: z.boolean(),
+      publish: z.boolean(),
+      reviewNotes: z.array(z.string().trim().min(1).max(1000)).max(30),
+    })
+    .safeParse(input);
   if (!parsed.success) return { ok: false, error: "Invalid review request." };
-  if (parsed.data.publish && !parsed.data.approve) return { ok: false, error: "Approve the question before publishing." };
+  if (parsed.data.publish && !parsed.data.approve)
+    return { ok: false, error: "Approve the question before publishing." };
 
   const { supabase, authorized } = await getAdminClient();
   if (!authorized) return { ok: false, error: "Administrator access is required." };
@@ -104,6 +123,11 @@ export async function reviewPyqQuestion(input: unknown): Promise<PyqActionResult
     p_publish: parsed.data.publish,
     p_review_notes: parsed.data.reviewNotes,
   });
-  if (error || !data || typeof data !== "object") return { ok: false, error: "Review action failed. The database requires a valid private answer key before publication." };
+  if (error || !data || typeof data !== "object")
+    return {
+      ok: false,
+      error:
+        "Review action failed. The database requires a valid private answer key before publication.",
+    };
   return { ok: true, id: parsed.data.questionId };
 }

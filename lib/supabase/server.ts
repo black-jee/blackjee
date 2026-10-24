@@ -6,7 +6,9 @@ export async function createSupabaseServerClient() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) {
-    throw new Error("Supabase server configuration is missing. Set the public URL and publishable key.");
+    throw new Error(
+      "Supabase server configuration is missing. Set the public URL and publishable key.",
+    );
   }
 
   const cookieStore = await cookies();

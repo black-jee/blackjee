@@ -13,7 +13,10 @@ describe("questionContentSchema", () => {
   });
 
   it("rejects empty statements and invalid subjects", () => {
-    expect(questionContentSchema.safeParse({ sourceId: "q1", statement: "", subject: "Biology" }).success).toBe(false);
+    expect(
+      questionContentSchema.safeParse({ sourceId: "q1", statement: "", subject: "Biology" })
+        .success,
+    ).toBe(false);
   });
 });
 
@@ -22,7 +25,14 @@ describe("isSafeAssetPath", () => {
     expect(isSafeAssetPath("assets/questions/q1.png")).toBe(true);
   });
 
-  it.each(["../secret.png", "/etc/passwd", "assets/../secret.png", "https://example.com/x.png", "assets\\secret.png", "assets//empty.png"])("rejects unsafe path %s", (path) => {
+  it.each([
+    "../secret.png",
+    "/etc/passwd",
+    "assets/../secret.png",
+    "https://example.com/x.png",
+    "assets\\secret.png",
+    "assets//empty.png",
+  ])("rejects unsafe path %s", (path) => {
     expect(isSafeAssetPath(path)).toBe(false);
   });
 });

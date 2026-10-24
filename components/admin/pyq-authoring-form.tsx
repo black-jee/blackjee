@@ -5,19 +5,24 @@ import { useRouter } from "next/navigation";
 import { savePyqQuestion } from "@/app/admin/pyq/actions";
 
 function parseOptions(raw: string) {
-  return raw.split("\n").map((line) => line.trim()).filter(Boolean).map((line, index) => {
-    const [labelPart, textPart = "", imagePart = ""] = line.split("|");
-    const label = labelPart.trim() || String.fromCharCode(65 + index);
-    return {
-      id: label.toLowerCase(),
-      label,
-      text: textPart.trim(),
-      ...(imagePart.trim() ? { imagePath: imagePart.trim() } : {}),
-    };
-  });
+  return raw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line, index) => {
+      const [labelPart, textPart = "", imagePart = ""] = line.split("|");
+      const label = labelPart.trim() || String.fromCharCode(65 + index);
+      return {
+        id: label.toLowerCase(),
+        label,
+        text: textPart.trim(),
+        ...(imagePart.trim() ? { imagePath: imagePart.trim() } : {}),
+      };
+    });
 }
 
-const inputClass = "w-full rounded-xl border border-[var(--border)] bg-black/20 px-3 py-2.5 text-sm";
+const inputClass =
+  "w-full rounded-xl border border-[var(--border)] bg-black/20 px-3 py-2.5 text-sm";
 const labelClass = "block space-y-1.5 text-sm font-medium";
 
 export function PyqAuthoringForm() {
@@ -35,12 +40,24 @@ export function PyqAuthoringForm() {
     setNotice(null);
     const yearRaw = String(formData.get("year") ?? "").trim();
     const pageRaw = String(formData.get("sourcePage") ?? "").trim();
-    const tags = String(formData.get("tags") ?? "").split(",").map((v) => v.trim()).filter(Boolean);
-    const assetPaths = String(formData.get("assetPaths") ?? "").split("\n").map((v) => v.trim()).filter(Boolean);
-    const reviewNotes = String(formData.get("reviewNotes") ?? "").split("\n").map((v) => v.trim()).filter(Boolean);
+    const tags = String(formData.get("tags") ?? "")
+      .split(",")
+      .map((v) => v.trim())
+      .filter(Boolean);
+    const assetPaths = String(formData.get("assetPaths") ?? "")
+      .split("\n")
+      .map((v) => v.trim())
+      .filter(Boolean);
+    const reviewNotes = String(formData.get("reviewNotes") ?? "")
+      .split("\n")
+      .map((v) => v.trim())
+      .filter(Boolean);
     const options = parseOptions(optionsText);
     const correctAnswer = String(formData.get("correctAnswer") ?? "").trim();
-    if (questionType === "single_correct" && !options.some((option) => option.label.toUpperCase() === correctAnswer.toUpperCase())) {
+    if (
+      questionType === "single_correct" &&
+      !options.some((option) => option.label.toUpperCase() === correctAnswer.toUpperCase())
+    ) {
       setError("Correct answer must match an option label (A, B, C, D…).");
       return;
     }
@@ -81,35 +98,238 @@ export function PyqAuthoringForm() {
   }
 
   return (
-    <form data-pyq-authoring onSubmit={(event) => { event.preventDefault(); submit(new FormData(event.currentTarget)); }} className="space-y-5">
+    <form
+      data-pyq-authoring
+      onSubmit={(event) => {
+        event.preventDefault();
+        submit(new FormData(event.currentTarget));
+      }}
+      className="space-y-5"
+    >
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className={labelClass}>Question title<input name="title" required maxLength={240} placeholder="JEE Main 2026 · Physics Q1" className={inputClass} /></label>
-        <label className={labelClass}>Stable source ID<input name="sourceId" maxLength={160} placeholder="BJ-JM-2026-S1-PHY-001" className={inputClass} /></label>
-        <label className={labelClass}>Exam<input name="exam" defaultValue="JEE Main" maxLength={80} className={inputClass} /></label>
-        <label className={labelClass}>Subject<select value={subject} onChange={(event) => setSubject(event.target.value)} className={inputClass}><option>Physics</option><option>Chemistry</option><option>Mathematics</option></select></label>
-        <label className={labelClass}>Year<input name="year" type="number" min="2000" max="2100" placeholder="2026" className={inputClass} /></label>
-        <label className={labelClass}>Session / shift<input name="session" maxLength={120} placeholder="4 April Shift 1" className={inputClass} /></label>
-        <label className={labelClass}>Chapter<input name="chapter" maxLength={160} placeholder="Current Electricity" className={inputClass} /></label>
-        <label className={labelClass}>Question type<select value={questionType} onChange={(event) => setQuestionType(event.target.value)} className={inputClass}><option value="single_correct">Single correct</option><option value="numerical">Numerical</option></select></label>
-        <label className={labelClass}>Marks for correct<input name="marksCorrect" type="number" min="1" max="20" defaultValue="4" required className={inputClass} /></label>
-        <label className={labelClass}>Marks for wrong<input name="marksWrong" type="number" min="-20" max="0" defaultValue="-1" required className={inputClass} /></label>
+        <label className={labelClass}>
+          Question title
+          <input
+            name="title"
+            required
+            maxLength={240}
+            placeholder="JEE Main 2026 · Physics Q1"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Stable source ID
+          <input
+            name="sourceId"
+            maxLength={160}
+            placeholder="BJ-JM-2026-S1-PHY-001"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Exam
+          <input name="exam" defaultValue="JEE Main" maxLength={80} className={inputClass} />
+        </label>
+        <label className={labelClass}>
+          Subject
+          <select
+            value={subject}
+            onChange={(event) => setSubject(event.target.value)}
+            className={inputClass}
+          >
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Mathematics</option>
+          </select>
+        </label>
+        <label className={labelClass}>
+          Year
+          <input
+            name="year"
+            type="number"
+            min="2000"
+            max="2100"
+            placeholder="2026"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Session / shift
+          <input
+            name="session"
+            maxLength={120}
+            placeholder="4 April Shift 1"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Chapter
+          <input
+            name="chapter"
+            maxLength={160}
+            placeholder="Current Electricity"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Question type
+          <select
+            value={questionType}
+            onChange={(event) => setQuestionType(event.target.value)}
+            className={inputClass}
+          >
+            <option value="single_correct">Single correct</option>
+            <option value="numerical">Numerical</option>
+          </select>
+        </label>
+        <label className={labelClass}>
+          Marks for correct
+          <input
+            name="marksCorrect"
+            type="number"
+            min="1"
+            max="20"
+            defaultValue="4"
+            required
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Marks for wrong
+          <input
+            name="marksWrong"
+            type="number"
+            min="-20"
+            max="0"
+            defaultValue="-1"
+            required
+            className={inputClass}
+          />
+        </label>
       </div>
-      <label className={labelClass}>Question statement<textarea value={statement} onChange={(event) => setStatement(event.target.value)} required maxLength={100000} rows={5} placeholder="Enter the exact question wording. Use LaTeX delimiters for mathematics." className={inputClass} /></label>
-      <label className={labelClass}>Question diagram path (optional)<input name="statementImagePath" maxLength={500} placeholder="assets/questions/paper/q1.png" className={inputClass} /></label>
-      <label className={labelClass}>Options (one per line: <code>Label|text|optional/image.png</code>)<textarea value={optionsText} onChange={(event) => setOptionsText(event.target.value)} rows={5} className={inputClass} /></label>
+      <label className={labelClass}>
+        Question statement
+        <textarea
+          value={statement}
+          onChange={(event) => setStatement(event.target.value)}
+          required
+          maxLength={100000}
+          rows={5}
+          placeholder="Enter the exact question wording. Use LaTeX delimiters for mathematics."
+          className={inputClass}
+        />
+      </label>
+      <label className={labelClass}>
+        Question diagram path (optional)
+        <input
+          name="statementImagePath"
+          maxLength={500}
+          placeholder="assets/questions/paper/q1.png"
+          className={inputClass}
+        />
+      </label>
+      <label className={labelClass}>
+        Options (one per line: <code>Label|text|optional/image.png</code>)
+        <textarea
+          value={optionsText}
+          onChange={(event) => setOptionsText(event.target.value)}
+          rows={5}
+          className={inputClass}
+        />
+      </label>
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className={labelClass}>Correct answer / numerical answer<input name="correctAnswer" required maxLength={100} placeholder="A or exact numeric value" className={inputClass} /></label>
-        <label className={labelClass}>Source PDF / reference<input name="sourcePdf" maxLength={500} placeholder="Original paper filename or citation" className={inputClass} /></label>
-        <label className={labelClass}>Source page<input name="sourcePage" type="number" min="1" max="10000" placeholder="Page number" className={inputClass} /></label>
-        <label className={labelClass}>Tags (comma separated)<input name="tags" maxLength={2000} placeholder="jee-main, 2026, mechanics" className={inputClass} /></label>
+        <label className={labelClass}>
+          Correct answer / numerical answer
+          <input
+            name="correctAnswer"
+            required
+            maxLength={100}
+            placeholder="A or exact numeric value"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Source PDF / reference
+          <input
+            name="sourcePdf"
+            maxLength={500}
+            placeholder="Original paper filename or citation"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Source page
+          <input
+            name="sourcePage"
+            type="number"
+            min="1"
+            max="10000"
+            placeholder="Page number"
+            className={inputClass}
+          />
+        </label>
+        <label className={labelClass}>
+          Tags (comma separated)
+          <input
+            name="tags"
+            maxLength={2000}
+            placeholder="jee-main, 2026, mechanics"
+            className={inputClass}
+          />
+        </label>
       </div>
-      <label className={labelClass}>Solution<textarea name="solution" maxLength={100000} rows={5} placeholder="Explain the reasoning and calculations." className={inputClass} /></label>
-      <label className={labelClass}>Additional asset paths (one per line)<textarea name="assetPaths" rows={2} className={inputClass} placeholder="assets/questions/paper/diagram.png" /></label>
-      <label className={labelClass}>Review notes (one per line)<textarea name="reviewNotes" rows={2} className={inputClass} placeholder="Source checked; formula and answer independently verified." /></label>
-      {notice ? <p role="status" className="rounded-xl border border-[var(--accent)]/30 p-3 text-sm">{notice}</p> : null}
-      {error ? <p role="alert" className="rounded-xl border border-red-400/30 bg-red-400/10 p-3 text-sm text-red-200">{error}</p> : null}
-      <button type="submit" disabled={pending} className="rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] disabled:opacity-50">{pending ? "Saving draft…" : "Save question as draft"}</button>
-      <p className="text-xs leading-5 text-[var(--muted)]">Saving does not approve or publish the question. Server-side validation and the database enforce administrator access, safe asset paths, and answer-key consistency.</p>
+      <label className={labelClass}>
+        Solution
+        <textarea
+          name="solution"
+          maxLength={100000}
+          rows={5}
+          placeholder="Explain the reasoning and calculations."
+          className={inputClass}
+        />
+      </label>
+      <label className={labelClass}>
+        Additional asset paths (one per line)
+        <textarea
+          name="assetPaths"
+          rows={2}
+          className={inputClass}
+          placeholder="assets/questions/paper/diagram.png"
+        />
+      </label>
+      <label className={labelClass}>
+        Review notes (one per line)
+        <textarea
+          name="reviewNotes"
+          rows={2}
+          className={inputClass}
+          placeholder="Source checked; formula and answer independently verified."
+        />
+      </label>
+      {notice ? (
+        <p role="status" className="rounded-xl border border-[var(--accent)]/30 p-3 text-sm">
+          {notice}
+        </p>
+      ) : null}
+      {error ? (
+        <p
+          role="alert"
+          className="rounded-xl border border-red-400/30 bg-red-400/10 p-3 text-sm text-red-200"
+        >
+          {error}
+        </p>
+      ) : null}
+      <button
+        type="submit"
+        disabled={pending}
+        className="rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] disabled:opacity-50"
+      >
+        {pending ? "Saving draft…" : "Save question as draft"}
+      </button>
+      <p className="text-xs leading-5 text-[var(--muted)]">
+        Saving does not approve or publish the question. Server-side validation and the database
+        enforce administrator access, safe asset paths, and answer-key consistency.
+      </p>
     </form>
   );
 }
