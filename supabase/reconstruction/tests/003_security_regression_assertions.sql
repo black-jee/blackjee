@@ -53,13 +53,13 @@ BEGIN
     RAISE EXCEPTION 'Privileged RPC attributes/ACL mismatch: %', v_missing;
   END IF;
 
-  -- Fingerprint the exact live function definitions captured in reconstruction
-  -- draft 003. This catches accidental edits or deparse/source drift.
+  -- Fingerprint reconstructed definitions that still match the captured live catalog.
+  -- admin_save_daily_challenge intentionally includes reconstruction-only hardening;
+  -- validate its new rules semantically below rather than comparing it to the live hash.
   SELECT string_agg(e.name, ', ' ORDER BY e.name)
   INTO v_missing
   FROM (VALUES
     ('admin_review_jee_pyq_question', 'c60ab9ab4141edcb615f475919cbf620'),
-    ('admin_save_daily_challenge', 'ebdff78aa677719515c9e500fc576562'),
     ('admin_save_jee_pyq_question', '9de6669f0727df14fd0851895ee37466'),
     ('get_current_daily_challenge', 'ff76bf83a39b595544fe15f3475cd70b'),
     ('get_daily_challenge_result', 'ccb0c62728a64f6382ffdf9a8f2f63d8'),
@@ -78,6 +78,18 @@ BEGIN
 
   IF v_missing IS NOT NULL THEN
     RAISE EXCEPTION 'Reconstructed RPC definition fingerprints differ from the live catalog: %', v_missing;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_proc p
+    WHERE p.pronamespace = 'public'::regnamespace
+      AND p.proname = 'admin_save_daily_challenge'
+      AND pg_get_functiondef(p.oid) LIKE '%A live challenge must include a worked solution%'
+      AND pg_get_functiondef(p.oid) LIKE '%Daily challenge option labels must be unique%'
+      AND pg_get_functiondef(p.oid) LIKE '%Correct answer must match one of the option labels%'
+      AND pg_get_functiondef(p.oid) LIKE '%jsonb_array_length(p_options) > 12%'
+  ) THEN
+    RAISE EXCEPTION 'Reconstructed daily-challenge RPC is missing solution/options integrity guards';
   END IF;
 
   -- The anonymous schedule RPC must remain invoker-rights and metadata-only.
