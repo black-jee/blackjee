@@ -26,8 +26,8 @@ export default function HomePage() {
             BLACK-JEE is being rebuilt around the original student and admin workflows, with safer question delivery, reliable attempts, and a consistent practice experience.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#modules" className="rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] transition-opacity hover:opacity-90">Explore platform modules <span aria-hidden="true">↘</span></a>
-            <a href="https://github.com/black-jee/blackjee" className="rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-semibold text-[var(--text)] hover:bg-white/5">Engineering progress ↗</a>
+            <a href="/challenge" className="rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] transition-opacity hover:opacity-90">Open daily challenge <span aria-hidden="true">↗</span></a>
+            <a href="/login" className="rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-semibold text-[var(--text)] hover:bg-white/5">Sign in</a>
           </div>
         </div>
 
