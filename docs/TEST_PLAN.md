@@ -32,7 +32,7 @@ CI run `40086464478` passed ESLint, strict TypeScript, both Vitest test files, b
 - Accessibility basics: keyboard operation, focus visibility, labels, contrast and reduced-motion behavior.
 - Recovery from API errors, offline/network interruption, empty datasets and stale sessions.
 
-## Recent CI observation\n\nThe pre-format CI run passed ESLint, strict TypeScript, Vitest, Playwright smoke tests and the Next.js production build, but failed at Prettier. A one-time formatter has now formatted the repository and a lockfile has been committed; the formatted tree still requires a fresh complete CI run. The new admin PYQ UI and server actions still require authenticated end-to-end tests.\n\n## Content verification
+## Recent CI observation\n\nCI run `40087443743` passed ESLint, strict TypeScript, Vitest, Playwright smoke tests and the Next.js production build, but failed at Prettier for `docs/PROJECT_STATUS.md` and `tsconfig.json`. The lockfile is committed and CI uses `npm ci`. Run a final formatter pass and then rerun the full workflow. The new admin PYQ UI and server actions still require authenticated end-to-end tests.\n\n## Content verification
 
 For each imported question, verify source wording, options, correct answer, solution, subject/chapter metadata, all asset references, alt text and mobile rendering. Structural manifest checks cannot prove factual accuracy. The April 4 Shift 1 unresolved items stay blocked until an authoritative source image/PDF is available and checked.
 
