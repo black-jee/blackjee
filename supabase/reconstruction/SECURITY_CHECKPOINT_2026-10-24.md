@@ -25,12 +25,12 @@ A second read-only check returned:
 
 `PASS: anonymous schedule RPC remains metadata-only; column-level grants preserve challenge content boundary`
 
-The committed regression file `tests/003_security_regression_assertions.sql` returned PASS against the live catalog and the disposable PostgreSQL 17 replay in CI run `40113101703`, including the daily-challenge image-path boundary. This verifies catalog assertions only; real-user negative RPC tests remain outstanding.
+The committed regression file `tests/003_security_regression_assertions.sql` returned PASS against the live catalog and the disposable PostgreSQL 17 replay in CI run `40113303240`, including the daily-challenge image-path boundary. This verifies catalog assertions only; real-user negative RPC tests remain outstanding.
 
 ## What this does not prove
 
 - Disposable replay: CI run `40113101703` successfully applied reconstructed tables, policies, 12 current RPC definitions, and access grants to a fresh PostgreSQL 17 container, then passed both schema and security catalog assertions. This validates structural compatibility, not the full Supabase runtime.
-- No real negative RPC calls were made as anonymous, ordinary authenticated, cross-user, or admin identities.
+- No negative RPC calls were made against the live Supabase project or with real Supabase-issued user tokens. CI now performs four negative checks against the disposable replay using synthetic identities and stub auth functions.
 - No Storage bucket or access policy exists yet, so asset migration and its security model remain unfinished.
 - The seven missing historical migration bodies remain unrecovered. Do not manufacture a false historical chain or alter the live migration ledger to make counts match.
 - Latest CI must be checked after the current branch commits. A previous run failed only at Prettier for `docs/PROJECT_STATUS.md` and `supabase/reconstruction/README.md`; earlier lint, typecheck, unit, and browser smoke tests passed, while build was skipped.
@@ -58,7 +58,7 @@ This does not make the records publish-ready by itself. They remain drafts; appr
 
 The full `tests/001_reconstruction_catalog_smoke.sql` was also executed against the live catalog after correcting two column-reporting references. It returned PASS for the nine tables, key defaults/nullability, RLS flags, 10 policies, 14 foreign keys/actions, 49 constraints, and 11 secondary indexes.
 
-This is useful catalog evidence, not a disposable replay: it confirms that the current live schema matches the assertions, but does not prove the reconstructed SQL files can recreate it from zero.
+The live-catalog pass confirms the assertions match the current project. Separately, CI run `40113303240` successfully replayed reconstructed tables, policies, RPCs, and grants from zero in a disposable PostgreSQL 17 database; neither check proves full Supabase Auth/runtime parity.
 
 ## Fresh Supabase advisor pass (read-only, 2026-10-24)
 
