@@ -41,13 +41,13 @@ expect_denial \
   "$nonadmin_sql"
 
 # Client-controlled user_metadata must not grant administrative access.
-spoofed_admin_challenge_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\\"sub\\\":\\\"$user_b\\\",\\\"user_metadata\\\":{\\\"role\\\":\\\"admin\\\"},\\\"app_metadata\\\":{\\\"role\\\":\\\"student\\\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, NULL::date, NULL::text, NULL::text, NULL::text, NULL::text, NULL::jsonb, NULL::timestamptz, NULL::timestamptz, NULL::timestamptz, NULL::text, NULL::text, NULL::boolean);"
+spoofed_admin_challenge_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"user_metadata\":{\"role\":\"admin\"},\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, NULL::date, NULL::text, NULL::text, NULL::text, NULL::text, NULL::jsonb, NULL::timestamptz, NULL::timestamptz, NULL::timestamptz, NULL::text, NULL::text, NULL::boolean);"
 expect_denial \
   "user_metadata admin claim cannot author a challenge" \
   "Administrator access required" \
   "$spoofed_admin_challenge_sql"
 
-spoofed_admin_pyq_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\\"sub\\\":\\\"$user_b\\\",\\\"user_metadata\\\":{\\\"role\\\":\\\"admin\\\"},\\\"app_metadata\\\":{\\\"role\\\":\\\"student\\\"}}'; SELECT public.admin_review_jee_pyq_question(NULL::uuid, false, false, NULL::text[]);"
+spoofed_admin_pyq_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"user_metadata\":{\"role\":\"admin\"},\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.admin_review_jee_pyq_question(NULL::uuid, false, false, NULL::text[]);"
 expect_denial \
   "user_metadata admin claim cannot review PYQs" \
   "Administrator access required" \
