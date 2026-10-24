@@ -60,3 +60,12 @@ The full `tests/001_reconstruction_catalog_smoke.sql` was also executed against 
 
 This is useful catalog evidence, not a disposable replay: it confirms that the current live schema matches the assertions, but does not prove the reconstructed SQL files can recreate it from zero.
 
+## Fresh Supabase advisor pass (read-only, 2026-10-24)
+
+- Security advisor: five private tables still have RLS enabled without policies. The current design isolates them behind the `private` schema, which browser roles cannot use directly; do not add broad policies just to silence this advisory.
+- Security advisor: 11 authenticated-callable `SECURITY DEFINER` RPCs remain flagged. The catalog assertions verify their pinned empty `search_path`, absence of anon/PUBLIC execute grants, and in-function authentication guards; the three admin RPCs also check server-managed admin metadata. Real-user negative RPC tests remain outstanding.
+- Performance advisor: `private.mock_test_responses.question_id` still has no covering index. Keep this as a deliberate performance review item; do not mislabel an unverified index as historical schema.
+- Performance advisor also lists seven indexes as unused. With only five draft PYQ records and no student/mock-test attempts, usage statistics are too small to justify dropping them.
+
+References: [RLS-enabled tables without policies](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy), [authenticated SECURITY DEFINER advisory](https://supabase.com/docs/guides/database/database-linter?lint=0029_authenticated_security_definer_function_executable), and [unindexed foreign-key advisory](https://supabase.com/docs/guides/database/database-linter?lint=0001_unindexed_foreign_keys).
+
