@@ -90,6 +90,48 @@ BEGIN
     RAISE EXCEPTION 'Browser roles have direct privileges on private tables/columns';
   END IF;
 
+  -- Public RLS policy count and key authorization predicates must not drift.
+  SELECT count(*) INTO v_count FROM pg_policies WHERE schemaname = 'public';
+  IF v_count <> 10 THEN
+    RAISE EXCEPTION 'Expected exactly 10 public RLS policies; found %', v_count;
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'jee_pyq_questions'
+      AND policyname = 'Published PYQs and admin review queue are readable'
+      AND roles @> ARRAY['anon','authenticated']::name[]
+      AND qual LIKE '%is_published%'
+      AND qual LIKE '%approved%'
+      AND qual LIKE '%app_metadata%'
+  ) THEN
+    RAISE EXCEPTION 'Published-PYQ read policy is missing or its access predicate drifted';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'daily_challenges'
+      AND policyname = 'Live challenge schedule is readable'
+      AND roles @> ARRAY['anon','authenticated']::name[]
+      AND qual LIKE '%is_live%'
+      AND qual LIKE '%app_metadata%'
+  ) THEN
+    RAISE EXCEPTION 'Daily-challenge schedule policy is missing or its access predicate drifted';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE schemaname = 'public'
+      AND tablename = 'mock_test_attempts'
+      AND policyname = 'Users can read own mock test attempts'
+      AND qual LIKE '%auth.uid()%'
+      AND qual LIKE '%user_id%'
+  ) THEN
+    RAISE EXCEPTION 'Mock-test attempt ownership policy is missing or drifted';
+  END IF;
+
   -- Private tables currently have no policies because browser roles have no
   -- schema access. Any policy change requires an explicit model review.
   IF EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'private') THEN
