@@ -295,7 +295,47 @@ begin
     raise exception 'Expected exactly 49 constraints across the nine reconstructed tables';
   end if;
 
+
+  -- Check representative high-impact nullability/defaults against the live
+  -- catalog snapshot. Expand this list as more metadata is recovered.
+  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, expected.column_name), ', ')
+    into missing
+  from (values
+    ('public','jee_pyq_questions','id','NO','gen_random_uuid()'),
+    ('public','jee_pyq_questions','options','NO', '''[]''::jsonb'),
+    ('public','jee_pyq_questions','is_published','NO','false'),
+    ('public','jee_pyq_questions','review_status','NO', '''draft''::text'),
+    ('public','jee_pyq_questions','marks_correct','NO','4'),
+    ('public','jee_pyq_questions','marks_wrong','NO', '''-1''::integer'),
+    ('public','daily_challenges','is_live','NO','false'),
+    ('public','daily_challenges','options','NO', '''[]''::jsonb'),
+    ('public','daily_challenge_attempts','user_id','NO',null),
+    ('public','daily_challenge_attempts','submitted_at','NO','now()'),
+    ('public','mock_test_attempts','user_id','NO',null),
+    ('public','mock_test_attempts','question_ids','NO',null),
+    ('public','mock_test_attempts','status','NO', '''in_progress''::text'),
+    ('private','jee_pyq_answer_keys','correct_answer','NO',null),
+    ('private','jee_pyq_answer_keys','updated_at','NO','now()'),
+    ('private','jee_pyq_answer_attempts','wrong_attempts','NO','0'),
+    ('private','daily_challenge_answer_keys','correct_answer','NO',null),
+    ('private','daily_challenge_sessions','started_at','NO','now()'),
+    ('private','mock_test_responses','is_correct','NO','false'),
+    ('private','mock_test_responses','marks_awarded','NO','0')
+  ) expected(schema_name, table_name, column_name, is_nullable, column_default)
+  where not exists (
+    select 1
+    from information_schema.columns actual
+    where actual.table_schema = expected.schema_name
+      and actual.table_name = expected.table_name
+      and actual.column_name = expected.column_name
+      and actual.is_nullable = expected.is_nullable
+      and actual.column_default is not distinct from expected.column_default
+  );
+  if missing is not null then
+    raise exception 'Column nullability/default mismatch: %', missing;
+  end if;
+
 end
 $test$;
 
-select 'PASS: nine tables, reconstructed columns, RLS flags, 10 policies, 14 foreign keys and actions, all 49 observed constraints, and 11 observed secondary indexes exist' as reconstruction_smoke_test;
+select 'PASS: nine tables, key column defaults/nullability, RLS flags, 10 policies, 14 foreign keys/actions, 49 constraints, and 11 secondary indexes exist' as reconstruction_smoke_test;
