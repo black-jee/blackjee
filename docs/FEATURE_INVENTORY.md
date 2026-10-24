@@ -20,7 +20,7 @@
 
 | Feature | Source files / assets | Expected behavior | Migration status | Verification method |
 |---|---|---|---|---|
-| PYQ browse/search/filter | `pyq.html`, question manifests | Browse approved questions; filter by exam/year/subject/chapter; paginate | In progress — data model found | Query tests and browser filtering tests |
+| PYQ browse/search/filter | `pyq.html`, question manifests | Browse approved questions; filter by exam/year/subject/chapter; paginate | In progress — initial `/pyq` published-question browse and subject/text filters; runtime verification pending | Query tests and browser filtering tests |
 | Chapter-wise navigation | `chapterwise.html` | Subject → chapter/topic → questions | Not started | Navigation and empty-state tests |
 | Chapter practice / grading | `chapter-practice.html`, source SQL migrations | Answer, grade on server, protect answer keys/solutions, per-user attempt rules | Not started | Anonymous/authenticated and cross-user SQL tests |
 | Mock tests / CBT | `mock-tests.html` | Timed question navigation, answer selection, submission/results where present | Not started | Timer, navigation, persistence and mobile tests |
