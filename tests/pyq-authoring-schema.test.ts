@@ -43,6 +43,23 @@ describe("PYQ authoring schema", () => {
     }
   });
 
+  it("rejects duplicate option labels regardless of letter case", () => {
+    const result = questionSchema.safeParse({
+      ...baseQuestion,
+      questionType: "single_correct",
+      correctAnswer: "A",
+      options: [
+        { id: "a", label: "A", text: "First option" },
+        { id: "a2", label: "a", text: "Ambiguous duplicate" },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((issue) => issue.message.includes("labels must be unique"))).toBe(true);
+    }
+  });
+
   it("accepts a single-correct question when the option set is present", () => {
     const result = questionSchema.safeParse({
       ...baseQuestion,
