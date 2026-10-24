@@ -70,3 +70,7 @@ These observations reduce the likelihood that the advisor warnings represent a d
 - The table-grant inventory showed authenticated direct `SELECT` on challenge attempts and mock-test attempts, while the answer/session tables in `private` have no client schema usage. The admin-write policies on public authoring tables still need negative role tests and full grant/policy replay comparison.
 
 This remains a catalog observation, not a migration recommendation. No production schema or grants were changed.
+
+## Client data-access contract to verify
+
+The live public-function inventory currently exposes `get_current_daily_challenge()` to `anon` and `authenticated`, plus authenticated grading/mock-test/challenge RPCs. No general published-PYQ browsing/listing RPC appeared in that inventory. Direct table `SELECT` checks for `anon` and `authenticated` on `public.jee_pyq_questions` and `public.daily_challenges` are false. This may be deliberate RPC-only access, but the frontend integration contract is not yet verified. Before changing grants, inspect the actual frontend callers and decide whether published-question browsing is a supported feature; if it is, design a narrow, reviewed read RPC rather than exposing private answer-key data or granting broad table access.
