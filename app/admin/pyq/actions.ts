@@ -37,7 +37,7 @@ const questionSchema = z.object({
   sourcePage: z.number().int().min(1).max(10000).nullable(),
   tags: z.array(z.string().trim().min(1).max(80)).max(30),
   assetPaths: z.array(z.string().trim().min(1).max(500)).max(100),
-  reviewNotes: z.array(z.string().trim().min(1).max(1000)).max(30),
+  reviewNotes: z.array(z.string().trim().min(1).max(1000)).max(30).optional(),
 });
 
 export type PyqActionResult = { ok: true; id?: string } | { ok: false; error: string };
@@ -121,7 +121,7 @@ export async function reviewPyqQuestion(input: unknown): Promise<PyqActionResult
     p_question_id: parsed.data.questionId,
     p_approve: parsed.data.approve,
     p_publish: parsed.data.publish,
-    p_review_notes: parsed.data.reviewNotes,
+    p_review_notes: parsed.data.reviewNotes?.length ? parsed.data.reviewNotes : null,
   });
   if (error || !data || typeof data !== "object")
     return {
