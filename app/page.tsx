@@ -1,6 +1,6 @@
 const modules = [
-  { number: "01", title: "Daily challenge", description: "A focused attempt with server-enforced timing and results release.", status: "Migration queued" },
-  { number: "02", title: "Previous-year questions", description: "Browse exam questions with reviewed solutions, diagrams and formulas.", status: "Content audit" },
+  { number: "01", title: "Daily challenge", description: "A focused attempt with server-enforced timing and results release.", status: "In progress" },
+  { number: "02", title: "Previous-year questions", description: "Browse exam questions with reviewed solutions, diagrams and formulas.", status: "In progress" },
   { number: "03", title: "Chapter practice", description: "Build accuracy topic by topic with protected answer feedback.", status: "Migration queued" },
   { number: "04", title: "Mock tests", description: "Practice in a responsive computer-based test experience.", status: "Migration queued" },
 ];
@@ -13,7 +13,7 @@ export default function HomePage() {
           <span className="grid size-10 place-items-center rounded-xl bg-[var(--accent)] text-sm font-black tracking-tight text-[var(--accent-foreground)]">BJ</span>
           <span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span>
         </a>
-        <nav aria-label="Main navigation" className="flex items-center gap-4 text-xs text-[var(--muted)] sm:gap-5"><a href="/challenge" className="hover:text-[var(--text)]">Challenge</a><a href="/profile" className="hover:text-[var(--text)]">Profile</a><a href="/login" className="rounded-full border border-[var(--border)] px-3 py-1.5 hover:text-[var(--text)]">Sign in</a></nav>
+        <nav aria-label="Main navigation" className="flex items-center gap-4 text-xs text-[var(--muted)] sm:gap-5"><a href="/challenge" className="hover:text-[var(--text)]">Challenge</a><a href="/pyq" className="hover:text-[var(--text)]">PYQs</a><a href="/profile" className="hover:text-[var(--text)]">Profile</a><a href="/login" className="rounded-full border border-[var(--border)] px-3 py-1.5 hover:text-[var(--text)]">Sign in</a></nav>
       </header>
 
       <section className="grid flex-1 content-center gap-10 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16 lg:py-24">
