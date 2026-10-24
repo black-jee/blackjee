@@ -25,11 +25,11 @@ A second read-only check returned:
 
 `PASS: anonymous schedule RPC remains metadata-only; column-level grants preserve challenge content boundary`
 
-The committed regression file `tests/003_security_regression_assertions.sql` was executed in full against the live catalog after its latest source edit, including the daily-challenge image-path boundary, and returned PASS. This verifies catalog assertions on the live project only; it is not a disposable replay or real-user negative RPC test.
+The committed regression file `tests/003_security_regression_assertions.sql` returned PASS against the live catalog and the disposable PostgreSQL 17 replay in CI run `40113101703`, including the daily-challenge image-path boundary. This verifies catalog assertions only; real-user negative RPC tests remain outstanding.
 
 ## What this does not prove
 
-- No disposable database replay has been run; reconstructed table and policy SQL is not yet a verified baseline.
+- Disposable replay: CI run `40113101703` successfully applied reconstructed tables, policies, 12 current RPC definitions, and access grants to a fresh PostgreSQL 17 container, then passed both schema and security catalog assertions. This validates structural compatibility, not the full Supabase runtime.
 - No real negative RPC calls were made as anonymous, ordinary authenticated, cross-user, or admin identities.
 - No Storage bucket or access policy exists yet, so asset migration and its security model remain unfinished.
 - The seven missing historical migration bodies remain unrecovered. Do not manufacture a false historical chain or alter the live migration ledger to make counts match.
