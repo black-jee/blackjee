@@ -44,3 +44,18 @@ The eleven functions are:
 ## Current assessment
 
 The advisor's authenticated-`SECURITY DEFINER` warning requires continued scrutiny, but it is not by itself proof that anonymous users or ordinary students can bypass the guards. The current catalog evidence shows an intentional authenticated RPC surface with server-side checks and no direct browser-role table access to private answer/session tables. Runtime cross-user and release-boundary tests remain **UNVERIFIED**.
+
+## Additional read-only ownership-path review
+
+The live function bodies were inspected for the main student attempt paths:
+
+- `get_mock_test_result` filters the attempt by both `a.id = p_attempt_id` and `a.user_id = auth.uid()`, and only returns submitted attempts.
+- `resume_mock_test` filters by attempt ID, owner, and `status = 'in_progress'`.
+- `submit_mock_test` selects the attempt by ID and owner with `FOR UPDATE`, rejects question IDs outside that attempt, and routes repeated submission through the owner-checked result function.
+- `start_mock_test` stores the current `auth.uid()` as attempt owner.
+- `start_daily_challenge` creates/looks up a session keyed by challenge and current user; `submit_daily_challenge` selects that user's active session with `FOR UPDATE`.
+- `grade_jee_pyq` stores attempts keyed by current user and question.
+
+These are positive static indicators for owner isolation, not proof from adversarial runtime tests. A specific policy question remains: `get_daily_challenge_result` returns the released answer/solution to any authenticated caller who knows a live challenge ID once `solution_release_at` has passed; it does not require that caller to have started or submitted the challenge. This may be intentional for post-release learning, but the product rule should be confirmed and tested explicitly. Before the release time, the function returns release metadata only, not the answer key.
+
+Do not tighten or loosen this behavior without confirming the intended post-release access rule. Add tests for before/at/after release boundaries and, if product policy requires attempt participation, test denial for users without a matching session/attempt.
