@@ -78,7 +78,6 @@ This is a partial snapshot, not a complete schema dump. Constraint definitions, 
 - Verified CI run [40092001380](https://github.com/black-jee/blackjee/actions/runs/40092001380) completed successfully, including lint, typecheck, unit tests, Playwright E2E, format check, and production build.
 - No DDL, migration apply, reset, row mutation, publication, or deployment action was performed.
 
-
 ## Expanded read-only security/storage inventory
 
 A follow-up catalog query found:
@@ -93,4 +92,3 @@ A follow-up catalog query found:
 ### Remaining caveats
 
 This is catalog inspection, not a schema dump. Full function bodies were truncated in some tool output and must be captured per function; column-level grants, sequence grants, schema ACLs, extension versions, storage API configuration, and auth/storage platform configuration still need validation. A disposable database has not yet been provisioned, so migration replay equivalence remains untested.
-

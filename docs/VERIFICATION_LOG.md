@@ -38,7 +38,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Result:** **UNVERIFIED pending reconciliation** — existing project documents disagree on the exact applied migration count. A prior direct Supabase query reported 20 applied versions, while a later context note reports 21. Re-query the live migration API before making the count authoritative.
 - **Safety:** no reset or destructive migration was performed. Known discrepancy: applied history and checked-in migration files do not match, including missing baseline bodies.
 
-
 ## 2026-10-24 — migration reconciliation discovery
 
 - **Outcome:** PASS for read-only discovery; migration reconstruction and isolated replay remain UNVERIFIED.
