@@ -23,6 +23,10 @@ Do not recreate these under their original version identifiers unless the origin
 
 These overlap with the applied publication-gate migration's purpose, but they are not proof of what the applied `20261024112132` body contained. Do not apply, rename, delete, or mark these as applied until their intent and the canonical migration sequence are reviewed.
 
+## Additional recovery search — 2026-10-24
+
+The accessible repository search was extended beyond the active reconstruction branch: checked the other available branch `chore/sql-security-test-plan` for all seven exact missing migration paths, and searched repository commit metadata for `20261024080824`, `foundation_schema`, and `20261024112132`. The exact migration files were not present on that branch, and those commit searches returned no matches. This is evidence that the accessible GitHub history did not yield the original bodies; it does not prove no external clone, archive, backup, or Supabase migration artifact exists. Keep the seven gaps open rather than inventing historical SQL.
+
 ## Important current limitation
 
 **Do not run `supabase db reset` against this incomplete migration directory.** The chain cannot currently recreate the live database from zero. The live target project has not been reset or repaired as part of this reconstruction work.
@@ -39,4 +43,4 @@ These overlap with the applied publication-gate migration's purpose, but they ar
 
 ## Current status
 
-**Inventory: verified read-only. Historical SQL recovery: blocked/not found in accessible repository history. Clean replay: unverified.** No production database changes, migration repairs, resets, question publication, or paid infrastructure were used for this inventory.
+**Inventory: verified read-only. Historical SQL recovery: not found in the accessible GitHub branches/commit search. Reconstructed disposable replay: verified in CI; full Supabase Auth/runtime parity and a complete historical-chain replay remain unverified.** No production database changes, migration repairs, resets, question publication, or paid infrastructure were used for this inventory.
