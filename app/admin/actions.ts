@@ -72,8 +72,11 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
   const optionLines = values.optionsText
     .split("\n")
     .map((line) => line.trim())
-    .filter(Boolean)
-    .slice(0, 12);
+    .filter(Boolean);
+  if (optionLines.length > 12) {
+    return { ok: false, error: "A daily challenge can have at most 12 options." };
+  }
+
   const options = optionLines.map((text, index) => ({
     id: String.fromCharCode(97 + index),
     label: String.fromCharCode(65 + index),
@@ -81,7 +84,7 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
   }));
   const correctAnswer = values.correctAnswer.trim().toUpperCase();
   if (options.length > 0 && !options.some((option) => option.label === correctAnswer)) {
-    return { ok: false, error: "Correct answer must match one of the option labels (A, B, C…)." };
+    return { ok: false, error: "Correct answer must match one of the option labels (A, B, C…)."};
   }
 
   const supabase = await createSupabaseServerClient();
