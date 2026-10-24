@@ -13,7 +13,6 @@ const optionSchema = z
       imagePath: z.string().trim().max(500).optional(),
     }),
   )
-  .min(2)
   .max(12);
 
 const questionSchema = z.object({
@@ -38,6 +37,14 @@ const questionSchema = z.object({
   tags: z.array(z.string().trim().min(1).max(80)).max(30),
   assetPaths: z.array(z.string().trim().min(1).max(500)).max(100),
   reviewNotes: z.array(z.string().trim().min(1).max(1000)).max(30).optional(),
+}).superRefine((question, context) => {
+  if (question.questionType === "single_correct" && question.options.length < 2) {
+    context.addIssue({
+      code: "custom",
+      path: ["options"],
+      message: "Single-correct questions need at least two options.",
+    });
+  }
 });
 
 export type PyqActionResult = { ok: true; id?: string } | { ok: false; error: string };
