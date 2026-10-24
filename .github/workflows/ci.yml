@@ -40,7 +40,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md docs/DECISIONS.md docs/PROJECT_CONTEXT.md docs/PROJECT_STATUS.md docs/RELEASES.md docs/SEO_AND_GROWTH.md docs/TASKS.md scripts/check-continuity.mjs
+          git add "*.md" "docs/**/*.md" scripts/check-continuity.mjs
           git commit -m "style: apply Prettier formatting to continuity records"
           git push
       - run: npm run lint
