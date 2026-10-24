@@ -1,6 +1,6 @@
 -- BLACK-JEE security regression assertions — READ ONLY.
--- Intended for a disposable reconstruction replay. Catalog-only assertions;
--- no application data is inserted, updated, or deleted.
+-- Designed for a disposable reconstruction replay; also safe for live catalog audit.
+-- Catalog-only assertions; no schema or application data is changed.
 -- This does not replace authenticated-user negative tests against RPC calls.
 
 DO $security$
