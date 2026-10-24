@@ -41,4 +41,15 @@ export const questionSchema = z.object({
       message: "Single-correct questions need at least two options.",
     });
   }
+
+  if (question.questionType === "single_correct") {
+    const labels = question.options.map((option) => option.label.toUpperCase());
+    if (new Set(labels).size !== labels.length) {
+      context.addIssue({
+        code: "custom",
+        path: ["options"],
+        message: "Single-correct option labels must be unique.",
+      });
+    }
+  }
 });
