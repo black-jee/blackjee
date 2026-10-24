@@ -13,7 +13,7 @@
 
 - `001_reconstructed_table_shapes.sql`: labelled nine-table structural draft, including selected catalog-confirmed constraints and secondary indexes.
 - `002_reconstructed_rls_policies.sql`: review draft of the 10 catalog-observed public-table RLS policies. It deliberately does not add table/column grants or private-table policies.
-- `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay after applying drafts 001 and 002. It checks the nine tables, every reconstructed column, RLS flags, the 10 policy names, all 14 foreign-key names plus delete/update/match actions and validation/deferrability flags, all 49 observed constraint names and kinds, selected check/unique constraints, and all 11 observed secondary indexes. It does not insert application data or prove full production parity.
+- `tests/001_reconstruction_catalog_smoke.sql`: read-only catalog assertions for a disposable replay after applying drafts 001 and 002. It checks the nine tables, all expected columns and an exact total of 93 columns, key column defaults/nullability, RLS flags, the 10 policy names, all 14 foreign-key names plus delete/update/match actions and validation/deferrability flags, all 49 observed constraint names and kinds plus an exact total of 49 constraints, selected check/unique constraints, and all 11 observed secondary indexes. It does not insert application data or prove full production parity.
 
 ## What was inspected
 
@@ -75,6 +75,12 @@ This remains a catalog observation, not a migration recommendation. No productio
 ## Client data-access contract — verified against frontend callers
 
 The live public-function inventory exposes `get_current_daily_challenge()` to `anon` and `authenticated`, plus authenticated grading/mock-test/challenge RPCs. The frontend PYQ and mock-test pages also query `public.jee_pyq_questions` directly. Table-level `SELECT` checks return false, but column-level grants exist: `anon` and `authenticated` can select the 25 public question columns used for published question content/metadata. For `public.daily_challenges`, `anon` can select only eight schedule/metadata columns, not `statement` or `options`; the authenticated challenge flow obtains the question through `start_daily_challenge()`. This matches the inspected frontend access patterns. Preserve column-level access and do not add broad table grants; verify requested columns whenever frontend queries change.
+
+
+## Expanded metadata checks — read-only checkpoint (2026-10-24)
+
+A live `information_schema.columns` query confirmed the reconstructed column counts per table: 31 PYQ question columns, 13 daily-challenge columns, 7 challenge-attempt columns, 19 mock-test-attempt columns, and 3/4/6/4/6 columns across the five private tables. The smoke test now rejects extra as well as missing columns by requiring exactly 93 columns across the nine-table set. It also checks representative high-impact defaults and nullability. This is still not a full column-by-column type/default parity proof, and it has not been run against a disposable replay.
+
 
 ## Foreign-key cross-check — read-only checkpoint (2026-10-24)
 
