@@ -41,3 +41,23 @@ Read-only catalog inspection of Supabase project `phdssyexhfyxsmhmmcgb` covered 
 - Disposable-database replay: **not run**.
 - Smoke test execution against a replayed schema: **not run**.
 - Production schema and migration history: untouched by this workflow.
+
+## Function-body and ACL review — read-only checkpoint (2026-10-24)
+
+Reviewed the definitions and ACLs of the 11 SECURITY DEFINER functions named by the security advisor. This was inspection only; no live SQL was changed.
+
+- All 11 functions have an empty pinned `search_path` setting.
+- Their explicit ACLs list `authenticated`, `service_role`, and the owner; no `anon` or `PUBLIC` execute grant was present in the catalog output.
+- The three authoring/review functions (`admin_save_jee_pyq_question`, `admin_save_daily_challenge`, `admin_review_jee_pyq_question`) check `auth.uid()` and the `app_metadata.role = 'admin'` claim inside the function body.
+- The student-facing grading, challenge, and mock-test functions check for a signed-in user. The mock-test resume, submission, and result functions scope attempts to `auth.uid()`; result retrieval requires the attempt to be submitted.
+- Question publishing has explicit gates for source document/page, a private answer key, a worked solution, and option-label matching for single-correct questions.
+- Daily challenge submission requires a valid active session and enforces the challenge time window. Daily challenge solution retrieval waits until `solution_release_at`.
+
+These observations reduce the likelihood that the advisor warnings represent a direct unauthenticated entry point, but they do **not** prove the whole app is secure. Keep the functions in the review scope, add negative/ownership regression tests in an isolated environment, and verify the private schema is not exposed through API settings or grants. The five private tables without policies may be intentionally function-only; do not add broad policies without proving the access model.
+
+## Remaining verification gates
+
+- Review exact table/schema grants and storage policies/settings against the expected client access model.
+- Inspect trigger definitions and all function callers; test non-admin rejection and cross-user attempt access in an isolated database.
+- Add an index for `private.mock_test_responses.question_id` only after confirming expected query patterns and validating it as a deliberate performance change—not as recovered historical schema.
+- Run the reconstruction smoke test and a full catalog comparison only against a disposable replay database. No disposable replay has been run yet.
