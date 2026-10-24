@@ -12,9 +12,9 @@ describe("safeInternalRedirectPath", () => {
 
   it.each([
     "//evil.example",
-    "/\\\\evil.example",
+    "/" + String.fromCharCode(92) + "evil.example",
     "https://evil.example/path",
-    "\\\\evil.example",
+    String.fromCharCode(92) + "evil.example",
     "profile",
   ])("rejects external or non-root-relative destination %s", (requestedNext) => {
     expect(safeInternalRedirectPath(requestedNext, origin)).toBe("/");
