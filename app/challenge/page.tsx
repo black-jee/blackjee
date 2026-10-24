@@ -3,6 +3,7 @@ import { ChallengeAttempt } from "@/components/challenge/challenge-attempt";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Daily challenge" };
+export const dynamic = "force-dynamic";
 
 type Schedule = {
   id: string;
