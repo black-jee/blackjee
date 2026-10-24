@@ -77,3 +77,20 @@ This is a partial snapshot, not a complete schema dump. Constraint definitions, 
 - Queried live public table columns, public routine names/definitions (partial), public RLS policies, and public indexes.
 - Verified CI run [40092001380](https://github.com/black-jee/blackjee/actions/runs/40092001380) completed successfully, including lint, typecheck, unit tests, Playwright E2E, format check, and production build.
 - No DDL, migration apply, reset, row mutation, publication, or deployment action was performed.
+
+
+## Expanded read-only security/storage inventory
+
+A follow-up catalog query found:
+
+- **RLS:** enabled on all four application tables in `public` and all five application tables in `private`. RLS is not forced on these tables.
+- **Private-schema policies:** zero explicit policies. Private tables have table ACLs owned by `postgres` and no direct grants to `anon` or `authenticated` in the inspected ACLs; access is intended through guarded functions.
+- **Application triggers:** zero non-internal triggers on `public` and `private` tables.
+- **Storage buckets:** zero rows in `storage.buckets`; no storage policies were returned. This means no application bucket is currently configured in this project. Do not assume question images can be served from Supabase Storage until a bucket and its access model are intentionally provisioned.
+- **Function hardening:** inspected security-sensitive admin functions are owned by `postgres`, marked `SECURITY DEFINER`, and set `search_path` to empty. Their bodies use schema-qualified objects and validate `auth.uid()` plus server-managed `app_metadata.role = admin`. The PYQ review function checks source PDF/page, private answer key, worked solution, and option-label consistency before publishing. The function ACL shown for that review RPC grants execute to `authenticated` and `service_role`, not `anon` or `PUBLIC`.
+- **Public RLS policies:** student attempt reads are owner-scoped (or admin-scoped for daily challenge attempts); live daily challenge schedule and approved/published PYQs are the ordinary-reader paths; challenge/PYQ write policies require authenticated admin role; mock attempt reads are owner-scoped.
+
+### Remaining caveats
+
+This is catalog inspection, not a schema dump. Full function bodies were truncated in some tool output and must be captured per function; column-level grants, sequence grants, schema ACLs, extension versions, storage API configuration, and auth/storage platform configuration still need validation. A disposable database has not yet been provisioned, so migration replay equivalence remains untested.
+
