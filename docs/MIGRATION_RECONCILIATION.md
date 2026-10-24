@@ -3,7 +3,7 @@
 **Date:** 2026-10-24  
 **Task:** BJ-DB-001  
 **Target:** Supabase project `phdssyexhfyxsmhmmcgb`  
-**Repository HEAD inspected:** `2195242d7b78cf52447ea2cd4fab83d30c834440`
+**Repository HEAD inspected:** `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`
 
 ## Findings from read-only inspection
 
@@ -143,3 +143,10 @@ This inventory confirms the routine-level ACL/configuration summary, but it is n
 - GitHub Pages workflow [40097368965](https://github.com/black-jee/blackjee/actions/runs/40097368965) completed successfully for that commit.
 - CI workflow [40097368791](https://github.com/black-jee/blackjee/actions/runs/40097368791) was still running when this entry was written. Do not describe CI as green until its final conclusion is `success`.
 - No production database writes, DDL, migration repairs, content publication, paid infrastructure, or deployment changes were performed during this follow-up.
+
+
+## Latest repository verification — 2026-10-24
+
+- CI run [40098020175](https://github.com/black-jee/blackjee/actions/runs/40098020175) completed successfully on `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`.
+- GitHub Pages workflow [40098020314](https://github.com/black-jee/blackjee/actions/runs/40098020314) completed successfully for the same commit. This confirms that workflow completed, not that the Vercel production deployment or authenticated application flows are verified.
+- Migration source recovery and clean isolated replay remain unverified. No production DDL, migration repair/apply, reset, data mutation, or paid infrastructure was used.
