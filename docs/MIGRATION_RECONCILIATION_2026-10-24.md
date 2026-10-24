@@ -63,3 +63,14 @@ The 20261024112500 file has the same source-page publication gate as the missing
 ## CI snapshot
 
 For the previously identified workflow run `40114721534`, the `reconstruction-replay` job reports success and the `quality` job reports cancelled. Therefore the replay job succeeded, but this run does not establish that the complete CI suite passed. The combined commit status also reports a Vercel failure linked to a build-rate-limit/upgrade page; no paid upgrade was attempted.
+
+
+## Follow-up Git history review (2026-10-24)
+
+Git history confirms:
+- Commit `2c27d5e8dc0eb9be6fe23fece3949726a45ade6d` added `20261024112500_require_pyq_source_page_before_publish.sql` as a new file. Its body enforces source document + source page, private answer key, and worked solution before publication.
+- Commit `190f33bedc0556fe0d7e45d09876d0ba1374ab0e` added `20261024120000_require_pyq_source_and_solution_before_publish.sql` with a source-reference and worked-solution gate.
+- Commit `3ae28e9f795e0a6bdef5168c495def6ea8d42154` later modified the `20261024120000` file to require source page as well, explicitly describing it as keeping the later migration at least as strict as the source-page gate.
+- A history query for the missing ledger filename `20261024112132_require_pyq_source_page_before_publish.sql` returned no commits.
+
+Conclusion: the current branch has two separately versioned migrations with overlapping publication-gate logic, while the live ledger contains a third version/name pair that is absent from repository path history. Do not rename or delete either migration automatically: first establish the intended ledger lineage and whether the live ledger recorded a file that was later renamed outside Git history. These commits show branch history, not the exact SQL that was applied to production.
