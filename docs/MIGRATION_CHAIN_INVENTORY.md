@@ -19,14 +19,14 @@ This is a reconciliation manifest, not a reconstructed migration chain. It does 
 
 ## Applied versions with missing SQL bodies
 
-| Live version | Live migration name | Status |
-| --- | --- | --- |
-| `20261024080824` | `foundation_schema` | Applied; original SQL not found in current repository |
-| `20261024080924` | `tighten_rpc_grants_and_policy` | Applied; original SQL not found in current repository |
-| `20261024081041` | `daily_solution_release_rpc` | Applied; original SQL not found in current repository |
-| `20261024081337` | `numeric_answers_and_admin_review` | Applied; original SQL not found in current repository |
-| `20261024081603` | `secure_daily_attempt_sessions` | Applied; original SQL not found in current repository |
-| `20261024081731` | `restrict_anon_rpc_execution` | Applied; original SQL not found in current repository |
+| Live version     | Live migration name                      | Status                                                                                                  |
+| ---------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `20261024080824` | `foundation_schema`                      | Applied; original SQL not found in current repository                                                   |
+| `20261024080924` | `tighten_rpc_grants_and_policy`          | Applied; original SQL not found in current repository                                                   |
+| `20261024081041` | `daily_solution_release_rpc`             | Applied; original SQL not found in current repository                                                   |
+| `20261024081337` | `numeric_answers_and_admin_review`       | Applied; original SQL not found in current repository                                                   |
+| `20261024081603` | `secure_daily_attempt_sessions`          | Applied; original SQL not found in current repository                                                   |
+| `20261024081731` | `restrict_anon_rpc_execution`            | Applied; original SQL not found in current repository                                                   |
 | `20261024112132` | `require_pyq_source_page_before_publish` | Applied; same-purpose local file uses a different version and is not a substitute for the original body |
 
 ## Applied versions with exact repository filename matches
@@ -51,10 +51,10 @@ A filename match does not alone prove that its contents are byte-for-byte identi
 
 ## Local-only SQL files
 
-| Repository file | Live history status | Handling |
-| --- | --- | --- |
-| `20261024112500_require_pyq_source_page_before_publish.sql` | No matching applied version | Do not apply or rename until intended migration lineage is reviewed |
-| `20261024120000_require_pyq_source_and_solution_before_publish.sql` | No matching applied version | Appears to overlap the publication guard; do not assume it ran |
+| Repository file                                                     | Live history status         | Handling                                                            |
+| ------------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------------- |
+| `20261024112500_require_pyq_source_page_before_publish.sql`         | No matching applied version | Do not apply or rename until intended migration lineage is reviewed |
+| `20261024120000_require_pyq_source_and_solution_before_publish.sql` | No matching applied version | Appears to overlap the publication guard; do not assume it ran      |
 
 The applied version `20261024112132` and local-only versions `20261024112500` / `20261024120000` must be reconciled deliberately. Do not rewrite live migration history or use `migration repair` as a substitute for missing SQL: repair changes migration records; it does not execute or recover SQL bodies.
 
