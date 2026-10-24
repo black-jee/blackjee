@@ -76,13 +76,13 @@
 - **Hardened and database-applied:** publishing now requires a source document and page, non-empty question statement, private answer key, worked solution, and (for single-correct questions) an answer matching an option label. Answer keys remain in the private schema; no draft was published by this change.
 - **Reconciled:** reconstructed the already-applied `admin_pyq_authoring_review` database function definitions into `supabase/migrations/20261024103715_admin_pyq_authoring_review.sql` so the admin authoring backend is represented in Git.
 - **Verified:** inspected target RLS policy for PYQs: students/anonymous users can select only approved published questions, while admin queue reads are gated by `app_metadata.role = admin`; the answer-key table remains private.
-- **CI:** the latest verified run before this migration was green; a fresh run is triggered by the migration-file commit. One-time formatting and the lockfile are committed. The final formatting issue was caused by the TypeScript config shape; adding Next.js dev type paths and running formatting before E2E/build fixed it. Full CI run `40088044408` passed all gates.
+- **CI:** historical run `40088044408` passed before this reconstruction work. The latest reconstruction branch head `d15ba7d` is undergoing a fresh workflow; the last completed green run is `40112374432` on `f2831f8`. Re-check the latest head run before claiming the current branch is green.
 - **Security hardening applied:** publishing a PYQ now requires a non-empty source reference, private answer key, and worked solution; the single-correct answer must still match an option. The migration is applied to the target Supabase project and checked into Git as `20261024111533_require_pyq_source_and_solution_before_publish.sql`.
 - **Verified:** target RLS permits anonymous/student reads only for published approved PYQs; the private answer-key table has no direct `anon` or `authenticated` table grants; the three admin authoring/review RPCs are executable by `authenticated` only among browser roles and enforce admin app metadata inside the function.
 - **Not verified:** admin PYQ authoring and review actions have not yet been exercised in a real authenticated browser session. No question has been published as part of this work.
 
 - **Engineering improvement:** the repository has a committed npm lockfile and CI uses `npm ci` for reproducible dependency installation.
-- **Latest CI:** run `40088170829` on current `main` passed all configured gates before the publication-gate migration. The new migration has triggered a fresh CI run; verify that run before treating the latest commit as fully green.
+- **Latest reconstruction CI:** run `40112374432` passed continuity validation, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build on commit `f2831f8`. Later commits updated RLS assertions and status documentation; run `40112662944` is queued for current HEAD `d15ba7d`.
 
 ## Constitution reconciliation — 2026-10-24
 
@@ -92,4 +92,4 @@
 - **Verified against live data:** 5 PYQ records total, 0 published, 5 unpublished. No content was imported or published during this reconciliation.
 - **CI evidence:** [Run 40090330071](https://github.com/black-jee/blackjee/actions/runs/40090330071) passed for commit `57d04ed9d3db332e0aafe71d69423be5723c7ff5`. Documentation commits after that SHA triggered additional workflows; those latest runs must be checked before claiming the current HEAD is green.
 - **Production verification:** the supplied URL `https://blackjee.vercel.app/` could not be fetched by the available web retrieval path. Vercel project linkage, deployed commit and runtime behavior remain unverified.
-- **Next action:** inspect the current head CI runs; then verify production deployment linkage/runtime non-invasively, and continue reconstructing the baseline migration chain on an isolated database.
+- **Next action:** verify the queued current-head CI; continue catalog-backed reconstruction without changing the live migration ledger; then perform a replay only when a no-cost disposable database is available. Production deployment linkage/runtime and real authenticated workflows remain unverified.
