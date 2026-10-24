@@ -4,7 +4,7 @@ import { z } from "zod";
 import { isSafeAssetPath } from "@/lib/questions/schema";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-const localDateTime = z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "Use a valid date and time.");
+const localDateTime = z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "Use a valid date and time.").refine((value) => !Number.isNaN(Date.parse(`${value}:00+05:30`)), "Use a real calendar date and time.");
 
 const challengeFormSchema = z.object({
   challengeDate: z.string().date(),
