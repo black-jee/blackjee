@@ -28,7 +28,7 @@ create table public.jee_pyq_questions (
   updated_at timestamptz not null default now(),
   statement_image_path text constraint jee_pyq_questions_statement_image_path_safe check (statement_image_path is null or statement_image_path !~ '(^/|//|(^|/)[.][.](/|$)|[^A-Za-z0-9._/-])'),
   session text,
-  question_type text not null default 'single_correct' check (question_type in ('single_correct','numerical')),
+  question_type text not null default 'single_correct' constraint jee_pyq_question_type_check check (question_type in ('single_correct','numerical')),
   marks_correct integer not null default 4,
   marks_wrong integer not null default -1,
   source_page integer,
@@ -36,7 +36,7 @@ create table public.jee_pyq_questions (
   source_reference jsonb not null default '{}'::jsonb,
   quality_checks jsonb not null default '{}'::jsonb,
   review_notes text[] not null default '{}'::text[],
-  source_status text not null default 'not_verified' check (source_status in ('awaiting_source','content_added','needs_review','verified_draft','approved_for_publish','not_verified')),
+  source_status text not null default 'not_verified' constraint jee_pyq_source_status_check check (source_status in ('awaiting_source','content_added','needs_review','verified_draft','approved_for_publish','not_verified')),
   publication_block_reason text
 );
 
