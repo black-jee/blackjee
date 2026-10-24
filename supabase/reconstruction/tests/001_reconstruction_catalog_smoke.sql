@@ -19,6 +19,31 @@ begin
     raise exception 'Reconstruction smoke test failed: one or more of the nine expected tables are missing';
   end if;
 
+  -- Check every column represented in the reconstructed table draft.
+  select string_agg(format('%I.%I.%I', expected.schema_name, expected.table_name, expected.column_name), ', ')
+    into missing
+  from (values
+    ('public','jee_pyq_questions',array['id','source_id','title','exam','year','subject','chapter','difficulty','statement','options','tags','asset_paths','review_status','is_published','created_by','reviewed_by','reviewed_at','created_at','updated_at','statement_image_path','session','question_type','marks_correct','marks_wrong','source_page','source_pdf','source_reference','quality_checks','review_notes','source_status','publication_block_reason']::text[]),
+    ('public','daily_challenges',array['id','challenge_date','title','subject','statement','options','starts_at','ends_at','solution_release_at','is_live','created_by','created_at','statement_image_path']::text[]),
+    ('public','daily_challenge_attempts',array['id','challenge_id','user_id','selected_answer','is_correct','elapsed_seconds','submitted_at']::text[]),
+    ('public','mock_test_attempts',array['id','user_id','mode','exam_year','session','subject','chapter','duration_seconds','question_ids','total_questions','status','started_at','submitted_at','attempted_count','correct_count','wrong_count','score','max_score','created_at']::text[]),
+    ('private','jee_pyq_answer_keys',array['question_id','correct_answer','solution','updated_at']::text[]),
+    ('private','jee_pyq_answer_attempts',array['user_id','question_id','wrong_attempts','first_attempt_at','last_attempt_at','solution_unlocked_at']::text[]),
+    ('private','daily_challenge_answer_keys',array['challenge_id','correct_answer','solution']::text[]),
+    ('private','daily_challenge_sessions',array['challenge_id','user_id','started_at','submitted_at']::text[]),
+    ('private','mock_test_responses',array['attempt_id','question_id','selected_answer','is_correct','marks_awarded','answered_at']::text[])
+  ) expected(schema_name, table_name, column_names)
+  cross join lateral unnest(expected.column_names) as cols(column_name)
+  where not exists (
+    select 1 from information_schema.columns col
+    where col.table_schema = expected.schema_name
+      and col.table_name = expected.table_name
+      and col.column_name = cols.column_name
+  );
+  if missing is not null then
+    raise exception 'Missing reconstructed table columns: %', missing;
+  end if;
+
   select string_agg(format('%I.%I', n.nspname, c.relname), ', ')
     into missing
   from (values
