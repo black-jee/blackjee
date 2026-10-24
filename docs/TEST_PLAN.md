@@ -32,7 +32,7 @@ CI run `40086464478` passed ESLint, strict TypeScript, both Vitest test files, b
 - Accessibility basics: keyboard operation, focus visibility, labels, contrast and reduced-motion behavior.
 - Recovery from API errors, offline/network interruption, empty datasets and stale sessions.
 
-## Content verification
+## Recent CI observation\n\nThe latest previously completed run passed ESLint, strict TypeScript, Vitest, Playwright smoke tests and the Next.js production build. It failed at the final Prettier check because 41 tracked files need formatting. Do not treat the formatting gate as passing until the repository is formatted and CI is green. The new admin PYQ UI and server actions still require authenticated end-to-end tests.\n\n## Content verification
 
 For each imported question, verify source wording, options, correct answer, solution, subject/chapter metadata, all asset references, alt text and mobile rendering. Structural manifest checks cannot prove factual accuracy. The April 4 Shift 1 unresolved items stay blocked until an authoritative source image/PDF is available and checked.
 
