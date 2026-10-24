@@ -53,6 +53,33 @@ BEGIN
     RAISE EXCEPTION 'Privileged RPC attributes/ACL mismatch: %', v_missing;
   END IF;
 
+  -- Fingerprint the exact live function definitions captured in reconstruction
+  -- draft 003. This catches accidental edits or deparse/source drift.
+  SELECT string_agg(e.name, ', ' ORDER BY e.name)
+  INTO v_missing
+  FROM (VALUES
+    ('admin_review_jee_pyq_question', 'c60ab9ab4141edcb615f475919cbf620'),
+    ('admin_save_daily_challenge', 'ebdff78aa677719515c9e500fc576562'),
+    ('admin_save_jee_pyq_question', '9de6669f0727df14fd0851895ee37466'),
+    ('get_current_daily_challenge', 'ff76bf83a39b595544fe15f3475cd70b'),
+    ('get_daily_challenge_result', 'ccb0c62728a64f6382ffdf9a8f2f63d8'),
+    ('get_mock_test_result', '3be309fd8edd50c20e814a5a99fb5f51'),
+    ('grade_jee_pyq', 'ffa56082434a79de6d37607fb225b145'),
+    ('resume_mock_test', 'c14e3486e41e53f9aee6207093b380df'),
+    ('start_daily_challenge', '6184a711c54ac02ef621064bb99fa8b4'),
+    ('start_mock_test', '721ed05ba1d51a63a1af126da78f669f'),
+    ('submit_daily_challenge', '9976c9390ebb5140757cc27e6afb02ec'),
+    ('submit_mock_test', '33b381c7bb94b3b772ca5f90db196c5d')
+  ) e(name, expected_md5)
+  LEFT JOIN pg_proc p
+    ON p.pronamespace = 'public'::regnamespace
+   AND p.proname = e.name
+  WHERE p.oid IS NULL OR md5(pg_get_functiondef(p.oid)) <> e.expected_md5;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'Reconstructed RPC definition fingerprints differ from the live catalog: %', v_missing;
+  END IF;
+
   -- The anonymous schedule RPC must remain invoker-rights and metadata-only.
   IF NOT EXISTS (
     SELECT 1 FROM pg_proc p
