@@ -163,7 +163,75 @@ begin
   if missing is not null then
     raise exception 'Missing catalog-confirmed secondary indexes: %', missing;
   end if;
+
+  -- Assert every observed constraint name and kind, not only a selected subset.
+  select string_agg(expected.constraint_name, ', ')
+    into missing
+  from (values
+    ('private','daily_challenge_answer_keys','daily_challenge_answer_keys_correct_answer_nonempty','c'),
+    ('private','daily_challenge_answer_keys','daily_challenge_answer_keys_challenge_id_fkey','f'),
+    ('private','daily_challenge_answer_keys','daily_challenge_answer_keys_pkey','p'),
+    ('private','daily_challenge_sessions','daily_challenge_sessions_challenge_id_fkey','f'),
+    ('private','daily_challenge_sessions','daily_challenge_sessions_user_id_fkey','f'),
+    ('private','daily_challenge_sessions','daily_challenge_sessions_pkey','p'),
+    ('private','jee_pyq_answer_attempts','jee_pyq_answer_attempts_wrong_attempts_check','c'),
+    ('private','jee_pyq_answer_attempts','jee_pyq_answer_attempts_question_id_fkey','f'),
+    ('private','jee_pyq_answer_attempts','jee_pyq_answer_attempts_user_id_fkey','f'),
+    ('private','jee_pyq_answer_attempts','jee_pyq_answer_attempts_pkey','p'),
+    ('private','jee_pyq_answer_keys','jee_pyq_answer_keys_correct_answer_nonempty','c'),
+    ('private','jee_pyq_answer_keys','jee_pyq_answer_keys_question_id_fkey','f'),
+    ('private','jee_pyq_answer_keys','jee_pyq_answer_keys_pkey','p'),
+    ('private','mock_test_responses','mock_test_responses_attempt_id_fkey','f'),
+    ('private','mock_test_responses','mock_test_responses_question_id_fkey','f'),
+    ('private','mock_test_responses','mock_test_responses_pkey','p'),
+    ('public','daily_challenge_attempts','daily_challenge_attempts_elapsed_seconds_check','c'),
+    ('public','daily_challenge_attempts','daily_challenge_attempts_challenge_id_fkey','f'),
+    ('public','daily_challenge_attempts','daily_challenge_attempts_user_id_fkey','f'),
+    ('public','daily_challenge_attempts','daily_challenge_attempts_pkey','p'),
+    ('public','daily_challenge_attempts','daily_challenge_attempts_challenge_id_user_id_key','u'),
+    ('public','daily_challenges','daily_challenges_check','c'),
+    ('public','daily_challenges','daily_challenges_options_check','c'),
+    ('public','daily_challenges','daily_challenges_statement_image_path_safe','c'),
+    ('public','daily_challenges','daily_challenges_subject_check','c'),
+    ('public','daily_challenges','daily_challenges_created_by_fkey','f'),
+    ('public','daily_challenges','daily_challenges_pkey','p'),
+    ('public','daily_challenges','daily_challenges_challenge_date_key','u'),
+    ('public','jee_pyq_questions','jee_pyq_marks_check','c'),
+    ('public','jee_pyq_questions','jee_pyq_question_type_check','c'),
+    ('public','jee_pyq_questions','jee_pyq_questions_difficulty_check','c'),
+    ('public','jee_pyq_questions','jee_pyq_questions_options_check','c'),
+    ('public','jee_pyq_questions','jee_pyq_questions_review_status_check','c'),
+    ('public','jee_pyq_questions','jee_pyq_questions_statement_image_path_safe','c'),
+    ('public','jee_pyq_questions','jee_pyq_questions_subject_check','c'),
+    ('public','jee_pyq_questions','jee_pyq_questions_year_check','c'),
+    ('public','jee_pyq_questions','jee_pyq_source_status_check','c'),
+    ('public','jee_pyq_questions','published_questions_must_be_approved','c'),
+    ('public','jee_pyq_questions','jee_pyq_questions_created_by_fkey','f'),
+    ('public','jee_pyq_questions','jee_pyq_questions_reviewed_by_fkey','f'),
+    ('public','jee_pyq_questions','jee_pyq_questions_pkey','p'),
+    ('public','jee_pyq_questions','jee_pyq_questions_source_id_key','u'),
+    ('public','mock_test_attempts','mock_test_attempts_check','c'),
+    ('public','mock_test_attempts','mock_test_attempts_duration_seconds_check','c'),
+    ('public','mock_test_attempts','mock_test_attempts_mode_check','c'),
+    ('public','mock_test_attempts','mock_test_attempts_status_check','c'),
+    ('public','mock_test_attempts','mock_test_attempts_total_questions_check','c'),
+    ('public','mock_test_attempts','mock_test_attempts_user_id_fkey','f'),
+    ('public','mock_test_attempts','mock_test_attempts_pkey','p')
+  ) expected(schema_name, table_name, constraint_name, constraint_type)
+  where not exists (
+    select 1 from pg_constraint con
+    join pg_class c on c.oid = con.conrelid
+    join pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = expected.schema_name
+      and c.relname = expected.table_name
+      and con.conname = expected.constraint_name
+      and con.contype::text = expected.constraint_type
+  );
+  if missing is not null then
+    raise exception 'Missing catalog-confirmed constraints or wrong constraint kinds: %', missing;
+  end if;
+
 end
 $test$;
 
-select 'PASS: nine tables, reconstructed columns, RLS flags, 10 policies, 14 foreign keys, selected check/unique constraints, and observed secondary indexes exist' as reconstruction_smoke_test;
+select 'PASS: nine tables, reconstructed columns, RLS flags, 10 policies, 14 foreign keys, all 49 observed constraints, and observed secondary indexes exist' as reconstruction_smoke_test;
