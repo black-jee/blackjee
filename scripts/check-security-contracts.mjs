@@ -30,12 +30,12 @@ const checks = [
   {
     file: "supabase/reconstruction/003_reconstructed_rpc_definitions.sql",
     description: "daily challenge RPC rejects live challenges without worked solutions",
-    pattern: /coalesce\\(p_is_live,\\s*false\\)[\\s\\S]*?nullif\\(btrim\\(p_solution\\),\\s*''\\)\\s+is\\s+null[\\s\\S]*?A live challenge must include a worked solution/i,
+    pattern: /coalesce\(p_is_live,\s*false\)[\s\S]*?nullif\(btrim\(p_solution\),\s*''\)\s+is\s+null[\s\S]*?A live challenge must include a worked solution/i,
   },
   {
     file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
     description: "direct RPC regression covers blank live-challenge solutions",
-    pattern: /live daily challenge cannot be saved without a worked solution[\\s\\S]*?A live challenge must include a worked solution/i,
+    pattern: /live daily challenge cannot be saved without a worked solution[\s\S]*?A live challenge must include a worked solution/i,
   },
   {
     file: "supabase/reconstruction/004_reconstructed_access_grants.sql",
