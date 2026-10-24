@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { validateDailyChallengeAuthoring } from "@/lib/challenges/daily-challenge-authoring";
 import { isSafeAssetPath } from "@/lib/questions/schema";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { isValidIstLocalDateTime, istLocalDateTimeToIso } from "@/lib/time/ist-local-date-time";
@@ -73,19 +74,19 @@ export async function saveDailyChallenge(formData: FormData): Promise<SaveChalle
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
-  if (optionLines.length > 12) {
-    return { ok: false, error: "A daily challenge can have at most 12 options." };
-  }
-
   const options = optionLines.map((text, index) => ({
     id: String.fromCharCode(97 + index),
     label: String.fromCharCode(65 + index),
     text,
   }));
   const correctAnswer = values.correctAnswer.trim().toUpperCase();
-  if (options.length > 0 && !options.some((option) => option.label === correctAnswer)) {
-    return { ok: false, error: "Correct answer must match one of the option labels (A, B, C…)."};
-  }
+  const authoringError = validateDailyChallengeAuthoring({
+    isLive: values.isLive,
+    solution: values.solution,
+    optionLabels: options.map((option) => option.label),
+    correctAnswer,
+  });
+  if (authoringError) return { ok: false, error: authoringError };
 
   const supabase = await createSupabaseServerClient();
   const { data: auth, error: authError } = await supabase.auth.getUser();
