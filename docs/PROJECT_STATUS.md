@@ -9,7 +9,7 @@
 |---|---|
 | New GitHub repository | `black-jee/blackjee`, public, default branch `main` |
 | New Supabase | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region |
-| Supabase migrations | 16 applied entries; 10 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
+| Supabase migrations | 17 applied entries; 11 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
 | Supabase data | 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported |
 | Supabase tables | 9 inspected public/private tables; no student attempts or mock-test attempts |
 | Supabase Edge Functions | Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410) |
