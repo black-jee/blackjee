@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Chapter-wise practice" };
@@ -32,7 +33,7 @@ export default async function ChapterwisePage() {
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-5 py-6 sm:px-8 lg:py-12">
       <header className="mb-8 flex items-center justify-between border-b border-[var(--border)] pb-5">
-        <a href="/" className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">BJ</span><span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span></a>
+        <Link href="/" className="flex items-center gap-3"><span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">BJ</span><span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span></Link>
         <nav className="flex gap-4 text-sm text-[var(--muted)]"><a href="/pyq">PYQs</a><a href="/mock-tests">Mock tests</a></nav>
       </header>
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--muted)]">Study by topic</p>
