@@ -67,8 +67,10 @@
 
 - **Implemented:** added `docs/CONTINUITY_SYSTEM_PROMPT.md`, `docs/SESSION_HANDOVER.md`, and `docs/VERIFICATION_LOG.md`; created `scripts/check-continuity.mjs` to require core continuity files, detect duplicate permanent task IDs, and ensure the active handover task exists in the ledger; added the validator to GitHub Actions CI.
 - **Verified:** the Supabase migration API currently returns 20 applied versions. Prior docs that reported 21 were inconsistent and have been corrected where found.
-- **CI warning:** run `40091156887` for commit `db8f98a439c80d8d822c0a0a73a3b5174da6aaf6` failed at Prettier format check on seven Markdown files and `scripts/check-continuity.mjs`; lint, typecheck, Vitest, Playwright, and the continuity validator passed, and build was skipped. Formatting remediation is the next action.
-- **Not yet verified:** continuity validator execution and latest full CI, authenticated student/admin journeys, Vercel linkage/runtime, clean isolated migration replay.
+- **CI recovery:** run `40091156887` failed at Prettier, as suspected. The CI workflow was adjusted to format the identified continuity docs and validator on pushes to `main`, commit only those formatting files, then run the gates. Run `40091830452` passed continuity validation, lint, typecheck, Vitest, Playwright, Prettier, and production build; formatter commit `b6bb46d81ce81b803296aa6c9421ca611b03f8b3` was created successfully.
+- **Verified:** continuity validator and full configured CI passed on the formatted working tree. **Not yet verified:** authenticated student/admin journeys, Vercel linkage/runtime, clean isolated migration replay.
+
+**Current task:** BJ-DB-001 — reconstruct and safely replay the missing migration baseline in isolated staging.
 
 ## Continued work — 2026-10-24
 
