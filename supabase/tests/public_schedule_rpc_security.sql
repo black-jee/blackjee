@@ -13,6 +13,12 @@ begin
     raise exception 'anon must not be able to select question statements';
   end if;
 
+  if has_column_privilege('authenticated', 'public.daily_challenges', 'statement', 'SELECT')
+     or has_column_privilege('anon', 'public.daily_challenges', 'options', 'SELECT')
+     or has_column_privilege('authenticated', 'public.daily_challenges', 'options', 'SELECT') then
+    raise exception 'Browser roles must not directly read challenge statements or options';
+  end if;
+
   if not has_column_privilege('anon', 'public.daily_challenges', 'title', 'SELECT') then
     raise exception 'anon should be able to select public schedule titles';
   end if;
