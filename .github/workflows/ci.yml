@@ -75,3 +75,5 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/001_reconstruction_catalog_smoke.sql
       - name: Assert reconstructed RPC and access security
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/003_security_regression_assertions.sql
+      - name: Test RPC authorization denials
+        run: bash supabase/reconstruction/tests/run_rpc_negative_tests.sh
