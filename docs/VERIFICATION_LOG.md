@@ -37,3 +37,12 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 
 - **Result:** **UNVERIFIED pending reconciliation** — existing project documents disagree on the exact applied migration count. A prior direct Supabase query reported 20 applied versions, while a later context note reports 21. Re-query the live migration API before making the count authoritative.
 - **Safety:** no reset or destructive migration was performed. Known discrepancy: applied history and checked-in migration files do not match, including missing baseline bodies.
+
+
+## 2026-10-24 — migration reconciliation discovery
+
+- **Outcome:** PASS for read-only discovery; migration reconstruction and isolated replay remain UNVERIFIED.
+- **Evidence:** Supabase migration history returned 20 applied versions. Repository listing contains 15 SQL migration files, with live version `20261024112132_require_pyq_source_page_before_publish` absent and repository-only versions `20261024112500` and `20261024120000` not present in live history. See [`docs/MIGRATION_RECONCILIATION.md`](./MIGRATION_RECONCILIATION.md).
+- **Schema inspected:** public base table/column inventory, public routines (definitions truncated for initial scan), public RLS policies, and public indexes. This is not yet a complete schema export.
+- **Safety:** no DDL, migration apply, reset, row mutation, publication, or deployment action was performed.
+- **CI:** run [40092001380](https://github.com/black-jee/blackjee/actions/runs/40092001380) succeeded, including continuity validation, lint, typecheck, unit tests, Playwright E2E, format check, and production build on workflow-triggering SHA `2195242d7b78cf52447ea2cd4fab83d30c834440`.
