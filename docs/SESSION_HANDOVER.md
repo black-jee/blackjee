@@ -18,12 +18,12 @@
 ## Current state
 
 - The repository already has `docs/PROJECT_CONTEXT.md`, `PROJECT_STATUS.md`, `TASKS.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `DATABASE_PLAN.md`, `SECURITY_PLAN.md`, `FEATURE_INVENTORY.md`, `TEST_PLAN.md`, `RELEASES.md`, `SEO_AND_GROWTH.md`, and `CHANGELOG.md`.
-- At handover creation, `docs/CONTINUITY_SYSTEM_PROMPT.md`, this file, and `docs/VERIFICATION_LOG.md` were absent and are being added as part of BJ-DOC-001.
+- Added `docs/CONTINUITY_SYSTEM_PROMPT.md`, this handover, and `docs/VERIFICATION_LOG.md`; added `scripts/check-continuity.mjs` and wired it into `.github/workflows/ci.yml`.
 - No production deployment was changed and no question was published in the documented work.
 
 ## Single exact next action
 
-Finish BJ-DOC-001 by adding a lightweight continuity validator to CI, reconcile the status and verification records against current GitHub/Supabase evidence, then check the new HEAD's CI result.
+Verify the latest CI run on current `main`; inspect any Prettier failures, fix them without broad unrelated rewrites, and confirm the continuity validator passes. Then update this handover, task ledger, verification log, and project status with the resulting commit and evidence.
 
 ## Verification steps
 
