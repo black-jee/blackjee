@@ -97,15 +97,15 @@ This is catalog inspection, not a schema dump. Full function bodies were truncat
 
 A subsequent aggregate catalog query against the same target confirmed the following counts for the `public` and `private` application schemas:
 
-| Catalog item | Observed |
-| --- | ---: |
-| Base tables | 9 |
-| Columns | 93 |
-| Constraints | 49 |
-| Indexes | 23 |
-| RLS policies | 10 |
-| Functions | 12 |
-| Non-internal triggers | 0 |
+| Catalog item          | Observed |
+| --------------------- | -------: |
+| Base tables           |        9 |
+| Columns               |       93 |
+| Constraints           |       49 |
+| Indexes               |       23 |
+| RLS policies          |       10 |
+| Functions             |       12 |
+| Non-internal triggers |        0 |
 
 RLS is enabled on all nine application tables; `FORCE ROW LEVEL SECURITY` is false on all nine. Installed extensions observed were `pg_stat_statements 1.11`, `pgcrypto 1.3`, `plpgsql 1.0`, `supabase_vault 0.3.1`, and `uuid-ossp 1.1`.
 
