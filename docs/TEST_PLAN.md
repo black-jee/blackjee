@@ -2,7 +2,7 @@
 
 ## Test status
 
-No application test is marked passing until it is actually executed against the current implementation. The new SQL regression assertions for the public schedule RPC and restricted anonymous column grants have been run successfully against the target Supabase project. The legacy ZIP contains static security checks, inline-JS checks, question-manifest audits, a crop processor and a SQL regression test; these are useful references but do not constitute end-to-end coverage for the new application.
+No application test is marked passing until it is actually executed against the current implementation. The new SQL regression assertions for the public schedule RPC, restricted anonymous column grants, and private-table browser-role privileges have been run successfully against the target Supabase project. The legacy ZIP contains static security checks, inline-JS checks, question-manifest audits, a crop processor and a SQL regression test; these are useful references but do not constitute end-to-end coverage for the new application.
 
 ## Automated gates
 
