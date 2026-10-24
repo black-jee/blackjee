@@ -132,6 +132,20 @@ BEGIN
     RAISE EXCEPTION 'Mock-test attempt ownership policy is missing or drifted';
   END IF;
 
+  -- Column-level grants are intentional: PYQ content is directly queryable,
+  -- while daily-challenge question text/options must stay behind the session RPC.
+  IF NOT has_column_privilege('anon', 'public.jee_pyq_questions', 'statement', 'SELECT')
+     OR NOT has_column_privilege('authenticated', 'public.jee_pyq_questions', 'statement', 'SELECT') THEN
+    RAISE EXCEPTION 'Expected anon/authenticated column SELECT on public PYQ statement';
+  END IF;
+
+  IF has_column_privilege('anon', 'public.daily_challenges', 'statement', 'SELECT')
+     OR has_column_privilege('anon', 'public.daily_challenges', 'options', 'SELECT')
+     OR has_column_privilege('authenticated', 'public.daily_challenges', 'statement', 'SELECT')
+     OR has_column_privilege('authenticated', 'public.daily_challenges', 'options', 'SELECT') THEN
+    RAISE EXCEPTION 'Daily-challenge statement/options must not be directly readable by browser roles';
+  END IF;
+
   -- Private tables currently have no policies because browser roles have no
   -- schema access. Any policy change requires an explicit model review.
   IF EXISTS (SELECT 1 FROM pg_policies WHERE schemaname = 'private') THEN
@@ -140,4 +154,4 @@ BEGIN
 END;
 $security$;
 
-SELECT 'PASS: privileged RPC attributes, admin guards, and private-schema browser isolation' AS security_regression_assertions;
+SELECT 'PASS: privileged RPC attributes, admin guards, private-schema isolation, and column grants' AS security_regression_assertions;
