@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+:root {
+  color-scheme: dark;
+  --background: #08090d;
+  --surface: #11131a;
+  --surface-raised: #181b25;
+  --border: #292d3a;
+  --text: #f4f5f8;
+  --muted: #9ca3b5;
+  --accent: #d7ff64;
+  --accent-foreground: #11150a;
+}
+
+* { box-sizing: border-box; }
+html { min-height: 100%; background: var(--background); }
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 85% -20%, rgb(215 255 100 / 8%), transparent 42%),
+    var(--background);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+a { color: inherit; text-decoration: none; }
+button, input, textarea, select { font: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--accent-foreground); }
