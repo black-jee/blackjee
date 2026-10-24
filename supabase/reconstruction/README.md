@@ -83,3 +83,17 @@ A fresh catalog query enumerated 14 foreign-key constraints across the nine reco
 ## Security catalog inventory query
 
 `tests/002_security_catalog_inventory.sql` is a read-only report for schema privileges, table grants, column grants, function execute ACLs and security attributes, RLS policy expressions, and non-internal triggers. Run it against the disposable replay first and compare output with the saved live-catalog checkpoint. It intentionally reports rather than mutates; do not infer that a grant is safe or unsafe without checking the actual frontend call path and function authorization logic.
+
+## Exact grant inventory — read-only live check (2026-10-24)
+
+A grouped read-only query of `information_schema.role_table_grants`, `column_privileges`, and `has_schema_privilege` confirmed the following current access shape:
+
+- `anon`, `authenticated`, and `service_role` have `USAGE` on `public`, but not `CREATE`.
+- None of those three roles has `USAGE` or `CREATE` on `private`. Do not grant it as part of reconstruction.
+- `authenticated` has table-level `SELECT` on `public.daily_challenge_attempts` and `public.mock_test_attempts`; corresponding read policies restrict rows. It has table-level `INSERT`, `UPDATE`, and `DELETE` on `public.daily_challenges` and `public.jee_pyq_questions`, with admin-only write policies.
+- The public question table has column-level `SELECT` on 25 content/metadata columns for `anon` and `authenticated`; answer key and solution are not in this public table.
+- `anon` has column-level `SELECT` on eight daily-challenge schedule/metadata columns (`challenge_date`, `ends_at`, `id`, `is_live`, `solution_release_at`, `starts_at`, `subject`, `title`). `authenticated` has a different eight-column set: `challenge_date`, `ends_at`, `id`, `is_live`, `starts_at`, `statement_image_path`, `subject`, `title`.
+- `service_role` has broad table-level privileges on the four public tables listed in the grant inventory; this role must remain server-side and must never be exposed to browser code.
+- The five private tables do not appear in client table-grant output. Continue routing answer/session access through the reviewed RPCs.
+
+These are current catalog observations, not a proposed grant migration. The SQL inventory script can regenerate detailed per-column output. No grants were changed. Grant replay is still pending in a disposable database.
