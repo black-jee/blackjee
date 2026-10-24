@@ -7,40 +7,44 @@
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
 **Production URL supplied by owner:** https://blackjee.vercel.app/ (deployment linkage/runtime not verified)
 
-## Last session completed
+## Latest verified state
 
-- Completed and tested BJ-DOC-001. The continuity validator and full configured CI passed in [run 40091830452](https://github.com/black-jee/blackjee/actions/runs/40091830452); the formatter committed changes as `b6bb46d81ce81b803296aa6c9421ca611b03f8b3`.
-
-- Added project context, task ledger, decisions, releases, SEO/growth, changelog, and reconciled project status.
-- Confirmed latest observed repository HEAD before this handover was `ec2f7ce1bfb25a0b1e96f3168ab82959c8a5af1e`.
-- Verified the live PYQ review RPC requires source provenance, source page, private answer key, worked solution, and valid option label for single-correct items; anonymous execute is denied. Five PYQs remain drafts; zero published.
-- Latest CI run for that HEAD, [40090784800](https://github.com/black-jee/blackjee/actions/runs/40090784800), **failed** at `npm run format:check`; lint, typecheck, Vitest, and Playwright passed; build was skipped after the formatting failure. The earlier successful run 40090330071 applies to an older commit only.
-- Migration-history reconciliation remains inconsistent across existing docs: latest direct checks must establish the exact live count; the known gap is missing baseline migration bodies and a checked-in migration not reflected in the live history. Never reset target Supabase.
+- Current observed `main` HEAD: `b4200163197bf399b74103950945085aec3b5c75` (`docs: update migration task evidence and staging gate`).
+- CI run [40093109450](https://github.com/black-jee/blackjee/actions/runs/40093109450) on that exact HEAD: **PASS**. Continuity validation, npm ci, lint, typecheck, unit tests, Playwright E2E, format check, and production build all completed successfully. The workflow's formatting remediation step also succeeded.
+- GitHub Pages workflow [40093109452](https://github.com/black-jee/blackjee/actions/runs/40093109452) on that HEAD: **PASS**. This is repository Pages workflow evidence only; it does not verify the owner-supplied Vercel deployment.
+- Direct Supabase migration listing confirms **20 applied versions**. No target DDL, migration apply, reset, row mutation, question publication, or deployment action was performed.
+- Searched the new repository for the six missing baseline version identifiers and the missing `20261024112132` migration identifier; no historical source was found. Branch listing returned only `main`. No authoritative bodies recovered so far.
+- Environment check found no local `psql`, `postgres`, `docker`, or `podman` executable available for disposable replay in this runtime.
 
 ## Current state
 
-- The repository already has `docs/PROJECT_CONTEXT.md`, `PROJECT_STATUS.md`, `TASKS.md`, `DECISIONS.md`, `ARCHITECTURE.md`, `DATABASE_PLAN.md`, `SECURITY_PLAN.md`, `FEATURE_INVENTORY.md`, `TEST_PLAN.md`, `RELEASES.md`, `SEO_AND_GROWTH.md`, and `CHANGELOG.md`.
-- Added `docs/CONTINUITY_SYSTEM_PROMPT.md`, this handover, and `docs/VERIFICATION_LOG.md`; added `scripts/check-continuity.mjs` and wired it into `.github/workflows/ci.yml`.
-- No production deployment was changed and no question was published in the documented work.
+- Required project records and continuity checks are in the repository.
+- Read-only catalog inventory is documented in `docs/MIGRATION_RECONCILIATION.md`. Four public application tables and five private application tables have RLS enabled but not forced; no non-internal app triggers, explicit private-schema policies, or storage buckets/policies were found in inspected catalogs.
+- The applied chain and repository migration directory remain inconsistent: six original baseline bodies are absent; live `20261024112132_require_pyq_source_page_before_publish` is missing from the repository while `20261024112500` and `20261024120000` files are not recorded as applied.
+- Five PYQs are drafts; zero published. The April 4 Shift 1 official source PDF is still missing. Do not publish unverified content.
+- Vercel project linkage, active deployed commit, and production runtime remain unverified.
 
 ## Single exact next action
 
-Continue BJ-DB-001 by locating authoritative historical migration bodies and resolving the live `20261024112132` versus repository `20261024112500` / `20261024120000` drift. Initial read-only inventory now covers public columns, constraints/FKs, public policies, table grants, function ACLs/definitions (partial), RLS status, private tables, triggers, and storage bucket/policy counts. No application triggers, explicit private-schema policies, or storage buckets were found. Before creating an isolated Supabase development branch, obtain owner approval for any possible usage charges; alternatively use a separately provisioned local disposable PostgreSQL environment. Never reset or alter target Supabase.
+Obtain authoritative historical migration bodies from an owner-controlled backup/export if available, and resolve the `20261024112132` / `20261024112500` / `20261024120000` drift. If no authoritative source exists, create a clearly labelled reconstruction chain (never claim it is original), then replay it in an isolated PostgreSQL/Supabase-compatible environment. This runtime has no local PostgreSQL/container tools. Before creating a Supabase development branch, get explicit owner approval for any possible usage charges. Never reset or alter target Supabase.
 
 ## Verification steps
 
-1. Migration history re-queried: 20 applied versions, including six missing baseline bodies.
-2. Read-only inventory findings recorded in `docs/MIGRATION_RECONCILIATION.md`; no target DDL/data writes were performed.
-3. Search the legacy/reference repository only for comparison; it contains a different migration sequence and is not authoritative for the new target's six versioned bodies.
-4. Resolve version drift and locate authoritative history/backup. Provision isolated replay only after owner approves any possible Supabase branch costs, or use a local disposable PostgreSQL instance.
-5. Run complete replay and schema/security diff before proposing changes. Latest successful CI run: [40092920061](https://github.com/black-jee/blackjee/actions/runs/40092920061); verify newer runs if additional commits are made.
+1. Confirmed current HEAD and latest workflow results through GitHub API.
+2. CI [40093109450](https://github.com/black-jee/blackjee/actions/runs/40093109450) passed all configured quality gates on `b4200163197bf399b74103950945085aec3b5c75`.
+3. GitHub Pages workflow [40093109452](https://github.com/black-jee/blackjee/actions/runs/40093109452) completed successfully; this is not evidence of Vercel production verification.
+4. Supabase migration listing returned 20 applied versions; no target writes were made.
+5. GitHub repository search did not recover the missing migration identifiers; only `main` branch was found.
+6. Local runtime check found no `psql`, `postgres`, `docker`, or `podman` executable. Isolated replay remains blocked pending an isolated environment.
+7. Continue with full replay and schema/security diff only after authoritative/reconstructed chain review. Do not reset the target project.
 
 ## Blockers / owner action
 
 - The official source PDF for the April 4 Shift 1 question set is missing; keep unresolved content unpublished.
 - Authenticated student/admin browser journeys need a dedicated test account/approved test setup.
-- Vercel project linkage and active deployed commit need access to deployment metadata; no secret values should be printed.
-- Do not reset the target Supabase database or publish questions.
+- Vercel project linkage and active deployed commit need deployment metadata; no secret values should be printed.
+- Isolated database replay requires either a separately available disposable PostgreSQL environment or explicit owner approval for a potentially billable Supabase branch.
+- Do not reset target Supabase or publish questions.
 
 ## Related records
 
