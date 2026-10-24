@@ -61,3 +61,12 @@ These observations reduce the likelihood that the advisor warnings represent a d
 - Inspect trigger definitions and all function callers; test non-admin rejection and cross-user attempt access in an isolated database.
 - Add an index for `private.mock_test_responses.question_id` only after confirming expected query patterns and validating it as a deliberate performance change—not as recovered historical schema.
 - Run the reconstruction smoke test and a full catalog comparison only against a disposable replay database. No disposable replay has been run yet.
+
+## Schema/table grants and trigger check — read-only checkpoint (2026-10-24)
+
+- The `private` schema ACL grants `USAGE` only to its owner; `anon` and `authenticated` do not have schema usage. This is consistent with keeping answer keys and session records behind the reviewed RPC functions.
+- The catalog query found no non-internal triggers on tables in `public` or `private`.
+- Direct `SELECT` privilege checks for `anon` and `authenticated` on `public.daily_challenges` and `public.jee_pyq_questions` returned false, even though read policies are defined. Public/client reads therefore appear intended to go through granted RPCs rather than direct table reads; confirm the frontend call path before changing grants. Do not grant direct table access just to silence an advisor.
+- The table-grant inventory showed authenticated direct `SELECT` on challenge attempts and mock-test attempts, while the answer/session tables in `private` have no client schema usage. The admin-write policies on public authoring tables still need negative role tests and full grant/policy replay comparison.
+
+This remains a catalog observation, not a migration recommendation. No production schema or grants were changed.
