@@ -54,3 +54,9 @@ An aggregate-only query inspected counts, not question text or answers:
 
 This does not make the records publish-ready by itself. They remain drafts; approval, option/answer consistency, asset checks, and real workflow tests are separate gates.
 
+## Reconstruction smoke-test execution (read-only)
+
+The full `tests/001_reconstruction_catalog_smoke.sql` was also executed against the live catalog after correcting two column-reporting references. It returned PASS for the nine tables, key defaults/nullability, RLS flags, 10 policies, 14 foreign keys/actions, 49 constraints, and 11 secondary indexes.
+
+This is useful catalog evidence, not a disposable replay: it confirms that the current live schema matches the assertions, but does not prove the reconstructed SQL files can recreate it from zero.
+
