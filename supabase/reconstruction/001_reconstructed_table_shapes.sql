@@ -188,6 +188,6 @@ commit;
 --    re-check them during replay comparison and capture any ON UPDATE behavior too.
 -- 2. Column nullability/defaults were cross-checked against information_schema;
 --    CHECK/UNIQUE/FK definitions still require full catalog comparison.
--- 3. No RLS policies, table/column grants, sequence grants, indexes beyond primary/
---    unique constraints, function definitions/ACLs, storage config, or seed data
---    are included. This is a structural draft only, not a secure runnable app.
+-- 3. No RLS policies, table/column grants, sequence grants, function definitions/
+--    ACLs, storage config, or seed data are included. This is a structural draft
+--    only, not a secure runnable app.
