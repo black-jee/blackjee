@@ -166,4 +166,4 @@ begin
 end
 $test$;
 
-select 'PASS: nine expected tables, RLS flags, selected constraints, and observed secondary indexes exist' as reconstruction_smoke_test;
+select 'PASS: nine tables, reconstructed columns, RLS flags, 10 policies, 14 foreign keys, selected check/unique constraints, and observed secondary indexes exist' as reconstruction_smoke_test;
