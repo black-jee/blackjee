@@ -32,3 +32,40 @@ jobs:
       - run: npm run test:e2e
       - run: npm run format:check
       - run: npm run build
+
+  reconstruction-replay:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: blackjee_reconstruction
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d blackjee_reconstruction"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: blackjee_reconstruction
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      - name: Bootstrap disposable Supabase auth surface
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/bootstrap_supabase_compat.sql
+      - name: Replay reconstructed table shapes
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/001_reconstructed_table_shapes.sql
+      - name: Replay reconstructed RLS policies
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/002_reconstructed_rls_policies.sql
+      - name: Assert reconstructed catalog
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/001_reconstruction_catalog_smoke.sql
