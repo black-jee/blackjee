@@ -1,53 +1,56 @@
 # BLACK-JEE project status
 
 **Last updated:** 2026-10-24  
-**Overall status:** In progress — foundation committed; database reconciliation and runtime verification remain open. Not production-ready.
+**Overall status:** In progress — core application routes and secure database workflows are being built. Not production-ready.
 
 ## Environment
 
 | Item | Observed status |
 |---|---|
-| New GitHub repository | `black-jee/blackjee`, public, default branch `main`; empty before this foundation commit |
+| New GitHub repository | `black-jee/blackjee`, public, default branch `main` |
 | New Supabase | `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region |
-| Supabase migrations | 8 applied entries; the two new migrations are checked into Git, while six original migration bodies remain to be reconstructed |
-| Supabase tables | 7 inspected public/private tables; empty at inspection |
-| Supabase Edge Functions | None deployed at inspection |
-| Legacy source ZIP | Readable; 84 files total |
+| Supabase migrations | 16 applied entries; 10 new migration files are checked into Git, while six original migration bodies remain to be reconstructed |
+| Supabase data | 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported |
+| Supabase tables | 9 inspected public/private tables; no student attempts or mock-test attempts |
+| Supabase Edge Functions | Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410) |
+| Legacy source ZIP | Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files |
 | Live website comparison | Blocked/incomplete; direct fetch did not return page content |
 
 ## Work log
 
 - **Verified:** ZIP opens successfully and file inventory enumerated.
-- **Verified:** Identified 17 HTML pages, SQL schema/migrations, two Edge Function sources, manifests, question images, Python audits and GitHub workflows.
-- **Verified:** Read `docs/SYSTEM_MAP.md`, buyer due-diligence notes, import standard, source schema and question-package notes.
-- **Verified:** Target Supabase project metadata, tables/columns, six migration records, deployed Edge Functions list and security/performance advisor findings.
-- **Implemented:** Initial Next.js/React/TypeScript/Tailwind scaffold, Supabase SSR/browser client helpers, Zod question schema, shared safe prose/KaTeX renderer, email/Google sign-in, OAuth callback, password reset/update, profile/history/sign-out, daily challenge route/server actions, initial published-PYQ browse/filter and protected grading flow, protected admin dashboard and challenge authoring form, Vitest/Playwright tests and CI workflow committed to `main`.
-- **Implemented and database-verified:** `get_current_daily_challenge()` now uses invoker privileges; anonymous role can read only schedule columns, not question statement; session `user_id` index added. Migration `20261024095050` is checked into the repository.
-- **Implemented and database-verified:** added optional `daily_challenges.statement_image_path`, a safe relative-path constraint, and updated the challenge-start RPC to return the path. Migration `20261024100007` is checked into the repository; a direct schema/RPC verification query passed.
-- **Implemented and database-verified:** added a semantic image path for published PYQs and scoped column grants; migrations `20261024100245` and `20261024100341` are checked into the repository. Verified the new PYQ image path is readable by `anon` while daily challenge diagram paths remain unavailable to `anon`.
-- **Implemented and database-verified:** added `admin_save_daily_challenge`, which atomically saves the challenge and private answer key and checks server-managed `app_metadata.role = admin`. Migration `20261024100524` is checked in; SQL assertions confirmed anon execution is denied and the guarded authenticated RPC checks the admin role. The app currently uses that RPC from the protected admin form; real browser testing remains pending.
-- **Tested:** SQL regression assertions for the schedule RPC security/index and private-table access controls passed against the target Supabase project. These do not substitute for application runtime or browser tests.
-- **Blocked for local runtime checks:** this execution environment cannot resolve `github.com`, so the repository could not be cloned and dependencies could not be installed; no npm test/build result is claimed.
-- **Not started:** Full app migration, database compatibility migrations, content import, browser tests and staging deployment.
+- **Verified:** Identified 17 HTML pages, SQL schema/migrations, two legacy Edge Function sources, manifests, question images, Python audits and GitHub workflows.
+- **Verified:** Read the source system map, buyer due-diligence notes, import standard, source schema and question-package notes.
+- **Verified:** Inspected target Supabase metadata, tables/columns, migration history, function grants and security/performance advisor findings.
+- **Implemented:** Next.js App Router / React / TypeScript / Tailwind foundation, Supabase SSR/browser clients, Zod question schema, safe mixed-prose/KaTeX renderer, email/Google sign-in, OAuth callback, password reset/update, profile/history/sign-out, daily challenge route/server actions, published-PYQ browse/filter and authenticated grading, chapter index/practice routes, mock-test runner, and protected admin dashboard/challenge authoring.
+- **Implemented and database-verified:** Public schedule RPC now uses invoker privileges; anonymous users can read schedule metadata but not question statements or daily-challenge diagram paths; a session foreign-key index was added.
+- **Implemented and database-verified:** Safe optional image-path columns for daily challenge and PYQ questions, with scoped grants. Published PYQ image-path metadata is readable to anonymous visitors; daily challenge diagram paths remain unavailable to anonymous visitors.
+- **Implemented and database-verified:** `admin_save_daily_challenge` atomically saves challenge content and private answer keys and checks server-managed `app_metadata.role = admin`. SQL assertions confirmed anonymous execution is denied.
+- **Implemented and database-verified:** Mock-test schema/RPCs now support shift/focused test selection, ownership-bound resume/submission, server-side marking, private responses, and the exact 75-question shift validation rule (20 MCQ + 5 numerical per subject). With an empty bank, start is rejected as expected.
+- **Tested:** SQL regression assertions for public schedule security, private-table access, admin RPC permissions, mock-test permissions and function ownership checks passed against the target Supabase project.
+- **Imported as drafts:** The first 5 Physics questions from the source manifest and their 5 answer keys were imported. They are not published. Their question images are not yet copied into the new application.
+- **Blocked for local runtime checks:** This execution environment cannot resolve `github.com`, so the repository could not be cloned and dependencies could not be installed. No npm test, TypeScript, lint, or production-build result is claimed.
+- **Not verified:** Browser behavior, real authenticated student/admin workflows, file upload/storage, full question import, and staging deployment.
 
 ## Important findings / blockers
 
-1. Original and target schemas differ. Source schema uses `daily_questions` and `attempt_submissions`; target baseline uses `daily_challenges`, `daily_challenge_attempts` and `jee_pyq_questions`. Reconcile before adding or changing tables.
-2. Target database has no rows. No old production records, Auth users, storage objects or secrets were supplied in the ZIP.
-3. Security advisors flag five browser-callable `SECURITY DEFINER` RPCs, including one callable by `anon`. Each requires body/grant review; do not blindly revoke necessary flows.
-4. Four private tables have RLS enabled without policies. Verify grants and exposure; absence of policies is expected only when direct access is denied.
-5. One private foreign key lacks a covering index; unused-index notices may be expected while the project is empty.
-6. The source has two Edge Function implementations (`admin-cleanup`, `released-solution`), but neither is deployed to the target project.
-7. April 4 Shift 1 includes unresolved source questions/visuals; the source README explicitly prohibits publishing it as a complete set.
-8. The original live website could not yet be successfully compared in a browser.
+1. **Migration history gap:** The new repository does not contain the six original SQL migration bodies already recorded in the target project. The gap is documented in `supabase/migrations/README.md`. Do not reset the database until a clean replayable baseline is reconstructed.
+2. **Source/target schema mismatch:** The original source uses `daily_questions` and `attempt_submissions`; the new target uses `daily_challenges`, `daily_challenge_attempts`, and `jee_pyq_questions`. A source-to-target compatibility map is required.
+3. **Content import incomplete:** The ZIP has 75 question slots; only 5 are in the target so far. All imported records are drafts, and no content is published. The manifest marks 28 questions as `needs_review`; their answer keys must stay withheld until review.
+4. **Image assets not migrated:** 21 PNG/JPG files and manifest references were found in the ZIP. They need to be copied to the new app or new Storage bucket and visually verified before any dependent question is published.
+5. **Security advisor warnings:** The advisor reports nine authenticated-callable `SECURITY DEFINER` RPCs. They are intentional trusted operations and include explicit `auth.uid()` checks; the admin save RPC additionally checks server-managed admin metadata. Five private tables have RLS enabled without policies and no direct browser-role grants. Re-run advisors and review after each backend change.
+6. **Admin bootstrap required:** No Auth users were supplied. Before the admin route can be used, create the owner account and assign `app_metadata.role = admin` through the Supabase Dashboard; never use user-editable metadata for authorization.
+7. **Legacy Edge Functions:** `admin-cleanup` and `released-solution` from the original ZIP have not been ported/deployed to the new project.
+8. **Live-site comparison:** The original GitHub Pages site still needs a successful browser inspection. The original production website remains untouched.
 
 ## Next actions
 
-1. Finish the source page/RPC/dependency map.
-2. Reconstruct the six pre-existing target Supabase migration bodies and capture baseline DDL, grants, policies and function definitions in version control.
-3. Complete the Next.js foundation and CI; run type/lint/test/build checks.
-4. Complete baseline migration reconstruction and add the shared KaTeX question renderer.
-5. Reconcile database naming and permissions before feature-by-feature migration.
+1. Finish the draft-only import of the remaining 70 question records and preserve source/QA metadata; keep all unresolved items unpublished.
+2. Migrate the 21 image assets, validate every reference, and add a storage-access model that does not leak daily challenge content before release.
+3. Reconstruct the six original migration bodies into a replayable, version-controlled baseline and test on an isolated staging database.
+4. Complete PYQ authoring/review/publishing, admin moderation, student practice, chapter filters and mock-test persistence.
+5. Obtain a real staging deployment, configure environment variables, and run lint, type checks, unit tests, Playwright, security-negative tests and production build.
+6. Prepare rollback and production-launch checklist. Do not switch the live site without approval.
 
 ## Status vocabulary
 
