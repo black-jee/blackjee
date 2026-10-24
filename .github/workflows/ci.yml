@@ -92,6 +92,10 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025100000_enforce_unique_pyq_option_labels.sql
       - name: Test PYQ option-label integrity
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/pyq_option_label_validation.sql
+      - name: Apply daily-challenge authoring integrity hardening
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql
+      - name: Test daily-challenge authoring integrity contract
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/daily_challenge_authoring_integrity.sql
       - name: Run application security regression assertions
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/private_table_access.sql
