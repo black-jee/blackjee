@@ -1,68 +1,47 @@
 # BLACK-JEE session handover
 
 **Updated:** 2026-10-24  
-**Active task:** BJ-DB-001 — reconstruct the missing migration baseline in isolated, no-cost testing  
+**Active task:** BJ-DB-001 — recover and reconcile missing applied migration SQL without paid infrastructure  
 **Branch:** `main`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
-**Production URL supplied by owner:** https://blackjee.vercel.app/ (deployment linkage/runtime not verified)
+**Production URL supplied by owner:** https://blackjee.vercel.app/ (deployment linkage and runtime not verified)
 
 ## Latest verified state
 
-- Current observed `main` HEAD: `468e7bd2d84d44cff94fb973d2c18b054a1c7456` (`docs: refresh handover with verified CI and migration search`).
-- Current documentation HEAD has advanced since the previous handover. CI run [40094861867](https://github.com/black-jee/blackjee/actions/runs/40094861867) passed on `c4392e11ff34435577409c9c1aa89ed610a4e5cd`; the formatter-created follow-up commit is `7e28a30afea75aaf39823d6292773f9bb53f3410`, whose Pages workflow [40094885333](https://github.com/black-jee/blackjee/actions/runs/40094885333) passed. Verify a CI run for the formatter follow-up before claiming the current HEAD has full CI coverage.
-- GitHub Pages workflow for the preceding HEAD [40093109452](https://github.com/black-jee/blackjee/actions/runs/40093109452) passed. This is not verification of the owner-supplied Vercel deployment.
-- Supabase quote for a development branch: **$0.01344/hour** (about $9.68 for 30 days continuously running, excluding other possible charges). Owner said they do not have money. **Do not create a branch or incur any cost.**
-- Live Supabase migration listing confirms 20 applied versions. No target DDL, migration apply, reset, row mutation, question publication, or deployment action was performed.
-- Searches for the six missing baseline migration identifiers and the missing `20261024112132` migration did not find historical SQL in the new repository. Branch listing returned only `main`.
-- Local runtime has no `psql`, `postgres`, `docker`, or `podman` executable available for disposable replay.
+- Observed `main` HEAD: [`ffc1437b`](https://github.com/black-jee/blackjee/commit/ffc1437b1381bb000c6a1417210e9891182509a0) — `docs: fix migration recovery command formatting`.
+- CI run [40101661444](https://github.com/black-jee/blackjee/actions/runs/40101661444) passed on this HEAD. Configured quality gates include continuity validation, dependency install, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build.
+- GitHub Pages workflow [40101661202](https://github.com/black-jee/blackjee/actions/runs/40101661202) passed on this HEAD. This does **not** verify the owner-supplied Vercel deployment.
+- Supabase migration history contains 20 applied versions. Seven applied SQL bodies are missing from the repository: six baseline bodies and `20261024112132_require_pyq_source_page_before_publish`.
+- Repository has 15 migration files; `20261024112500` and `20261024120000` are not recorded as applied in the live history. Do not treat either as the missing `20261024112132` original.
+- Searches of the checked public repository history and indexed code search did not recover the missing originals. The search does not cover the owner's local device, private repos, other clones, or unuploaded backups.
+- The owner's budget constraint is explicit: **do not create a Supabase branch/project or incur infrastructure charges**.
+- No production DDL, migration apply/repair, reset, row mutation, question publication, or paid infrastructure creation was performed during this work.
 
-## Current state
+## Current work and blockers
 
-- Latest CI for commit [`78e6c72b`](https://github.com/black-jee/blackjee/actions/runs/40101029806) passed all configured quality steps, including lint, typecheck, unit tests, Playwright E2E, formatting, and production build. GitHub Pages workflow [40101029607](https://github.com/black-jee/blackjee/actions/runs/40101029607) also succeeded; this does not prove Vercel linkage or production runtime.
+### BJ-DB-001 — migration recovery and replay
 
-- Required project records and continuity checks are in the repository.
-- Read-only catalog inventory is documented in `docs/MIGRATION_RECONCILIATION.md`. Four public application tables and five private application tables have RLS enabled but not forced; no non-internal app triggers, explicit private-schema policies, or storage buckets/policies were found in inspected catalogs.
-- Applied chain and repository migration directory remain inconsistent: seven applied migration bodies are absent from the repository (six baseline bodies plus live `20261024112132_require_pyq_source_page_before_publish`) while `20261024112500` and `20261024120000` files are not recorded as applied.
-- Five PYQs are drafts; zero published. The April 4 Shift 1 official source PDF is still missing. Do not publish unverified content.
-- Vercel project linkage, active deployed commit, and production runtime remain unverified.
+- Inventory and recovery evidence: `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_CHAIN_INVENTORY.md`, and `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
+- Current state: historical SQL recovery remains blocked; clean replay remains unverified. Do not run `supabase db reset`, `migration repair`, or ad hoc DDL against the target.
+- Next: continue no-cost recovery from owner-controlled Termux folders, archives, older clones, backups, or other trustworthy artifacts. If originals cannot be recovered, create a separately labelled reconstructed baseline and review it as reconstruction—not original history. Only test in a disposable PostgreSQL service in GitHub Actions with no production credentials, after a replayable chain has been assembled.
 
-## Additional verification — 2026-10-24
+### Security and authenticated journeys
 
-- CI passed on `c4392e11ff34435577409c9c1aa89ed610a4e5cd` (run [40094861867](https://github.com/black-jee/blackjee/actions/runs/40094861867)); GitHub Pages workflow passed on formatter follow-up commit `7e28a30afea75aaf39823d6292773f9bb53f3410` (run [40094885333](https://github.com/black-jee/blackjee/actions/runs/40094885333)). Do not assume CI passed on the formatter follow-up until its own run is checked.
-- A non-invasive fetch of the owner-supplied `https://blackjee.vercel.app/` could not retrieve content (cache miss); Vercel linkage and live behavior remain unverified.
-- Additional read-only catalog counts are recorded in `docs/MIGRATION_RECONCILIATION.md`: 9 application tables, 93 columns, 49 constraints, 23 indexes, 10 policies, 12 functions, and 0 non-internal triggers; RLS enabled on all nine tables, not forced.
-- No paid infrastructure was created and no production database writes were performed.
+- `docs/SECURITY_DEFINER_REVIEW_2026-10-24.md` records read-only function/grant inspection and remaining security tests.
+- Authenticated cross-user isolation, admin denial for ordinary users, and daily-solution/PYQ release boundaries still need runtime tests in an isolated setup. Do not create or publish real content for testing.
+- Current security advisor findings include private tables with RLS enabled but no policies and warnings about authenticated execution of SECURITY DEFINER functions. These are findings to assess against the intended mediated-access design, not automatic proof of a vulnerability. Do not change grants/policies without a reviewed test plan.
 
-## Single exact next action
+### Content and deployment
 
-Continue free, non-destructive discovery: inspect Git history and available repository artifacts for recoverable migration definitions, then plan a disposable PostgreSQL replay using a free environment such as a temporary GitHub Actions Postgres service (only if a replayable chain can be assembled). Do not provision any paid Supabase branch or project. If original SQL cannot be recovered, explicitly label any new SQL as reconstructed equivalents and validate the schema/function/policy/grant diff before proposing it. Never reset or alter target Supabase.
+- Five PYQs are drafts and zero are published. The official April 4 Shift 1 source PDF is missing; keep unresolved content unpublished.
+- Vercel project linkage, active deployed commit, environment-variable presence, and production smoke behavior remain unverified. Never print secret values.
+- The source archive lists 75 question slots (47 marked content_added, 28 needs_review); reconcile each against an authoritative source before import or publication.
 
-## Verification steps
+## Safe operating rules
 
-1. Confirmed current HEAD and CI results through GitHub API; CI passed on `468e7bd2d84d44cff94fb973d2c18b054a1c7456`.
-2. Supabase migration listing returned 20 applied versions; no target writes were made.
-3. GitHub repository search did not recover the missing migration identifiers; only `main` branch was found.
-4. Local runtime check found no `psql`, `postgres`, `docker`, or `podman` executable. A GitHub Actions service may offer isolated testing without provisioning Supabase compute, subject to workflow limits.
-5. Owner explicitly stated they do not have money. Do not create a Supabase development branch, a new paid project, or otherwise incur infrastructure charges.
-6. Continue with full replay and schema/security diff only in a disposable no-cost environment. Do not reset the target project.
-
-## Blockers / owner action
-
-- The official source PDF for the April 4 Shift 1 question set is missing; keep unresolved content unpublished.
-- Authenticated student/admin browser journeys need a dedicated test account/approved test setup.
-- Vercel project linkage and active deployed commit need deployment metadata; no secret values should be printed.
-- Original migration bodies remain unrecovered. Continue with free investigation and no-cost isolated test options only.
-- Do not reset target Supabase or publish questions.
-
-## Related records
-
-- [Project context](PROJECT_CONTEXT.md)
-- [Project status](PROJECT_STATUS.md)
-- [Task ledger](TASKS.md)
-- [Decisions](DECISIONS.md)
-- [Verification log](VERIFICATION_LOG.md)
-- [Test plan](TEST_PLAN.md)
-- [Database plan](DATABASE_PLAN.md)
-- [Security plan](SECURITY_PLAN.md)
-- [Continuity system prompt](CONTINUITY_SYSTEM_PROMPT.md)
+1. Treat live Supabase checks as read-only until a separately reviewed change is explicitly approved.
+2. Never expose service-role keys, passwords, or environment-variable values in logs or client-side variables.
+3. Never fabricate missing migration SQL or question content.
+4. Use free, isolated test environments only; the owner cannot afford a paid Supabase branch.
+5. Update this handover and `docs/TASKS.md` when verified evidence changes.
