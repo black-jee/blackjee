@@ -29,15 +29,13 @@ These checks do not search private repositories, local device folders, unuploade
 
 ## Missing applied bodies
 
-| Version | Recorded migration name |
-| --- | --- |
-| `20261024080824` | `foundation_schema` |
-| `20261024080924` | `tighten_rpc_grants_and_policy` |
-| `20261024081041` | `daily_solution_release_rpc` |
-| `20261024081337` | `numeric_answers_and_admin_review` |
-| `20261024081603` | `secure_daily_attempt_sessions` |
-| `20261024081731` | `restrict_anon_rpc_execution` |
-| `20261024112132` | `require_pyq_source_page_before_publish` |
+- `20261024080824` — `foundation_schema`
+- `20261024080924` — `tighten_rpc_grants_and_policy`
+- `20261024081041` — `daily_solution_release_rpc`
+- `20261024081337` — `numeric_answers_and_admin_review`
+- `20261024081603` — `secure_daily_attempt_sessions`
+- `20261024081731` — `restrict_anon_rpc_execution`
+- `20261024112132` — `require_pyq_source_page_before_publish`
 
 The live version `20261024112132` must not be replaced by either local-only file with a different version number. The later local files may overlap in purpose, but their existence does not establish what SQL was applied at the recorded version.
 
