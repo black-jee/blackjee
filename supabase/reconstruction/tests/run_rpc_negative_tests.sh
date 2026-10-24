@@ -53,6 +53,12 @@ expect_denial \
   "Administrator access required" \
   "$spoofed_admin_pyq_sql"
 
+spoofed_admin_pyq_save_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"user_metadata\":{\"role\":\"admin\"},\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.admin_save_jee_pyq_question(NULL::uuid, NULL::text, NULL::text, NULL::text, NULL::integer, NULL::text, NULL::text, NULL::text, NULL::text, NULL::text, NULL::jsonb, NULL::text, NULL::integer, NULL::integer, NULL::text, NULL::text, NULL::text, NULL::integer, NULL::text[], NULL::text[], NULL::text[]);"
+expect_denial \
+  "user_metadata admin claim cannot author PYQs" \
+  "Administrator access required" \
+  "$spoofed_admin_pyq_save_sql"
+
 cross_user_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.resume_mock_test('$attempt_id'::uuid);"
 expect_denial \
   "user cannot resume another user's mock attempt" \
