@@ -95,6 +95,7 @@ export function ChallengeAttempt({ schedule }: { schedule: Schedule }) {
       ) : (
         <div className="mt-6">
           <div className="text-base leading-8" dangerouslySetInnerHTML={{ __html: renderQuestionText(typeof question.statement === "string" ? question.statement : "") }} />
+          {typeof question.statement_image_path === "string" && isSafeAssetPath(question.statement_image_path) ? <img src={`/${question.statement_image_path}`} alt="Question diagram" loading="lazy" decoding="async" className="mt-4 h-auto max-h-[28rem] max-w-full rounded-lg border border-[var(--border)] object-contain" /> : null}
           {options.length ? (
             <fieldset disabled={Boolean(result) || busy} className="mt-5 grid gap-3">
               <legend className="mb-3 text-sm font-semibold">Choose one answer</legend>
