@@ -25,7 +25,7 @@
 
 ## Single exact next action
 
-Inspect the six missing baseline migration versions and compare live schema/function/grant definitions to repository migration files; create a reviewed reconstruction plan and replay it only in an isolated database. Do not reset or alter the target Supabase project.
+Continue BJ-DB-001 by completing a full read-only inventory of constraints, foreign keys, triggers, grants, private-schema objects, and storage policies; then retrieve authoritative historical migration bodies if available. Resolve the live `20261024112132` versus repository `20261024112500` / `20261024120000` drift before drafting a canonical reconstruction chain. Replay only in isolated staging; do not reset or alter the target Supabase project.
 
 ## Verification steps
 
