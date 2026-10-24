@@ -25,7 +25,7 @@
 
 ## Disposable replay in CI
 
-The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies drafts 001–004, and runs both the catalog smoke test and security catalog assertions. CI run `40113303240` passed both the quality job and disposable replay job, including four negative authorization tests. This is a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, or replace real-user end-to-end authorization tests.
+The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies drafts 001–004, and runs both the catalog smoke test and security catalog assertions. CI run `40113487978` passed both the quality job and disposable replay job, including RPC definition fingerprints and four negative authorization tests. This is a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, or replace real-user end-to-end authorization tests.
 
 ## Migration-history reconciliation — read-only inventory (2026-10-24)
 
