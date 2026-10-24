@@ -28,9 +28,7 @@ jobs:
       - name: Format continuity documentation on main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: >-
-          npx prettier --write CHANGELOG.md docs/DECISIONS.md
-          docs/PROJECT_CONTEXT.md docs/PROJECT_STATUS.md docs/RELEASES.md
-          docs/SEO_AND_GROWTH.md docs/TASKS.md scripts/check-continuity.mjs
+          npx prettier --write "*.md" "docs/**/*.md" scripts/check-continuity.mjs
       - name: Commit formatting corrections
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
