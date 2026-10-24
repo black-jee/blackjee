@@ -110,3 +110,12 @@ A subsequent aggregate catalog query against the same target confirmed the follo
 RLS is enabled on all nine application tables; `FORCE ROW LEVEL SECURITY` is false on all nine. Installed extensions observed were `pg_stat_statements 1.11`, `pgcrypto 1.3`, `plpgsql 1.0`, `supabase_vault 0.3.1`, and `uuid-ossp 1.1`.
 
 The query was read-only. These counts improve the inventory baseline but do not establish replay equivalence: full function bodies, ACLs/grants, sequences, auth/storage platform configuration, and a clean isolated replay still require review. The owner has no budget for a billable Supabase branch, so no paid branch/project is to be provisioned. Continue exploring no-cost replay options only.
+
+## Follow-up provenance search — 2026-10-24
+
+- Searched the repository's GitHub code index for all six missing baseline migration identifiers; no matching indexed results were returned.
+- Inspected the repository migration-path commit history and current branch list. The migration-path history contains the recent migration work, but no authoritative baseline bodies for the six missing versions were found; the only branch returned was `main`.
+- This is evidence of an unsuccessful search in the currently accessible repository, not proof that no backup exists elsewhere. Do not treat similarly named migrations from the legacy/reference repository as authoritative because its schema and migration sequence differ.
+- Supabase's official migration guidance explains that Git migration files and the remote `supabase_migrations.schema_migrations` records are separate sources, and that `migration repair` changes history records rather than executing or reverting SQL. Therefore, a repair command cannot recover missing SQL bodies and is not an appropriate fix for this repository gap. See [Supabase Database Migrations](https://supabase.com/docs/guides/deployment/database-migrations) and [Supabase CLI migration reference](https://supabase.com/docs/reference/cli/supabase-inspect-db-role-configs).
+- Latest observed workflow status at this pass: CI run [40094999185](https://github.com/black-jee/blackjee/actions/runs/40094999185) was still in progress for handover commit `857d781868302a9cff5b8b5ecb7d948440c99de8`; GitHub Pages run [40094999467](https://github.com/black-jee/blackjee/actions/runs/40094999467) was also in progress. Re-check before claiming those checks passed.
+- No production database writes, migration repairs, paid branches, or project creation were performed.
