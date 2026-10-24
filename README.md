@@ -30,7 +30,7 @@ The original Supabase project is reference-only and must not be connected to or 
 - `npm run test:e2e`
 - `npm run build`
 
-CI runs these gates on pushes to `main` and pull requests. The first successful runtime execution is still pending; repository files existing is not proof that checks pass.
+CI has passed these configured quality gates on commit `ffc1437b1381bb000c6a1417210e9891182509a0`; see [the successful CI run](https://github.com/black-jee/blackjee/actions/runs/40101661444). The latest documentation commit also passed CI: [run 40101879382](https://github.com/black-jee/blackjee/actions/runs/40101879382). This verifies the configured repository checks, not a production deployment or live Supabase runtime. Production runtime and deployment linkage remain unverified.
 
 ## Project documentation
 
