@@ -112,15 +112,19 @@ No production SQL was executed for this investigation; the Supabase calls used w
 
 ## Latest verification update (2026-10-25)
 
-The latest completed GitHub Actions run for the working branch is [run 40142341490](https://github.com/black-jee/blackjee/actions/runs/40142341490).
+The latest inspected completed GitHub Actions run is [run 40148547937](https://github.com/black-jee/blackjee/actions/runs/40148547937), associated with PR #2 head commit `4bdd582c3be676b25a77eab7b0bbcfbcddf9e7b5`.
 
-- **Disposable database reconstruction/replay: passed.** This includes the reconstructed catalog/RPC/access checks, mock-test NULL-input regression, PYQ option-label integrity guard, daily-challenge authoring integrity migration and contract test, application security regression assertions, and RPC authorization-denial tests.
-- **Application quality: passed** for the static security-contract checker, dependency install, lint, type checking, unit tests, Playwright end-to-end tests, and production build.
-- **Overall run: failed only at the formatting check.** This is a known issue intentionally left unchanged by the project owner; CI remains strict about formatting.
-- No production database changes were made. The new migrations were exercised only in the disposable CI database. Draft PR #2 remains unmerged.
+- **Disposable database reconstruction/replay: PASS.** The job completed the reconstructed catalog, RLS, RPC, grant, security-regression, mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, mock-test response question-index, application security regression, and RPC authorization-denial steps.
+- **Quality checks: mixed.** Static security-contract checks, `npm ci`, lint, typecheck, unit tests, Playwright E2E, and the production build passed. The strict Prettier check failed.
+- **Formatting failure details:** CI reported four files needing formatting: `docs/MIGRATION_RECONCILIATION_2026-10-24.md`, `lib/questions/pyq-authoring-schema.ts`, `scripts/check-security-contracts.mjs`, and `tests/pyq-authoring-schema.test.ts`. This run does not establish a fully green CI result.
+- The combined commit status also reports a Vercel failure associated with the deployment-rate-limit/upgrade page. No paid upgrade was attempted.
+- The PR remains draft, open, and unmerged. No production SQL or migration repair was performed, no paid Supabase infrastructure was created, and no JEE questions, answers, or solutions were added.
 
-New forward-only hardening files on the working branch:
+The run exercises the forward-only hardening migrations only in the disposable CI PostgreSQL service. It does not recover the missing historical migration bodies, prove production migration-chain replay, or replace real Supabase-issued user-token tests.
+
+New forward-only hardening files present on the working branch:
 - `supabase/migrations/20261025100000_enforce_unique_pyq_option_labels.sql`
 - `supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql`
+- `supabase/migrations/20261025120000_add_mock_test_response_question_id_index.sql`
 
-The daily-challenge RPC now checks live-solution completeness and option integrity at the database boundary, with regression coverage. The existing solution-release behavior is intentionally unchanged: the RPC releases the answer and worked solution after the configured release timestamp to any authenticated caller. Whether release should additionally require a submitted attempt remains an unresolved product/security decision; do not change this behavior without confirming the intended access rule.
+The daily-challenge authoring guard checks live-solution completeness and option integrity at the database boundary. The solution-release behavior remains unchanged: after its configured release timestamp, the RPC releases the answer and worked solution to authenticated callers. Whether release should additionally require a submitted attempt remains an unresolved product/security decision; do not change this behavior without confirming the intended access rule.
