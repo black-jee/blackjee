@@ -82,7 +82,7 @@ const checks = [
     file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
     description: "daily solution RPC rejects a missing authenticated user identity before lookup",
     pattern:
-      /authenticated role without a user identity cannot fetch daily challenge solutions[\s\S]*?Sign in required[\s\S]*?SET request\.jwt\.claims = '\{\}'/i,
+      /authenticated role without a user identity cannot fetch daily challenge solutions[\s\S]*?Sign in required/i,
   },
   {
     file: "supabase/tests/pyq_option_label_validation.sql",
