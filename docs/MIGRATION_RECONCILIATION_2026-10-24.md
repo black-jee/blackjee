@@ -139,11 +139,20 @@ The daily-challenge authoring guard checks live-solution completeness and option
 
 ## Latest complete CI verification (2026-10-25)
 
-The latest inspected GitHub Actions run is [run 40153871492](https://github.com/black-jee/blackjee/actions/runs/40153871492), on commit `8aa9833999c6b5e15dca1ded3c4d3395bcc273f7`. Both jobs completed successfully.
+The latest inspected GitHub Actions run is [run 40154165240](https://github.com/black-jee/blackjee/actions/runs/40154165240), on commit `e41759c1ad47429d44a1ea1982b514db0a943db3`. Both jobs completed successfully.
 
-- **Disposable database reconstruction/replay: PASS.** All 24 job steps completed successfully, including reconstructed catalog/RLS/RPC/grant assertions, mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, the mock-test response question index, application security regression assertions, and RPC authorization-denial tests.
+- **Disposable database reconstruction/replay: PASS.** Catalog/RLS/RPC/grant assertions, mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, the mock-test response question index, application security regression assertions, and RPC authorization-denial tests all passed.
 - **Quality job: PASS.** Static security checks, `npm ci`, production dependency vulnerability audit, lint, typecheck, unit tests, Playwright end-to-end tests, Prettier formatting, and the production build all passed.
 - **Dependency audit scope:** `npm audit --omit=dev --audit-level=high` checks production dependencies and fails on high/critical findings. It does not claim that every development dependency or every lower-severity advisory is absent.
-- **Scope boundary:** these checks run in CI/disposable infrastructure. They do not recover the missing historical migration bodies, prove exact equivalence to production, or substitute for real Supabase-issued user-token tests.
 
-PR #2 remains open and draft. No production SQL or migration was applied, no paid infrastructure was created, and no JEE question/answer/solution content was added.
+## Read-only production recheck (2026-10-25)
+
+A fresh read-only Supabase check confirmed the live migration ledger still contains 20 applied versions. The seven ledger entries without same-version SQL bodies and the two repository-only migration files remain unresolved; no migration repair or production DDL was run.
+
+The live `public.admin_save_daily_challenge` definition fingerprint remains `ebdff78aa677719515c9e500fc576562`, which differs from the branch's forward-only hardening definition. Therefore the new authoring-integrity guard and mock-test response index are **not verified as applied to production**. This is expected: they were tested only in the disposable CI database. The read-only check also confirmed the reviewed admin RPCs retain `SECURITY DEFINER`, an empty `search_path`, no `anon` execute grant, and an `authenticated` execute grant.
+
+## Boundaries and next gate
+
+This green CI run verifies committed source checks and the disposable PostgreSQL reconstruction. It does not recover the missing historical migration bodies, prove production migration-chain replay, establish full equivalence with the live catalog, or replace real Supabase-issued user-token tests.
+
+PR #2 remains open, draft, and unmerged. No production SQL or migration repair was performed, no paid infrastructure was created, and no JEE question/answer/solution content was added.
