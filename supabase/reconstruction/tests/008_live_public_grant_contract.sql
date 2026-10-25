@@ -29,14 +29,39 @@ BEGIN
     END LOOP;
   END LOOP;
 
-  -- Attempt rows are table-readable only to authenticated users; RLS must still
-  -- constrain those reads to the owning user.
-  IF NOT has_table_privilege('authenticated', 'public.daily_challenge_attempts', 'SELECT')
-     OR NOT has_table_privilege('authenticated', 'public.mock_test_attempts', 'SELECT')
-     OR has_table_privilege('anon', 'public.daily_challenge_attempts', 'SELECT')
-     OR has_table_privilege('anon', 'public.mock_test_attempts', 'SELECT') THEN
-    RAISE EXCEPTION 'Attempt table SELECT privilege boundary changed';
-  END IF;
+  -- Exact effective table-level privilege matrix for all four public tables.
+  -- PYQ and challenge schedule reads intentionally use column grants, not a
+  -- table-level SELECT grant. Attempt rows are readable only to authenticated
+  -- users, with RLS still constraining reads to the owning user.
+  FOR r IN
+    SELECT * FROM (VALUES
+      ('anon', 'daily_challenge_attempts', false, false, false, false, false, false, false),
+      ('anon', 'daily_challenges', false, false, false, false, false, false, false),
+      ('anon', 'jee_pyq_questions', false, false, false, false, false, false, false),
+      ('anon', 'mock_test_attempts', false, false, false, false, false, false, false),
+      ('authenticated', 'daily_challenge_attempts', true, false, false, false, false, false, false),
+      ('authenticated', 'daily_challenges', false, true, true, true, false, false, false),
+      ('authenticated', 'jee_pyq_questions', false, true, true, true, false, false, false),
+      ('authenticated', 'mock_test_attempts', true, false, false, false, false, false, false),
+      ('service_role', 'daily_challenge_attempts', true, true, true, true, true, true, true),
+      ('service_role', 'daily_challenges', true, true, true, true, true, true, true),
+      ('service_role', 'jee_pyq_questions', true, true, true, true, true, true, true),
+      ('service_role', 'mock_test_attempts', true, true, true, true, true, true, true)
+    ) AS expected(role_name, table_name, sel, ins, upd, del, trunc, refs, trig)
+  LOOP
+    IF (has_table_privilege(r.role_name, format('public.%I', r.table_name), 'SELECT'),
+        has_table_privilege(r.role_name, format('public.%I', r.table_name), 'INSERT'),
+        has_table_privilege(r.role_name, format('public.%I', r.table_name), 'UPDATE'),
+        has_table_privilege(r.role_name, format('public.%I', r.table_name), 'DELETE'),
+        has_table_privilege(r.role_name, format('public.%I', r.table_name), 'TRUNCATE'),
+        has_table_privilege(r.role_name, format('public.%I', r.table_name), 'REFERENCES'),
+        has_table_privilege(r.role_name, format('public.%I', r.table_name), 'TRIGGER'))
+       IS DISTINCT FROM
+       (r.sel, r.ins, r.upd, r.del, r.trunc, r.refs, r.trig) THEN
+      RAISE EXCEPTION 'Table-level privilege matrix changed for role %, table %',
+        r.role_name, r.table_name;
+    END IF;
+  END LOOP;
 
   -- Authenticated authoring writes remain granted at the table level and gated
   -- by the reviewed admin-only RLS policies. Anonymous writes are never allowed.
@@ -64,12 +89,44 @@ BEGIN
     RAISE EXCEPTION 'Unexpected browser-role write privilege on a public table';
   END IF;
 
+  -- Exact schema-level access for browser and service roles.
   IF NOT has_schema_privilege('anon', 'public', 'USAGE')
      OR NOT has_schema_privilege('authenticated', 'public', 'USAGE')
+     OR NOT has_schema_privilege('service_role', 'public', 'USAGE')
      OR has_schema_privilege('anon', 'public', 'CREATE')
-     OR has_schema_privilege('authenticated', 'public', 'CREATE') THEN
-    RAISE EXCEPTION 'Public schema usage/create privilege boundary changed';
+     OR has_schema_privilege('authenticated', 'public', 'CREATE')
+     OR has_schema_privilege('service_role', 'public', 'CREATE')
+     OR has_schema_privilege('anon', 'private', 'USAGE')
+     OR has_schema_privilege('authenticated', 'private', 'USAGE')
+     OR has_schema_privilege('service_role', 'private', 'USAGE')
+     OR has_schema_privilege('anon', 'private', 'CREATE')
+     OR has_schema_privilege('authenticated', 'private', 'CREATE')
+     OR has_schema_privilege('service_role', 'private', 'CREATE') THEN
+    RAISE EXCEPTION 'Schema usage/create privilege boundary changed';
   END IF;
+
+  -- Private tables remain inaccessible directly to all browser/service roles;
+  -- privileged access is intentionally mediated by reviewed SECURITY DEFINER RPCs.
+  FOR r IN
+    SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = 'private' AND table_type = 'BASE TABLE'
+  LOOP
+    IF has_table_privilege('anon', format('private.%I', r.table_name), 'SELECT')
+       OR has_table_privilege('anon', format('private.%I', r.table_name), 'INSERT')
+       OR has_table_privilege('anon', format('private.%I', r.table_name), 'UPDATE')
+       OR has_table_privilege('anon', format('private.%I', r.table_name), 'DELETE')
+       OR has_table_privilege('authenticated', format('private.%I', r.table_name), 'SELECT')
+       OR has_table_privilege('authenticated', format('private.%I', r.table_name), 'INSERT')
+       OR has_table_privilege('authenticated', format('private.%I', r.table_name), 'UPDATE')
+       OR has_table_privilege('authenticated', format('private.%I', r.table_name), 'DELETE')
+       OR has_table_privilege('service_role', format('private.%I', r.table_name), 'SELECT')
+       OR has_table_privilege('service_role', format('private.%I', r.table_name), 'INSERT')
+       OR has_table_privilege('service_role', format('private.%I', r.table_name), 'UPDATE')
+       OR has_table_privilege('service_role', format('private.%I', r.table_name), 'DELETE') THEN
+      RAISE EXCEPTION 'Unexpected direct privilege on private table %', r.table_name;
+    END IF;
+  END LOOP;
 END;
 $test$;
 
