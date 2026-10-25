@@ -136,3 +136,15 @@ New forward-only hardening files present on the working branch:
 - `supabase/migrations/20261025120000_add_mock_test_response_question_id_index.sql`
 
 The daily-challenge authoring guard checks live-solution completeness and option integrity at the database boundary. The solution-release behavior remains unchanged: after its configured release timestamp, the RPC releases the answer and worked solution to authenticated callers. Whether release should additionally require a submitted attempt remains an unresolved product/security decision; do not change this behavior without confirming the intended access rule.
+
+
+## Latest complete CI verification (2026-10-25)
+
+The latest inspected GitHub Actions run is [run 40153871492](https://github.com/black-jee/blackjee/actions/runs/40153871492), on commit `8aa9833999c6b5e15dca1ded3c4d3395bcc273f7`. Both jobs completed successfully.
+
+- **Disposable database reconstruction/replay: PASS.** All 24 job steps completed successfully, including reconstructed catalog/RLS/RPC/grant assertions, mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, the mock-test response question index, application security regression assertions, and RPC authorization-denial tests.
+- **Quality job: PASS.** Static security checks, `npm ci`, production dependency vulnerability audit, lint, typecheck, unit tests, Playwright end-to-end tests, Prettier formatting, and the production build all passed.
+- **Dependency audit scope:** `npm audit --omit=dev --audit-level=high` checks production dependencies and fails on high/critical findings. It does not claim that every development dependency or every lower-severity advisory is absent.
+- **Scope boundary:** these checks run in CI/disposable infrastructure. They do not recover the missing historical migration bodies, prove exact equivalence to production, or substitute for real Supabase-issued user-token tests.
+
+PR #2 remains open and draft. No production SQL or migration was applied, no paid infrastructure was created, and no JEE question/answer/solution content was added.
