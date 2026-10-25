@@ -27,19 +27,9 @@ Record the exact recovery checks performed for the BLACK-JEE Supabase migration 
 
 These checks do not search private repositories, local device folders, unuploaded archives, backups, deployment artifacts, or other collaborators' clones. A no-result code search is not proof that no copy exists elsewhere.
 
-## Optional local recovery check (Termux / Android)
+## Local-device recovery scope
 
-If an older clone or downloaded archive may exist on the owner's device, run these read-only commands in Termux. They only print matching paths; they do not edit or upload files.
-
-```sh
-# Search Termux home for the exact missing migration filenames.
-find "$HOME" -type f \( -name '20261024080824*' -o -name '20261024080924*' -o -name '20261024081041*' -o -name '20261024081337*' -o -name '20261024081603*' -o -name '20261024081731*' -o -name '20261024112132*' \) -print 2>/dev/null
-
-# If Android shared storage permission was already granted, search Downloads too.
-find "$HOME/storage/shared/Download" -type f \( -iname '*.zip' -o -iname '*.tar' -o -iname '*.tar.gz' -o -iname '*.tgz' -o -iname '*.7z' -o -name '20261024*.sql' \) -print 2>/dev/null
-```
-
-If the shared Download folder does not exist, do not change permissions just for this check; run `termux-setup-storage` only if the owner chooses to grant Termux shared-storage access. Inspect candidate archives before extracting them, and do not upload secrets or `.env` files. A matching filename is only a candidate: compare SQL content and provenance before treating it as original history.
+No Termux or owner-device commands are required for this workflow. This session cannot inspect files stored only on the owner's phone, local clone, or private backup, so that evidence remains unavailable unless it is later attached or made accessible through an approved integration. Continue repository-side and database-side checks without asking the owner to run shell commands.
 
 ## Repository/ledger count recheck — 2026-10-25
 
@@ -82,3 +72,20 @@ The live version `20261024112132` must not be replaced by either local-only file
 ## Next actionable recovery input
 
 The highest-value next input is an archive, old clone, Termux folder, or backup containing the original `supabase/migrations/` files. Until one is found or a reconstruction is explicitly separated and reviewed, preserve the live migration ledger and do not run `db reset`, `migration repair`, or ad hoc DDL against the target.
+
+
+## Read-only recovery recheck — 2026-10-25
+
+- **Live ledger:** a fresh Supabase migration-list read returned 20 applied versions. The seven missing source bodies remain ledger entries, not reconstructed SQL.
+- **Repository migration directory:** a fresh GitHub API directory listing on `chore/schema-reconstruction` returned 19 SQL files. Comparison with the live version/name list confirms 13 exact matches, seven live versions without matching SQL files, and six repository-only SQL files.
+- **Path-specific Git history:** queried GitHub commit history for each of the seven exact missing paths on this repository. The API returned zero commits for all seven:
+  - `20261024080824_foundation_schema.sql`
+  - `20261024080924_tighten_rpc_grants_and_policy.sql`
+  - `20261024081041_daily_solution_release_rpc.sql`
+  - `20261024081337_numeric_answers_and_admin_review.sql`
+  - `20261024081603_secure_daily_attempt_sessions.sql`
+  - `20261024081731_restrict_anon_rpc_execution.sql`
+  - `20261024112132_require_pyq_source_page_before_publish.sql`
+- **Interpretation:** this establishes that the current public repository path history does not contain these exact files. It does not prove that originals do not exist in private backups, other repositories, local clones, or deployment artifacts. Do not infer SQL from migration names or catalog state and label it original.
+- **CI reference:** [run 40166741350](https://github.com/black-jee/blackjee/actions/runs/40166741350) passed both quality and disposable PostgreSQL reconstruction jobs on commit `bb0d19bb58e09c7dba41892a7d0c571d08155579`. A documentation-only follow-up commit is separately queued for CI; it is not yet verified.
+- **Safety:** all database checks in this recheck were read-only. No migration was applied or repaired, no database rows or schema were changed, no JEE content was added, no paid infrastructure was created, and PR #2 remains draft/unmerged.
