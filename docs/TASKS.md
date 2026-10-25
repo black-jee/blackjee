@@ -110,7 +110,6 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **External deployment:** Vercel's build-rate-limit/upgrade blocker is separate from green repository CI. No paid infrastructure is authorized.
 - **Next:** continue free, evidence-backed search for the exact historical migration bodies; meanwhile design real signed-token/authenticated-client tests only with isolated test credentials and fixtures. Do not mutate production Supabase, invent historical SQL or JEE content, or merge PR #2.
 
-
 ### Latest continuation checkpoint — 2026-10-26 (formatting follow-up after CI #713)
 
 - Current documentation HEAD after formatting-only corrections: `5d6219a734b918e78552f9cb4052316d358043a2`; preceding task-ledger formatting correction: `87436e42dadf1b0e041ffb5f5b3bd5dc63b4a660`.
