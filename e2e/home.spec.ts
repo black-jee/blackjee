@@ -25,3 +25,14 @@ test("sign-in page exposes accessible email and password controls", async ({ pag
     "/auth/reset-password",
   );
 });
+
+test("password-reset page explains the neutral recovery response", async ({ page }) => {
+  await page.goto("/auth/reset-password");
+  await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
+  await expect(
+    page.getByText(/show a neutral confirmation so account existence is not disclosed/i),
+  ).toBeVisible();
+  await expect(page.getByLabel("Email address")).toHaveAttribute("type", "email");
+  await expect(page.getByRole("button", { name: "Send reset link" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Back to sign in" })).toHaveAttribute("href", "/login");
+});
