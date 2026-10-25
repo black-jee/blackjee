@@ -301,3 +301,13 @@ This count-level parity is a useful consistency check, not an exact definition-l
 - **Fresh live read-only check:** ledger count remains 20; live function MD5 still matches the captured baseline. The PYQ option-label trigger is absent, and no standalone `private.mock_test_responses(question_id)` index is present. The related branch migrations have not been applied to production.
 - **Scope limitation:** this closes the identified mismatch for one RPC and proves the disposable replay path is green. It does not resolve seven missing historical migration bodies, repository-only migration files, full catalog/grant/policy parity, or real Supabase-issued JWT testing.
 - **Safety:** no live DDL, grant changes, row changes, migration-ledger repair, content publication, paid infrastructure, or PR merge occurred.
+
+
+## Fresh read-only privileged-RPC catalog fingerprint check — 2026-10-25
+
+A new read-only query checked all 11 reviewed public privileged RPCs against the fingerprints already recorded in the reconstruction security assertions.
+
+- **Definition fingerprints:** 11 of 11 live function MD5 fingerprints match the recorded expected values, including `admin_save_daily_challenge` at `ebdff78aa677719515c9e500fc576562`.
+- **Common function attributes observed:** all 11 are `SECURITY DEFINER`, pin `search_path` to the empty string, deny `anon` EXECUTE, and allow `authenticated` and `service_role` EXECUTE.
+- **Interpretation:** this confirms the reviewed function-definition snapshots and the recorded privilege shape for this specific 11-function set. It is not a full database catalog diff and does not validate authorization with real Supabase-issued tokens.
+- **Unchanged deployment boundary:** the branch-only NULL-input guard, PYQ option-label trigger, daily-challenge authoring hardening, and mock-response question index remain unverified as production-applied. No migration was run and no live object was modified.
