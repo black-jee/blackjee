@@ -81,7 +81,7 @@ The applied version `20261024112132` and the two publication-gate files with dif
 
 ## Recovery and replay gate
 
-1. Continue searching authoritative Git history, uploaded source archives, backups, or captured migration artifacts for the two remaining missing bodies. The current repository's code-index search did not find the six baseline identifiers or `20261024112132`.
+1. Continue searching authoritative Git history, uploaded source archives, backups, or captured migration artifacts for the two remaining missing bodies. The current repository's code-index search did not find the two remaining unresolved identifiers (`20261024081337` and `20261024112132`).
 2. If original bodies cannot be recovered, author a separately labelled **reconstructed baseline** from verified live object definitions. Do not label reconstructed SQL as original history.
 3. Capture a complete target snapshot: schemas and ACLs, tables/columns, defaults, constraints, indexes, RLS policies, table/column/sequence grants, full function definitions/owners/configuration/ACLs, triggers, extensions, and storage configuration.
 4. Reconcile the two local-only files and the applied `112132` version before preparing a canonical ordered replay chain.

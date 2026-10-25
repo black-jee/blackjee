@@ -1,21 +1,9 @@
-## Latest checkpoint — 2026-10-26 (CI run #671 green)
+## Latest checkpoint — 2026-10-26 (CI #677 green; five migration bodies recovered)
 
-- **Verified HEAD:** `8b6d0c0552e071bce08da81b0aa7baa7f9f73e64` (`docs: align project records with green CI run 670`).
-- **CI:** [run #671 / 40218443473](https://github.com/black-jee/blackjee/actions/runs/40218443473) passed both `quality` and `reconstruction-replay` on that HEAD. The formatting check and production build are included in the green quality job.
-- **Vercel:** the GitHub status for this SHA reports success, “Deployment has completed.” This is a deployment status only; a live runtime/browser smoke test remains unverified.
-- **PR #2:** open, draft, unmerged. Its verification section cites run #671. Do not merge.
-- **Migration evidence rechecked:** live Supabase ledger returns 20 versions; repository contains 19 SQL migration files, 13 exact version/name matches, seven applied versions without same-version bodies, and six repository-only SQL files. Supabase development branches list is empty. Exact code/commit searches so far have not recovered the seven missing bodies.
-- **Next:** continue free source recovery and improve the mismatch inventory without inventing historical SQL. No production schema/data/grants/ledger mutations, paid branch/project, or question/answer content creation.
-- **Release gates:** real Supabase-issued JWT and full authenticated student/admin tests, content/image reconciliation, Storage policy/bucket review, staging/runtime/rollback review remain incomplete.
-
-## Current reconstruction checkpoint — 2026-10-25 (CI run #670 green)
-
-- **CI verification:** run [#670 / 40218123225](https://github.com/black-jee/blackjee/actions/runs/40218123225) passed both `quality` and `reconstruction-replay` on `a6e4608fac26f60786c9753cbf5947973aed8e77`. The actual Prettier diff was applied to `tests/mock-test-action-auth.test.ts`; formatting and build passed.
-- **PR follow-up:** PR #2 verification section now cites run #668; the PR remains draft/open/unmerged.
-- **BJ-DB-001:** remains **IN_PROGRESS/BLOCKED on source recovery**. Do not fabricate the seven missing applied migration bodies or reconcile the six repo-only migration files by mutating production history.
-- **Next project priority after PR metadata:** continue free source/history recovery and reviewed no-cost isolated replay planning; no paid Supabase branch/project, production migration changes, or invented content.
-- **Release gates remain:** real Supabase-issued JWT/authenticated student-admin tests, full content/image review, deployment/runtime and rollback verification.
-- **Safety:** PR #2 must remain draft and unmerged; no production Supabase mutations or paid resources.
+- **Verified commit:** `f40883f0b5f913843bc388ece559c23ae18e65f0`; CI [#677 / 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) passed both `quality` and `reconstruction-replay`.
+- **Migration status:** five exact-version bodies restored from `blackjee-foundation.zip`; current inventory is 20 live versions, 24 repository SQL files, 18 exact matches, two unresolved applied bodies, and six repository-only files.
+- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive only has similar-purpose version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`.
+- **Safety:** no production schema/data/grant/ledger mutation, paid resources, or question content import. PR #2 remains draft and unmerged.
 
 # BLACK-JEE task ledger
 
@@ -39,12 +27,12 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **Evidence:** read-only catalog review is recorded in [`docs/SECURITY_DEFINER_REVIEW_2026-10-24.md`](./SECURITY_DEFINER_REVIEW_2026-10-24.md). Eleven public SECURITY DEFINER functions are owned by `postgres`, pin an empty `search_path`, and have no anonymous execute grant. The three admin RPCs check server-managed `app_metadata.role = admin`; direct SELECT/INSERT checks for the five private answer/session tables deny `anon`, `authenticated`, and `service_role`. Existing SQL catalog contract assertions passed previously, but authenticated cross-user and release-boundary runtime tests remain unverified.
 - **Next:** add isolated tests proving student A cannot read, resume, submit, or retrieve results for student B; verify anonymous denial, ordinary-user admin denial, and daily-solution/PYQ release boundaries. Do not mutate production data or publish test content.
 
-### BJ-DB-001 — Recover and reconcile the seven missing applied migration bodies
+### BJ-DB-001 — Recover and reconcile the two remaining missing applied migration bodies
 
 - **Status:** IN_PROGRESS
 - **Acceptance:** clean isolated database replay reproduces target schema, constraints, grants, RLS, functions, and indexes; diff against live target reviewed.
-- **Risk:** seven applied migration bodies are missing from the repository (six baseline bodies plus the later `20261024112132` body); live history has 20 versions. Repository migration directory has version drift: live `20261024112132_require_pyq_source_page_before_publish` is missing while `20261024112500` and `20261024120000` files are not recorded as applied.
-- **Evidence:** read-only comparison documented in [`docs/MIGRATION_RECONCILIATION.md`](./MIGRATION_RECONCILIATION.md); public columns, constraints/FKs, RLS, public policies, table grants, partial routine definitions/ACLs, private tables, triggers and storage bucket/policy counts inspected. No app triggers, private-schema policies or storage buckets were found. The reference repo has a different migration sequence and is not authoritative for the seven missing versioned bodies. Recovery checks are recorded in [`docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`](./MIGRATION_RECOVERY_SEARCH_2026-10-24.md); checked public repository path history and indexed code searches found no originals. Latest CI run [40101661444](https://github.com/black-jee/blackjee/actions/runs/40101661444) and GitHub Pages run [40101661202](https://github.com/black-jee/blackjee/actions/runs/40101661202) both passed on HEAD `ffc1437b1381bb000c6a1417210e9891182509a0`. This confirms configured CI and Pages workflow status only; production deployment linkage and database replay remain unverified.
+- **Risk:** two applied migration bodies remain missing after five exact-version bodies were restored from the Library archive; live history has 20 versions and the repository now has 24 SQL files (18 exact matches). Repository migration directory has version drift: live `20261024112132_require_pyq_source_page_before_publish` is missing while `20261024112500` and `20261024120000` files are not recorded as applied.
+- **Evidence:** read-only comparison documented in [`docs/MIGRATION_RECONCILIATION.md`](./MIGRATION_RECONCILIATION.md); public columns, constraints/FKs, RLS, public policies, table grants, partial routine definitions/ACLs, private tables, triggers and storage bucket/policy counts inspected. No app triggers, private-schema policies or storage buckets were found. Five bodies have been restored byte-for-byte from `blackjee-foundation.zip`; the remaining unresolved versions are `20261024081337` and `20261024112132`. The archive's `20261024081110` file is not treated as the `20261024081337` original. Recovery checks and exact blob IDs are recorded in [`docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`](./MIGRATION_RECOVERY_SEARCH_2026-10-24.md). Latest CI run [40101661444](https://github.com/black-jee/blackjee/actions/runs/40101661444) and GitHub Pages run [40101661202](https://github.com/black-jee/blackjee/actions/runs/40101661202) both passed on HEAD `ffc1437b1381bb000c6a1417210e9891182509a0`. This confirms configured CI and Pages workflow status only; production deployment linkage and database replay remain unverified.
 - **Next:** continue free Git-history/artifact recovery and investigate no-cost isolated replay options (for example, a temporary PostgreSQL service in GitHub Actions if a reviewed replayable chain can be assembled). Owner has stated they cannot afford a paid branch; do not create any billable Supabase branch/project. If original bodies cannot be recovered, label reconstructed equivalents explicitly and compare schema/security behavior in isolation. Never reset or alter the target project.
 
 ## P1 — critical workflows and deployment confidence

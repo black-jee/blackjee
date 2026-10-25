@@ -1,3 +1,11 @@
+## 2026-10-26 — CI run #677 green after recovery-document formatting repair
+
+- **Commit tested:** `f40883f0b5f913843bc388ece559c23ae18e65f0`.
+- **GitHub Actions:** [run 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully. Formatting, 22 Playwright checks, production build, and disposable PostgreSQL replay passed.
+- **Recovery milestone:** five exact-version SQL migration bodies were restored in parent commit `0d194fd54667d22ae118ad09bfd11af482ad4293` from Library archive `blackjee-foundation.zip`; their Git blob IDs match the archive bytes. See the recovery log for all hashes.
+- **Current inventory:** 20 live versions; 24 repository SQL files; 18 exact matches; two applied bodies unresolved; six repository-only files. The unresolved bodies are `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- **Safety:** no production database/ledger changes, paid infrastructure, or question/answer content import. Full original-chain replay remains blocked.
+
 ## 2026-10-26 — CI run #671 green on current verified HEAD
 
 - **Commit tested:** `8b6d0c0552e071bce08da81b0aa7baa7f9f73e64` (`docs: align project records with green CI run 670`).

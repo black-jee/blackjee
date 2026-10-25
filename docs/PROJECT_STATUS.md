@@ -1,12 +1,12 @@
-## Latest checkpoint — 2026-10-26 (CI run #671 green)
+## Latest checkpoint — 2026-10-26 (CI #677 green; five migration bodies recovered)
 
-- **Verified HEAD:** `8b6d0c0552e071bce08da81b0aa7baa7f9f73e64` (`docs: align project records with green CI run 670`).
-- **CI:** [run #671 / 40218443473](https://github.com/black-jee/blackjee/actions/runs/40218443473) passed both `quality` and `reconstruction-replay` on that HEAD. The formatting check and production build are included in the green quality job.
-- **Vercel:** the GitHub status for this SHA reports success, “Deployment has completed.” This is a deployment status only; a live runtime/browser smoke test remains unverified.
-- **PR #2:** open, draft, unmerged. Its verification section cites run #671. Do not merge.
-- **Migration evidence rechecked:** live Supabase ledger returns 20 versions; repository contains 19 SQL migration files, 13 exact version/name matches, seven applied versions without same-version bodies, and six repository-only SQL files. Supabase development branches list is empty. Exact code/commit searches so far have not recovered the seven missing bodies.
-- **Next:** continue free source recovery and improve the mismatch inventory without inventing historical SQL. No production schema/data/grants/ledger mutations, paid branch/project, or question/answer content creation.
-- **Release gates:** real Supabase-issued JWT and full authenticated student/admin tests, content/image reconciliation, Storage policy/bucket review, staging/runtime/rollback review remain incomplete.
+- **Verified commit:** `f40883f0b5f913843bc388ece559c23ae18e65f0`; CI [#677 / 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) passed both `quality` and `reconstruction-replay`.
+- **Migration recovery:** five exact-version SQL bodies were restored from `blackjee-foundation.zip`; archived bytes and Git blob IDs match exactly. See `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
+- **Current inventory:** 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies still missing, and six repository-only files.
+- **Remaining unresolved bodies:** `20261024081337_numeric_answers_and_admin_review` (only similar-purpose `20261024081110` archive file found) and `20261024112132_require_pyq_source_page_before_publish`. Do not rename near-matches or invent SQL.
+- **Vercel:** GitHub status reports deployment completed; live runtime/browser smoke test remains unverified.
+- **PR #2:** open, draft, unmerged. Refresh its verification section after the next green CI run. Do not merge.
+- **Safety:** no production schema/data/grant/migration-ledger changes, paid resources, or JEE question/answer import.
 
 ## Reconstruction checkpoint — 2026-10-25 (CI run #670 green)
 
@@ -26,7 +26,7 @@
 
 - **New GitHub repository:** `black-jee/blackjee`, public, default branch `main`
 - **New Supabase:** `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region
-- **Supabase migrations:** last read-only inventory found 20 applied entries and 19 repository SQL migration files (excluding README); 13 exact version/name matches, seven live versions without same-version SQL bodies, and six repository files absent from the live ledger. See the dated reconciliation below; no migration history was repaired
+- **Supabase migrations:** latest read-only inventory found 20 applied entries and 24 repository SQL migration files (excluding README); 18 exact version/name matches, two live versions without same-version SQL bodies, and six repository files absent from the live ledger. See the dated reconciliation below; no migration history was repaired
 - **Supabase data:** 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported
 - **Supabase tables:** 9 inspected public/private tables; no student attempts or mock-test attempts
 - **Reconstruction replay:** latest verified green run [40212864662](https://github.com/black-jee/blackjee/actions/runs/40212864662) (CI run #645) passed both `quality` and `reconstruction-replay` on commit `f866dbfd17e75ff760d3c967b4eee9beeee1bad0` (2026-10-25). Quality includes dependency audit, lint, typecheck, 44 unit tests, seven Python asset-import safety tests, 22 Playwright browser checks across desktop/mobile, formatting and production build. Browser coverage includes anonymous redirects from `/admin` and `/admin/pyq`, a safe unauthenticated profile prompt, and a missing OAuth callback-code case with an external `next` parameter. Safe-redirect unit tests reject protocol-relative/triple-slash, backslash-based, external-URL, and `javascript:` destinations. The legacy asset importer requires explicit opt-in before writing public assets, rejects unsafe/cross-platform paths, ambiguous duplicate image basenames, oversized images, and missing references before copying; it validates report/destination containment and has seven passing safety tests. Disposable PostgreSQL replay includes synthetic RPC authorization/input-validation checks, including cross-user daily-challenge session submission. This is not proof of exact historical migration equivalence or real Supabase-issued JWT/Auth parity.

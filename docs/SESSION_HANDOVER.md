@@ -9,26 +9,22 @@
 
 ## Latest verified state
 
-- Current reconstruction PR #2 HEAD: `a6e4608fac26f60786c9753cbf5947973aed8e77` (`docs: track checkpoint reconciliation commit`). CI run #670 ([40218123225](https://github.com/black-jee/blackjee/actions/runs/40218123225)) passed both `quality` and `reconstruction-replay`. Run #666 separately confirmed the Prettier correction in `tests/mock-test-action-auth.test.ts`. PR #2 verification description now cites run #670; PR remains draft/open/unmerged.
-
-- Latest observed `main` HEAD: [`185a0ec9`](https://github.com/black-jee/blackjee/commit/185a0ec9612130980f96caa865df25daaebb31e2) — `docs: correct foundation audit migration counts`.
-- CI run [40103159838](https://github.com/black-jee/blackjee/actions/runs/40103159838) passed on that commit. GitHub Pages workflow [40103159334](https://github.com/black-jee/blackjee/actions/runs/40103159334) also passed. These verify repository workflows only, not Vercel production runtime.
-- The previous docs commit `73f7609d` also passed CI [40103034856](https://github.com/black-jee/blackjee/actions/runs/40103034856) and Pages [40103034659](https://github.com/black-jee/blackjee/actions/runs/40103034659).
-- Supabase migration history contains 20 applied versions. Seven applied SQL bodies are missing from the repository: six baseline bodies and `20261024112132_require_pyq_source_page_before_publish`.
-- Repository has 15 migration files, 13 exact filename/version matches, and two local-only files (`20261024112500`, `20261024120000`) not recorded as applied in the live history. Do not treat either local-only file as the missing `20261024112132` original.
-- Public repository indexed searches and exact-path Git history checks did not recover the seven missing originals. The older reference repository `bhavishyacodz/BLACK-JEE` has a different schema and migration lineage; it is not authoritative for reconstruction.
-- Latest read-only Supabase advisor scan (observed 2026-10-24 around 14:39 UTC) reported five informational private-table RLS/no-policy notices, eleven authenticated SECURITY DEFINER warnings, one informational unindexed FK (`private.mock_test_responses.question_id`), and seven informational unused-index suggestions. These findings need contextual review; do not blanket-revoke RPCs or drop indexes.
-- The owner has no budget for paid infrastructure: **do not create a Supabase branch/project or incur infrastructure charges**.
-- No production DDL, migration apply/repair, reset, row mutation, question publication, or paid infrastructure creation was performed during this work.
+- Current PR #2 HEAD: `f40883f0b5f913843bc388ece559c23ae18e65f0`; CI [#677 / 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) passed both `quality` and `reconstruction-replay`.
+- Five missing applied migration bodies were recovered byte-for-byte from Library archive `blackjee-foundation.zip` and restored under their exact versioned filenames. Hashes and provenance are in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
+- Current inventory: 20 live migration versions; 24 repository SQL files; 18 exact filename/version matches; two applied bodies remain missing; six repository-only files remain absent from live history.
+- Unresolved: `20261024081337_numeric_answers_and_admin_review` (archive only has near-match version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Do not relabel either near-match.
+- Vercel GitHub status reports deployment completed for the current commit; live runtime/browser smoke test remains unverified.
+- PR #2 remains draft/open/unmerged. Refresh PR verification after the next green CI run. No production schema/data/grants/migration-history changes or paid infrastructure were used.
 
 ## Current work and blockers
 
 ### BJ-DB-001 — migration recovery and replay
 
-- Inventory and recovery evidence: `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_CHAIN_INVENTORY.md`, `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, and `docs/FOUNDATION_AUDIT_2026-10-24.md`.
-- Current state: historical SQL recovery remains blocked; clean replay remains unverified. Do not run `supabase db reset`, `migration repair`, or ad hoc DDL against the target.
-- The safe path is to recover original SQL from owner-controlled local folders, older clones, archives, or backups. If unavailable, separately label reconstructed equivalents and compare them against read-only catalog evidence.
-- Do not assemble a temporary replay workflow until the canonical migration sequence is replayable. Once it is, use a disposable PostgreSQL service in GitHub Actions with no production credentials and no paid Supabase resources.
+- Current evidence: `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_CHAIN_INVENTORY.md`, `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, and `docs/VERIFICATION_LOG.md`.
+- Five exact-version SQL bodies have been restored from `blackjee-foundation.zip`; blob IDs match the archive byte-for-byte.
+- Two applied bodies remain missing: `20261024081337_numeric_answers_and_admin_review` (archive has a different-version near-match only) and `20261024112132_require_pyq_source_page_before_publish`.
+- Clean original-chain replay remains blocked. Do not run `supabase db reset`, `migration repair`, or ad hoc DDL against the target.
+- Continue source recovery from archives/history and compare recovered bodies to live catalog evidence. Any inferred baseline must be separately labelled; no production ledger or schema mutation is authorized.
 
 ### Security and authenticated journeys
 
