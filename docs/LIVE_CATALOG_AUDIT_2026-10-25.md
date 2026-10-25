@@ -11,16 +11,16 @@
 
 | Object | Count / result |
 |---|---:|
-| Tables in `public` and `private` | 9 |
-| Columns across those tables | 93 |
+| Tables | 9 |
+| Columns | 93 |
 | Constraints | 49 |
 | Indexes | 23 |
 | RLS policies | 10 |
 | Functions | 12 |
-| `SECURITY DEFINER` functions | 11 |
-| Tables with RLS enabled | 9 of 9 |
-| Tables with FORCE ROW LEVEL SECURITY | 0 of 9 |
-| Definer functions with non-empty or unset `search_path` in the query | 0 |
+| Definer functions | 11 |
+| RLS-enabled tables | 9 of 9 |
+| FORCE RLS tables | 0 of 9 |
+| Non-empty definer `search_path` | 0 |
 
 Counts are useful inventory checks only; they do not establish definition-level equivalence.
 
