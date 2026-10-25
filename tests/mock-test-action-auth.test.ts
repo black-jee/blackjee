@@ -10,7 +10,9 @@ const mockTestActions = readFileSync(
 describe("mock-test server action authentication contract", () => {
   it("derives the caller from Supabase's verified user session", () => {
     expect(mockTestActions).toMatch(/supabase\.auth\.getUser\(\)/);
-    expect(mockTestActions).toMatch(/if\s*\(error\s*\|\|\s*!data\.user\)\s*return\s*\{\s*supabase,\s*userId:\s*null\s*\}/);
+    expect(mockTestActions).toContain(
+      "if (error || !data.user) return { supabase, userId: null }",
+    );
     expect(mockTestActions).not.toMatch(/auth\.getSession\(\)/);
   });
 
@@ -18,7 +20,7 @@ describe("mock-test server action authentication contract", () => {
     ["startMockTest", "start_mock_test", "Sign in to start a mock test."],
     ["resumeMockTest", "resume_mock_test", "Sign in to resume this test."],
     ["submitMockTest", "submit_mock_test", "Sign in to submit this test."],
-  ])("%s rejects unauthenticated callers before invoking %s", (action, rpc, message) => {
+  ])("%s rejects unauthenticated callers before calling %s", (action, rpc, message) => {
     const start = mockTestActions.indexOf(`export async function ${action}(`);
     expect(start, `${action} should be exported`).toBeGreaterThanOrEqual(0);
 
