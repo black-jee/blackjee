@@ -75,9 +75,9 @@ describe("PYQ authoring schema", () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error.issues.some((issue) => issue.message === "Option IDs must be unique.")).toBe(
-        true,
-      );
+      expect(
+        result.error.issues.some((issue) => issue.message === "Option IDs must be unique."),
+      ).toBe(true);
     }
   });
 
