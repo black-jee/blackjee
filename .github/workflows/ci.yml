@@ -27,6 +27,8 @@ jobs:
       - name: Fast static security contract checks
         run: node scripts/check-security-contracts.mjs
       - run: npm ci
+      - name: Audit production dependency vulnerabilities
+        run: npm audit --omit=dev --audit-level=high
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test
