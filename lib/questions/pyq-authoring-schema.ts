@@ -36,6 +36,15 @@ export const questionSchema = z
     reviewNotes: z.array(z.string().trim().min(1).max(1000)).max(30).optional(),
   })
   .superRefine((question, context) => {
+    const optionIds = question.options.map((option) => option.id);
+    if (new Set(optionIds).size !== optionIds.length) {
+      context.addIssue({
+        code: "custom",
+        path: ["options"],
+        message: "Option IDs must be unique.",
+      });
+    }
+
     if (question.questionType === "single_correct" && question.options.length < 2) {
       context.addIssue({
         code: "custom",
