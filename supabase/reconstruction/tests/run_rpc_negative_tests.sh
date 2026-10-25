@@ -243,7 +243,7 @@ psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.clai
 cross_user_daily_submit_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.submit_daily_challenge('$challenge_id'::uuid, 'A');"
 expect_denial \
   "user cannot submit another user's daily-challenge session" \
-  "start the challenge before submitting" \
+  "Start the challenge before submitting" \
   "$cross_user_daily_submit_sql"
 
 psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_a'; SET request.jwt.claims = '{\"sub\":\"$user_a\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.submit_daily_challenge('$challenge_id'::uuid, 'A');" >/dev/null
