@@ -145,3 +145,11 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Performance advisor:** the live database still reports no covering index for `private.mock_test_responses(question_id)`. A branch-only migration `20261025120000_add_mock_test_response_question_id_index.sql` and disposable-replay regression test already address it, but the migration has **not** been applied to production. Seven indexes are reported unused; do not drop them without workload evidence.
 - **Limits:** catalog source inspection is not a substitute for real Supabase-issued JWT tests and an end-to-end authorization audit. The seven missing historical migration bodies remain unrecovered.
 - **Safety:** no production schema/data/grant changes, no paid infrastructure, no content publication, and no PR merge.
+
+## 2026-10-25 — daily solution identity guard regression
+
+- **Commit tested:** `4f10136bc4be5e0dd237514715633a7d1968965e` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40171137953](https://github.com/black-jee/blackjee/actions/runs/40171137953) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully; lint, typecheck, unit tests, Playwright E2E, formatting, production build, and disposable PostgreSQL reconstruction/security tests passed.
+- **New runtime regression:** the disposable replay now verifies that a database session using role `authenticated` but carrying no signed-in user identity cannot retrieve daily-challenge solution data. The assertion passed before any challenge lookup. The fixture uses a synthetic UUID and adds no question, answer key, or worked solution.
+- **Deployment status:** GitHub reports the Vercel deployment completed for this commit. This is provider status only, not independent verification of every live route or authenticated flow.
+- **Safety:** no production SQL/DDL or data changes, no migration repair/reset, no new JEE content, no paid upgrade, and no PR merge.
