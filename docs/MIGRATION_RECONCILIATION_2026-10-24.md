@@ -261,3 +261,13 @@ A focused application-to-catalog comparison found a concrete mismatch:
 - Therefore the admin list query is expected to fail with a column permission error against the currently inspected live grants, even for a valid admin JWT. This is a catalog-and-code mismatch, not a live browser reproduction; no real JWT test has been run.
 - The student query uses an explicit subset and does not request this field. The same grant inventory also means a direct student API caller cannot select the ungranted field.
 - Branch fix: removed `publication_block_reason` from the admin page's SELECT list and UI rendering, so the query no longer requests a column that the live authenticated role cannot read. This intentionally omits the block-reason display until a guarded retrieval path or a separately reviewed grant change is justified. The fix is committed on the reconstruction branch. Static regression coverage in `tests/admin-pyq-query.test.ts` now guards against reintroducing the ungranted column, and CI run [40157249508](https://github.com/black-jee/blackjee/actions/runs/40157249508) passed both `quality` and `reconstruction-replay` on commit `8f0328ffda24e599de20217843fa5bff9dd14574`. This does not replace real admin/non-admin JWT regression tests. No production grants were changed.
+
+## Focused live index and constraint count recheck — 2026-10-25 (read-only)
+
+A fresh catalog-only SQL query against the live project reconfirmed the reconstructed smoke-test totals for the nine tracked application tables:
+
+- Constraints: 49 total — 33 in `public`, 16 in `private`.
+- Secondary indexes, excluding primary indexes and indexes owned by constraints: 11 total — 9 in `public`, 2 in `private`.
+- The expected standalone `private.mock_test_responses(question_id)` index is still absent in the live catalog. The composite primary key remains `(attempt_id, question_id)`; the branch-only index migration remains un-applied in production.
+
+This count-level parity is a useful consistency check, not an exact definition-level diff. The smoke test verifies the known constraint names/kinds and selected foreign-key actions, while a generated full catalog diff and real Supabase JWT tests remain outstanding. No DDL or grants were executed.
