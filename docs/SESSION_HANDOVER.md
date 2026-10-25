@@ -66,3 +66,12 @@ Continue with a no-cost, read-only repository review and test-plan preparation w
 A direct job-level read of [CI run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626) confirms both `quality` and `reconstruction-replay` completed with conclusion `success`. Quality included lint, typecheck, unit tests, Playwright E2E, formatting, and production build. Reconstruction replay included catalog/RPC/grant assertions and the dedicated security regression checks. This validates that run only; it does not recover the two historical SQL bodies or prove the original historical chain can be replayed as-is.
 
 The current documentation-only commit at the time of this note is `ea8a7cae6e8fe35c9c6ffb5cbed3a39e2331e1b9`; no status checks had appeared for that new commit at the last poll. Do not transfer run #679's result to this later commit without a matching run.
+
+
+### Library archive inspection update — 2026-10-26
+
+- Directly inspected all five ZIP files currently visible in the Library. The foundation archive contains only the different-version `20261024081110_numeric_answers_and_admin_review.sql` near-match; the four duplicated `BLACK-JEE-main*.zip` archives are byte-identical and contain neither unresolved migration.
+- No original migration body was recovered. The two blockers remain `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- Archive inspection and SHA-256 evidence are recorded in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md` and summarized in `docs/MIGRATION_RECONCILIATION.md`.
+- Latest documentation commit before this handover update: `9b2150784db14a039570095132e133cb5d6dde61`. CI #679 is confirmed green for its own commit; this newer documentation commit requires its own CI result before it can be called green.
+- Next action: search external/local authoritative artifacts only if they become available; otherwise prepare a clearly labelled reconstruction proposal for review, without changing the live ledger or inventing historical SQL.
