@@ -34,6 +34,14 @@ expect_denial \
   "permission denied for function admin_review_jee_pyq_question" \
   "SET ROLE anon; SELECT public.admin_review_jee_pyq_question(NULL::uuid, false, false, NULL::text[]);"
 
+# The authenticated PostgreSQL role is not proof of a signed-in user. This call
+# uses no user identity and must fail before looking up any challenge or solution.
+unauthenticated_solution_sql="SET ROLE authenticated; SET request.jwt.claims = '{}'; SELECT public.get_daily_challenge_result('$attempt_id'::uuid);"
+expect_denial \
+  "authenticated role without a user identity cannot fetch daily challenge solutions" \
+  "Sign in required" \
+  "$unauthenticated_solution_sql"
+
 nonadmin_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, NULL::date, NULL::text, NULL::text, NULL::text, NULL::text, NULL::jsonb, NULL::timestamptz, NULL::timestamptz, NULL::timestamptz, NULL::text, NULL::text, NULL::boolean);"
 expect_denial \
   "ordinary authenticated user cannot author a challenge" \
