@@ -183,7 +183,6 @@
 - **Remaining gates:** real Supabase-issued anonymous/student/admin JWT and browser journeys; normalized live-vs-reconstruction comparison beyond the covered catalog contracts; recovery or approved replacement strategy for migration history; content import and image review; staging/runtime/rollback verification. Vercel deployment rate limiting has previously blocked new preview deployments; do not pay to bypass it.
 - **Safety:** PR #2 remains draft, open, and unmerged. No production SQL/DDL, grants, data, migration ledger, JEE question/solution content, or paid infrastructure was changed.
 
-
 ## Reconstruction checkpoint — 2026-10-25 (exact role and RPC ACLs)
 
 - **Latest verified HEAD:** `0b11db500d37718d736f1b9a84597208fa287e66` on `chore/schema-reconstruction`.
