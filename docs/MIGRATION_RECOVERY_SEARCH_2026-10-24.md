@@ -1,13 +1,17 @@
-## Additional branch and exact-identifier recovery check — 2026-10-26
+## Recovery status update — 2026-10-26 (five archived bodies restored)
 
-This follow-up expands the accessible GitHub-side search; it still does not establish that no external copy exists.
+The Library archive `blackjee-foundation.zip` (SHA-256 `f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433`) supplied five SQL migration files whose Git blob IDs match the archived bytes exactly. They were restored unchanged into `supabase/migrations/`:
+- `20261024080824_foundation_schema.sql` — blob `8f21bc901173963de9569bd2b24bb27fae1851b7`
+- `20261024080924_tighten_rpc_grants_and_policy.sql` — blob `7bab53a3c94194f5b75ed3811703529207dcc31e`
+- `20261024081041_daily_solution_release_rpc.sql` — blob `bd3afd3728b7ad9f53abec4f0663ea039dbd1a5a`
+- `20261024081603_secure_daily_attempt_sessions.sql` — blob `5b70c7e130718cc7730f16b6468f4620d8c9c89d`
+- `20261024081731_restrict_anon_rpc_execution.sql` — blob `e53dda77762d7d62fc3b4df41632e6789ab6b4bb`
 
-- Inspected recursive Git trees for all three currently listed repository branches: `main`, `chore/sql-security-test-plan`, and `chore/schema-reconstruction`. None contains any of the seven missing versioned migration paths.
-- Repeated exact-name GitHub file searches for all seven missing migration filenames; no matching files were returned.
-- Repeated repository-scoped commit searches for the six baseline identifiers and the later publication-gate identifier; no matching commit results were returned.
-- Fresh read-only Supabase migration API check still returns 20 applied versions. The repository reconstruction branch contains 19 SQL migration files (README excluded), 13 exact version/name matches, seven live-only versions without source bodies, and six repository-only SQL files.
-- The Supabase development-branch listing returned no branches. No new paid branch/project was created.
-- **Conclusion:** no original historical SQL body has been recovered by these checks. Keep all seven gaps unresolved and do not synthesize SQL under their original version identifiers. The active local-only migration files remain unapplied according to the live ledger; this check performed no production mutations.
+Two applied bodies remain unresolved:
+- `20261024081337_numeric_answers_and_admin_review`: the archive contains a similar-purpose `20261024081110_numeric_answers_and_admin_review.sql`, but its version differs. It was not renamed or treated as the applied body.
+- `20261024112132_require_pyq_source_page_before_publish`: no exact file was found in the archive or the other four Library ZIPs. Local `20261024112500`/`20261024120000` files are not substitutes.
+
+**Current inventory:** live ledger 20 versions; repository 24 SQL files; 18 exact filename/version matches; two live versions without matching SQL bodies; six repository-only SQL files. CI run [#674 / 40242836656](https://github.com/black-jee/blackjee/actions/runs/40242836656) passed both `quality` and `reconstruction-replay` on the commit that restored the five files. The complete historical chain is still not replayable from zero. No production database or migration ledger was changed.
 
 # Migration recovery search log — 2026-10-24
 
@@ -18,12 +22,13 @@ Record the exact recovery checks performed for the BLACK-JEE Supabase migration 
 ## Current facts
 
 - Target project: `phdssyexhfyxsmhmmcgb`.
-- Live migration history currently contains 20 versions.
-- Current repository inventory (rechecked 2026-10-25): 19 SQL files under `supabase/migrations/` (excluding README).
-- Thirteen migration versions have exact filename/version matches.
-- Seven applied migration bodies are missing from the current migration directory.
-- Six repository SQL files are not recorded as applied in the live history.
-- Only the `main` branch was returned by the repository branch listing at the time of this check.
+- Live migration history contains 20 versions.
+- Current reconstruction branch contains 24 SQL files under `supabase/migrations/` (README excluded).
+- Eighteen versions have exact filename/version matches.
+- Two applied bodies remain missing: `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- Six repository SQL files remain absent from the live migration ledger.
+- Five formerly missing bodies were restored byte-for-byte from `blackjee-foundation.zip`; exact Git blob IDs are listed above.
+- The archive's `20261024081110_numeric_answers_and_admin_review.sql` is a near-match only and is not represented as the applied `20261024081337` body.
 
 ## Recovery checks performed
 
@@ -53,17 +58,12 @@ The live ledger still has 20 applied versions. The branch now has 19 SQL migrati
 
 The two publication-gate files remain local-only as well. CI run [40154542265](https://github.com/black-jee/blackjee/actions/runs/40154542265) passed both quality and disposable reconstruction replay jobs on commit `9f924ab40e369093153ed579fdaf8e3af22c7588`. These tests do not mean any of the six local-only migrations were applied to production.
 
-## Missing applied bodies
+## Applied bodies still missing
 
-- `20261024080824` — `foundation_schema`
-- `20261024080924` — `tighten_rpc_grants_and_policy`
-- `20261024081041` — `daily_solution_release_rpc`
-- `20261024081337` — `numeric_answers_and_admin_review`
-- `20261024081603` — `secure_daily_attempt_sessions`
-- `20261024081731` — `restrict_anon_rpc_execution`
-- `20261024112132` — `require_pyq_source_page_before_publish`
+- `20261024081337` — `numeric_answers_and_admin_review` (archive contains similar-purpose `20261024081110`; do not rename it).
+- `20261024112132` — `require_pyq_source_page_before_publish` (local same-purpose files use different versions).
 
-The live version `20261024112132` must not be replaced by either local-only file with a different version number. The later local files may overlap in purpose, but their existence does not establish what SQL was applied at the recorded version.
+The five recovered files retain their original names and byte contents. Do not fabricate, relabel, or repair production migration history for the two unresolved versions.
 
 ## Safe recovery path
 

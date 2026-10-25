@@ -1,18 +1,15 @@
 # Supabase migration discipline
 
-The target Supabase project has **20 applied migration versions** in its live ledger. The repository currently contains 19 SQL migration files: 13 exact filename/version matches, seven applied SQL bodies missing from the repository, and six repository-only migration files not recorded as applied. See [the migration chain inventory](../../docs/MIGRATION_CHAIN_INVENTORY.md) for the version-by-version ledger.
+The target Supabase project has **20 applied migration versions** in its live ledger. The repository currently contains 24 SQL migration files: 18 exact filename/version matches, two applied SQL bodies still missing, and six repository-only migration files not recorded as applied. See [the migration chain inventory](../../docs/MIGRATION_CHAIN_INVENTORY.md) for the version-by-version ledger.
 
-## Applied versions whose SQL bodies are missing
+## Archive recovery — 2026-10-26
 
-Six early baseline bodies and one later publication-gate body are missing:
+Five exact-version bodies were restored byte-for-byte from Library archive `blackjee-foundation.zip`: `20261024080824_foundation_schema.sql`, `20261024080924_tighten_rpc_grants_and_policy.sql`, `20261024081041_daily_solution_release_rpc.sql`, `20261024081603_secure_daily_attempt_sessions.sql`, and `20261024081731_restrict_anon_rpc_execution.sql`. Their Git blob IDs match the source archive exactly; see `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
 
-- `20261024080824_foundation_schema`
-- `20261024080924_tighten_rpc_grants_and_policy`
-- `20261024081041_daily_solution_release_rpc`
-- `20261024081337_numeric_answers_and_admin_review`
-- `20261024081603_secure_daily_attempt_sessions`
-- `20261024081731_restrict_anon_rpc_execution`
-- `20261024112132_require_pyq_source_page_before_publish`
+## Applied versions whose SQL bodies remain missing
+
+- `20261024081337_numeric_answers_and_admin_review` — archive has a similar-purpose `20261024081110_numeric_answers_and_admin_review.sql`, but the version differs; do not relabel it.
+- `20261024112132_require_pyq_source_page_before_publish` — no exact body recovered. The local `20261024112500` file is not a substitute.
 
 Do not recreate these under their original version identifiers unless the original SQL is recovered. Any replacement inferred from live definitions must be explicitly labelled a reconstruction, not original historical SQL.
 
@@ -49,4 +46,4 @@ The accessible repository search was extended beyond the active reconstruction b
 
 ## Current status
 
-**Inventory: verified read-only. Historical SQL recovery: not found in the accessible GitHub branches/commit search. Reconstructed disposable replay: verified in CI; full Supabase Auth/runtime parity and a complete historical-chain replay remain unverified.** No production database changes, migration repairs, resets, question publication, or paid infrastructure were used for this inventory.
+**Inventory: verified read-only. Five original-version SQL bodies were recovered from the Library archive; two remain unresolved. Reconstructed disposable replay is verified in CI, but full original-chain replay and Supabase Auth/runtime parity remain unverified.** No production database changes, migration repairs, resets, question publication, or paid infrastructure were used for this inventory.

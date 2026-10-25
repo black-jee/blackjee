@@ -5,24 +5,26 @@
 **Target:** Supabase project `phdssyexhfyxsmhmmcgb`  
 **Repository HEAD inspected:** `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`
 
-## Current inventory addendum — 2026-10-25
+## Current inventory addendum — 2026-10-26
 
-A fresh recursive repository-tree count confirms **19 SQL migration files**, not the 15 stated in the historical snapshot below. The current reconciliation is **20 live applied versions, 13 exact filename/version matches, seven applied bodies missing from the repository, and six repository-only SQL files absent from the live ledger**. The dated inventory at [`MIGRATION_CHAIN_INVENTORY.md`](./MIGRATION_CHAIN_INVENTORY.md) contains the full version-by-version lists. The 15-file count below is retained as part of the original 2026-10-24 report and should not be used as the current count.
+The Library archive `blackjee-foundation.zip` yielded five exact-version migration bodies, restored byte-for-byte to the repository. Current reconciliation is **20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies still missing, and six repository-only SQL files**. The unresolved applied bodies are `20261024081337_numeric_answers_and_admin_review` (archive has only the similar-purpose `20261024081110` file) and `20261024112132_require_pyq_source_page_before_publish`. Older counts below are historical snapshots. See the recovery log and chain inventory for exact hashes and version-by-version details.
 
 ## Findings from read-only inspection
 
 ### Migration history mismatch
 
-The live Supabase migration history contains 20 applied versions. The first six are the missing baseline bodies:
-
+The live Supabase migration history contains 20 applied versions. Five of the seven bodies previously missing from the repository have now been restored byte-for-byte from `blackjee-foundation.zip`:
 - `20261024080824_foundation_schema`
 - `20261024080924_tighten_rpc_grants_and_policy`
 - `20261024081041_daily_solution_release_rpc`
-- `20261024081337_numeric_answers_and_admin_review`
 - `20261024081603_secure_daily_attempt_sessions`
 - `20261024081731_restrict_anon_rpc_execution`
 
-The live history then records these 14 versions, in order:
+Two applied bodies remain unresolved:
+- `20261024081337_numeric_answers_and_admin_review` — the archive contains `20261024081110_numeric_answers_and_admin_review.sql`, but the version differs and it is not accepted as the applied body.
+- `20261024112132_require_pyq_source_page_before_publish` — no exact body was found in the inspected archives.
+
+The live history also records the following 14 later versions, in order:
 
 - `20261024095050_harden_public_schedule_rpc_and_index`
 - `20261024100007_daily_challenge_question_assets`
@@ -41,13 +43,15 @@ The live history then records these 14 versions, in order:
 
 ### Repository migration directory drift
 
-The current repository contains 15 SQL files, but only 13 filenames exactly match versions in live migration history. Three discrepancies require resolution:
+The current repository contains 24 SQL migration files, of which 18 match live migration versions exactly. Six repository files are not recorded as applied in the live history:
+1. `20261024112500_require_pyq_source_page_before_publish.sql` — overlaps the applied publication-gate purpose but is not the `20261024112132` original.
+2. `20261024120000_require_pyq_source_and_solution_before_publish.sql` — similar publication checks; not recorded as applied.
+3. `20261024130000_harden_mock_test_input_nulls.sql` — CI-tested only; not verified applied to production.
+4. `20261025100000_enforce_unique_pyq_option_labels.sql` — CI-tested only; not verified applied to production.
+5. `20261025110000_harden_daily_challenge_authoring_integrity.sql` — CI-tested only; not verified applied to production.
+6. `20261025120000_add_mock_test_response_question_id_index.sql` — CI-tested only; not verified applied to production.
 
-1. Live version `20261024112132_require_pyq_source_page_before_publish` has no matching repository file. The repository instead contains `20261024112500_require_pyq_source_page_before_publish.sql`, which has the same page-number guard but a different version.
-2. `20261024120000_require_pyq_source_and_solution_before_publish.sql` is present in the repository but is not recorded as applied in the live history. It duplicates the stricter source-page gate and must not be assumed to have run.
-3. The source-page guard appears both under the unapplied `112500` filename and inside the unapplied `120000` file. Do not rename, delete, or apply either file until the repository history and intended release sequence are reviewed.
-
-This is more than the original six-file gap: the current migration directory is not an exact representation of the live applied chain. A clean replay must use a reviewed, ordered chain and explicitly document how the original six versions and the version drift are represented. Do not rewrite applied version identifiers in the live project.
+The archive's `20261024081110_numeric_answers_and_admin_review.sql` is retained as a near-match, not added to the active migration directory, because it is not the applied `20261024081337` version. Do not rename, delete, or apply local-only files until the canonical sequence is reviewed. Do not alter the production ledger to mask these gaps.
 
 ### Live schema snapshot (read-only)
 
