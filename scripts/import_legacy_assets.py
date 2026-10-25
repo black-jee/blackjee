@@ -17,10 +17,12 @@ MAX_FILE_BYTES = 15 * 1024 * 1024
 
 
 def safe_archive_path(value: str) -> bool:
-    if not value:
+    if not value or "\\x00" in value or "\\\\" in value or ":" in value:
         return False
     path = PurePosixPath(value)
-    return not path.is_absolute() and all(part not in {"", ".", ".."} for part in path.parts)
+    return bool(path.parts) and not path.is_absolute() and all(
+        part not in {"", ".", ".."} for part in path.parts
+    )
 
 
 def sha256(content: bytes) -> str:
@@ -112,6 +114,8 @@ def main() -> int:
                 raise ValueError("Public asset destination resolves outside --repo-root.")
 
             for filename, archive_name in archive_by_name.items():
+                if archive.getinfo(archive_name).file_size > MAX_FILE_BYTES:
+                    raise ValueError(f"Image exceeds {MAX_FILE_BYTES} bytes: {filename}")
                 content = archive.read(archive_name)
                 if len(content) > MAX_FILE_BYTES:
                     raise ValueError(f"Image exceeds {MAX_FILE_BYTES} bytes: {filename}")
