@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { safeInternalRedirectPath } from "@/lib/auth/safe-next-path";
 
 export function LoginForm() {
   const router = useRouter();
@@ -12,8 +13,7 @@ export function LoginForm() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const requestedNext = searchParams.get("next");
-  const safeNext =
-    requestedNext?.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/";
+  const safeNext = safeInternalRedirectPath(requestedNext, window.location.origin);
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
