@@ -272,7 +272,6 @@ A fresh catalog-only SQL query against the live project reconfirmed the reconstr
 
 This count-level parity is a useful consistency check, not an exact definition-level diff. The smoke test verifies the known constraint names/kinds and selected foreign-key actions, while a generated full catalog diff and real Supabase JWT tests remain outstanding. No DDL or grants were executed.
 
-
 ## Latest CI and live RLS expression recheck — 2026-10-25
 
 - GitHub Actions run [40157546264](https://github.com/black-jee/blackjee/actions/runs/40157546264), for the latest documentation commit, completed **PASS** for both jobs.
@@ -283,7 +282,6 @@ This count-level parity is a useful consistency check, not an exact definition-l
 - **Open policy question:** `get_daily_challenge_result` releases answer/solution after `solution_release_at` for any signed-in caller who knows a live challenge ID; it does not check for a submitted attempt. Do not change this without confirming product intent.
 - **Still open:** exact definition-level live-vs-reconstruction diff; genuine Supabase-issued anonymous/student/admin JWT tests; decision on daily-solution release semantics; approved rollout/rollback plan for branch-only fixes. The live `start_mock_test` NULL question-count validation gap remains unpatched in production.
 - No production SQL, grants, migration ledger, schema, or data were changed. No paid service was started, no JEE question/solution content was added, and PR #2 remains open/unmerged.
-
 
 ## Function fingerprint parity — 2026-10-25 follow-up
 
