@@ -134,3 +134,10 @@ test("anonymous visitors see a safe sign-in prompt on their profile", async ({ p
     "/login?next=%2Fprofile",
   );
 });
+
+test("OAuth callback without a code returns safely to sign-in", async ({ page }) => {
+  await page.goto("/auth/callback?next=https%3A%2F%2Fevil.example%2Fsteal");
+  await expect(page).toHaveURL(/\\/login\\?error=oauth_callback$/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+  await expect(page).not.toHaveURL(/evil\\.example/);
+});
