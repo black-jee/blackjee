@@ -1,7 +1,7 @@
 # BLACK-JEE session handover
 
 **Updated:** 2026-10-25  
-**Active task:** BJ-DB-001 — recover and reconcile missing applied migration SQL; current immediate task is verify CI after auth-test formatting correction  
+**Active task:** BJ-DB-001 — recover and reconcile missing applied migration SQL; CI run #666 is green, so next refresh PR #2 verification metadata  
 **Branch:** `chore/schema-reconstruction`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
@@ -9,7 +9,7 @@
 
 ## Latest verified state
 
-- Current reconstruction PR #2 HEAD before this handover update: `45832664ac395912257e1c7b5afcd6280c81b44b` (`test: correct auth assertion formatting`). Previous CI run #659 ([40215878244](https://github.com/black-jee/blackjee/actions/runs/40215878244)) failed only at `quality` → `Check formatting`; `reconstruction-replay` passed. The log identified `tests/mock-test-action-auth.test.ts` as the formatting failure. Commit `45832664` restores the assertion to a single Prettier-compatible line; a workflow result for that correction has not yet been observed. Do not call the current HEAD green until both jobs are verified.
+- Current reconstruction PR #2 HEAD: `195d7a6269e9704a73751720bcc7232b3f3c38e4` (`style: apply Prettier formatting to mock auth test`). CI run #666 ([40217609671](https://github.com/black-jee/blackjee/actions/runs/40217609671)) passed both `quality` and `reconstruction-replay`. The Prettier diff identified compact formatting changes in `tests/mock-test-action-auth.test.ts`; those were applied and verified. PR #2 remains draft/open/unmerged; refresh its verification description with run #666 before further PR handoff.
 
 - Latest observed `main` HEAD: [`185a0ec9`](https://github.com/black-jee/blackjee/commit/185a0ec9612130980f96caa865df25daaebb31e2) — `docs: correct foundation audit migration counts`.
 - CI run [40103159838](https://github.com/black-jee/blackjee/actions/runs/40103159838) passed on that commit. GitHub Pages workflow [40103159334](https://github.com/black-jee/blackjee/actions/runs/40103159334) also passed. These verify repository workflows only, not Vercel production runtime.
