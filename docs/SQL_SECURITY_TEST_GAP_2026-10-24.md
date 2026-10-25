@@ -25,8 +25,7 @@ The current GitHub Actions workflow in `.github/workflows/ci.yml` runs continuit
 - Authenticated multi-user runtime isolation tests: **unverified**.
 - Live database changed during this review: **no**.
 
-
 ## 2026-10-25 — CI wiring follow-up
 
 - Workflow change: commit `797bc8680f539a5ba59790f50c7fd115cfc9aa74` adds an explicit `psql -v ON_ERROR_STOP=1 -f supabase/tests/security_definer_rpc_contracts.sql` step after reconstructed access grants in the disposable PostgreSQL replay.
-- Outcome: **PENDING CI** until the workflow run for this commit completes. This closes the test-wiring gap only; it does not recover historical migrations, prove full live-catalog parity, or test real Supabase-issued JWTs.
+- Outcome: the dedicated SQL contract passed in reconstruction-replay on run #543. The overall run failed only at Prettier because this document had an extra blank line; that formatting defect is corrected in the current commit. This closes the test-wiring gap only; it does not recover historical migrations, prove full live-catalog parity, or test real Supabase-issued JWTs.
