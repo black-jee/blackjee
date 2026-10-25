@@ -91,9 +91,17 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Next action:** obtain a CI run for the corrected current HEAD and verify Prettier is clean; then continue read-only recovery and the isolated authenticated-JWT test plan. If workflow execution cannot be triggered from this session, state that limitation rather than treating the old green run as current.
 - **Safety:** no production schema/data/grants/migration-history mutation, paid infrastructure, invented question content, or PR merge. Keep the PR draft and production untouched.
 
-
 ### CI run #692 follow-up — 2026-10-26
 
 - [Run #692 / 40245119398](https://github.com/black-jee/blackjee/actions/runs/40245119398) started for the corrected formatting changes. `quality` failed early in `scripts/check-continuity.mjs` because the new task-ledger notes repeated permanent IDs `BJ-DB-001` and `BJ-DOC-001`; the `reconstruction-replay` assertions all completed successfully, but the job was cancelled after the `quality` job failed early.
 - Corrected `docs/TASKS.md` by making the new evidence headings descriptive instead of assigning duplicate task IDs. No task definitions or project code were changed.
 - The corrected branch needs another CI result. The duplicate task IDs were removed from the continuation notes; the current HEAD still has no matching CI result. Current Vercel check showed a platform build-rate-limit failure (`upgradeToPro=build-rate-limit`), which is not a source-code verification result.
+
+
+### Final continuation checkpoint — 2026-10-26
+
+- Current source branch head at this checkpoint: `3614b506e2294429ad63885470a65c1ab1fbc6df` (task-ledger evidence update). PR #2 remains draft/open/unmerged.
+- Run #692's continuity failure has been addressed by removing duplicate task-ID headings from the continuation notes. The reconstructed catalog/security assertion steps completed successfully, but the run was not green because the quality job stopped at the continuity validator.
+- No workflow run is currently visible for the latest source head. The CI workflow is configured for pull-request events and pushes to `main`; GitHub API commits made by this session have not produced a new matching run after #692. Do not claim the latest head is green. Vercel's check is failing with a platform build-rate-limit/upgrade message, not a code-level result.
+- The two historical SQL bodies remain unresolved after direct inspection of every ZIP currently visible in the Library. Do not fabricate or substitute SQL.
+- Next action: obtain a CI run on the corrected head (a normal PR synchronize event may be needed), then inspect both job conclusions and Prettier/continuity checks. After CI, continue the isolated real-JWT test plan and external artifact recovery. Production remains read-only; do not merge PR #2.
