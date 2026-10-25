@@ -80,6 +80,12 @@ const checks = [
   },
   {
     file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
+    description: "mock-test RPC NULL mode, question count, and duration are rejected at runtime",
+    pattern:
+      /mock-test RPC rejects NULL mode at runtime[\\s\\S]*?mock-test RPC rejects NULL question count at runtime[\\s\\S]*?mock-test RPC rejects NULL duration at runtime/i,
+  },
+  {
+    file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
     description: "daily solution RPC rejects a missing authenticated user identity before lookup",
     pattern:
       /authenticated role without a user identity cannot fetch daily challenge solutions[\s\S]*?Sign in required/i,
