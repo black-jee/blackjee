@@ -26,7 +26,10 @@ describe("mock-test server action authentication contract", () => {
       const start = mockTestActions.indexOf(
         `export async function ${action}(`,
       );
-      expect(start, `${action} should be exported`).toBeGreaterThanOrEqual(0);
+      expect(
+        start,
+        `${action} should be exported`,
+      ).toBeGreaterThanOrEqual(0);
 
       const nextExport = mockTestActions.indexOf(
         "\nexport async function ",
