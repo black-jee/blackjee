@@ -1,3 +1,7 @@
+## Recovery status update — 2026-10-26
+
+A fresh read-only check confirmed that none of the seven missing applied migration paths exists in the recursive tree for any of the three current GitHub branches (`main`, `chore/sql-security-test-plan`, `chore/schema-reconstruction`). Exact-name file searches and repository-scoped commit searches returned no matches. The live Supabase ledger still has 20 versions; the reconstruction branch has 19 SQL migration files, 13 exact matches, seven missing applied bodies, and six repository-only SQL files. Supabase development branches list is empty. This does not search private clones, local device folders, backups, or archives; historical bodies remain unrecovered. No production mutation or paid resource was used. See [the recovery search log](./MIGRATION_RECOVERY_SEARCH_2026-10-24.md).
+
 # Migration chain inventory — 2026-10-24
 
 **Task:** BJ-DB-001  

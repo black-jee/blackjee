@@ -1,3 +1,14 @@
+## Additional branch and exact-identifier recovery check — 2026-10-26
+
+This follow-up expands the accessible GitHub-side search; it still does not establish that no external copy exists.
+
+- Inspected recursive Git trees for all three currently listed repository branches: `main`, `chore/sql-security-test-plan`, and `chore/schema-reconstruction`. None contains any of the seven missing versioned migration paths.
+- Repeated exact-name GitHub file searches for all seven missing migration filenames; no matching files were returned.
+- Repeated repository-scoped commit searches for the six baseline identifiers and the later publication-gate identifier; no matching commit results were returned.
+- Fresh read-only Supabase migration API check still returns 20 applied versions. The repository reconstruction branch contains 19 SQL migration files (README excluded), 13 exact version/name matches, seven live-only versions without source bodies, and six repository-only SQL files.
+- The Supabase development-branch listing returned no branches. No new paid branch/project was created.
+- **Conclusion:** no original historical SQL body has been recovered by these checks. Keep all seven gaps unresolved and do not synthesize SQL under their original version identifiers. The active local-only migration files remain unapplied according to the live ledger; this check performed no production mutations.
+
 # Migration recovery search log — 2026-10-24
 
 ## Purpose
