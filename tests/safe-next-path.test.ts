@@ -12,8 +12,11 @@ describe("safeInternalRedirectPath", () => {
 
   it.each([
     "//evil.example",
+    "///evil.example",
     "/" + String.fromCharCode(92) + "evil.example",
+    "/" + String.fromCharCode(92) + String.fromCharCode(92) + "evil.example",
     "https://evil.example/path",
+    "javascript:alert(1)",
     String.fromCharCode(92) + "evil.example",
     "profile",
   ])("rejects external or non-root-relative destination %s", (requestedNext) => {
