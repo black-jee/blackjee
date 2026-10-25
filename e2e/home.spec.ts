@@ -29,7 +29,7 @@ test(
       "href",
       "/auth/reset-password",
     );
-      expect(pageErrors).toEqual([]);
+    expect(pageErrors).toEqual([]);
   },
 );
 
