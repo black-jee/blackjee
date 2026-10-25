@@ -149,3 +149,16 @@ This inventory confirms the routine-level ACL/configuration summary, but it is n
 - CI run [40098020175](https://github.com/black-jee/blackjee/actions/runs/40098020175) completed successfully on `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`.
 - GitHub Pages workflow [40098020314](https://github.com/black-jee/blackjee/actions/runs/40098020314) completed successfully for the same commit. This confirms that workflow completed, not that the Vercel production deployment or authenticated application flows are verified.
 - Migration source recovery and clean isolated replay remain unverified. No production DDL, migration repair/apply, reset, data mutation, or paid infrastructure was used.
+
+## Current reconciliation checkpoint — 2026-10-25
+
+This checkpoint supersedes the older file-count statement above; earlier sections are retained as dated investigation history.
+
+- A fresh read of the live migration API reports **20 applied versions**, from `20261024080824` through `20261024112132`.
+- The repository migration directory currently contains **19 SQL files**. **13** have exact version/filename matches in the live ledger.
+- **Seven applied versions lack same-version SQL bodies in the repository:** the six baseline versions listed above, plus live version `20261024112132_require_pyq_source_page_before_publish`.
+- **Six repository migration files are absent from the live ledger:** `20261024112500_require_pyq_source_page_before_publish.sql`, `20261024120000_require_pyq_source_and_solution_before_publish.sql`, `20261024130000_harden_mock_test_input_nulls.sql`, `20261025100000_enforce_unique_pyq_option_labels.sql`, `20261025110000_harden_daily_challenge_authoring_integrity.sql`, and `20261025120000_add_mock_test_response_question_id_index.sql`.
+- The `112500` and `120000` files overlap on the PYQ source/page/solution publishing guard. Do not infer that either ran in production or rename them to make the ledger appear aligned.
+- CI run [40184792445](https://github.com/black-jee/blackjee/actions/runs/40184792445) (#608) completed successfully on branch head `724ad7fed30afe1c4893eb7ba6209afbdb31bdbf): both `quality` and `reconstruction-replay` passed. This is repository CI evidence, not production migration-history recovery.
+
+**Disposition:** keep the live database and migration ledger unchanged. Recover the seven missing historical bodies from an authoritative backup or source commit if one becomes available. If none can be found, maintain a separately labelled reconstructed baseline and require explicit review of the six repository-only files before selecting a canonical future migration chain.
