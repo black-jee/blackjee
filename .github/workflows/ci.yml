@@ -37,7 +37,10 @@ jobs:
         run: npm run format:check
       - name: Show Prettier diff when formatting fails
         if: steps.format-check.outcome == 'failure'
-        run: npx prettier docs/MIGRATION_RECONCILIATION_2026-10-24.md | diff -u docs/MIGRATION_RECONCILIATION_2026-10-24.md - || true
+        run: |
+          for file in docs/MIGRATION_RECONCILIATION_2026-10-24.md scripts/check-security-contracts.mjs tests/pyq-authoring-schema.test.ts; do
+            npx prettier "$file" | diff -u "$file" - || true
+          done
       - name: Build application
         if: success() || steps.format-check.outcome == 'failure'
         run: npm run build
