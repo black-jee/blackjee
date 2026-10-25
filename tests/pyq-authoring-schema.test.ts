@@ -39,9 +39,7 @@ describe("PYQ authoring schema", () => {
 
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(
-        result.error.issues.some((issue) => issue.path.includes("options")),
-      ).toBe(true);
+      expect(result.error.issues.some((issue) => issue.path.includes("options"))).toBe(true);
     }
   });
 
@@ -59,9 +57,7 @@ describe("PYQ authoring schema", () => {
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(
-        result.error.issues.some((issue) =>
-          issue.message.includes("labels must be unique"),
-        ),
+        result.error.issues.some((issue) => issue.message.includes("labels must be unique")),
       ).toBe(true);
     }
   });
