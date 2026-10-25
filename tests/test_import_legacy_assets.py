@@ -83,6 +83,33 @@ class ImportLegacyAssetsTests(unittest.TestCase):
             self.assertEqual(result.returncode, 2)
             self.assertIn("Duplicate image basename", result.stderr)
 
+    def test_missing_referenced_image_aborts_before_writing_any_assets(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            archive = self.make_archive(root, filename="missing.png", image_paths=())
+            repo = root / "repo"
+            result = self.run_import(
+                archive, repo, "--write-public-assets"
+            )
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("refusing partial import", result.stderr.lower())
+            self.assertFalse((repo / "public").exists())
+            self.assertFalse((repo / "docs" / "ASSET_IMPORT_REPORT.json").exists())
+
+    def test_rejects_report_path_traversal(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            archive = self.make_archive(root)
+            repo = root / "repo"
+            result = self.run_import(
+                archive, repo, "--dry-run", "--report", "../outside.json"
+            )
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("safe relative path", result.stderr)
+            self.assertFalse((root / "outside.json").exists())
+
     def test_rejects_invalid_manifest_asset_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
