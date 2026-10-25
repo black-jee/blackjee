@@ -200,3 +200,16 @@ A focused read-only query of PostgreSQL catalogs inspected constraints, indexes,
 ### Decision
 
 The current catalog evidence supports documenting the observed live behavior, not recreating historical SQL byte-for-byte. Keep branch-only NULL guards, option-label enforcement, and the response-question index marked **not production-deployed**. Continue the catalog diff in a separate, reviewable artifact; do not repair migration history, apply migrations, or alter production data as part of reconstruction.
+
+## SECURITY DEFINER execute-ACL recheck — 2026-10-25 (read-only)
+
+A fresh catalog query checked every `SECURITY DEFINER` routine in the `public` and `private` schemas, including effective `EXECUTE` privileges for `anon`, `authenticated`, and `service_role`.
+
+- The query returned 11 `SECURITY DEFINER` functions, all in `public`; each has an empty `search_path` setting.
+- `anon` cannot execute any of the 11 functions according to `has_function_privilege`.
+- `authenticated` and `service_role` can execute all 11 functions. This is not itself proof of a vulnerability: authorization must be enforced inside each callable function.
+- The three admin RPCs (`admin_review_jee_pyq_question`, `admin_save_daily_challenge`, and `admin_save_jee_pyq_question`) all reference `auth.uid()`, contain an admin-guard marker, and raise exceptions. This is a focused structural check, not a full proof of every branch or an authenticated-token test.
+- The eight non-admin routines are `get_daily_challenge_result`, `get_mock_test_result`, `grade_jee_pyq`, `resume_mock_test`, `start_daily_challenge`, `start_mock_test`, `submit_daily_challenge`, and `submit_mock_test`, plus the three admin routines above (11 total). Their ownership, release timing, and input validation still need function-by-function review alongside real user-token tests.
+
+**Disposition:** retain the current ACLs pending verified per-function authorization and real JWT tests. Do not blindly revoke authenticated execution or change production grants based only on the advisor warning or this inventory. No production DDL or grant changes were made.
+
