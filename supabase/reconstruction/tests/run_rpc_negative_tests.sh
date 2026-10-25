@@ -237,16 +237,16 @@ echo "PASS: synthetic daily-challenge create/update/read-back/cleanup"
 
 # A daily challenge session belongs to the authenticated user who started it.
 # User B must not submit using User A's session; User A's own submission remains valid.
-challenge_id="$(psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\"sub\\":\\"$user_b\\",\\"app_metadata\\":{\\"role\\":\\"admin\\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, CURRENT_DATE, 'Synthetic cross-user session', 'Physics', 'Synthetic authorization fixture', NULL::text, '[{\\"id\\":\\"a\\",\\"label\\":\\"A\\",\\"text\\":\\"synthetic option A\\"},{\\"id\\":\\"b\\",\\"label\\":\\"B\\",\\"text\\":\\"synthetic option B\\"}]'::jsonb, now() - interval '1 minute', now() + interval '1 hour', now() + interval '2 hours', 'A', 'Synthetic worked solution', true);")"
-psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_a'; SET request.jwt.claims = '{\\"sub\\":\\"$user_a\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.start_daily_challenge('$challenge_id'::uuid);" >/dev/null
+challenge_id="$(psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"admin\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, CURRENT_DATE, 'Synthetic cross-user session', 'Physics', 'Synthetic authorization fixture', NULL::text, '[{\"id\":\"a\",\"label\":\"A\",\"text\":\"synthetic option A\"},{\"id\":\"b\",\"label\":\"B\",\"text\":\"synthetic option B\"}]'::jsonb, now() - interval '1 minute', now() + interval '1 hour', now() + interval '2 hours', 'A', 'Synthetic worked solution', true);")"
+psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_a'; SET request.jwt.claims = '{\"sub\":\"$user_a\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.start_daily_challenge('$challenge_id'::uuid);" >/dev/null
 
-cross_user_daily_submit_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\"sub\\":\\"$user_b\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.submit_daily_challenge('$challenge_id'::uuid, 'A');"
+cross_user_daily_submit_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.submit_daily_challenge('$challenge_id'::uuid, 'A');"
 expect_denial \
   "user cannot submit another user's daily-challenge session" \
   "start the challenge before submitting" \
   "$cross_user_daily_submit_sql"
 
-psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_a'; SET request.jwt.claims = '{\\"sub\\":\\"$user_a\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.submit_daily_challenge('$challenge_id'::uuid, 'A');" >/dev/null
+psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_a'; SET request.jwt.claims = '{\"sub\":\"$user_a\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.submit_daily_challenge('$challenge_id'::uuid, 'A');" >/dev/null
 psql -X -v ON_ERROR_STOP=1 -qAt -c "DELETE FROM public.daily_challenges WHERE id = '$challenge_id'::uuid;"
 echo "PASS: daily-challenge session ownership and cleanup"
 
