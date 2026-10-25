@@ -135,7 +135,6 @@
 - **Remaining gates:** exact live-vs-reconstruction definition-level diff; real Supabase-issued anonymous/student/admin JWT tests; reviewed deployment and rollback plan. CI green does not substitute for these gates.
 - **Safety:** no production SQL/grants/schema/data or migration-ledger changes, no paid infrastructure, no new JEE content, and no PR merge.
 
-
 ## Reconstruction checkpoint — 2026-10-25 (baseline integrity repair verified)
 
 - **Current branch:** `chore/schema-reconstruction`; draft [PR #2](https://github.com/black-jee/blackjee/pull/2) remains open and unmerged.
