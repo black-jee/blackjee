@@ -164,7 +164,6 @@
 - **Deployment boundary:** CI success does not establish the current HEAD's deployed runtime or authenticated browser behavior. Check provider status separately; do not upgrade paid resources to bypass limits.
 - **Safety:** draft PR #2 remains open and unmerged. No production schema/data/grant changes, migration repair, content additions/publication, paid resources, or deployment action occurred.
 
-
 ## Reconstruction checkpoint — 2026-10-25 (definition-level catalog contracts)
 
 - **Latest verified code commit:** `13663455db50e0c592611a737817929dcb62617a`; [GitHub Actions run 40176912205](https://github.com/black-jee/blackjee/actions/runs/40176912205) passed both `quality` and `reconstruction-replay`.
