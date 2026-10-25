@@ -112,5 +112,62 @@ expect_denial \
   "permission denied for schema private" \
   "SET ROLE authenticated; SELECT correct_answer FROM private.jee_pyq_answer_keys LIMIT 1;"
 
+# Exercise the successful admin authoring path using only a synthetic challenge.
+# Verify create -> update -> read-back -> cleanup, including its private answer key.
+psql -X -v ON_ERROR_STOP=1 -qAt <<'SQL'
+SET ROLE authenticated;
+SET request.jwt.claim.sub = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+SET request.jwt.claims = '{"sub":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb","app_metadata":{"role":"admin"}}';
+DO $
+DECLARE
+  v_id uuid;
+  v_options jsonb := jsonb_build_array(
+    jsonb_build_object('label', 'A', 'text', 'synthetic option one'),
+    jsonb_build_object('label', 'B', 'text', 'synthetic option two')
+  );
+BEGIN
+  v_id := public.admin_save_daily_challenge(
+    NULL, CURRENT_DATE, 'Synthetic authoring create', 'Physics',
+    'Synthetic authoring test statement', NULL, v_options,
+    now(), now() + interval '1 hour', now() + interval '2 hours',
+    'A', 'Synthetic worked solution', false
+  );
+
+  PERFORM public.admin_save_daily_challenge(
+    v_id, CURRENT_DATE, 'Synthetic authoring update', 'Physics',
+    'Synthetic authoring updated statement', NULL, v_options,
+    now(), now() + interval '1 hour', now() + interval '2 hours',
+    'B', 'Synthetic updated worked solution', false
+  );
+
+  IF NOT EXISTS (
+    SELECT 1 FROM public.daily_challenges
+    WHERE id = v_id
+      AND title = 'Synthetic authoring update'
+      AND statement = 'Synthetic authoring updated statement'
+  ) THEN
+    RAISE EXCEPTION 'Daily challenge authoring update did not persist';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM private.daily_challenge_answer_keys
+    WHERE challenge_id = v_id
+      AND correct_answer = 'B'
+      AND solution = 'Synthetic updated worked solution'
+  ) THEN
+    RAISE EXCEPTION 'Daily challenge answer-key update did not persist';
+  END IF;
+
+  DELETE FROM public.daily_challenges WHERE id = v_id;
+
+  IF EXISTS (SELECT 1 FROM public.daily_challenges WHERE id = v_id)
+     OR EXISTS (SELECT 1 FROM private.daily_challenge_answer_keys WHERE challenge_id = v_id) THEN
+    RAISE EXCEPTION 'Synthetic daily challenge fixture cleanup failed';
+  END IF;
+END;
+$;
+SQL
+echo "PASS: synthetic daily-challenge create/update/read-back/cleanup"
+
 psql -X -v ON_ERROR_STOP=1 -qAt -c "DELETE FROM public.mock_test_attempts WHERE id = '$attempt_id'; DELETE FROM auth.users WHERE id IN ('$user_a', '$user_b');"
 echo "PASS: disposable RPC negative authorization suite"
