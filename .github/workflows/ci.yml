@@ -98,6 +98,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/002_live_rpc_baseline_fingerprint.sql
       - name: Replay reconstructed access grants
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/004_reconstructed_access_grants.sql
+      - name: Assert exact public browser-role grant contract
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/008_live_public_grant_contract.sql
       - name: Run dedicated SECURITY DEFINER RPC contract
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/security_definer_rpc_contracts.sql
       - name: Assert reconstructed catalog
