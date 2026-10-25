@@ -111,7 +111,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Boundaries:** the CI replay does not recover missing historical migration bodies, prove production migration-chain replay or full live-catalog parity, or replace real Supabase-issued JWT/user-token and student/admin browser tests.
 - **Safety:** this verification involved repository CI only. No production SQL/DDL, migration repair, production data changes, content publication, paid infrastructure, or PR merge occurred.
 
-
 ## 2026-10-25 — browser recovery tests and reconstruction CI
 
 - **Commit tested:** `731a835d1ad3e89e343984a043d94c83b3d41b2e` on `chore/schema-reconstruction`.
