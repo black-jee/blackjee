@@ -119,3 +119,14 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Reconstruction scope:** disposable PostgreSQL 17 replay, reconstructed catalog/RLS/RPC/grant assertions, branch-only integrity hardening tests, application security regression assertions, and RPC authorization-denial tests passed.
 - **Limits:** this does not recover the seven missing historical migration bodies, prove exact live catalog/migration parity, test real Supabase-issued JWTs, or validate deployed Vercel runtime/authenticated end-to-end flows. Vercel deployment remains separately unverified due to the previously observed build-rate-limit/upgrade status.
 - **Safety:** repository-only test/configuration and documentation changes. No production SQL/DDL, migration repair/reset, data changes, question/solution additions, paid infrastructure, deployment, or PR merge.
+
+
+## 2026-10-25 — password-reset neutral error handling and browser CI
+
+- **Commit tested:** `703c803be479905ba4f5f7e89c622a182757d401` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40169013572](https://github.com/black-jee/blackjee/actions/runs/40169013572) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Browser coverage:** all 12 Playwright executions passed across desktop Chromium and mobile Chromium. Coverage includes the home page, sign-in controls, password-reset page, neutral password-reset success, neutral provider-failure handling, and mismatched-password rejection.
+- **Security improvement:** password-reset failures now display a generic message instead of raw provider error text. CI supplies isolated dummy public Supabase configuration to browser tests so reset-flow tests exercise the client request rather than only the missing-configuration fallback. The test asserts the form paragraph specifically to avoid framework route-announcer role ambiguity.
+- **Quality scope:** dependency audit, lint, typecheck, unit tests, E2E tests, Prettier formatting, and production build passed. Disposable PostgreSQL reconstruction replay and its catalog/security assertions passed.
+- **Limits:** this does not recover the seven missing historical migration bodies, prove exact live catalog parity, validate real Supabase-issued JWTs, or verify the deployed Vercel runtime. The Vercel status remains rate-limited and no paid upgrade was attempted.
+- **Safety:** only repository source, tests, CI configuration, and documentation were changed. No production DDL/data changes, migration repair/reset, question/solution additions, paid infrastructure, deployment, or PR merge occurred.
