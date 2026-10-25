@@ -49,3 +49,22 @@ The repository's disposable PostgreSQL replay remains a separate test environmen
 ## Verification boundary
 
 This is a **read-only live catalog audit**. It does not test real Supabase-issued anonymous/student/admin JWTs, authenticated browser journeys, or the deployed Vercel runtime. The branch-only PYQ option-label trigger and `private.mock_test_responses(question_id)` index remain separate from production unless a fresh live query establishes otherwise. Draft PR #2 remains open and unmerged.
+
+## Follow-up read-only snapshot — 2026-10-25
+
+The Supabase management API and PostgreSQL catalog were queried again after the initial report:
+
+- The migration API returned 20 applied versions, from `20261024080824` (`foundation_schema`) through `20261024112132` (`require_pyq_source_page_before_publish`). The complete live list is available from the connected project's migration API; this report does not reproduce missing historical bodies.
+- The live table API returned nine application tables across `public` and `private`, all with RLS enabled. The detailed response includes column types/defaults/checks, primary keys, and foreign keys; the earlier inventory count was 93 columns and 49 constraints.
+- A normalized access snapshot returned 10 policies, 12 routines, 36 table-grant rows, and 460 column-grant rows for the selected application schemas/roles.
+- The effective privilege check returned no direct `SELECT`, `INSERT`, `UPDATE`, or `DELETE` table grants to `anon` or `authenticated` on `private` tables. It returned no `PUBLIC EXECUTE` grant among the 12 routines and only `get_current_daily_challenge()` executable by `anon`. The 11 remaining routines are not executable by `anon`; authenticated and service roles can execute them.
+- `public` has `USAGE` for the browser roles and no `CREATE` for `anon`, `authenticated`, or `service_role`; `private` denies `USAGE` to those three roles.
+
+### CI verification after formatting correction
+
+GitHub Actions run [40184262757](https://github.com/black-jee/blackjee/actions/runs/40184262757) completed successfully. Both `quality` and `reconstruction-replay` concluded `success`. This verifies the repository CI jobs on the formatting correction; it does not establish that the separate Vercel deployment succeeded.
+
+### Remaining parity work
+
+This is still an access/catalog inventory, not a full definition-level diff. Exact live-versus-repository comparison of every column attribute, constraint action, index definition, policy expression, grant, and routine definition remains open. Migration history reconciliation also remains open: the known seven missing applied migration bodies and six repository-only migration files must be matched by version and recovered from trustworthy source material, not reconstructed by guesswork. No live database changes were made.
+
