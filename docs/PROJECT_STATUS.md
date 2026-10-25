@@ -125,3 +125,13 @@
 - **Fresh read-only live catalog query:** nine tracked tables have 49 constraints (33 public, 16 private) and 11 secondary indexes (9 public, 2 private), matching the expected baseline smoke-test counts. The branch-only `private.mock_test_responses(question_id)` index remains absent from production. Count parity is not a full definition-level schema diff.
 - **Latest documentation:** `docs/MIGRATION_RECONCILIATION_2026-10-24.md` records this count recheck. Full live-versus-reconstruction definitions/grants/policy comparison and real Supabase-issued admin/non-admin JWT tests remain release gates.
 - **Production safety:** only read-only SQL was run. No production DDL/grants/data changes, migration ledger repair, paid services, JEE question/solution additions, or PR merge occurred.
+
+
+## Reconstruction checkpoint — 2026-10-25 (latest CI and policy audit)
+
+- **Latest confirmed CI:** [run 40157546264](https://github.com/black-jee/blackjee/actions/runs/40157546264) passed both `quality` and `reconstruction-replay`. Quality included dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and build; replay covered the reconstructed catalog/RLS/RPC/grants and branch-only integrity tests in disposable PostgreSQL.
+- **Fresh read-only policy review:** owner-scoped attempt reads, live-schedule/public-approved-PYQ read predicates, and admin-role write predicates were inspected from `pg_policies`. Eleven live `SECURITY DEFINER` functions have empty `search_path`; `anon` lacks EXECUTE, while `authenticated` and `service_role` have it. Admin RPCs contain user-presence and server-managed admin-role checks.
+- **Open security/product decision:** daily-challenge answer/solution retrieval is timestamp-gated but does not require a submitted attempt. Preserve current behavior until the owner confirms the intended release policy.
+- **Production validation gap:** live `start_mock_test` still lacks explicit NULL rejection for question count/duration; branch-only fix is tested in replay but not deployed. A NULL question count can make the selection query's `LIMIT` unbounded before the NOT NULL duration constraint rejects the insert.
+- **Remaining gates:** exact live-vs-reconstruction definition-level diff; real Supabase-issued anonymous/student/admin JWT tests; reviewed deployment and rollback plan. CI green does not substitute for these gates.
+- **Safety:** no production SQL/grants/schema/data or migration-ledger changes, no paid infrastructure, no new JEE content, and no PR merge.
