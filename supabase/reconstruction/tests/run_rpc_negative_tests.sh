@@ -247,6 +247,16 @@ expect_denial \
   "$cross_user_daily_submit_sql"
 
 psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_a'; SET request.jwt.claims = '{\"sub\":\"$user_a\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.submit_daily_challenge('$challenge_id'::uuid, 'A');" >/dev/null
+
+# A live challenge's answer and worked solution must remain hidden until release,
+# even after a synthetic attempt has been submitted by another user.
+unreleased_result="$(psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT (r.result ->> 'solution_released') = 'false' AND NOT (r.result ? 'correct_answer') AND NOT (r.result ? 'solution') FROM (SELECT public.get_daily_challenge_result('$challenge_id'::uuid) AS result) AS r;")"
+if [[ "$unreleased_result" != "t" ]]; then
+  echo "FAIL: daily challenge result exposed answer/solution before release"
+  exit 1
+fi
+echo "PASS: daily-challenge answer and solution stay hidden before release"
+
 psql -X -v ON_ERROR_STOP=1 -qAt -c "DELETE FROM public.daily_challenges WHERE id = '$challenge_id'::uuid;"
 echo "PASS: daily-challenge session ownership and cleanup"
 
