@@ -68,3 +68,11 @@ GitHub Actions run [40184262757](https://github.com/black-jee/blackjee/actions/r
 
 This is still an access/catalog inventory, not a full definition-level diff. Exact live-versus-repository comparison of every column attribute, constraint action, index definition, policy expression, grant, and routine definition remains open. Migration history reconciliation also remains open: the known seven missing applied migration bodies and six repository-only migration files must be matched by version and recovered from trustworthy source material, not reconstructed by guesswork. No live database changes were made.
 
+## Security advisor follow-up — 2026-10-25
+
+The Supabase security advisor currently reports:
+
+- Five informational `rls_enabled_no_policy` findings for private answer-key/session/response tables. These tables intentionally have RLS enabled with no direct-client policies, and the catalog check found no browser-role `USAGE` on `private` and no direct browser CRUD grants. This is defense in depth; RPC access still needs runtime tests.
+- Eleven warnings for authenticated execution of `SECURITY DEFINER` routines exposed in `public`. This is not by itself proof of an authorization bypass. Read-only inspection of the live definitions showed each of the 11 routines references `auth.uid()`; the three admin authoring/review routines also check the trusted `auth.jwt()->'app_metadata'->>'role' = 'admin'` claim. The user-scoped routines constrain queried or mutated attempts to the caller's user ID, and routines pin `search_path` to empty. These static observations are encouraging but do not replace negative runtime tests using real issued JWTs, including ordinary authenticated users invoking each admin routine and cross-user attempt IDs.
+- No security advisor finding was remediated in production during this pass. The intended role model and runtime validation gap should be documented and reviewed before any approved production security change.
+
