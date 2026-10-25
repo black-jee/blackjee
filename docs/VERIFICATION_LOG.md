@@ -93,3 +93,13 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Deployment status:** the combined GitHub commit status still reports a Vercel build-rate-limit/upgrade-page failure. Deployment/runtime remains **UNVERIFIED**; no paid upgrade was attempted.
 - **Production safety:** no production DDL, migration apply/repair/reset, content publication, or deployment was performed for this verification.
 - **Follow-up documentation:** the current-head checkpoint was added to `docs/PROJECT_STATUS.md` in commit `0758f03385f153d28853a40b33caa40b3331bea8`. That new documentation commit needs its own CI run before it can be called green.
+
+
+## 2026-10-25 — exact daily-challenge RPC baseline and CI verification
+
+- **GitHub Actions:** [run 40165662614](https://github.com/black-jee/blackjee/actions/runs/40165662614) — **PASS** for both `quality` and `reconstruction-replay` at commit `12548bf6bb499ac806124b09dc29af93d3a0cac4`.
+- **Baseline:** the branch reconstruction now uses the read-only live `pg_get_functiondef` for `public.admin_save_daily_challenge`; captured MD5 is `ebdff78aa677719515c9e500fc576562`. CI asserts this baseline before applying branch-only hardening.
+- **Test correction:** security-contract checks now locate solution/option integrity rules in `20261025110000_harden_daily_challenge_authoring_integrity.sql`, not in the original live baseline.
+- **Fresh live read-only query:** 20 migration ledger rows; live function MD5 matches the captured fingerprint; production has zero `validate_jee_pyq_option_labels` triggers and zero standalone indexes matching `private.mock_test_responses(question_id)`. These two hardening changes remain branch-only.
+- **Limits:** this verifies one RPC baseline and branch CI, not the full production catalog, missing historical SQL bodies, real Auth-issued JWT behavior, or deployment/runtime.
+- **Safety:** no production DDL, grants, row changes, migration repair, publication, paid infrastructure, or PR merge occurred.
