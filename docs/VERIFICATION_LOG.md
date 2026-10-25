@@ -1,3 +1,11 @@
+## 2026-10-26 — CI run #671 green on current verified HEAD
+
+- **Commit tested:** `8b6d0c0552e071bce08da81b0aa7baa7f9f73e64` (`docs: align project records with green CI run 670`).
+- **GitHub Actions:** [run 40218443473](https://github.com/black-jee/blackjee/actions/runs/40218443473) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD.
+- **Deployment status:** GitHub reports the Vercel status as successful (“Deployment has completed”). Runtime/browser smoke test remains unverified.
+- **Migration inventory:** a fresh read-only Supabase migration listing returned 20 versions; repository tree contains 19 SQL migration files (README excluded), with 13 exact version/name matches, seven live versions lacking same-version SQL bodies, and six repository-only files. No Supabase development branches were listed.
+- **Safety:** no production Supabase changes, migration-history repair, paid infrastructure, or JEE content import occurred. PR #2 remains draft and unmerged.
+
 ## 2026-10-25 — CI run #670 green on latest verified HEAD
 
 - **Commit tested:** `a6e4608fac26f60786c9753cbf5947973aed8e77` (`docs: track checkpoint reconciliation commit`).

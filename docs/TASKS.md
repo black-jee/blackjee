@@ -1,3 +1,13 @@
+## Latest checkpoint — 2026-10-26 (CI run #671 green)
+
+- **Verified HEAD:** `8b6d0c0552e071bce08da81b0aa7baa7f9f73e64` (`docs: align project records with green CI run 670`).
+- **CI:** [run #671 / 40218443473](https://github.com/black-jee/blackjee/actions/runs/40218443473) passed both `quality` and `reconstruction-replay` on that HEAD. The formatting check and production build are included in the green quality job.
+- **Vercel:** the GitHub status for this SHA reports success, “Deployment has completed.” This is a deployment status only; a live runtime/browser smoke test remains unverified.
+- **PR #2:** open, draft, unmerged. Its verification section cites run #671. Do not merge.
+- **Migration evidence rechecked:** live Supabase ledger returns 20 versions; repository contains 19 SQL migration files, 13 exact version/name matches, seven applied versions without same-version bodies, and six repository-only SQL files. Supabase development branches list is empty. Exact code/commit searches so far have not recovered the seven missing bodies.
+- **Next:** continue free source recovery and improve the mismatch inventory without inventing historical SQL. No production schema/data/grants/ledger mutations, paid branch/project, or question/answer content creation.
+- **Release gates:** real Supabase-issued JWT and full authenticated student/admin tests, content/image reconciliation, Storage policy/bucket review, staging/runtime/rollback review remain incomplete.
+
 ## Current reconstruction checkpoint — 2026-10-25 (CI run #670 green)
 
 - **CI verification:** run [#670 / 40218123225](https://github.com/black-jee/blackjee/actions/runs/40218123225) passed both `quality` and `reconstruction-replay` on `a6e4608fac26f60786c9753cbf5947973aed8e77`. The actual Prettier diff was applied to `tests/mock-test-action-auth.test.ts`; formatting and build passed.

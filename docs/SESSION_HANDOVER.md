@@ -1,7 +1,7 @@
 # BLACK-JEE session handover
 
-**Updated:** 2026-10-25  
-**Active task:** BJ-DB-001 — continue free recovery of missing applied migration SQL; CI run #670 is green and PR #2 verification metadata is current  
+**Updated:** 2026-10-26  
+**Active task:** BJ-DB-001 — continue free recovery of missing applied migration SQL; CI run #671 is green and PR #2 verification metadata is current  
 **Branch:** `chore/schema-reconstruction`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
