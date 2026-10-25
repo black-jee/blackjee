@@ -291,3 +291,13 @@ This count-level parity is a useful consistency check, not an exact definition-l
 - Requeried constraints and indexes across the nine tracked application tables. The live catalog still has 49 constraints. The 11 baseline secondary indexes are present; the additional `private.mock_test_responses(question_id)` index remains a branch-only proposal and is absent from production.
 - **Remaining exactness gate:** perform a machine-comparable, definition-level diff for column types/defaults/nullability, constraint expressions and FK actions, indexes (including predicates), RLS expressions, and all effective grants. Function fingerprint parity alone does not establish whole-catalog parity.
 - Latest CI run [40157731052](https://github.com/black-jee/blackjee/actions/runs/40157731052): `reconstruction-replay` passed; `quality` was still running E2E setup at the time of this note.
+
+
+## Latest baseline integrity repair — 2026-10-25
+
+- **CI evidence:** [run 40165662614](https://github.com/black-jee/blackjee/actions/runs/40165662614) passed both quality and disposable reconstruction replay on commit `12548bf6bb499ac806124b09dc29af93d3a0cac4`.
+- **RPC baseline repair:** `supabase/reconstruction/003_reconstructed_rpc_definitions.sql` now contains the read-only live definition of `public.admin_save_daily_challenge`, with MD5 `ebdff78aa677719515c9e500fc576562`. CI runs `supabase/reconstruction/tests/002_live_rpc_baseline_fingerprint.sql` immediately after replaying the baseline RPC definitions and before the branch-only hardening migrations.
+- **Layered checks:** `supabase/reconstruction/tests/003_security_regression_assertions.sql` fingerprints the original function as part of the live baseline contract; the static contract script checks the hardening rules in `20261025110000_harden_daily_challenge_authoring_integrity.sql`. The post-migration SQL contract test checks the hardened definition.
+- **Fresh live read-only check:** ledger count remains 20; live function MD5 still matches the captured baseline. The PYQ option-label trigger is absent, and no standalone `private.mock_test_responses(question_id)` index is present. The related branch migrations have not been applied to production.
+- **Scope limitation:** this closes the identified mismatch for one RPC and proves the disposable replay path is green. It does not resolve seven missing historical migration bodies, repository-only migration files, full catalog/grant/policy parity, or real Supabase-issued JWT testing.
+- **Safety:** no live DDL, grant changes, row changes, migration-ledger repair, content publication, paid infrastructure, or PR merge occurred.
