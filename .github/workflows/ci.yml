@@ -96,6 +96,10 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql
       - name: Test daily-challenge authoring integrity contract
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/daily_challenge_authoring_integrity.sql
+      - name: Add mock-test response question FK index
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025120000_add_mock_test_response_question_id_index.sql
+      - name: Test mock-test response question FK index
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/mock_test_response_question_id_index.sql
       - name: Run application security regression assertions
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/private_table_access.sql
