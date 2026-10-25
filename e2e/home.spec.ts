@@ -13,7 +13,10 @@ test("home page explains the platform and its migration status", async ({ page }
   ).toBeVisible();
 });
 
-test("sign-in page exposes accessible email and password controls", async ({ page }) => {
+test("sign-in page exposes accessible email and password controls without browser-render errors", async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+
   await page.goto("/login");
   await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
   await expect(page.getByLabel("Email address")).toHaveAttribute("type", "email");
@@ -24,6 +27,7 @@ test("sign-in page exposes accessible email and password controls", async ({ pag
     "href",
     "/auth/reset-password",
   );
+  expect(pageErrors).toEqual([]);
 });
 
 test("password-reset page explains the neutral recovery response", async ({ page }) => {
