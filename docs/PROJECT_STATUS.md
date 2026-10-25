@@ -10,7 +10,7 @@
 - **Supabase migrations:** last read-only inventory found 20 applied entries and 19 repository SQL migration files (excluding README); 13 exact version/name matches, seven live versions without same-version SQL bodies, and six repository files absent from the live ledger. See the dated reconciliation below; no migration history was repaired
 - **Supabase data:** 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported
 - **Supabase tables:** 9 inspected public/private tables; no student attempts or mock-test attempts
-- **Reconstruction replay:** the latest verified completed run for prior HEAD is [40155186509](https://github.com/black-jee/blackjee/actions/runs/40155186509), with both quality and reconstruction-replay jobs passing on `063cf1480d36f8c4c84efebb41438566122dc8c3`. New documentation commits are awaiting their own CI runs. Disposable PostgreSQL replay is not proof of exact historical migration equivalence or real Supabase Auth parity.
+- **Reconstruction replay:** latest verified run [40175995526](https://github.com/black-jee/blackjee/actions/runs/40175995526) passed both quality and reconstruction-replay jobs on `fb82e5c3dcec4127c11ea9ee2840b4c3d3404dc1`. Disposable PostgreSQL replay is not proof of exact historical migration equivalence or real Supabase Auth parity.
 - **Supabase Edge Functions:** Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)
 - **Legacy source ZIP:** Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files
 - **Live website comparison:** Blocked/incomplete; direct fetch did not return page content
@@ -154,3 +154,13 @@
 - **Known deliberate branch-only differences:** production still lacks the PYQ option-label trigger and the standalone `private.mock_test_responses(question_id)` index; no production migration or object change was performed.
 - **Remaining gates:** full definition-level comparison for table columns/defaults/nullability, constraints and FK actions, index predicates, RLS expressions, and effective grants; resolve seven missing historical migration bodies and six repository-only migration files without rewriting the live ledger; test with real Supabase-issued anonymous/student/admin JWTs; and verify a no-cost deployment path.
 - **Safety:** draft PR #2 remains open and unmerged. No production DDL, grants, data, migration-ledger changes, paid infrastructure, or JEE question/solution additions.
+
+
+## Reconstruction checkpoint — 2026-10-25 (latest green CI)
+
+- **Current branch HEAD:** `fb82e5c3dcec4127c11ea9ee2840b4c3d3404dc1` on `chore/schema-reconstruction`.
+- **CI:** [run 40175995526](https://github.com/black-jee/blackjee/actions/runs/40175995526) — **PASS** for both quality and disposable PostgreSQL reconstruction replay.
+- **Verified gates:** dependency audit, lint, typecheck, unit tests, 14 browser tests, formatting, build, reconstructed catalog/RLS/RPC/grants, branch-only hardening tests, and authorization-denial assertions.
+- **Next priorities:** create a machine-comparable definition-level live-versus-reconstruction diff; continue reviewing access-control boundaries; plan real Supabase-issued anonymous/student/admin JWT tests; keep the seven missing migration bodies and repository/live-ledger drift unresolved rather than inventing SQL or changing production history.
+- **Deployment boundary:** CI success does not establish the current HEAD's deployed runtime or authenticated browser behavior. Check provider status separately; do not upgrade paid resources to bypass limits.
+- **Safety:** draft PR #2 remains open and unmerged. No production schema/data/grant changes, migration repair, content additions/publication, paid resources, or deployment action occurred.
