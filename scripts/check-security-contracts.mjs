@@ -90,7 +90,9 @@ for (const check of checks) {
   try {
     source = readFileSync(check.file, "utf8");
   } catch (error) {
-    console.error(`FAIL: ${check.description} (cannot read ${check.file}: ${error.message})`);
+    console.error(
+      `FAIL: ${check.description} (cannot read ${check.file}: ${error.message})`,
+    );
     failed++;
     continue;
   }
