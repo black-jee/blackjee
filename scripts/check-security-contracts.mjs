@@ -103,10 +103,11 @@ const checks = [
   },
   {
     file: "app/admin/pyq/actions.ts",
-    description: "PYQ authoring and review verify server-managed administrator role before privileged RPCs",
+    description:
+      "PYQ authoring and review verify server-managed administrator role before privileged RPCs",
     pattern:
       /supabase\.auth\.getUser\(\)[\s\S]*?app_metadata\?\.role\s*!==\s*"admin"[\s\S]*?supabase\.rpc\(\s*"admin_save_jee_pyq_question"[\s\S]*?supabase\.rpc\(\s*"admin_review_jee_pyq_question"/,
-  }
+  },
 ];
 
 let failed = 0;
