@@ -81,6 +81,28 @@ describe("PYQ authoring schema", () => {
     }
   });
 
+  it("rejects a correct answer that is absent from the option labels", () => {
+    const result = questionSchema.safeParse({
+      ...baseQuestion,
+      questionType: "single_correct",
+      correctAnswer: "C",
+      options: [
+        { id: "a", label: "A", text: "First option" },
+        { id: "b", label: "B", text: "Second option" },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(
+        result.error.issues.some(
+          (issue) => issue.path.includes("correctAnswer") &&
+            issue.message === "Correct answer must match one of the option labels.",
+        ),
+      ).toBe(true);
+    }
+  });
+
   it("accepts a single-correct question when the option set is present", () => {
     const result = questionSchema.safeParse({
       ...baseQuestion,

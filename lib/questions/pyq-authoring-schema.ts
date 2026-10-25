@@ -62,5 +62,13 @@ export const questionSchema = z
           message: "Single-correct option labels must be unique.",
         });
       }
+
+      if (!labels.includes(question.correctAnswer.toUpperCase())) {
+        context.addIssue({
+          code: "custom",
+          path: ["correctAnswer"],
+          message: "Correct answer must match one of the option labels.",
+        });
+      }
     }
   });
