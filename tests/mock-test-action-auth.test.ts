@@ -10,9 +10,7 @@ const mockTestActions = readFileSync(
 describe("mock-test server action authentication contract", () => {
   it("derives the caller from Supabase's verified user session", () => {
     expect(mockTestActions).toMatch(/supabase\.auth\.getUser\(\)/);
-    expect(mockTestActions).toContain(
-      "if (error || !data.user) return { supabase, userId: null }",
-    );
+    expect(mockTestActions).toContain("if (error || !data.user) return { supabase, userId: null }");
     expect(mockTestActions).not.toMatch(/auth\.getSession\(\)/);
   });
 
