@@ -113,6 +113,12 @@ def main() -> int:
             if not public_root.is_relative_to(repo_root):
                 raise ValueError("Public asset destination resolves outside --repo-root.")
 
+            # Validate the report destination before writing any assets so a symlink
+            # escape cannot leave a partially imported public directory behind.
+            report_path = repo_root / args.report
+            if not report_path.resolve().is_relative_to(repo_root):
+                raise ValueError("Report destination resolves outside --repo-root.")
+
             for filename, archive_name in archive_by_name.items():
                 if archive.getinfo(archive_name).file_size > MAX_FILE_BYTES:
                     raise ValueError(f"Image exceeds {MAX_FILE_BYTES} bytes: {filename}")
