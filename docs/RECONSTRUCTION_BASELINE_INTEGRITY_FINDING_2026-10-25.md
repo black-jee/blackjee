@@ -25,13 +25,13 @@ The same function block labels `ebdff78aa677719515c9e500fc576562` as the **origi
 - If the forward migration repeats the same guards, the replay may not adequately demonstrate the difference between pre-fix and post-fix state.
 - Historical migration provenance cannot be inferred from the fingerprint comment.
 
-### Required repair before claiming exact RPC parity
+### Branch-only repair implemented; CI verification pending
 
-1. Capture the exact live `pg_get_functiondef` body for `admin_save_daily_challenge` into a clearly labelled baseline artifact, retaining its observed fingerprint.
-2. Move hardening exclusively into `20261025110000_harden_daily_challenge_authoring_integrity.sql` (or another explicitly proposed forward migration), not the baseline snapshot.
-3. Add a replay assertion that checks the baseline fingerprint/body before hardening, then checks the post-migration guard behavior after hardening.
-4. Ensure docs and CI distinguish **baseline parity** from **post-hardening expected state**.
-5. Re-run disposable replay and the full quality workflow; review the exact diff before treating this as release-ready.
+1. Captured the exact live `pg_get_functiondef` body for `admin_save_daily_challenge` in the reconstructed baseline artifact. Its observed MD5 is `ebdff78aa677719515c9e500fc576562`.
+2. Kept authoring hardening in the forward migration `20261025110000_harden_daily_challenge_authoring_integrity.sql`, separate from the baseline snapshot.
+3. Added `supabase/reconstruction/tests/002_live_rpc_baseline_fingerprint.sql` and wired it into CI immediately after replaying RPC definitions, before later migrations are applied.
+4. The existing `supabase/tests/daily_challenge_authoring_integrity.sql` checks the hardened function after the forward migration.
+5. The new baseline assertion and complete CI run must pass before claiming this RPC's baseline-to-hardened transition is verified. This assertion covers this function only; it does not establish full catalog parity.
 
 ## Additional focused check
 
