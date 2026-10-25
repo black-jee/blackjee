@@ -85,7 +85,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Edge Function audit:** `one-time-pyq-import` is listed ACTIVE with JWT verification enabled, but the deployed handler responds only with HTTP 410 and the message that the endpoint has been retired. **PASS for retired handler content**; do not treat ACTIVE metadata alone as evidence that import is available.
 - **Safety:** these checks were read-only. No live DDL, data mutation, content publication, Storage bucket creation, paid infrastructure, or deployment action was performed. Authenticated browser journeys and production runtime remain **UNVERIFIED**.
 
-
 ## 2026-10-25 — reconstruction branch HEAD verification
 
 - **Commit tested:** `063cf1480d36f8c4c84efebb41438566122dc8c3`.
