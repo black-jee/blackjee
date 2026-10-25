@@ -9,6 +9,7 @@
 File: `supabase/reconstruction/003_reconstructed_rpc_definitions.sql`
 
 The file header describes the file as a current live catalog snapshot. However, its `public.admin_save_daily_challenge` body contains explicit reconstructed hardening:
+
 - live challenge requires a non-empty worked solution;
 - explicit schedule comparisons;
 - options JSON-array and count validation;
