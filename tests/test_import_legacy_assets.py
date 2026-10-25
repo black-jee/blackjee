@@ -100,7 +100,7 @@ class ImportLegacyAssetsTests(unittest.TestCase):
     def test_rejects_windows_style_manifest_asset_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            archive = self.make_archive(root, filename=r"..\\diagram.png")
+            archive = self.make_archive(root, filename=r"..\diagram.png")
             result = self.run_import(archive, root / "repo", "--dry-run")
 
             self.assertEqual(result.returncode, 2)
