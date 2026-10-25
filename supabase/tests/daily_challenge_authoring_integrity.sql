@@ -8,6 +8,9 @@ BEGIN
   IF position('A live challenge must include a worked solution' IN v_definition) = 0 THEN
     RAISE EXCEPTION 'Daily challenge RPC must reject live challenges without a worked solution';
   END IF;
+  IF position('Challenge date and schedule times are required' IN v_definition) = 0 THEN
+    RAISE EXCEPTION 'Daily challenge RPC must reject NULL challenge dates and schedule timestamps';
+  END IF;
   IF position('A daily challenge can have at most 12 options' IN v_definition) = 0
      OR position('Daily challenge options need non-empty labels' IN v_definition) = 0
      OR position('Daily challenge option labels must be unique' IN v_definition) = 0
