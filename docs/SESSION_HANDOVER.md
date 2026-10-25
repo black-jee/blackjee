@@ -80,7 +80,6 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - Corrective change: normalized excessive blank lines before Markdown headings in those three files. This is a formatting-only correction; it does not change SQL or database state.
 - The new commit's CI must be checked independently. Keep PR #2 draft/unmerged and production untouched.
 
-
 ## Latest handover — 2026-10-26 (supersedes older checkpoints above)
 
 - **Repository / branch:** [black-jee/blackjee](https://github.com/black-jee/blackjee), `chore/schema-reconstruction`.
