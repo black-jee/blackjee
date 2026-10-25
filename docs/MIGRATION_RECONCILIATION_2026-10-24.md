@@ -283,3 +283,13 @@ This count-level parity is a useful consistency check, not an exact definition-l
 - **Open policy question:** `get_daily_challenge_result` releases answer/solution after `solution_release_at` for any signed-in caller who knows a live challenge ID; it does not check for a submitted attempt. Do not change this without confirming product intent.
 - **Still open:** exact definition-level live-vs-reconstruction diff; genuine Supabase-issued anonymous/student/admin JWT tests; decision on daily-solution release semantics; approved rollout/rollback plan for branch-only fixes. The live `start_mock_test` NULL question-count validation gap remains unpatched in production.
 - No production SQL, grants, migration ledger, schema, or data were changed. No paid service was started, no JEE question/solution content was added, and PR #2 remains open/unmerged.
+
+
+## Function fingerprint parity — 2026-10-25 follow-up
+
+- Requeried the live routine catalog read-only and compared `md5(pg_get_functiondef(oid))` with the fingerprints recorded beside each reconstructed function.
+- **12/12 reconstructed routine fingerprints match the live catalog**: 11 `SECURITY DEFINER` RPCs plus `get_current_daily_challenge` (which is not `SECURITY DEFINER`). This establishes current function-definition fingerprint parity for the recorded snapshot, not historical migration provenance or runtime authorization proof.
+- All 11 `SECURITY DEFINER` functions retain empty `search_path` settings; current EXECUTE results remain `anon=false`, `authenticated=true`, `service_role=true`.
+- Requeried constraints and indexes across the nine tracked application tables. The live catalog still has 49 constraints. The 11 baseline secondary indexes are present; the additional `private.mock_test_responses(question_id)` index remains a branch-only proposal and is absent from production.
+- **Remaining exactness gate:** perform a machine-comparable, definition-level diff for column types/defaults/nullability, constraint expressions and FK actions, indexes (including predicates), RLS expressions, and all effective grants. Function fingerprint parity alone does not establish whole-catalog parity.
+- Latest CI run [40157731052](https://github.com/black-jee/blackjee/actions/runs/40157731052): `reconstruction-replay` passed; `quality` was still running E2E setup at the time of this note.
