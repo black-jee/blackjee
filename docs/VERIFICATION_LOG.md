@@ -110,3 +110,13 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Deployment status:** the commit's combined GitHub status still reports **Vercel failure** linking to the build-rate-limit/upgrade page. Do not treat CI success as deployment success. No paid upgrade was attempted.
 - **Boundaries:** the CI replay does not recover missing historical migration bodies, prove production migration-chain replay or full live-catalog parity, or replace real Supabase-issued JWT/user-token and student/admin browser tests.
 - **Safety:** this verification involved repository CI only. No production SQL/DDL, migration repair, production data changes, content publication, paid infrastructure, or PR merge occurred.
+
+
+## 2026-10-25 — browser recovery tests and reconstruction CI
+
+- **Commit tested:** `731a835d1ad3e89e343984a043d94c83b3d41b2e` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40168181107](https://github.com/black-jee/blackjee/actions/runs/40168181107) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** static security contracts, production dependency audit, lint, TypeScript, unit tests, Playwright browser smoke tests, Prettier formatting, and production build passed. The password-update mismatch test now targets the form paragraph with `p[role="alert"]`, avoiding ambiguity with framework route-announcer alerts.
+- **Reconstruction scope:** disposable PostgreSQL 17 replay, reconstructed catalog/RLS/RPC/grant assertions, branch-only integrity hardening tests, application security regression assertions, and RPC authorization-denial tests passed.
+- **Limits:** this does not recover the seven missing historical migration bodies, prove exact live catalog/migration parity, test real Supabase-issued JWTs, or validate deployed Vercel runtime/authenticated end-to-end flows. Vercel deployment remains separately unverified due to the previously observed build-rate-limit/upgrade status.
+- **Safety:** repository-only test/configuration and documentation changes. No production SQL/DDL, migration repair/reset, data changes, question/solution additions, paid infrastructure, deployment, or PR merge.
