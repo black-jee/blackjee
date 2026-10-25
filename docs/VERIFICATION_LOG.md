@@ -1,3 +1,10 @@
+## 2026-10-25 — CI run #668 green on current PR HEAD
+
+- **Commit tested:** `1a42455e41393c9f66b36d9c9ecb63466223f3b5` (`docs: refresh handover with green CI run 666`).
+- **GitHub Actions:** [run 40217791906](https://github.com/black-jee/blackjee/actions/runs/40217791906) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD.
+- **Scope:** documentation checkpoint updates passed the same full quality and disposable PostgreSQL replay workflow. PR #2's verification description was updated to cite this run.
+- **Limits and safety:** CI does not prove recovered historical migration equivalence, real Supabase-issued JWT parity, full authenticated student/admin workflows, or production deployment health. PR #2 remains draft and unmerged; no production schema/data/grants/migration-history changes or paid infrastructure were used.
+
 ## 2026-10-25 — CI run #666 green after Prettier correction
 
 - **Commit tested:** `195d7a6269e9704a73751720bcc7232b3f3c38e4` (`style: apply Prettier formatting to mock auth test`).
