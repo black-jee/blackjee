@@ -5,6 +5,10 @@
 **Target:** Supabase project `phdssyexhfyxsmhmmcgb`  
 **Repository HEAD inspected:** `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`
 
+## Current inventory addendum — 2026-10-25
+
+A fresh recursive repository-tree count confirms **19 SQL migration files**, not the 15 stated in the historical snapshot below. The current reconciliation is **20 live applied versions, 13 exact filename/version matches, seven applied bodies missing from the repository, and six repository-only SQL files absent from the live ledger**. The dated inventory at [`MIGRATION_CHAIN_INVENTORY.md`](./MIGRATION_CHAIN_INVENTORY.md) contains the full version-by-version lists. The 15-file count below is retained as part of the original 2026-10-24 report and should not be used as the current count.
+
 ## Findings from read-only inspection
 
 ### Migration history mismatch
