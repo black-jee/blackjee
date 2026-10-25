@@ -8,10 +8,10 @@ Record the exact recovery checks performed for the BLACK-JEE Supabase migration 
 
 - Target project: `phdssyexhfyxsmhmmcgb`.
 - Live migration history currently contains 20 versions.
-- Repository has 15 files under `supabase/migrations/`.
+- Current repository inventory (rechecked 2026-10-25): 19 SQL files under `supabase/migrations/` (excluding README).
 - Thirteen migration versions have exact filename/version matches.
 - Seven applied migration bodies are missing from the current migration directory.
-- Two repository migration files are not recorded as applied in the live history.
+- Six repository SQL files are not recorded as applied in the live history.
 - Only the `main` branch was returned by the repository branch listing at the time of this check.
 
 ## Recovery checks performed
@@ -40,6 +40,17 @@ find "$HOME/storage/shared/Download" -type f \( -iname '*.zip' -o -iname '*.tar'
 ```
 
 If the shared Download folder does not exist, do not change permissions just for this check; run `termux-setup-storage` only if the owner chooses to grant Termux shared-storage access. Inspect candidate archives before extracting them, and do not upload secrets or `.env` files. A matching filename is only a candidate: compare SQL content and provenance before treating it as original history.
+
+## Repository/ledger count recheck — 2026-10-25
+
+The live ledger still has 20 applied versions. The branch now has 19 SQL migration files: 13 exact version/name matches and six local-only files. The four later files below were added after the initial 2026-10-24 inventory; none is recorded as applied in the current live ledger:
+
+- `20261024130000_harden_mock_test_input_nulls.sql`
+- `20261025100000_enforce_unique_pyq_option_labels.sql`
+- `20261025110000_harden_daily_challenge_authoring_integrity.sql`
+- `20261025120000_add_mock_test_response_question_id_index.sql`
+
+The two publication-gate files remain local-only as well. CI run [40154542265](https://github.com/black-jee/blackjee/actions/runs/40154542265) passed both quality and disposable reconstruction replay jobs on commit `9f924ab40e369093153ed579fdaf8e3af22c7588`. These tests do not mean any of the six local-only migrations were applied to production.
 
 ## Missing applied bodies
 
