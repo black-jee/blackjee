@@ -79,6 +79,12 @@ const checks = [
       /cannot resume another user's mock attempt[\s\S]*?cannot submit another user's mock attempt[\s\S]*?cannot retrieve another user's mock-test result/i,
   },
   {
+    file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
+    description: "daily solution RPC rejects a missing authenticated user identity before lookup",
+    pattern:
+      /authenticated role without a user identity cannot fetch daily challenge solutions[\s\S]*?Sign in required[\s\S]*?SET request\.jwt\.claims = '\{\}'/i,
+  },
+  {
     file: "supabase/tests/pyq_option_label_validation.sql",
     description: "numerical questions with an empty options array remain valid",
     pattern:
