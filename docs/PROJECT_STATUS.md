@@ -173,7 +173,6 @@
 - **Remaining gates:** exact RLS policy-expression/effective-grant parity beyond the existing assertions; real Supabase-issued anonymous/student/admin JWT and browser journeys; safe handling of seven unrecovered historical migration bodies and six repo-only migration files; remaining 70 source question records and 21 image assets; staging/deployment and rollback verification.
 - **Safety:** draft PR #2 remains open and unmerged. No production schema/data/grant changes, migration-ledger repair, paid resources, question/solution additions, or deployment action occurred.
 
-
 ## Reconstruction checkpoint — 2026-10-25 (policy and grant snapshots)
 
 - **Latest verified HEAD:** `aa9270785137e4242ba66aaa12b382edaad038d7` on `chore/schema-reconstruction`.

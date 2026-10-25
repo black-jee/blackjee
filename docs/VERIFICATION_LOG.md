@@ -174,7 +174,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Limits / blockers:** this run does not recover the seven missing historical migration bodies, prove complete live-catalog/migration parity, validate real Supabase-issued JWTs, or independently prove current deployed runtime/authenticated student-admin journeys. Branch-only database hardening is not production-applied.
 - **Safety:** no production DDL/data/grant changes, migration repair/reset, question/solution additions, paid resources, deployment action, or PR merge occurred. Draft PR #2 remains open and unmerged.
 
-
 ## 2026-10-25 — exact RLS and browser grant contracts
 
 - **Commit tested:** `aa9270785137e4242ba66aaa12b382edaad038d7` on `chore/schema-reconstruction`.
