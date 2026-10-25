@@ -97,6 +97,15 @@ class ImportLegacyAssetsTests(unittest.TestCase):
             self.assertFalse((repo / "public").exists())
             self.assertFalse((repo / "docs" / "ASSET_IMPORT_REPORT.json").exists())
 
+    def test_rejects_windows_style_manifest_asset_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            archive = self.make_archive(root, filename=r"..\\diagram.png")
+            result = self.run_import(archive, root / "repo", "--dry-run")
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("invalid asset filename", result.stderr)
+
     def test_rejects_report_path_traversal(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
