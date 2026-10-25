@@ -96,6 +96,12 @@ const checks = [
   },
 
   {
+    file: "lib/auth/require-admin.ts",
+    description: "administrator pages use authenticated server-managed app metadata, not user-editable metadata",
+    pattern:
+      /supabase\\.auth\\.getUser\\(\\)[\\s\\S]*?app_metadata\\?\\.role\\s*!==\\s*"admin"/,
+  },
+  {
     file: "app/admin/actions.ts",
     description: "daily-challenge authoring verifies server-managed administrator role before RPC",
     pattern:
