@@ -102,3 +102,11 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Fresh live read-only query:** 20 migration ledger rows; live function MD5 matches the captured fingerprint; production has zero `validate_jee_pyq_option_labels` triggers and zero standalone indexes matching `private.mock_test_responses(question_id)`. These two hardening changes remain branch-only.
 - **Limits:** this verifies one RPC baseline and branch CI, not the full production catalog, missing historical SQL bodies, real Auth-issued JWT behavior, or deployment/runtime.
 - **Safety:** no production DDL, grants, row changes, migration repair, publication, paid infrastructure, or PR merge occurred.
+
+## 2026-10-25 — latest verified reconstruction CI
+
+- **Commit tested:** `bb0d19bb58e09c7dba41892a7d0c571d08155579` (`chore/schema-reconstruction`).
+- **GitHub Actions:** [run 40166741350](https://github.com/black-jee/blackjee/actions/runs/40166741350) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully. Quality gates passed: static security contracts, production dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build. Reconstruction replay passed on disposable PostgreSQL 17, including catalog/RLS/RPC/grant assertions, branch-only hardening tests, application security assertions, and RPC authorization-denial tests.
+- **Deployment status:** the commit's combined GitHub status still reports **Vercel failure** linking to the build-rate-limit/upgrade page. Do not treat CI success as deployment success. No paid upgrade was attempted.
+- **Boundaries:** the CI replay does not recover missing historical migration bodies, prove production migration-chain replay or full live-catalog parity, or replace real Supabase-issued JWT/user-token and student/admin browser tests.
+- **Safety:** this verification involved repository CI only. No production SQL/DDL, migration repair, production data changes, content publication, paid infrastructure, or PR merge occurred.
