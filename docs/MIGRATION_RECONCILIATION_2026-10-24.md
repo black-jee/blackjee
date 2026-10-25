@@ -137,7 +137,6 @@ New forward-only hardening files present on the working branch:
 
 The daily-challenge authoring guard checks live-solution completeness and option integrity at the database boundary. The solution-release behavior remains unchanged: after its configured release timestamp, the RPC releases the answer and worked solution to authenticated callers. Whether release should additionally require a submitted attempt remains an unresolved product/security decision; do not change this behavior without confirming the intended access rule.
 
-
 ## Latest complete CI verification (2026-10-25)
 
 The latest inspected GitHub Actions run is [run 40153871492](https://github.com/black-jee/blackjee/actions/runs/40153871492), on commit `8aa9833999c6b5e15dca1ded3c4d3395bcc273f7`. Both jobs completed successfully.
