@@ -9,7 +9,6 @@
 - **External check:** Vercel still reports a platform build-rate-limit/upgrade failure. Do not create paid resources; this is separate from the green repository CI jobs.
 - **Safety:** no production schema/data/grant/ledger mutation or JEE content import. PR #2 remains draft and unmerged.
 
-
 # BLACK-JEE task ledger
 
 **Last reconciled:** 2026-10-26. One authoritative entry per task; update this file as evidence changes.
