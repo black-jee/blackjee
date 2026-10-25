@@ -62,6 +62,25 @@ describe("PYQ authoring schema", () => {
     }
   });
 
+  it("rejects duplicate option IDs", () => {
+    const result = questionSchema.safeParse({
+      ...baseQuestion,
+      questionType: "single_correct",
+      correctAnswer: "A",
+      options: [
+        { id: "duplicate", label: "A", text: "First option" },
+        { id: "duplicate", label: "B", text: "Second option" },
+      ],
+    });
+
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      expect(result.error.issues.some((issue) => issue.message === "Option IDs must be unique.")).toBe(
+        true,
+      );
+    }
+  });
+
   it("accepts a single-correct question when the option set is present", () => {
     const result = questionSchema.safeParse({
       ...baseQuestion,
