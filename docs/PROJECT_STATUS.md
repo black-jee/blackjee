@@ -7,10 +7,10 @@
 
 - **New GitHub repository:** `black-jee/blackjee`, public, default branch `main`
 - **New Supabase:** `phdssyexhfyxsmhmmcgb`, ACTIVE_HEALTHY, PostgreSQL 17.11, Tokyo region
-- **Supabase migrations:** 20 applied entries; 15 SQL migration files are checked into Git; seven live migration versions lack same-version files, and two overlapping repository migration files are absent from the live ledger
+- **Supabase migrations:** last read-only inventory found 20 applied entries and 19 repository SQL migration files (excluding README); 13 exact version/name matches, seven live versions without same-version SQL bodies, and six repository files absent from the live ledger. See the dated reconciliation below; no migration history was repaired
 - **Supabase data:** 5 PYQ rows imported as drafts, 5 private answer keys, 0 published questions; 70 source questions remain to be imported
 - **Supabase tables:** 9 inspected public/private tables; no student attempts or mock-test attempts
-- **Reconstruction replay:** CI run `40113487978` passed on commit `63c099c`; the later branch-head run `40113673941` (#353) also passed both quality and reconstruction-replay jobs. Disposable PostgreSQL 17 replay applies table shapes, 10 RLS policies, 12 current RPC definitions, and access grants, then passes schema/security assertions, RPC definition fingerprint checks, and four negative authorization checks.
+- **Reconstruction replay:** the latest verified completed run for prior HEAD is [40155186509](https://github.com/black-jee/blackjee/actions/runs/40155186509), with both quality and reconstruction-replay jobs passing on `063cf1480d36f8c4c84efebb41438566122dc8c3`. New documentation commits are awaiting their own CI runs. Disposable PostgreSQL replay is not proof of exact historical migration equivalence or real Supabase Auth parity.
 - **Supabase Edge Functions:** Original source functions are not deployed. A temporary import endpoint is retired (JWT required, returns HTTP 410)
 - **Legacy source ZIP:** Readable; 84 files total, including 75 question slots in the April 4 Shift 1 manifest and 21 image files
 - **Live website comparison:** Blocked/incomplete; direct fetch did not return page content
