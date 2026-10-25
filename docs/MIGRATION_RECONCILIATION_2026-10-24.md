@@ -292,7 +292,6 @@ This count-level parity is a useful consistency check, not an exact definition-l
 - **Remaining exactness gate:** perform a machine-comparable, definition-level diff for column types/defaults/nullability, constraint expressions and FK actions, indexes (including predicates), RLS expressions, and all effective grants. Function fingerprint parity alone does not establish whole-catalog parity.
 - Latest CI run [40157731052](https://github.com/black-jee/blackjee/actions/runs/40157731052): `reconstruction-replay` passed; `quality` was still running E2E setup at the time of this note.
 
-
 ## Latest baseline integrity repair — 2026-10-25
 
 - **CI evidence:** [run 40165662614](https://github.com/black-jee/blackjee/actions/runs/40165662614) passed both quality and disposable reconstruction replay on commit `12548bf6bb499ac806124b09dc29af93d3a0cac4`.
