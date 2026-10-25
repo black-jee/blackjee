@@ -14,7 +14,7 @@ BEGIN
     RAISE EXCEPTION 'Missing index private.mock_test_responses_question_id_idx';
   END IF;
 
-  IF v_index_definition !~* '\\(question_id\\)' THEN
+  IF position('(question_id)' IN v_index_definition) = 0 THEN
     RAISE EXCEPTION 'Question FK index must lead with question_id; got: %', v_index_definition;
   END IF;
 
