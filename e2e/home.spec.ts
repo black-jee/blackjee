@@ -13,9 +13,7 @@ test("home page explains the platform and its migration status", async ({ page }
   ).toBeVisible();
 });
 
-test(
-  "sign-in page exposes accessible email and password controls without browser-render errors",
-  async ({ page }) => {
+test("sign-in renders without browser errors", async ({ page }) => {
     const pageErrors: string[] = [];
     page.on("pageerror", (error) => pageErrors.push(error.message));
 
@@ -29,9 +27,8 @@ test(
       "href",
       "/auth/reset-password",
     );
-    expect(pageErrors).toEqual([]);
-  },
-);
+  expect(pageErrors).toEqual([]);
+});
 
 test("password-reset page explains the neutral recovery response", async ({ page }) => {
   await page.goto("/auth/reset-password");
