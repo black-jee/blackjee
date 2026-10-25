@@ -185,7 +185,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Limits:** this remains a disposable replay, not a production mutation. It does not prove real Supabase-issued JWT behavior, every deployed browser journey, or recovery of the seven historical migration bodies. The six repository-only migration files remain unresolved.
 - **Safety:** no production SQL/DDL/data/grant changes, migration repair/reset, JEE content additions, paid resources, deployment action, or PR merge occurred.
 
-
 ## 2026-10-25 — exact table/schema grants and RPC execute ACLs
 
 - **Commit tested:** `0b11db500d37718d736f1b9a84597208fa287e66` on `chore/schema-reconstruction`.
