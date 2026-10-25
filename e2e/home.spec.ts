@@ -40,6 +40,25 @@ test("password-reset page explains the neutral recovery response", async ({ page
   );
 });
 
+test("password-reset success uses a neutral confirmation", async ({ page }) => {
+  await page.route("**/auth/v1/recover*", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({}),
+    });
+  });
+
+  await page.goto("/auth/reset-password");
+  await page.getByLabel("Email address").fill("student@example.com");
+  await page.getByRole("button", { name: "Send reset link" }).click();
+
+  await expect(page.getByRole("status")).toHaveText(
+    "If the account is eligible, a reset link will be sent to this address.",
+  );
+  await expect(page.getByRole("alert")).toHaveCount(0);
+});
+
 test("password-reset provider failures stay neutral", async ({ page }) => {
   await page.route("**/auth/v1/recover*", async (route) => {
     await route.fulfill({
