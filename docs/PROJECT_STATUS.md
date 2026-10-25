@@ -126,7 +126,6 @@
 - **Latest documentation:** `docs/MIGRATION_RECONCILIATION_2026-10-24.md` records this count recheck. Full live-versus-reconstruction definitions/grants/policy comparison and real Supabase-issued admin/non-admin JWT tests remain release gates.
 - **Production safety:** only read-only SQL was run. No production DDL/grants/data changes, migration ledger repair, paid services, JEE question/solution additions, or PR merge occurred.
 
-
 ## Reconstruction checkpoint — 2026-10-25 (latest CI and policy audit)
 
 - **Latest confirmed CI:** [run 40157546264](https://github.com/black-jee/blackjee/actions/runs/40157546264) passed both `quality` and `reconstruction-replay`. Quality included dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and build; replay covered the reconstructed catalog/RLS/RPC/grants and branch-only integrity tests in disposable PostgreSQL.
