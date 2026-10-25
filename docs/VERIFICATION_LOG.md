@@ -84,3 +84,13 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Live Supabase performance advisor:** one unindexed foreign key remains on `private.mock_test_responses.question_id`; seven indexes are reported unused. No index was added or removed because workload evidence is insufficient for a safe performance change.
 - **Edge Function audit:** `one-time-pyq-import` is listed ACTIVE with JWT verification enabled, but the deployed handler responds only with HTTP 410 and the message that the endpoint has been retired. **PASS for retired handler content**; do not treat ACTIVE metadata alone as evidence that import is available.
 - **Safety:** these checks were read-only. No live DDL, data mutation, content publication, Storage bucket creation, paid infrastructure, or deployment action was performed. Authenticated browser journeys and production runtime remain **UNVERIFIED**.
+
+
+## 2026-10-25 — reconstruction branch HEAD verification
+
+- **Commit tested:** `063cf1480d36f8c4c84efebb41438566122dc8c3`.
+- **GitHub Actions:** [run 40155186509](https://github.com/black-jee/blackjee/actions/runs/40155186509) — **PASS** for both `quality` and `reconstruction-replay` jobs. This is the verified result for that SHA only.
+- **Scope limits:** the replay uses disposable PostgreSQL 17 and a compatibility auth surface; synthetic-identity authorization checks are not equivalent to real Supabase-issued user-token tests. It does not prove that reconstructed SQL is byte-for-byte or historically equivalent to the missing applied migrations.
+- **Deployment status:** the combined GitHub commit status still reports a Vercel build-rate-limit/upgrade-page failure. Deployment/runtime remains **UNVERIFIED**; no paid upgrade was attempted.
+- **Production safety:** no production DDL, migration apply/repair/reset, content publication, or deployment was performed for this verification.
+- **Follow-up documentation:** the current-head checkpoint was added to `docs/PROJECT_STATUS.md` in commit `0758f03385f153d28853a40b33caa40b3331bea8`. That new documentation commit needs its own CI run before it can be called green.
