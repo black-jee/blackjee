@@ -1,3 +1,12 @@
+## Reconstruction checkpoint — 2026-10-25 (CI run #659 failure and correction in progress)
+
+- **Observed CI:** [run #659](https://github.com/black-jee/blackjee/actions/runs/40215878244), triggered for `c63f0329806174300682311446af0b420ec927d3`, failed `quality` only at Prettier's `Check formatting` step; the log named `tests/mock-test-action-auth.test.ts`. The `reconstruction-replay` job passed. Earlier quality steps including dependency audit, lint, typecheck, unit tests, 22 desktop/mobile Playwright tests, and build passed in that run.
+- **Code correction:** `45832664ac395912257e1c7b5afcd6280c81b44b` restores the authentication-contract assertion to a single line. The documentation follow-up commits are `717b53de2f4d90f4530d27efe3bfa20840346f80` (handover) and `6a32863f10487e995941d1f0c02f427b447f5efb` (verification log).
+- **Current HEAD verification:** the correction and documentation commits have not yet been verified green by a returned CI result. Do not describe the latest HEAD as green until both `quality` and `reconstruction-replay` pass on the same commit.
+- **Vercel:** the correction commit's combined status was pending at last check; deployment/runtime is **UNVERIFIED**.
+- **Unchanged release blockers:** seven applied migration SQL bodies remain unrecovered; six repository-only migrations remain unreconciled; real Supabase-issued JWT and authenticated student/admin journeys remain unverified; 70 question slots and 21 assets remain to be reconciled/reviewed; staging/runtime and rollback readiness remain incomplete.
+- **Safety:** PR #2 stays draft/open/unmerged. No production schema/data/grant/migration-ledger change, publication, paid infrastructure, or deployment action was performed.
+
 # BLACK-JEE project status
 
 **Last updated:** 2026-10-25
