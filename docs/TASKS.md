@@ -1,8 +1,9 @@
-## Current reconstruction checkpoint — 2026-10-25
+## Current reconstruction checkpoint — 2026-10-25 (CI run #666 green)
 
+- **CI verification:** run [#666 / 40217609671](https://github.com/black-jee/blackjee/actions/runs/40217609671) passed both `quality` and `reconstruction-replay` on `195d7a6269e9704a73751720bcc7232b3f3c38e4`. The actual Prettier diff was applied to `tests/mock-test-action-auth.test.ts`; formatting and build passed.
+- **PR follow-up:** refresh PR #2's verification section with run #666, preserving its draft/open/unmerged state.
 - **BJ-DB-001:** remains **IN_PROGRESS/BLOCKED on source recovery**. Do not fabricate the seven missing applied migration bodies or reconcile the six repo-only migration files by mutating production history.
-- **CI follow-up:** run #659 ([40215878244](https://github.com/black-jee/blackjee/actions/runs/40215878244)) failed only at quality formatting for `tests/mock-test-action-auth.test.ts`; reconstruction replay passed. The assertion formatting was corrected in `45832664ac395912257e1c7b5afcd6280c81b44b`. Follow-up documentation commits `717b53de2f4d90f4530d27efe3bfa20840346f80`, `6a32863f10487e995941d1f0c02f427b447f5efb`, and `e29d094fd19bbbcfe93d2ba9ad2bc6e0f3f3b93b` are not yet verified green by a returned workflow result.
-- **Immediate next action:** inspect Actions runs for latest branch HEAD; if no run starts, investigate the workflow trigger without weakening gates. Verify both jobs on one SHA, then update PR #2 verification description only with confirmed evidence.
+- **Next project priority after PR metadata:** continue free source/history recovery and reviewed no-cost isolated replay planning; no paid Supabase branch/project, production migration changes, or invented content.
 - **Release gates remain:** real Supabase-issued JWT/authenticated student-admin tests, full content/image review, deployment/runtime and rollback verification.
 - **Safety:** PR #2 must remain draft and unmerged; no production Supabase mutations or paid resources.
 
