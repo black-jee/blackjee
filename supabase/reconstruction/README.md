@@ -28,15 +28,17 @@
 
 The CI workflow now starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies drafts 001–004, and runs both the catalog smoke test and security catalog assertions. CI run `40113487978` passed both the quality job and disposable replay job, including RPC definition fingerprints and four negative authorization tests. The latest branch-head run `40113673941` (#353) also passed both `quality` and `reconstruction-replay`. This is a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, or replace real-user end-to-end authorization tests.
 
-## Migration-history reconciliation — read-only inventory (2026-10-24)
+## Migration-history reconciliation — latest read-only inventory (2026-10-25)
 
-A fresh comparison of the live Supabase migration ledger (20 entries) against `supabase/migrations/` (15 SQL files) found:
+A fresh comparison of the live Supabase migration ledger (20 entries) against `supabase/migrations/` (19 SQL files, excluding README) found:
 
 - **7 live migration versions have no same-version SQL file in the repository:** `20261024080824` (`foundation_schema`), `20261024080924` (`tighten_rpc_grants_and_policy`), `20261024081041` (`daily_solution_release_rpc`), `20261024081337` (`numeric_answers_and_admin_review`), `20261024081603` (`secure_daily_attempt_sessions`), `20261024081731` (`restrict_anon_rpc_execution`), and `20261024112132` (`require_pyq_source_page_before_publish`).
-- **2 repository SQL files are not present in the live ledger:** `20261024112500_require_pyq_source_page_before_publish.sql` and `20261024120000_require_pyq_source_and_solution_before_publish.sql`. Their overlapping publication-validation intent requires review; do not apply or delete them merely to reconcile counts.
-- The other 13 repository SQL files match versions in the live ledger.
+- **6 repository SQL files are not present in the live ledger:** `20261024112500_require_pyq_source_page_before_publish.sql`, `20261024120000_require_pyq_source_and_solution_before_publish.sql`, `20261024130000_harden_mock_test_input_nulls.sql`, `20261025100000_enforce_unique_pyq_option_labels.sql`, `20261025110000_harden_daily_challenge_authoring_integrity.sql`, and `20261025120000_add_mock_test_response_question_id_index.sql`.
+- The other 13 repository SQL files match versions in the live ledger by filename/version. A match alone does not prove the contents are byte-identical to the original applied body.
 
-This is a version/name inventory only; it does not recover the seven missing historical SQL bodies or prove that the overlapping files are equivalent. Preserve the live ledger and production schema. Reconstruct missing bodies from verified catalog/function definitions and repository history, label inferred SQL clearly, and only validate replay in a disposable database.
+The live `admin_review_jee_pyq_question` function requires a source document and positive source page, a non-empty statement, private answer key and worked solution, and a matching option label for single-correct questions. The local-only `20261024112500` body implements the source-page check, while applied repository migration `20261024111533` does not. This supports the live behavior but does not recover the exact original SQL body for ledger version `20261024112132`.
+
+The four later hardening/index migrations were exercised in the disposable CI replay, but they are **not verified as applied to production**. Latest checked CI run [40154542265](https://github.com/black-jee/blackjee/actions/runs/40154542265) passed both quality and reconstruction replay. Preserve the live ledger and production schema. Do not apply these files, rename them to match ledger entries, or run migration repair just to align counts. If original bodies cannot be recovered, reconstruct a separately labelled baseline from reviewed catalog evidence and validate it only in a disposable database.
 
 ## Security checkpoint — read-only live-catalog comparison (2026-10-24)
 
