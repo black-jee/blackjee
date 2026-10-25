@@ -163,3 +163,13 @@
 - **Next priorities:** fix the two documentation formatting issues and rerun CI; create a machine-comparable definition-level live-versus-reconstruction diff; review access-control boundaries; plan real Supabase-issued anonymous/student/admin JWT tests; keep the seven missing migration bodies and repository/live-ledger drift unresolved rather than inventing SQL or changing production history.
 - **Deployment boundary:** CI success does not establish the current HEAD's deployed runtime or authenticated browser behavior. Check provider status separately; do not upgrade paid resources to bypass limits.
 - **Safety:** draft PR #2 remains open and unmerged. No production schema/data/grant changes, migration repair, content additions/publication, paid resources, or deployment action occurred.
+
+
+## Reconstruction checkpoint — 2026-10-25 (definition-level catalog contracts)
+
+- **Latest verified code commit:** `13663455db50e0c592611a737817929dcb62617a`; [GitHub Actions run 40176912205](https://github.com/black-jee/blackjee/actions/runs/40176912205) passed both `quality` and `reconstruction-replay`.
+- **New exact snapshot contracts passed in disposable PostgreSQL:** all 93 live column definitions (order, types, nullability, defaults, identity/generated flags); all 49 constraint definitions and 23 index definitions/flags; and all 12 live routine fingerprints, languages, security modes, and pinned configurations. These are compared with read-only catalog snapshots captured from the live project. They do not mutate production.
+- **Quality gates passed:** dependency audit, lint, TypeScript, unit tests, 14 browser tests, Prettier, and production build. Reconstruction replay also passed its existing RLS/grant/RPC assertions, branch-only integrity/index tests, and RPC authorization-denial tests.
+- **Fresh production safety check:** the branch-only PYQ option-label trigger and `private.mock_test_responses_question_id_idx` are both absent from production. They remain reconstruction-only and have not been applied.
+- **Remaining gates:** exact RLS policy-expression/effective-grant parity beyond the existing assertions; real Supabase-issued anonymous/student/admin JWT and browser journeys; safe handling of seven unrecovered historical migration bodies and six repo-only migration files; remaining 70 source question records and 21 image assets; staging/deployment and rollback verification.
+- **Safety:** draft PR #2 remains open and unmerged. No production schema/data/grant changes, migration-ledger repair, paid resources, question/solution additions, or deployment action occurred.
