@@ -1,6 +1,7 @@
 ## Recovery status update — 2026-10-26 (five archived bodies restored)
 
 The Library archive `blackjee-foundation.zip` (SHA-256 `f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433`) supplied five SQL migration files whose Git blob IDs match the archived bytes exactly. They were restored unchanged into `supabase/migrations/`:
+
 - `20261024080824_foundation_schema.sql` — blob `8f21bc901173963de9569bd2b24bb27fae1851b7`
 - `20261024080924_tighten_rpc_grants_and_policy.sql` — blob `7bab53a3c94194f5b75ed3811703529207dcc31e`
 - `20261024081041_daily_solution_release_rpc.sql` — blob `bd3afd3728b7ad9f53abec4f0663ea039dbd1a5a`
@@ -8,6 +9,7 @@ The Library archive `blackjee-foundation.zip` (SHA-256 `f0bfe458bdf81f7f84f34ef0
 - `20261024081731_restrict_anon_rpc_execution.sql` — blob `e53dda77762d7d62fc3b4df41632e6789ab6b4bb`
 
 Two applied bodies remain unresolved:
+
 - `20261024081337_numeric_answers_and_admin_review`: the archive contains a similar-purpose `20261024081110_numeric_answers_and_admin_review.sql`, but its version differs. It was not renamed or treated as the applied body.
 - `20261024112132_require_pyq_source_page_before_publish`: no exact file was found in the archive or the other four Library ZIPs. Local `20261024112500`/`20261024120000` files are not substitutes.
 
@@ -34,10 +36,10 @@ This is a reconciliation manifest, not a reconstructed migration chain. It does 
 
 ## Applied versions whose SQL bodies remain missing
 
-| Live version | Live migration name | Status |
-| --- | --- | --- |
-| `20261024081337` | `numeric_answers_and_admin_review` | Archive contains similar-purpose `20261024081110` file, but the version differs; applied body remains unresolved. |
-| `20261024112132` | `require_pyq_source_page_before_publish` | No exact body recovered. Same-purpose local files use different versions and are not substitutes. |
+| Live version     | Live migration name                      | Status                                                                                                            |
+| ---------------- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `20261024081337` | `numeric_answers_and_admin_review`       | Archive contains similar-purpose `20261024081110` file, but the version differs; applied body remains unresolved. |
+| `20261024112132` | `require_pyq_source_page_before_publish` | No exact body recovered. Same-purpose local files use different versions and are not substitutes.                 |
 
 ## Applied versions with exact repository filename matches
 

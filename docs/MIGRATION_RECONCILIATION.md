@@ -14,6 +14,7 @@ The Library archive `blackjee-foundation.zip` yielded five exact-version migrati
 ### Migration history mismatch
 
 The live Supabase migration history contains 20 applied versions. Five of the seven bodies previously missing from the repository have now been restored byte-for-byte from `blackjee-foundation.zip`:
+
 - `20261024080824_foundation_schema`
 - `20261024080924_tighten_rpc_grants_and_policy`
 - `20261024081041_daily_solution_release_rpc`
@@ -21,6 +22,7 @@ The live Supabase migration history contains 20 applied versions. Five of the se
 - `20261024081731_restrict_anon_rpc_execution`
 
 Two applied bodies remain unresolved:
+
 - `20261024081337_numeric_answers_and_admin_review` — the archive contains `20261024081110_numeric_answers_and_admin_review.sql`, but the version differs and it is not accepted as the applied body.
 - `20261024112132_require_pyq_source_page_before_publish` — no exact body was found in the inspected archives.
 
@@ -44,6 +46,7 @@ The live history also records the following 14 later versions, in order:
 ### Repository migration directory drift
 
 The current repository contains 24 SQL migration files, of which 18 match live migration versions exactly. Six repository files are not recorded as applied in the live history:
+
 1. `20261024112500_require_pyq_source_page_before_publish.sql` — overlaps the applied publication-gate purpose but is not the `20261024112132` original.
 2. `20261024120000_require_pyq_source_and_solution_before_publish.sql` — similar publication checks; not recorded as applied.
 3. `20261024130000_harden_mock_test_input_nulls.sql` — CI-tested only; not verified applied to production.
