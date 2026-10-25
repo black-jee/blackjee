@@ -42,6 +42,8 @@ def main() -> int:
 
     if not args.dry_run and not args.write_public_assets:
         parser.error("Refusing to write question assets into public/ without --write-public-assets; use --dry-run to validate only.")
+    if args.report.is_absolute() or not safe_archive_path(args.report.as_posix()):
+        parser.error("--report must be a safe relative path inside --repo-root.")
 
     if not args.zip_file.is_file():
         parser.error(f"ZIP file not found: {args.zip_file}")
@@ -98,15 +100,29 @@ def main() -> int:
             for filename in sorted(referenced):
                 if filename not in archive_by_name:
                     missing.append(filename)
+            if missing:
+                raise ValueError(
+                    "Referenced image files are missing; refusing partial import: "
+                    + ", ".join(missing)
+                )
+
+            repo_root = args.repo_root.resolve()
+            public_root = (repo_root / "public").resolve()
+            if not public_root.is_relative_to(repo_root):
+                raise ValueError("Public asset destination resolves outside --repo-root.")
 
             for filename, archive_name in archive_by_name.items():
                 content = archive.read(archive_name)
                 if len(content) > MAX_FILE_BYTES:
                     raise ValueError(f"Image exceeds {MAX_FILE_BYTES} bytes: {filename}")
                 relative = PACKAGE + "images/" + filename
-                destination = args.repo_root / "public" / relative
+                destination = repo_root / "public" / relative
+                if not destination.resolve().is_relative_to(public_root):
+                    raise ValueError(f"Asset destination resolves outside public/: {filename}")
                 if not args.dry_run:
                     destination.parent.mkdir(parents=True, exist_ok=True)
+                    if not destination.resolve().is_relative_to(public_root):
+                        raise ValueError(f"Asset destination resolves outside public/: {filename}")
                     destination.write_bytes(content)
                 copied.append({
                     "path": relative,
@@ -133,9 +149,15 @@ def main() -> int:
         "warning": "Copying assets does not verify question wording, answer keys, diagram correctness, or publication approval.",
     }
 
-    report_path = args.repo_root / args.report
+    report_path = args.repo_root.resolve() / args.report
+    if not report_path.resolve().is_relative_to(args.repo_root.resolve()):
+        print("Asset import failed: report destination resolves outside --repo-root.", file=sys.stderr)
+        return 2
     if not args.dry_run:
         report_path.parent.mkdir(parents=True, exist_ok=True)
+        if not report_path.resolve().is_relative_to(args.repo_root.resolve()):
+            print("Asset import failed: report destination resolves outside --repo-root.", file=sys.stderr)
+            return 2
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + os.linesep, encoding="utf-8")
 
     print(json.dumps({
