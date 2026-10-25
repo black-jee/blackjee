@@ -109,3 +109,12 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **Migration blockers unchanged:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files. Exact originals remain `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute `20261024081110` for the first.
 - **External deployment:** Vercel's build-rate-limit/upgrade blocker is separate from green repository CI. No paid infrastructure is authorized.
 - **Next:** continue free, evidence-backed search for the exact historical migration bodies; meanwhile design real signed-token/authenticated-client tests only with isolated test credentials and fixtures. Do not mutate production Supabase, invent historical SQL or JEE content, or merge PR #2.
+
+
+### Latest continuation checkpoint — 2026-10-26 (formatting follow-up after CI #713)
+
+- Current documentation HEAD after formatting-only corrections: `5d6219a734b918e78552f9cb4052316d358043a2`; preceding task-ledger formatting correction: `87436e42dadf1b0e041ffb5f5b3bd5dc63b4a660`.
+- CI [#713 / 40246843924](https://github.com/black-jee/blackjee/actions/runs/40246843924) ran against the preceding documentation checkpoint. `reconstruction-replay` passed; `quality` failed only at Prettier. The log specifically identified excess blank lines before the new checkpoint heading in `docs/TASKS.md` and `docs/SESSION_HANDOVER.md`. Those spacing issues have now been corrected in the two commits above. The latest HEAD has no matching successful workflow run yet; do not claim it is green.
+- Run #712 / 40246842441 was cancelled; it is not a code failure and does not verify either job.
+- No application or SQL changes were made in this formatting follow-up. Migration blockers and security-test limitations remain as recorded above. PR #2 must remain draft/unmerged; production Supabase stays read-only; no paid infrastructure or invented migration/question content.
+- Next action: obtain and inspect a workflow run on `5d6219a734b918e78552f9cb4052316d358043a2`. If formatting passes, resume evidence-backed recovery and isolated real-auth test design.
