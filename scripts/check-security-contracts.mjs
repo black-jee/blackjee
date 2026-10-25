@@ -93,7 +93,20 @@ const checks = [
     file: ".github/workflows/ci.yml",
     description: "CI executes database option-integrity and authorization regressions",
     pattern: /supabase\/tests\/pyq_option_label_validation\.sql[\s\S]*?run_rpc_negative_tests\.sh/,
+  },,
+
+  {
+    file: "app/admin/actions.ts",
+    description: "daily-challenge authoring verifies server-managed administrator role before RPC",
+    pattern:
+      /supabase\\.auth\\.getUser\\(\\)[\\s\\S]*?auth\\.user\\.app_metadata\\?\\.role\\s*!==\\s*"admin"[\\s\\S]*?supabase\\.rpc\\(\\s*"admin_save_daily_challenge"/,
   },
+  {
+    file: "app/admin/pyq/actions.ts",
+    description: "PYQ authoring and review verify server-managed administrator role before privileged RPCs",
+    pattern:
+      /supabase\\.auth\\.getUser\\(\\)[\\s\\S]*?app_metadata\\?\\.role\\s*!==\\s*"admin"[\\s\\S]*?supabase\\.rpc\\(\\s*"admin_save_jee_pyq_question"[\\s\\S]*?supabase\\.rpc\\(\\s*"admin_review_jee_pyq_question"/,
+  }
 ];
 
 let failed = 0;
