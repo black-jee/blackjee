@@ -96,3 +96,13 @@ The highest-value next input is an archive, old clone, Termux folder, or backup 
 - **Indexed commit search:** `foundation_schema` returned no matching commits within the `black-jee` owner scope.
 - **Interpretation:** this narrows the public GitHub recovery paths checked, but does not inspect private repositories, local devices, cloud drives, editor backups, or external archives. The missing migration bodies remain **not recovered**.
 - **Safety:** the `Sample` repository was only read during this recheck; no new file was created by this check, and no production database action was taken.
+
+
+## Branch and indexed-search recheck — 2026-10-25
+
+- Requeried path-specific GitHub commit history for each of the seven missing migration filenames; all seven returned zero commits.
+- Checked the expected exact paths on the repository branches `main` and `chore/sql-security-test-plan`; none of the seven source files exists at those paths. The current `chore/schema-reconstruction` branch also has no original bodies at those paths.
+- Searched indexed GitHub files for each exact version/name pair; no results were returned.
+- **Conclusion:** no original SQL body was recovered from the public repository paths, branch checks, or indexed searches performed in this pass. This is not proof that private backups, local clones, external archives, or deployment artifacts do not exist.
+- **Next action:** preserve the production ledger and keep the reconstruction labelled separately. Do not synthesize historical bodies or run `migration repair`, `db reset`, or production DDL to force parity.
+- **Safety:** all checks were repository/API reads; no production database mutation, paid resource, question/solution addition, or PR merge occurred.

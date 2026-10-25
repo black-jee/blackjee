@@ -173,3 +173,15 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Application validation:** PYQ authoring schema now rejects duplicate option IDs, duplicate case-insensitive labels, fewer than two options for single-correct questions, and a correct answer absent from the option labels. Numerical questions with no options remain valid.
 - **Limits / blockers:** this run does not recover the seven missing historical migration bodies, prove complete live-catalog/migration parity, validate real Supabase-issued JWTs, or independently prove current deployed runtime/authenticated student-admin journeys. Branch-only database hardening is not production-applied.
 - **Safety:** no production DDL/data/grant changes, migration repair/reset, question/solution additions, paid resources, deployment action, or PR merge occurred. Draft PR #2 remains open and unmerged.
+
+
+## 2026-10-25 — exact RLS and browser grant contracts
+
+- **Commit tested:** `aa9270785137e4242ba66aaa12b382edaad038d7` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40177773683](https://github.com/black-jee/blackjee/actions/runs/40177773683) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **New RLS contract:** all 10 public policy definitions matched the captured live snapshot, including policy mode, role set, command, `USING`, and `WITH CHECK` expressions.
+- **New grant contract:** browser-role SELECT column boundaries for daily challenges and PYQ questions, attempt-table read privileges, authoring write privileges, anonymous write denial, and public-schema usage/create privileges matched the reviewed contract.
+- **Existing replay scope:** exact column, constraint/index, and routine fingerprints; RPC grant/security assertions; branch-only hardening tests; and synthetic RPC authorization-denial tests all passed.
+- **Quality scope:** dependency audit, lint, TypeScript typecheck, unit tests, 14 Playwright browser tests, Prettier formatting, and production build passed.
+- **Limits:** this remains a disposable replay, not a production mutation. It does not prove real Supabase-issued JWT behavior, every deployed browser journey, or recovery of the seven historical migration bodies. The six repository-only migration files remain unresolved.
+- **Safety:** no production SQL/DDL/data/grant changes, migration repair/reset, JEE content additions, paid resources, deployment action, or PR merge occurred.

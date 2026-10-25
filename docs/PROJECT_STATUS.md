@@ -172,3 +172,14 @@
 - **Fresh production safety check:** the branch-only PYQ option-label trigger and `private.mock_test_responses_question_id_idx` are both absent from production. They remain reconstruction-only and have not been applied.
 - **Remaining gates:** exact RLS policy-expression/effective-grant parity beyond the existing assertions; real Supabase-issued anonymous/student/admin JWT and browser journeys; safe handling of seven unrecovered historical migration bodies and six repo-only migration files; remaining 70 source question records and 21 image assets; staging/deployment and rollback verification.
 - **Safety:** draft PR #2 remains open and unmerged. No production schema/data/grant changes, migration-ledger repair, paid resources, question/solution additions, or deployment action occurred.
+
+
+## Reconstruction checkpoint — 2026-10-25 (policy and grant snapshots)
+
+- **Latest verified HEAD:** `aa9270785137e4242ba66aaa12b382edaad038d7` on `chore/schema-reconstruction`.
+- **CI:** [run 40177773683](https://github.com/black-jee/blackjee/actions/runs/40177773683) passed both `quality` and `reconstruction-replay`, including dependency audit, lint, typecheck, unit tests, 14 browser tests, formatting, production build, disposable PostgreSQL replay, and RPC authorization-denial tests.
+- **Definition-level replay coverage:** exact snapshots passed for 93 columns, 49 constraints, 23 indexes, and 12 routines; a new policy contract passed for all 10 public RLS policy definitions (roles, command, permissive mode, USING, and WITH CHECK expressions).
+- **Grant coverage:** new browser-role assertions passed for exact SELECT column sets on public PYQ/challenge tables, authenticated attempt-table read grants, admin-gated authoring write grants, anonymous write denial, and public-schema usage/create boundaries.
+- **Migration recovery:** a new public GitHub recovery pass found no history entries or indexed results for the seven missing migration filenames; exact source bodies remain unrecovered and must not be invented. Six repository-only migration files also remain a reconciliation issue.
+- **Remaining gates:** real Supabase-issued anonymous/student/admin JWT and browser journeys; normalized live-vs-reconstruction comparison beyond the covered catalog contracts; recovery or approved replacement strategy for migration history; content import and image review; staging/runtime/rollback verification. Vercel deployment rate limiting has previously blocked new preview deployments; do not pay to bypass it.
+- **Safety:** PR #2 remains draft, open, and unmerged. No production SQL/DDL, grants, data, migration ledger, JEE question/solution content, or paid infrastructure was changed.
