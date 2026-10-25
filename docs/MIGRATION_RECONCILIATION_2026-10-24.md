@@ -118,13 +118,14 @@ No production SQL was executed for this investigation; the Supabase calls used w
 
 ## Latest verification update (2026-10-25)
 
-The latest inspected completed GitHub Actions run is [run 40148547937](https://github.com/black-jee/blackjee/actions/runs/40148547937), associated with PR #2 head commit `4bdd582c3be676b25a77eab7b0bbcfbcddf9e7b5`.
+The latest inspected GitHub Actions run is [run 40152913800](https://github.com/black-jee/blackjee/actions/runs/40152913800), associated with branch `chore/schema-reconstruction` at commit `68081fd9519f9a33489f034e09fdf637007ce118). Both required CI jobs completed successfully.
 
 - **Disposable database reconstruction/replay: PASS.** The job completed the reconstructed catalog, RLS, RPC, grant, security-regression, mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, mock-test response question-index, application security regression, and RPC authorization-denial steps.
-- **Quality checks: mixed.** Static security-contract checks, `npm ci`, lint, typecheck, unit tests, Playwright E2E, and the production build passed. The strict Prettier check failed.
-- **Formatting failure details:** CI reported four files needing formatting: `docs/MIGRATION_RECONCILIATION_2026-10-24.md`, `lib/questions/pyq-authoring-schema.ts`, `scripts/check-security-contracts.mjs`, and `tests/pyq-authoring-schema.test.ts`. This run does not establish a fully green CI result.
-- The combined commit status also reports a Vercel failure associated with the deployment-rate-limit/upgrade page. No paid upgrade was attempted.
+- **Quality checks: PASS.** Static security-contract checks, `npm ci`, lint, typecheck, unit tests, Playwright E2E, strict Prettier formatting, and the production build all passed on this commit.
+- The previous formatting failures in `docs/MIGRATION_RECONCILIATION_2026-10-24.md`, `scripts/check-security-contracts.mjs`, and related quality files were corrected and the current CI run verifies the checks now pass.
 - The PR remains draft, open, and unmerged. No production SQL or migration repair was performed, no paid Supabase infrastructure was created, and no JEE questions, answers, or solutions were added.
+
+This green run verifies the current branch's automated checks and disposable PostgreSQL reconstruction. It does not recover the missing historical migration bodies, prove production migration-chain replay, establish exact equivalence with the live production catalog, or replace real Supabase-issued user-token tests. The previously observed Vercel deployment-rate-limit/upgrade status is separate from this GitHub Actions result; no paid upgrade was attempted.
 
 The run exercises the forward-only hardening migrations only in the disposable CI PostgreSQL service. It does not recover the missing historical migration bodies, prove production migration-chain replay, or replace real Supabase-issued user-token tests.
 
