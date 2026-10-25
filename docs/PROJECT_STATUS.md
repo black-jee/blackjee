@@ -182,3 +182,13 @@
 - **Migration recovery:** a new public GitHub recovery pass found no history entries or indexed results for the seven missing migration filenames; exact source bodies remain unrecovered and must not be invented. Six repository-only migration files also remain a reconciliation issue.
 - **Remaining gates:** real Supabase-issued anonymous/student/admin JWT and browser journeys; normalized live-vs-reconstruction comparison beyond the covered catalog contracts; recovery or approved replacement strategy for migration history; content import and image review; staging/runtime/rollback verification. Vercel deployment rate limiting has previously blocked new preview deployments; do not pay to bypass it.
 - **Safety:** PR #2 remains draft, open, and unmerged. No production SQL/DDL, grants, data, migration ledger, JEE question/solution content, or paid infrastructure was changed.
+
+
+## Reconstruction checkpoint — 2026-10-25 (exact role and RPC ACLs)
+
+- **Latest verified HEAD:** `0b11db500d37718d736f1b9a84597208fa287e66` on `chore/schema-reconstruction`.
+- **CI:** [run 40183570563](https://github.com/black-jee/blackjee/actions/runs/40183570563) passed both `quality` and `reconstruction-replay`; browser tests, formatting, and production build passed.
+- **Grant contracts:** the replay now checks effective table-level privileges for `anon`, `authenticated`, and `service_role` across all four public application tables, plus column-level SELECT allowlists, public/private schema privileges, and private-table direct-access isolation.
+- **RPC ACL contract:** all 12 public routine execute matrices are asserted. Only `get_current_daily_challenge()` is executable by `anon`; all 12 are callable by `authenticated` and `service_role`; no routine has a `PUBLIC` execute grant.
+- **Remaining gates:** real Supabase-issued anonymous/student/admin JWT and browser journeys; full live-vs-reconstruction catalog comparison beyond captured contracts; seven missing historical migration bodies; six repository-only migration files; staging/runtime/rollback verification; content import and image review.
+- **Safety:** PR #2 remains draft, open, and unmerged. No production SQL/DDL, grants, data, migration ledger, JEE question/solution content, or paid infrastructure was changed.

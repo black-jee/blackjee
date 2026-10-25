@@ -184,3 +184,14 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Quality scope:** dependency audit, lint, TypeScript typecheck, unit tests, 14 Playwright browser tests, Prettier formatting, and production build passed.
 - **Limits:** this remains a disposable replay, not a production mutation. It does not prove real Supabase-issued JWT behavior, every deployed browser journey, or recovery of the seven historical migration bodies. The six repository-only migration files remain unresolved.
 - **Safety:** no production SQL/DDL/data/grant changes, migration repair/reset, JEE content additions, paid resources, deployment action, or PR merge occurred.
+
+
+## 2026-10-25 — exact table/schema grants and RPC execute ACLs
+
+- **Commit tested:** `0b11db500d37718d736f1b9a84597208fa287e66` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40183570563](https://github.com/black-jee/blackjee/actions/runs/40183570563) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Public grant contract:** exact effective table-level privileges for `anon`, `authenticated`, and `service_role` on all four public application tables; approved column-level SELECT sets for challenge/PYQ tables; public/private schema USAGE/CREATE boundaries; and no direct privileges on private tables for browser/service roles.
+- **Routine execute contract:** all 12 public RPCs checked for effective EXECUTE privileges and absence of `PUBLIC` EXECUTE. Only the schedule RPC is anonymously callable; all 12 are available to authenticated and service roles.
+- **Quality scope:** dependency audit, lint, TypeScript typecheck, unit tests, Playwright browser tests, formatting, and production build passed.
+- **Limits:** replay remains disposable PostgreSQL with stub auth functions; this is not a substitute for real Supabase-issued JWT/browser authorization testing or a complete catalog parity comparison.
+- **Safety:** no production SQL/DDL/data/grant changes, migration repair/reset, JEE content additions, paid resources, deployment action, or PR merge occurred.
