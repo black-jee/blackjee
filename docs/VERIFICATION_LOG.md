@@ -194,3 +194,13 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Quality scope:** dependency audit, lint, TypeScript typecheck, unit tests, Playwright browser tests, formatting, and production build passed.
 - **Limits:** replay remains disposable PostgreSQL with stub auth functions; this is not a substitute for real Supabase-issued JWT/browser authorization testing or a complete catalog parity comparison.
 - **Safety:** no production SQL/DDL/data/grant changes, migration repair/reset, JEE content additions, paid resources, deployment action, or PR merge occurred.
+
+## 2026-10-25 — current branch CI run #611
+
+- **Commit tested:** `c79d5b3d6b7a2cb9773823e4c6ab023e35194171`.
+- **CI:** [run 40185258884](https://github.com/black-jee/blackjee/actions/runs/40185258884) — **PASS** for both `quality` and `reconstruction-replay`.
+- **Quality scope:** continuity/static security checks, `npm ci`, production dependency audit, lint, typecheck, unit tests, Playwright browser tests, Prettier check, and production build all passed.
+- **Replay scope:** disposable PostgreSQL replay passed captured table/column, constraint/index, RLS policy, routine definition/security attributes, routine ACL, browser-role grants, and catalog contracts. Runtime negative tests passed for anonymous/admin RPC denials, student/admin claim separation, mock-test NULL input rejection, cross-user mock-attempt resume/submit/result denial, private schema isolation, and synthetic challenge authoring integrity.
+- **Limits:** these tests use a disposable PostgreSQL compatibility auth surface and synthetic identities; they are not a real Supabase-issued JWT/browser verification and do not establish historical equivalence of missing migration bodies.
+- **Outstanding release gates:** seven applied migration bodies remain unrecovered, six repository-only migrations remain unreconciled, real authenticated student/admin journeys remain unverified, remaining question/image migration and review are incomplete, and deployment/runtime/rollback remain unverified.
+- **Safety:** PR #2 remains draft/open/unmerged. No production schema/data/grants/migration ledger changes, question/solution additions, paid infrastructure, or deployment action occurred in this verification.
