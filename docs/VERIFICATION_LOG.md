@@ -1,3 +1,11 @@
+## 2026-10-25 — CI run #670 green on latest verified HEAD
+
+- **Commit tested:** `a6e4608fac26f60786c9753cbf5947973aed8e77` (`docs: track checkpoint reconciliation commit`).
+- **GitHub Actions:** [run 40218123225](https://github.com/black-jee/blackjee/actions/runs/40218123225) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD.
+- **Scope:** configured quality checks, desktop/mobile Playwright smoke tests, Prettier, production build, and disposable PostgreSQL reconstruction replay all passed.
+- **PR status:** PR #2 verification description cites run #670. PR remains draft and unmerged.
+- **Limits and safety:** CI does not prove historical equivalence of unrecovered migrations, real Supabase-issued JWT parity, full authenticated student/admin workflows, or production deployment health. No production schema/data/grants/migration history changes or paid infrastructure were used.
+
 ## 2026-10-25 — CI run #668 green on current PR HEAD
 
 - **Commit tested:** `1a42455e41393c9f66b36d9c9ecb63466223f3b5` (`docs: refresh handover with green CI run 666`).

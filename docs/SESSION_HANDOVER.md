@@ -1,7 +1,7 @@
 # BLACK-JEE session handover
 
 **Updated:** 2026-10-25  
-**Active task:** BJ-DB-001 — continue free recovery of missing applied migration SQL; CI run #668 is green and PR #2 verification metadata is current  
+**Active task:** BJ-DB-001 — continue free recovery of missing applied migration SQL; CI run #670 is green and PR #2 verification metadata is current  
 **Branch:** `chore/schema-reconstruction`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
@@ -9,7 +9,7 @@
 
 ## Latest verified state
 
-- Current reconstruction PR #2 HEAD: `1a42455e41393c9f66b36d9c9ecb63466223f3b5` (`docs: refresh handover with green CI run 666`). CI run #668 ([40217791906](https://github.com/black-jee/blackjee/actions/runs/40217791906)) passed both `quality` and `reconstruction-replay`. Run #666 separately confirmed the Prettier correction in `tests/mock-test-action-auth.test.ts`. PR #2 verification description now cites run #668; PR remains draft/open/unmerged.
+- Current reconstruction PR #2 HEAD: `a6e4608fac26f60786c9753cbf5947973aed8e77` (`docs: track checkpoint reconciliation commit`). CI run #670 ([40218123225](https://github.com/black-jee/blackjee/actions/runs/40218123225)) passed both `quality` and `reconstruction-replay`. Run #666 separately confirmed the Prettier correction in `tests/mock-test-action-auth.test.ts`. PR #2 verification description now cites run #670; PR remains draft/open/unmerged.
 
 - Latest observed `main` HEAD: [`185a0ec9`](https://github.com/black-jee/blackjee/commit/185a0ec9612130980f96caa865df25daaebb31e2) — `docs: correct foundation audit migration counts`.
 - CI run [40103159838](https://github.com/black-jee/blackjee/actions/runs/40103159838) passed on that commit. GitHub Pages workflow [40103159334](https://github.com/black-jee/blackjee/actions/runs/40103159334) also passed. These verify repository workflows only, not Vercel production runtime.

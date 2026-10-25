@@ -1,7 +1,7 @@
-## Reconstruction checkpoint — 2026-10-25 (CI run #668 green)
+## Reconstruction checkpoint — 2026-10-25 (CI run #670 green)
 
-- **Latest verified HEAD:** `1a42455e41393c9f66b36d9c9ecb63466223f3b5` (`docs: refresh handover with green CI run 666`).
-- **CI:** [run #668](https://github.com/black-jee/blackjee/actions/runs/40217791906) completed successfully on current HEAD: both `quality` and `reconstruction-replay` passed. Run #666 also confirmed the actual formatter correction in `tests/mock-test-action-auth.test.ts`; formatting, production build, and disposable PostgreSQL replay are green.
+- **Latest verified HEAD:** `a6e4608fac26f60786c9753cbf5947973aed8e77` (`docs: track checkpoint reconciliation commit`).
+- **CI:** [run #670](https://github.com/black-jee/blackjee/actions/runs/40218123225) completed successfully on current HEAD: both `quality` and `reconstruction-replay` passed. Run #666 also confirmed the actual formatter correction in `tests/mock-test-action-auth.test.ts`; formatting, production build, and disposable PostgreSQL replay are green.
 - **PR #2:** open, draft, unmerged. PR #2 verification description has been refreshed to cite run #668. The four project checkpoint records were reconciled together in commit `f2d9be30083b7d2b266b82050d8425e2c6ee7a23`; this documentation-only follow-up still needs its own CI result. Do not merge.
 - **Vercel:** a prior status showed a build-rate-limit/upgrade prompt. Deployment/runtime remains unverified; do not upgrade or incur charges.
 - **Unchanged release blockers:** seven applied migration SQL bodies remain unrecovered; six repository-only migration files remain unreconciled; real Supabase-issued JWT and authenticated student/admin journeys remain unverified; 70 question slots and 21 assets still require reconciliation/review; staging/runtime and rollback readiness remain incomplete.

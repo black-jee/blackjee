@@ -1,6 +1,6 @@
-## Current reconstruction checkpoint — 2026-10-25 (CI run #668 green)
+## Current reconstruction checkpoint — 2026-10-25 (CI run #670 green)
 
-- **CI verification:** run [#668 / 40217791906](https://github.com/black-jee/blackjee/actions/runs/40217791906) passed both `quality` and `reconstruction-replay` on `1a42455e41393c9f66b36d9c9ecb63466223f3b5`. The actual Prettier diff was applied to `tests/mock-test-action-auth.test.ts`; formatting and build passed.
+- **CI verification:** run [#670 / 40218123225](https://github.com/black-jee/blackjee/actions/runs/40218123225) passed both `quality` and `reconstruction-replay` on `a6e4608fac26f60786c9753cbf5947973aed8e77`. The actual Prettier diff was applied to `tests/mock-test-action-auth.test.ts`; formatting and build passed.
 - **PR follow-up:** PR #2 verification section now cites run #668; the PR remains draft/open/unmerged.
 - **BJ-DB-001:** remains **IN_PROGRESS/BLOCKED on source recovery**. Do not fabricate the seven missing applied migration bodies or reconcile the six repo-only migration files by mutating production history.
 - **Next project priority after PR metadata:** continue free source/history recovery and reviewed no-cost isolated replay planning; no paid Supabase branch/project, production migration changes, or invented content.
