@@ -302,7 +302,6 @@ This count-level parity is a useful consistency check, not an exact definition-l
 - **Scope limitation:** this closes the identified mismatch for one RPC and proves the disposable replay path is green. It does not resolve seven missing historical migration bodies, repository-only migration files, full catalog/grant/policy parity, or real Supabase-issued JWT testing.
 - **Safety:** no live DDL, grant changes, row changes, migration-ledger repair, content publication, paid infrastructure, or PR merge occurred.
 
-
 ## Fresh read-only privileged-RPC catalog fingerprint check — 2026-10-25
 
 A new read-only query checked all 11 reviewed public privileged RPCs against the fingerprints already recorded in the reconstruction security assertions.
