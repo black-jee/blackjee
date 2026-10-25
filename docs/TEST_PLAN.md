@@ -6,7 +6,6 @@ The latest verified fully green CI run is [40196563553](https://github.com/black
 
 Read-only checks against the configured target Supabase project previously exercised the public schedule RPC, restricted anonymous column grants, private-table browser-role privileges, admin challenge-save RPC, and mock-test ownership/private-response privileges. Mock-test start/resume/submit were exercised against an empty bank and correctly rejected unavailable attempts. Authenticated student/admin browser workflows and database-backed seeded question workflows remain unverified. Do not treat old CI notes below as current pipeline status.
 
-
 ## Real Supabase Auth/JWT validation gate
 
 Do this only in an owner-approved staging Supabase project with disposable test accounts and synthetic records; never use production student data or real JEE content for security fixtures. Required prerequisites: a dedicated staging project or explicitly approved isolated test environment, test-only student A/student B/admin accounts, supported way to obtain genuine Supabase-issued access tokens, and a cleanup plan limited to test-owned fixtures. Never paste service-role keys or user tokens into repository files, logs, CI output, or chat.
@@ -48,7 +47,11 @@ Until this gate runs successfully, mark real Supabase JWT parity and authenticat
 - Accessibility basics: keyboard operation, focus visibility, labels, contrast and reduced-motion behavior.
 - Recovery from API errors, offline/network interruption, empty datasets and stale sessions.
 
-## Recent CI observation\n\nCI run `40088044408` passed the complete pipeline: `npm ci`, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build. The lockfile is committed and CI uses `npm ci`. The new admin PYQ UI and server actions still require authenticated end-to-end tests.\n\n## Content verification
+## Historical CI observation
+
+CI run `40088044408` passed the complete pipeline: `npm ci`, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build. The lockfile is committed and CI uses `npm ci`. The new admin PYQ UI and server actions still require authenticated end-to-end tests.
+
+## Content verification
 
 For each imported question, verify source wording, options, correct answer, solution, subject/chapter metadata, all asset references, alt text and mobile rendering. Structural manifest checks cannot prove factual accuracy. The April 4 Shift 1 unresolved items stay blocked until an authoritative source image/PDF is available and checked.
 
