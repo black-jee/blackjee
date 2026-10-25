@@ -83,7 +83,6 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **Evidence:** added `docs/CONTINUITY_SYSTEM_PROMPT.md`, `docs/SESSION_HANDOVER.md`, `docs/VERIFICATION_LOG.md`, `scripts/check-continuity.mjs`, and a CI validation step. Direct Supabase migration listing returned 20 applied versions. CI run `40091830452` passed all configured gates, including the continuity validator, Prettier, and production build; it also committed the formatter corrections as `b6bb46d81ce81b803296aa6c9421ca611b03f8b3`.
 - **Next:** maintain these records after each meaningful change; resume BJ-DB-001 and reconstruct the missing migration baseline only in isolated staging.
 
-
 ## Continuation update — 2026-10-26
 
 ### BJ-DB-001 — source recovery checkpoint
