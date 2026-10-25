@@ -92,8 +92,7 @@ const checks = [
   {
     file: ".github/workflows/ci.yml",
     description: "CI executes database option-integrity and authorization regressions",
-    pattern:
-      /supabase\/tests\/pyq_option_label_validation\.sql[\s\S]*?run_rpc_negative_tests\.sh/,
+    pattern: /supabase\/tests\/pyq_option_label_validation\.sql[\s\S]*?run_rpc_negative_tests\.sh/,
   },
 ];
 
