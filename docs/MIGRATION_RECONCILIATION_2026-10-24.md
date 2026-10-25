@@ -251,3 +251,14 @@ Re-read the live `pg_policies` rows for `public` and `private`, then inspected p
 ## PYQ column-grant confirmation — 2026-10-25 (read-only)
 
 A targeted live query to `information_schema.column_privileges` confirmed `anon` and `authenticated` each have SELECT on the same 25 columns of `public.jee_pyq_questions`; `has_table_privilege(..., 'SELECT')` is false for both roles, so access is granted at column level rather than table level. Granted fields include source reference/status/PDF/page, timestamps, publication/review flags, and marks metadata. `quality_checks`, `review_notes`, and `publication_block_reason` are not in the granted SELECT-column set. The student PYQ page requests an explicit subset and does not request these extra metadata fields, but direct PostgREST clients can request any columns granted to their role, subject to RLS. This confirms the data-minimization question is about actual column grants, not merely the RLS policy's row predicate. No grant or policy was changed.
+
+## Admin PYQ list versus live column grants — 2026-10-25 (read-only)
+
+A focused application-to-catalog comparison found a concrete mismatch:
+
+- `app/admin/pyq/page.tsx` selects `publication_block_reason` from `public.jee_pyq_questions` for the authenticated administrator's draft/review list.
+- The live `information_schema.column_privileges` inventory does not grant SELECT on `publication_block_reason` to `authenticated` (nor `anon`). RLS admin access cannot substitute for a missing column-level SELECT privilege.
+- Therefore the admin list query is expected to fail with a column permission error against the currently inspected live grants, even for a valid admin JWT. This is a catalog-and-code mismatch, not a live browser reproduction; no real JWT test has been run.
+- The student query uses an explicit subset and does not request this field. The same grant inventory also means a direct student API caller cannot select the ungranted field.
+- Safe follow-up: add a focused regression check for the admin query's required columns and decide whether to grant the single field to `authenticated` (still constrained by the admin RLS policy) or remove it from the admin query and surface the block reason through a properly guarded RPC. Any grant change must be a separately reviewed migration with both admin and non-admin token tests; no production grants were changed during this audit.
+
