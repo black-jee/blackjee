@@ -81,7 +81,7 @@ begin
 end;
 $function$;
 
--- Original live definition fingerprint before reconstruction-only hardening: ebdff78aa677719515c9e500fc576562
+-- Live definition fingerprint: ebdff78aa677719515c9e500fc576562
 CREATE OR REPLACE FUNCTION public.admin_save_daily_challenge(p_challenge_id uuid, p_challenge_date date, p_title text, p_subject text, p_statement text, p_statement_image_path text, p_options jsonb, p_starts_at timestamp with time zone, p_ends_at timestamp with time zone, p_solution_release_at timestamp with time zone, p_correct_answer text, p_solution text, p_is_live boolean)
  RETURNS uuid
  LANGUAGE plpgsql
@@ -102,43 +102,12 @@ begin
     raise exception 'Title, statement and correct answer are required' using errcode = '22023';
   end if;
 
-  -- Reconstructed hardening: enforce publication completeness at the RPC boundary,
-  -- not only in the web form, because administrators can call this RPC directly.
-  if coalesce(p_is_live, false) and nullif(btrim(p_solution), '') is null then
-    raise exception 'A live challenge must include a worked solution' using errcode = '22023';
-  end if;
-
   if p_starts_at >= p_ends_at or p_ends_at > p_solution_release_at then
     raise exception 'Challenge schedule times are invalid' using errcode = '22023';
   end if;
 
   if p_options is null or jsonb_typeof(p_options) <> 'array' then
     raise exception 'Options must be a JSON array' using errcode = '22023';
-  end if;
-  if jsonb_array_length(p_options) > 12 then
-    raise exception 'A daily challenge can have at most 12 options' using errcode = '22023';
-  end if;
-  if jsonb_array_length(p_options) > 0 and exists (
-    select 1
-    from jsonb_array_elements(p_options) as o(item)
-    where nullif(btrim(o.item->>'label'), '') is null
-  ) then
-    raise exception 'Daily challenge options need non-empty labels' using errcode = '22023';
-  end if;
-  if exists (
-    select 1
-    from jsonb_array_elements(p_options) as o(item)
-    group by upper(btrim(o.item->>'label'))
-    having count(*) > 1
-  ) then
-    raise exception 'Daily challenge option labels must be unique' using errcode = '22023';
-  end if;
-  if jsonb_array_length(p_options) > 0 and not exists (
-    select 1
-    from jsonb_array_elements(p_options) as o(item)
-    where upper(btrim(o.item->>'label')) = upper(btrim(p_correct_answer))
-  ) then
-    raise exception 'Correct answer must match one of the option labels' using errcode = '22023';
   end if;
 
   if p_challenge_id is null then
@@ -179,7 +148,6 @@ begin
   return v_challenge_id;
 end;
 $function$;
-
 -- Live definition fingerprint: 9de6669f0727df14fd0851895ee37466
 CREATE OR REPLACE FUNCTION public.admin_save_jee_pyq_question(p_question_id uuid, p_source_id text, p_title text, p_exam text, p_year integer, p_session text, p_subject text, p_chapter text, p_statement text, p_statement_image_path text, p_options jsonb, p_question_type text, p_marks_correct integer, p_marks_wrong integer, p_correct_answer text, p_solution text, p_source_pdf text, p_source_page integer, p_tags text[], p_asset_paths text[], p_review_notes text[])
  RETURNS uuid
