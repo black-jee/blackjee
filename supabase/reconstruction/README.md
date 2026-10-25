@@ -29,7 +29,9 @@
 
 ## Disposable replay in CI
 
-The CI workflow starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies the labelled reconstruction drafts, and checks the reconstructed catalog/security contracts. The latest fully green run [40176912205](https://github.com/black-jee/blackjee/actions/runs/40176912205) passed both `quality` and `reconstruction-replay` on code commit `13663455db50e0c592611a737817929dcb62617a`. The replay now checks exact snapshots for all 93 columns, 49 constraints, 23 indexes, and 12 routine definitions in addition to the existing RLS/grant/security assertions and negative RPC tests.
+The CI workflow starts a temporary PostgreSQL 17 service, bootstraps only the minimum `auth.users`, `auth.uid()`, and `auth.jwt()` surface, applies the labelled reconstruction drafts, and checks the reconstructed catalog/security contracts.
+
+The latest fully green run [40176912205](https://github.com/black-jee/blackjee/actions/runs/40176912205) passed both `quality` and `reconstruction-replay` on code commit `13663455db50e0c592611a737817929dcb62617a`. The replay now checks exact snapshots for all 93 columns, 49 constraints, 23 indexes, and 12 routine definitions in addition to the existing RLS/grant/security assertions and negative RPC tests.
 
 This uses a no-cost ephemeral CI container, not a paid Supabase branch or production connection. It does not emulate Supabase Auth fully, replay the missing historical migration chain, prove effective grant parity in every case, or replace real-user end-to-end authorization tests.
 ## Migration-history reconciliation — latest read-only inventory (2026-10-25)
