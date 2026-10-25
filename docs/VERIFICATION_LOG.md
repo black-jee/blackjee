@@ -153,3 +153,14 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **New runtime regression:** the disposable replay now verifies that a database session using role `authenticated` but carrying no signed-in user identity cannot retrieve daily-challenge solution data. The assertion passed before any challenge lookup. The fixture uses a synthetic UUID and adds no question, answer key, or worked solution.
 - **Deployment status:** GitHub reports the Vercel deployment completed for this commit. This is provider status only, not independent verification of every live route or authenticated flow.
 - **Safety:** no production SQL/DDL or data changes, no migration repair/reset, no new JEE content, no paid upgrade, and no PR merge.
+
+
+## 2026-10-25 — password-update error handling and latest CI
+
+- **Commit tested:** `2dfcbc8db0fb423bb41897a6f826f325b0b68bb3` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40172747201](https://github.com/black-jee/blackjee/actions/runs/40172747201) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** static security contract checks, production dependency vulnerability audit, lint, TypeScript typecheck, unit tests, Playwright E2E, Prettier format check, and production build all passed.
+- **Database replay scope:** disposable PostgreSQL reconstruction, catalog/RLS/RPC/grant assertions, branch-only mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, mock-test response question index, application security assertions, and RPC authorization-denial tests all passed.
+- **Application change:** password-update failures now display a neutral message rather than exposing raw authentication-provider/session errors. The user is directed to request a new reset link.
+- **Limits:** this CI does not recover the seven missing historical migration bodies, prove exact live schema/migration parity, validate real Supabase-issued JWTs, or independently verify deployed authenticated student/admin journeys.
+- **Safety:** repository-only change. No production SQL/DDL/data change, migration repair/reset, content publication, paid infrastructure, deployment action, or PR merge.
