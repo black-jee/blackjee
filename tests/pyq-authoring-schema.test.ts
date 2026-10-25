@@ -96,7 +96,8 @@ describe("PYQ authoring schema", () => {
     if (!result.success) {
       expect(
         result.error.issues.some(
-          (issue) => issue.path.includes("correctAnswer") &&
+          (issue) =>
+            issue.path.includes("correctAnswer") &&
             issue.message === "Correct answer must match one of the option labels.",
         ),
       ).toBe(true);
