@@ -154,7 +154,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Deployment status:** GitHub reports the Vercel deployment completed for this commit. This is provider status only, not independent verification of every live route or authenticated flow.
 - **Safety:** no production SQL/DDL or data changes, no migration repair/reset, no new JEE content, no paid upgrade, and no PR merge.
 
-
 ## 2026-10-25 — password-update error handling and latest CI
 
 - **Commit tested:** `2dfcbc8db0fb423bb41897a6f826f325b0b68bb3` on `chore/schema-reconstruction`.
