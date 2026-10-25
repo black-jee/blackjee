@@ -118,3 +118,15 @@ The highest-value next input is an archive, old clone, Termux folder, or backup 
 - **Conclusion:** no original SQL body was recovered from the public repository paths, branch checks, or indexed searches performed in this pass. This is not proof that private backups, local clones, external archives, or deployment artifacts do not exist.
 - **Next action:** preserve the production ledger and keep the reconstruction labelled separately. Do not synthesize historical bodies or run `migration repair`, `db reset`, or production DDL to force parity.
 - **Safety:** all checks were repository/API reads; no production database mutation, paid resource, question/solution addition, or PR merge occurred.
+
+
+## Read-only continuation — 2026-10-26
+
+- Re-read the branch's reconciliation report, chain inventory, recovery search log, and session handover before continuing; the documented inventory remains 20 live versions, 24 repository SQL files, 18 exact version/name matches, two unresolved applied bodies, and six repository-only files.
+- Rechecked the exact expected paths for the two unresolved SQL files on `chore/schema-reconstruction` through the GitHub contents API. Both paths return 404 (no file at that exact path); this is consistent with the recorded missing-body status, not evidence about private/local backups.
+- A GitHub commit search returned newer documentation commits, but did not establish that either missing SQL body was recovered. The existing archive near-match `20261024081110_numeric_answers_and_admin_review.sql` and local `20261024112500` / `20261024120000` publication-gate files remain non-substitutes.
+- CI status check for the previously documented handover head `81e979207b39915b94c272780a9b1b810fb16380` reports the Vercel context as success; this status alone is not the quality/reconstruction CI result. The owner supplied CI run [#679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626) as the latest green CI evidence; this session did not independently retrieve its full job conclusions.
+- Library semantic search for the archive name surfaced migration SQL snippets but did not expose the ZIP itself as a directly inspectable result in this pass. Therefore no new archive contents or historical body were recovered.
+- No SQL was fabricated or relabelled. No Supabase schema/data/grants/ledger changes, paid resources, PR merge, or question/solution content changes were performed.
+
+**Next action:** search the archive as a concrete Library file / inspect other authoritative attached backups, then compare any candidate source by exact version and Git blob bytes before changing the inventory. If no original appears, prepare a separately labelled reconstruction proposal for review rather than claiming original recovery.
