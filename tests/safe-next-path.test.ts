@@ -23,4 +23,9 @@ describe("safeInternalRedirectPath", () => {
   it("uses the root path when the destination is missing", () => {
     expect(safeInternalRedirectPath(null, origin)).toBe("/");
   });
+
+  it("validates root-relative paths without requiring a browser origin", () => {
+    expect(safeInternalRedirectPath("/profile?tab=security")).toBe("/profile?tab=security");
+    expect(safeInternalRedirectPath("//evil.example")).toBe("/");
+  });
 });
