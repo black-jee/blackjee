@@ -271,3 +271,15 @@ A fresh catalog-only SQL query against the live project reconfirmed the reconstr
 - The expected standalone `private.mock_test_responses(question_id)` index is still absent in the live catalog. The composite primary key remains `(attempt_id, question_id)`; the branch-only index migration remains un-applied in production.
 
 This count-level parity is a useful consistency check, not an exact definition-level diff. The smoke test verifies the known constraint names/kinds and selected foreign-key actions, while a generated full catalog diff and real Supabase JWT tests remain outstanding. No DDL or grants were executed.
+
+
+## Latest CI and live RLS expression recheck — 2026-10-25
+
+- GitHub Actions run [40157546264](https://github.com/black-jee/blackjee/actions/runs/40157546264), for the latest documentation commit, completed **PASS** for both jobs.
+- The `quality` job passed continuity validation, static security checks, `npm ci`, production dependency vulnerability audit, lint, typecheck, unit tests, Playwright E2E, formatting, and application build.
+- The `reconstruction-replay` job passed reconstructed catalog/RLS/RPC/grant assertions, mock-test NULL hardening, PYQ option-label integrity, daily-challenge authoring integrity, response-question index assertions, application security regressions, and RPC denial checks. These run against disposable PostgreSQL, not live-user JWTs.
+- A fresh read-only query of live policy expressions reconfirmed 10 policies across the tracked public tables. Daily/mock attempt SELECT policies scope records to `auth.uid()`; the daily-attempt policy additionally allows the server-managed `app_metadata.role = admin`. Live challenge schedule reads allow live rows (or admin review access); PYQ reads allow published + approved rows (or admin review access). Direct authoring writes are gated by the admin app-metadata role. No direct private-table policies were returned.
+- A fresh `SECURITY DEFINER` inventory reconfirmed 11 public functions, all configured with an empty `search_path`; `anon` lacks EXECUTE on all 11, while `authenticated` and `service_role` have EXECUTE. The three admin RPCs check both `auth.uid()` and the server-managed admin role. This is structural source/catalog evidence only, not proof from genuine JWT calls.
+- **Open policy question:** `get_daily_challenge_result` releases answer/solution after `solution_release_at` for any signed-in caller who knows a live challenge ID; it does not check for a submitted attempt. Do not change this without confirming product intent.
+- **Still open:** exact definition-level live-vs-reconstruction diff; genuine Supabase-issued anonymous/student/admin JWT tests; decision on daily-solution release semantics; approved rollout/rollback plan for branch-only fixes. The live `start_mock_test` NULL question-count validation gap remains unpatched in production.
+- No production SQL, grants, migration ledger, schema, or data were changed. No paid service was started, no JEE question/solution content was added, and PR #2 remains open/unmerged.
