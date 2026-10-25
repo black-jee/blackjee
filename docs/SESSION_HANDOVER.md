@@ -51,7 +51,6 @@ Continue with a no-cost, read-only repository review and test-plan preparation w
 4. Use free, isolated test environments only; the owner cannot afford a paid Supabase branch.
 5. Update this handover and `docs/TASKS.md` when verified evidence changes.
 
-
 ## Continuation checkpoint — 2026-10-26
 
 - Latest documentation commit in this session: `52b2426c5e10a34c8d136744892370c77ec5666a` (reconciliation recheck); prior recovery-log commit: `3657bf634259e47720d77e29c591457da43f7753`.
@@ -60,13 +59,11 @@ Continue with a no-cost, read-only repository review and test-plan preparation w
 - Inventory remains: 20 live applied versions, 24 repository SQL files, 18 exact version/name matches, two unresolved applied bodies, and six repository-only files.
 - Next: continue targeted recovery of the actual ZIP and other authoritative backups; if none is available, prepare a separately labelled reconstruction proposal for review. Preserve production schema/data/grants/ledger, keep PR #2 draft/unmerged, and avoid paid infrastructure.
 
-
 ### CI evidence correction — 2026-10-26
 
 A direct job-level read of [CI run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626) confirms both `quality` and `reconstruction-replay` completed with conclusion `success`. Quality included lint, typecheck, unit tests, Playwright E2E, formatting, and production build. Reconstruction replay included catalog/RPC/grant assertions and the dedicated security regression checks. This validates that run only; it does not recover the two historical SQL bodies or prove the original historical chain can be replayed as-is.
 
 The current documentation-only commit at the time of this note is `ea8a7cae6e8fe35c9c6ffb5cbed3a39e2331e1b9`; no status checks had appeared for that new commit at the last poll. Do not transfer run #679's result to this later commit without a matching run.
-
 
 ### Library archive inspection update — 2026-10-26
 
@@ -75,3 +72,11 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - Archive inspection and SHA-256 evidence are recorded in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md` and summarized in `docs/MIGRATION_RECONCILIATION.md`.
 - Latest documentation commit before this handover update: `9b2150784db14a039570095132e133cb5d6dde61`. CI #679 is confirmed green for its own commit; this newer documentation commit requires its own CI result before it can be called green.
 - Next action: search external/local authoritative artifacts only if they become available; otherwise prepare a clearly labelled reconstruction proposal for review, without changing the live ledger or inventing historical SQL.
+
+
+### CI run #686 follow-up — 2026-10-26
+
+- Current PR HEAD before this formatting correction: `7cadd5bf14f3e2967644ca68d0abe60949c74967`.
+- CI [run #686 / 40244658935](https://github.com/black-jee/blackjee/actions/runs/40244658935) completed with `reconstruction-replay` **success** and `quality` **failure**. Job logs identify formatting only: Prettier flagged `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, and `docs/SESSION_HANDOVER.md`. Lint, typecheck, unit tests, Playwright E2E, dependency audit, and build all passed in that run.
+- Corrective change: normalized excessive blank lines before Markdown headings in those three files. This is a formatting-only correction; it does not change SQL or database state.
+- The new commit's CI must be checked independently. Keep PR #2 draft/unmerged and production untouched.
