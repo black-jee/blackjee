@@ -155,12 +155,11 @@
 - **Remaining gates:** full definition-level comparison for table columns/defaults/nullability, constraints and FK actions, index predicates, RLS expressions, and effective grants; resolve seven missing historical migration bodies and six repository-only migration files without rewriting the live ledger; test with real Supabase-issued anonymous/student/admin JWTs; and verify a no-cost deployment path.
 - **Safety:** draft PR #2 remains open and unmerged. No production DDL, grants, data, migration-ledger changes, paid infrastructure, or JEE question/solution additions.
 
-
 ## Reconstruction checkpoint — 2026-10-25 (latest green CI)
 
-- **Current branch HEAD:** `fb82e5c3dcec4127c11ea9ee2840b4c3d3404dc1` on `chore/schema-reconstruction`.
-- **CI:** [run 40175995526](https://github.com/black-jee/blackjee/actions/runs/40175995526) — **PASS** for both quality and disposable PostgreSQL reconstruction replay.
+- **Latest branch HEAD checked:** `27437b2529d634fa3cea39c00ddfaf2d467a0539` on `chore/schema-reconstruction`.
+- **Latest CI:** [run 40176244625](https://github.com/black-jee/blackjee/actions/runs/40176244625) — reconstruction replay **PASS**; quality **FAIL** only at Prettier formatting for `docs/LIVE_CATALOG_AUDIT_2026-10-25.md` and `docs/PROJECT_STATUS.md`. Dependency audit, lint, typecheck, unit tests, all 14 browser tests, and production build passed. The earlier green code run [40175995526](https://github.com/black-jee/blackjee/actions/runs/40175995526) remains evidence for commit `fb82e5c3dcec4127c11ea9ee2840b4c3d3404dc1`, not the current HEAD.
 - **Verified gates:** dependency audit, lint, typecheck, unit tests, 14 browser tests, formatting, build, reconstructed catalog/RLS/RPC/grants, branch-only hardening tests, and authorization-denial assertions.
-- **Next priorities:** create a machine-comparable definition-level live-versus-reconstruction diff; continue reviewing access-control boundaries; plan real Supabase-issued anonymous/student/admin JWT tests; keep the seven missing migration bodies and repository/live-ledger drift unresolved rather than inventing SQL or changing production history.
+- **Next priorities:** fix the two documentation formatting issues and rerun CI; create a machine-comparable definition-level live-versus-reconstruction diff; review access-control boundaries; plan real Supabase-issued anonymous/student/admin JWT tests; keep the seven missing migration bodies and repository/live-ledger drift unresolved rather than inventing SQL or changing production history.
 - **Deployment boundary:** CI success does not establish the current HEAD's deployed runtime or authenticated browser behavior. Check provider status separately; do not upgrade paid resources to bypass limits.
 - **Safety:** draft PR #2 remains open and unmerged. No production schema/data/grant changes, migration repair, content additions/publication, paid resources, or deployment action occurred.
