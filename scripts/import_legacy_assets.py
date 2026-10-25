@@ -17,7 +17,7 @@ MAX_FILE_BYTES = 15 * 1024 * 1024
 
 
 def safe_archive_path(value: str) -> bool:
-    if not value or "\\x00" in value or "\\\\" in value or ":" in value:
+    if not value or "\x00" in value or "\\" in value or ":" in value:
         return False
     path = PurePosixPath(value)
     return bool(path.parts) and not path.is_absolute() and all(
