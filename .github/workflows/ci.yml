@@ -90,6 +90,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/002_reconstructed_rls_policies.sql
       - name: Replay reconstructed RPC definitions
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/003_reconstructed_rpc_definitions.sql
+      - name: Assert exact live routine definitions and security attributes
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/006_live_routine_definition_contract.sql
       - name: Assert exact live RPC baseline before hardening
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/002_live_rpc_baseline_fingerprint.sql
       - name: Replay reconstructed access grants
