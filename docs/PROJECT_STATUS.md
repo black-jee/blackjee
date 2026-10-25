@@ -117,3 +117,11 @@
 - **Content and assets:** no new JEE question/answer/solution content was added by this reconstruction work. The existing five imported PYQs remain drafts per the last recorded live-data check; confirm live data again before relying on that count. Storage has no configured buckets/policies per the last read-only audit.
 - **Safety boundary:** no production DDL, migration apply/repair/reset, content publication, paid infrastructure, or PR merge was performed.
 - **Next engineering step:** deepen live-catalog-versus-reconstruction comparison (constraints, indexes, function ACLs, and policy expressions), record evidence versus inference, and keep all reconstruction artifacts separate from deployable migration history until a separately reviewed baseline plan exists.
+
+## Reconstruction checkpoint — 2026-10-25 (fresh verification)
+
+- **Current branch HEAD before this status update:** `c36949d3939368266218527dc6bdccfdbc45438f`; draft PR [#2](https://github.com/black-jee/blackjee/pull/2) remains open and unmerged.
+- **CI for `c36949d`:** [run 40157477014](https://github.com/black-jee/blackjee/actions/runs/40157477014) — `reconstruction-replay` completed **PASS**; `quality` was **IN_PROGRESS** at the last poll. Do not claim the whole run passed until the quality job completes.
+- **Fresh read-only live catalog query:** nine tracked tables have 49 constraints (33 public, 16 private) and 11 secondary indexes (9 public, 2 private), matching the expected baseline smoke-test counts. The branch-only `private.mock_test_responses(question_id)` index remains absent from production. Count parity is not a full definition-level schema diff.
+- **Latest documentation:** `docs/MIGRATION_RECONCILIATION_2026-10-24.md` records this count recheck. Full live-versus-reconstruction definitions/grants/policy comparison and real Supabase-issued admin/non-admin JWT tests remain release gates.
+- **Production safety:** only read-only SQL was run. No production DDL/grants/data changes, migration ledger repair, paid services, JEE question/solution additions, or PR merge occurred.
