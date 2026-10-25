@@ -237,3 +237,13 @@ A second inspection compared the live function's control flow with the live tabl
 - The branch migration `20261024130000_harden_mock_test_input_nulls.sql` explicitly rejects NULL mode, question count, and duration before selection. It is repository-only and absent from the live migration ledger, so production remains exposed to this validation/availability defect until a reviewed release is approved.
 
 **Disposition:** treat this as a confirmed production input-validation and potential resource-amplification issue, not as evidence that an attempt with NULL duration can persist. Do not apply the branch migration directly to production or rewrite the migration ledger. Validate the forward-only fix in the disposable replay, prepare a production rollout plan with rollback criteria, and require real authenticated JWT tests before deployment.
+
+## Public-table RLS and column-surface recheck — 2026-10-25 (read-only)
+
+Re-read the live `pg_policies` rows for `public` and `private`, then inspected public columns for the challenge, PYQ, and attempt tables.
+
+- All 10 observed RLS policies remain in `public`; no direct policy exists on a `private` table. Owner-scoped SELECT policies on `daily_challenge_attempts` and `mock_test_attempts` use `auth.uid()`; daily-attempt reads additionally allow the server-managed admin role.
+- The public challenge SELECT policy allows `anon` and `authenticated` to read rows where `is_live` is true (and admin review access). The PYQ SELECT policy similarly allows published, approved questions and admin review access. Direct authoring writes are gated by the `app_metadata.role = 'admin'` predicate in RLS.
+- The inspected public `daily_challenges` and `jee_pyq_questions` column lists do not contain a correct-answer or worked-solution column. The answer keys remain in `private` tables, consistent with the intended separation. This column inventory is not a substitute for testing API responses with real anonymous/authenticated JWTs or auditing every view/function path.
+- The PYQ table's published-row policy exposes the full row, including operational metadata columns such as `quality_checks`, `review_notes`, `source_reference`, and `publication_block_reason` when present on a published row. This may be intentional for the current client, but it is a **data-minimization review item**: decide whether clients need all these fields. If not, prefer a narrow public view or explicit column grants, carefully reconciled with existing RLS and RPC behavior, rather than broadening policies.
+- No policy, grant, schema, or data was changed. The ten policies and current access model remain pending real-token regression tests and a generated exact live-vs-replay diff.
