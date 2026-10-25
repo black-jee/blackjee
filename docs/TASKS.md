@@ -1,6 +1,6 @@
-## Latest checkpoint — 2026-10-26 (CI #677 green; five migration bodies recovered)
+## Latest checkpoint — 2026-10-26 (CI #678 green; five migration bodies recovered)
 
-- **Verified commit:** `f40883f0b5f913843bc388ece559c23ae18e65f0`; CI [#677 / 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) passed both `quality` and `reconstruction-replay`.
+- **Verified commit:** `81e979207b39915b94c272780a9b1b810fb16380`; CI [#678 / 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) passed both `quality` and `reconstruction-replay`.
 - **Migration status:** five exact-version bodies restored from `blackjee-foundation.zip`; current inventory is 20 live versions, 24 repository SQL files, 18 exact matches, two unresolved applied bodies, and six repository-only files.
 - **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive only has similar-purpose version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`.
 - **Safety:** no production schema/data/grant/ledger mutation, paid resources, or question content import. PR #2 remains draft and unmerged.

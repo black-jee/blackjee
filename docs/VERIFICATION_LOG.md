@@ -1,3 +1,11 @@
+## 2026-10-26 — CI run #678 green and PR verification refreshed
+
+- **Commit tested:** `81e979207b39915b94c272780a9b1b810fb16380`.
+- **GitHub Actions:** [run 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully; formatting, 22 Playwright checks, production build, and disposable PostgreSQL replay passed.
+- **PR #2:** verification section updated to cite run #678. The PR remains draft and unmerged.
+- **Migration recovery:** five exact-version bodies are restored byte-for-byte from `blackjee-foundation.zip`; two applied bodies remain unresolved. Current inventory: 20 live versions, 24 repository SQL files, 18 exact matches, two missing bodies, six repository-only files.
+- **Safety:** no production database/ledger changes, paid infrastructure, or question/answer content import. Full original-chain replay remains blocked.
+
 ## 2026-10-26 — CI run #677 green after recovery-document formatting repair
 
 - **Commit tested:** `f40883f0b5f913843bc388ece559c23ae18e65f0`.

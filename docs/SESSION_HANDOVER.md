@@ -1,7 +1,7 @@
 # BLACK-JEE session handover
 
 **Updated:** 2026-10-26  
-**Active task:** BJ-DB-001 — continue free recovery of missing applied migration SQL; CI run #671 is green and PR #2 verification metadata is current  
+**Active task:** BJ-DB-001 — continue recovery of the two remaining applied migration bodies; CI run #678 is green and PR #2 verification metadata is current  
 **Branch:** `chore/schema-reconstruction`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
@@ -9,12 +9,12 @@
 
 ## Latest verified state
 
-- Current PR #2 HEAD: `f40883f0b5f913843bc388ece559c23ae18e65f0`; CI [#677 / 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) passed both `quality` and `reconstruction-replay`.
-- Five missing applied migration bodies were recovered byte-for-byte from Library archive `blackjee-foundation.zip` and restored under their exact versioned filenames. Hashes and provenance are in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
+- Current PR #2 HEAD: `81e979207b39915b94c272780a9b1b810fb16380`; CI [#678 / 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) passed both `quality` and `reconstruction-replay`.
+- Five missing applied migration bodies were recovered byte-for-byte from Library archive `blackjee-foundation.zip` and restored under exact versioned filenames. Hashes and provenance are in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
 - Current inventory: 20 live migration versions; 24 repository SQL files; 18 exact filename/version matches; two applied bodies remain missing; six repository-only files remain absent from live history.
 - Unresolved: `20261024081337_numeric_answers_and_admin_review` (archive only has near-match version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Do not relabel either near-match.
 - Vercel GitHub status reports deployment completed for the current commit; live runtime/browser smoke test remains unverified.
-- PR #2 remains draft/open/unmerged. Refresh PR verification after the next green CI run. No production schema/data/grants/migration-history changes or paid infrastructure were used.
+- PR #2 verification section cites run #678. PR remains draft/open/unmerged. No production schema/data/grants/migration-history changes or paid infrastructure were used.
 
 ## Current work and blockers
 

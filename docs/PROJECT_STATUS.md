@@ -1,11 +1,11 @@
-## Latest checkpoint — 2026-10-26 (CI #677 green; five migration bodies recovered)
+## Latest checkpoint — 2026-10-26 (CI #678 green; five migration bodies recovered)
 
-- **Verified commit:** `f40883f0b5f913843bc388ece559c23ae18e65f0`; CI [#677 / 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) passed both `quality` and `reconstruction-replay`.
+- **Verified commit:** `81e979207b39915b94c272780a9b1b810fb16380`; CI [#678 / 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) passed both `quality` and `reconstruction-replay`.
 - **Migration recovery:** five exact-version SQL bodies were restored from `blackjee-foundation.zip`; archived bytes and Git blob IDs match exactly. See `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
 - **Current inventory:** 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies still missing, and six repository-only files.
 - **Remaining unresolved bodies:** `20261024081337_numeric_answers_and_admin_review` (only similar-purpose `20261024081110` archive file found) and `20261024112132_require_pyq_source_page_before_publish`. Do not rename near-matches or invent SQL.
 - **Vercel:** GitHub status reports deployment completed; live runtime/browser smoke test remains unverified.
-- **PR #2:** open, draft, unmerged. Refresh its verification section after the next green CI run. Do not merge.
+- **PR #2:** open, draft, unmerged. Its verification section now cites run #678. Do not merge.
 - **Safety:** no production schema/data/grant/migration-ledger changes, paid resources, or JEE question/answer import.
 
 ## Reconstruction checkpoint — 2026-10-25 (CI run #670 green)
