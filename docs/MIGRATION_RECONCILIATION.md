@@ -182,3 +182,10 @@ The exact paths for the two unresolved applied bodies were checked again on `cho
 The owner's supplied latest green CI reference is [run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626); its full job conclusions were not independently retrieved during this pass. A documentation-only recovery-log update was committed as `3657bf634259e47720d77e29c591457da43f7753`; its newly reported Vercel status was pending at last check, and the workflow-run lookup returned no PR-triggered runs for that commit. Do not infer the quality/reconstruction CI result from the Vercel status.
 
 **Disposition unchanged:** two applied bodies remain unresolved; do not substitute `20261024081110`, `20261024112500`, or `20261024120000`. No production database change, migration repair, paid resource, PR merge, or content publication was performed.
+
+
+## Direct archive inspection addendum — 2026-10-26
+
+All five ZIP archives visible in the ChatGPT Library were inspected by entry path. `blackjee-foundation.zip` (SHA-256 `f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433`) contains only the `20261024081110_numeric_answers_and_admin_review.sql` near-match for the numeric/admin migration. The four `BLACK-JEE-main*.zip` files are byte-identical to each other (SHA-256 `8e5abd749a3a6dac6f785cf320d1d23f9ba6c2c02d3df311a89cc1bfd939c44e`) and contain neither missing migration path. Thus no additional original SQL body was recovered from the Library archives inspected.
+
+The inventory and disposition remain unchanged: preserve the two unresolved entries as unresolved, do not relabel near-matches, and do not change production schema/data/grants/migration history. Details and hashes are recorded in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
