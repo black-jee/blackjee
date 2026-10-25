@@ -112,8 +112,8 @@ expect_denial \
   "permission denied for schema private" \
   "SET ROLE authenticated; SELECT correct_answer FROM private.jee_pyq_answer_keys LIMIT 1;"
 
-# Exercise the successful admin authoring path using only a synthetic challenge.
-# Verify create -> update -> read-back -> private answer-key update -> cleanup.
+# Exercise successful admin authoring using only a synthetic challenge.
+# Create/update runs as authenticated admin; privileged test harness verifies and cleans up.
 psql -X -v ON_ERROR_STOP=1 -qAt <<'SQL'
 SET ROLE authenticated;
 SET request.jwt.claim.sub = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
@@ -121,6 +121,7 @@ SET request.jwt.claims = '{"sub":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb","app_met
 DO $$
 DECLARE
   v_id uuid;
+  v_updated_id uuid;
   v_options jsonb := jsonb_build_array(
     jsonb_build_object('label', 'A', 'text', 'synthetic option one'),
     jsonb_build_object('label', 'B', 'text', 'synthetic option two')
@@ -133,13 +134,25 @@ BEGIN
     'A', 'Synthetic worked solution', false
   );
 
-  PERFORM public.admin_save_daily_challenge(
+  v_updated_id := public.admin_save_daily_challenge(
     v_id, CURRENT_DATE, 'Synthetic authoring update', 'Physics',
     'Synthetic authoring updated statement', NULL, v_options,
     now(), now() + interval '1 hour', now() + interval '2 hours',
     'B', 'Synthetic updated worked solution', false
   );
 
+  IF v_updated_id IS DISTINCT FROM v_id THEN
+    RAISE EXCEPTION 'Daily challenge authoring update returned a different ID';
+  END IF;
+
+  PERFORM set_config('blackjee.test_daily_challenge_id', v_id::text, false);
+END;
+$$;
+RESET ROLE;
+DO $$
+DECLARE
+  v_id uuid := current_setting('blackjee.test_daily_challenge_id')::uuid;
+BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM public.daily_challenges
     WHERE id = v_id
@@ -147,21 +160,6 @@ BEGIN
       AND statement = 'Synthetic authoring updated statement'
   ) THEN
     RAISE EXCEPTION 'Daily challenge authoring update did not persist';
-  END IF;
-END;
-$$;
-RESET ROLE;
-DO $$
-DECLARE
-  v_id uuid;
-BEGIN
-  SELECT id INTO v_id
-  FROM public.daily_challenges
-  WHERE title = 'Synthetic authoring update'
-    AND statement = 'Synthetic authoring updated statement';
-
-  IF v_id IS NULL THEN
-    RAISE EXCEPTION 'Synthetic daily challenge fixture was not available for privileged verification';
   END IF;
 
   IF NOT EXISTS (
@@ -184,4 +182,5 @@ $$;
 SQL
 echo "PASS: synthetic daily-challenge create/update/read-back/cleanup"
 
+psql -X -v ON_ERROR_STOP=1 -qAt -c "DELETE FROM public.mock_test_attempts WHERE id = '$attempt_id'; DELETE FROM auth.users WHERE id IN ('$user_a', '$user_b');"
 echo "PASS: disposable RPC negative authorization suite"
