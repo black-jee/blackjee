@@ -173,3 +173,12 @@ This checkpoint supersedes the older file-count statement above; earlier section
 - CI run [40184792445](https://github.com/black-jee/blackjee/actions/runs/40184792445) (#608) completed successfully on branch head `724ad7fed30afe1c4893eb7ba6209afbdb31bdbf`; both `quality` and `reconstruction-replay` passed. This is repository CI evidence, not production migration-history recovery.
 
 **Disposition:** keep the live database and migration ledger unchanged. Recover the seven missing historical bodies from an authoritative backup or source commit if one becomes available. If none can be found, maintain a separately labelled reconstructed baseline and require explicit review of the six repository-only files before selecting a canonical future migration chain.
+
+
+## Recovery recheck — 2026-10-26 continuation
+
+The exact paths for the two unresolved applied bodies were checked again on `chore/schema-reconstruction` through the GitHub contents API and both are absent (404). A fresh Git commit search showed documentation updates but no evidence of either original SQL body being restored. The Library semantic search did not return the ZIP itself as a directly inspectable result, so this pass recovered no additional source bytes.
+
+The owner's supplied latest green CI reference is [run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626); its full job conclusions were not independently retrieved during this pass. A documentation-only recovery-log update was committed as `3657bf634259e47720d77e29c591457da43f7753`; its newly reported Vercel status was pending at last check, and the workflow-run lookup returned no PR-triggered runs for that commit. Do not infer the quality/reconstruction CI result from the Vercel status.
+
+**Disposition unchanged:** two applied bodies remain unresolved; do not substitute `20261024081110`, `20261024112500`, or `20261024120000`. No production database change, migration repair, paid resource, PR merge, or content publication was performed.
