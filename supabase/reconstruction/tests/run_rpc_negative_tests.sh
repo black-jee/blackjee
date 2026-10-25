@@ -69,25 +69,25 @@ expect_denial \
 # Even an administrator must supply a complete challenge date and schedule.
 # These exercise the function at runtime, not just a catalog-text assertion.
 null_challenge_date_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"admin\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, NULL::date, 'Synthetic replay fixture', 'Physics', 'Synthetic test statement', NULL::text, '[]'::jsonb, now(), now() + interval '1 hour', now() + interval '2 hours', 'A', 'Worked synthetic solution', false);"
-expect_denial \\
+expect_denial \
   "daily challenge RPC rejects NULL challenge date" \\
   "Challenge date and schedule times are required" \\
   "$null_challenge_date_sql"
 
 null_starts_at_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"admin\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, CURRENT_DATE, 'Synthetic replay fixture', 'Physics', 'Synthetic test statement', NULL::text, '[]'::jsonb, NULL::timestamptz, now() + interval '1 hour', now() + interval '2 hours', 'A', 'Worked synthetic solution', false);"
-expect_denial \\
+expect_denial \
   "daily challenge RPC rejects NULL start time" \\
   "Challenge date and schedule times are required" \\
   "$null_starts_at_sql"
 
 null_ends_at_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"admin\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, CURRENT_DATE, 'Synthetic replay fixture', 'Physics', 'Synthetic test statement', NULL::text, '[]'::jsonb, now(), NULL::timestamptz, now() + interval '2 hours', 'A', 'Worked synthetic solution', false);"
-expect_denial \\
+expect_denial \
   "daily challenge RPC rejects NULL end time" \\
   "Challenge date and schedule times are required" \\
   "$null_ends_at_sql"
 
 null_solution_release_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"admin\"}}'; SELECT public.admin_save_daily_challenge(NULL::uuid, CURRENT_DATE, 'Synthetic replay fixture', 'Physics', 'Synthetic test statement', NULL::text, '[]'::jsonb, now(), now() + interval '1 hour', NULL::timestamptz, 'A', 'Worked synthetic solution', false);"
-expect_denial \\
+expect_denial \
   "daily challenge RPC rejects NULL solution release time" \\
   "Challenge date and schedule times are required" \\
   "$null_solution_release_sql"
