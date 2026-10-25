@@ -53,14 +53,12 @@ A filename match does not alone prove that its contents are byte-for-byte identi
 
 A fresh read-only comparison on 2026-10-25 found six repository SQL files not recorded in the live migration ledger:
 
-| Repository file | Live history status | Handling |
-| --- | --- | --- |
-| `20261024112500_require_pyq_source_page_before_publish.sql` | No matching applied version | Do not apply or rename; current function behavior overlaps this file, but original historical body remains unverified |
-| `20261024120000_require_pyq_source_and_solution_before_publish.sql` | No matching applied version | Overlaps publication checks; do not assume it ran |
-| `20261024130000_harden_mock_test_input_nulls.sql` | No matching applied version | CI-tested only; not verified applied to production |
-| `20261025100000_enforce_unique_pyq_option_labels.sql` | No matching applied version | CI-tested only; not verified applied to production |
-| `20261025110000_harden_daily_challenge_authoring_integrity.sql` | No matching applied version | CI-tested only; not verified applied to production |
-| `20261025120000_add_mock_test_response_question_id_index.sql` | No matching applied version | CI-tested only; not verified applied to production |
+- `20261024112500_require_pyq_source_page_before_publish.sql` — no matching applied version. Do not apply or rename; current function behavior overlaps this file, but the original historical body remains unverified.
+- `20261024120000_require_pyq_source_and_solution_before_publish.sql` — no matching applied version. It overlaps publication checks; do not assume it ran.
+- `20261024130000_harden_mock_test_input_nulls.sql` — CI-tested only; not verified applied to production.
+- `20261025100000_enforce_unique_pyq_option_labels.sql` — CI-tested only; not verified applied to production.
+- `20261025110000_harden_daily_challenge_authoring_integrity.sql` — CI-tested only; not verified applied to production.
+- `20261025120000_add_mock_test_response_question_id_index.sql` — CI-tested only; not verified applied to production.
 
 The applied version `20261024112132` and the two publication-gate files with different versions must be reconciled deliberately. The four later hardening/index migrations were added after the original inventory and are also not present in the live ledger. Do not rewrite live migration history or use `migration repair` as a substitute for missing SQL: repair changes migration records; it does not execute or recover SQL bodies.
 
