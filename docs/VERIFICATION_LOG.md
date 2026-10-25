@@ -1,5 +1,14 @@
 # BLACK-JEE verification log
 
+## 2026-10-25 — commit f65d12d / CI run #649
+
+- **Commit tested:** `f65d12d1657ca0daa09956442003c5e0cd0d58a9` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40214294126](https://github.com/black-jee/blackjee/actions/runs/40214294126) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** legacy asset-import safety tests, continuity validation, static security contracts, production dependency audit, lint, TypeScript typecheck, unit tests, 22 Playwright desktop/mobile browser checks, Prettier formatting, and production build all passed.
+- **Reconstruction scope:** disposable PostgreSQL 17 replay passed table-shape, constraint/index, RLS policy, routine definition/security, routine execute ACL, browser-role grant, application security, branch-only integrity/index, and RPC authorization-denial checks.
+- **Limits:** the passing disposable replay does not recover the seven missing applied migration bodies or prove exact historical migration equivalence. Synthetic compatibility auth is not real Supabase-issued JWT verification; complete authenticated student/admin browser workflows remain outstanding. The production deployment/runtime is not certified by CI.
+- **Safety:** no production schema/data/grant/migration-ledger changes, question/solution additions, paid infrastructure, deployment action, or PR merge occurred. PR #2 remains open and unmerged.
+
 Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**, **UNVERIFIED**. A successful check applies only to the commit/environment named.
 
 ## 2026-10-24 — repository CI
