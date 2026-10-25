@@ -38,6 +38,13 @@ BEGIN
     RAISE EXCEPTION 'A live challenge must include a worked solution' USING errcode = '22023';
   END IF;
 
+  IF p_challenge_date IS NULL
+     OR p_starts_at IS NULL
+     OR p_ends_at IS NULL
+     OR p_solution_release_at IS NULL THEN
+    RAISE EXCEPTION 'Challenge date and schedule times are required' USING errcode = '22023';
+  END IF;
+
   IF p_starts_at >= p_ends_at OR p_ends_at > p_solution_release_at THEN
     RAISE EXCEPTION 'Challenge schedule times are invalid' USING errcode = '22023';
   END IF;
