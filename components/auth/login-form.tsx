@@ -28,7 +28,7 @@ export function LoginForm() {
       if (signInError) throw signInError;
       router.replace(safeNext);
       router.refresh();
-    } catch (cause) {
+    } catch {
       setError("Unable to sign in. Check your credentials and try again.");
     } finally {
       setBusy(false);
