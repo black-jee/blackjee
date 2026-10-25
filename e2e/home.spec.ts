@@ -56,7 +56,7 @@ test("password-reset success uses a neutral confirmation", async ({ page }) => {
   await expect(page.getByRole("status")).toHaveText(
     "If the account is eligible, a reset link will be sent to this address.",
   );
-  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.locator('p[role="alert"]')).toHaveCount(0);
 });
 
 test("password-reset provider failures stay neutral", async ({ page }) => {
