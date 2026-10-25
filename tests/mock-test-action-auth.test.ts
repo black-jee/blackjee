@@ -9,11 +9,11 @@ const mockTestActions = readFileSync(
 
 describe("mock-test server action authentication contract", () => {
   it("derives the caller from Supabase's verified user session", () => {
-    expect(mockTestActions).toMatch(/supabase\.auth\.getUser\(\)/);
+    expect(mockTestActions).toMatch(/supabase\\.auth\\.getUser\\(\\)/);
     expect(mockTestActions).toContain(
       "if (error || !data.user) return { supabase, userId: null }",
     );
-    expect(mockTestActions).not.toMatch(/auth\.getSession\(\)/);
+    expect(mockTestActions).not.toMatch(/auth\\.getSession\\(\\)/);
   });
 
   it.each([
@@ -23,10 +23,15 @@ describe("mock-test server action authentication contract", () => {
   ])(
     "%s rejects unauthenticated callers before calling %s",
     (action, rpc, message) => {
-      const start = mockTestActions.indexOf(`export async function ${action}(`);
+      const start = mockTestActions.indexOf(
+        `export async function ${action}(`,
+      );
       expect(start, `${action} should be exported`).toBeGreaterThanOrEqual(0);
 
-      const nextExport = mockTestActions.indexOf("\nexport async function ", start + 1);
+      const nextExport = mockTestActions.indexOf(
+        "\\nexport async function ",
+        start + 1,
+      );
       const body = mockTestActions.slice(
         start,
         nextExport === -1 ? undefined : nextExport,
@@ -34,9 +39,15 @@ describe("mock-test server action authentication contract", () => {
       const authGuard = body.indexOf("if (!userId)");
       const rpcCall = body.indexOf(`.rpc("${rpc}"`);
 
-      expect(authGuard, `${action} must reject missing users`).toBeGreaterThanOrEqual(0);
+      expect(
+        authGuard,
+        `${action} must reject missing users`,
+      ).toBeGreaterThanOrEqual(0);
       expect(body).toContain(message);
-      expect(rpcCall, `${action} must call the expected RPC`).toBeGreaterThan(authGuard);
+      expect(
+        rpcCall,
+        `${action} must call the expected RPC`,
+      ).toBeGreaterThan(authGuard);
     },
   );
 });
