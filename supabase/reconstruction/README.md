@@ -67,13 +67,13 @@ Read-only catalog inspection of Supabase project `phdssyexhfyxsmhmmcgb` covered 
 4. The live public policies use `auth.jwt()->'app_metadata'->>'role' = 'admin'` for admin authorization and row ownership predicates for user records. The ten observed public-table policies are represented in `002_reconstructed_rls_policies.sql`; table/column grants, sequence grants, function definitions/ACLs, storage configuration, and exact full-catalog parity still need a separate reviewed layer before a replay baseline is complete.
 5. The structural draft does not yet reconstruct exact grants, function bodies/ACLs, trigger definitions, owners, storage configuration, or every catalog object.
 
-## Verification status
+## Verification status — supersedes earlier checkpoint text
 
-- Live catalog reads: completed.
-- Draft constraints/indexes update: committed to `chore/schema-reconstruction`.
-- Smoke test file: committed to `chore/schema-reconstruction`.
-- Disposable-database replay: **not run**.
-- Smoke test execution against a replayed schema: **not run**.
+- Live catalog reads: completed; the current observations are recorded above.
+- Reconstructed table, policy, RPC, and grant drafts: replayed in a disposable PostgreSQL 17 CI service.
+- Catalog smoke tests and security regression assertions: passing in CI.
+- Four RPC authorization-denial tests: passing in the disposable replay using synthetic identities and stub auth functions.
+- Real Supabase-issued user-token tests and full exact catalog parity: still outstanding.
 - Production schema and migration history: untouched by this workflow.
 
 ## Function-body and ACL review — read-only checkpoint (2026-10-24)
@@ -94,7 +94,7 @@ These observations reduce the likelihood that the advisor warnings represent a d
 - Review exact table/schema grants and storage policies/settings against the expected client access model.
 - Inspect trigger definitions and all function callers; test non-admin rejection and cross-user attempt access in an isolated database.
 - Add an index for `private.mock_test_responses.question_id` only after confirming expected query patterns and validating it as a deliberate performance change—not as recovered historical schema.
-- Run the reconstruction smoke test and a full catalog comparison only against a disposable replay database. No disposable replay has been run yet.
+- The reconstruction smoke test, security catalog assertions, and RPC denial tests now pass in the disposable PostgreSQL 17 CI replay. A full definition-by-definition comparison with the live catalog and real Supabase-issued user-token tests remain outstanding.
 
 ## Schema/table grants and trigger check — read-only checkpoint (2026-10-24)
 
@@ -111,7 +111,7 @@ The live public-function inventory exposes `get_current_daily_challenge()` to `a
 
 ## Expanded metadata checks — read-only checkpoint (2026-10-24)
 
-A live `information_schema.columns` query confirmed the reconstructed column counts per table: 31 PYQ question columns, 13 daily-challenge columns, 7 challenge-attempt columns, 19 mock-test-attempt columns, and 3/4/6/4/6 columns across the five private tables. The smoke test now rejects extra as well as missing columns by requiring exactly 93 columns across the nine-table set. It also checks representative high-impact defaults and nullability. This is still not a full column-by-column type/default parity proof, and it has not been run against a disposable replay.
+A live `information_schema.columns` query confirmed the reconstructed column counts per table: 31 PYQ question columns, 13 daily-challenge columns, 7 challenge-attempt columns, 19 mock-test-attempt columns, and 3/4/6/4/6 columns across the five private tables. The smoke test now rejects extra as well as missing columns by requiring exactly 93 columns across the nine-table set. It also checks representative high-impact defaults and nullability. This is still not a full column-by-column type/default parity proof; the disposable CI replay passes the implemented assertions, but broader exact parity remains unproven.
 
 ## Foreign-key cross-check — read-only checkpoint (2026-10-24)
 
@@ -133,10 +133,10 @@ A grouped read-only query of `information_schema.role_table_grants`, `column_pri
 - `service_role` has broad table-level privileges on the four public tables listed in the grant inventory; this role must remain server-side and must never be exposed to browser code.
 - The five private tables do not appear in client table-grant output. Continue routing answer/session access through the reviewed RPCs.
 
-These are current catalog observations, not a proposed grant migration. The SQL inventory script can regenerate detailed per-column output. No grants were changed. Grant replay is still pending in a disposable database.
+These are current catalog observations, not a proposed grant migration. The SQL inventory script can regenerate detailed per-column output. No grants were changed in production. The reconstructed grant snapshot is now replayed in disposable CI; exact live-vs-replay privilege parity still needs a dedicated comparison.
 
 ## Constraint/index exactness pass — read-only checkpoint (2026-10-24)
 
 A full live catalog inventory returned 49 constraints across the nine reconstructed tables: 23 CHECK, 14 FOREIGN KEY, 9 PRIMARY KEY, and 3 UNIQUE. Comparing names against the SQL draft exposed three auto-generated constraint-name mismatches on the two answer-key nonempty checks and the two statement-image path safety checks; these are now explicitly named to match the catalog. The same comparison found the secondary index `mock_test_attempts_user_created_idx` missing from the draft; it has been added on `(user_id, created_at DESC)`.
 
-The smoke test now asserts all 49 observed constraint names and kinds, and the complete 11-index secondary-index set. This is a source-level/catalog comparison only: the updated draft and test have not been executed against a disposable database. Foreign-key names are checked in the broad test and delete actions are described in the table draft, but a full definition-by-definition replay diff remains outstanding.
+The smoke test now asserts all 49 observed constraint names and kinds, and the complete 11-index secondary-index set. The draft and smoke test have been executed in the disposable CI replay. The test checks all observed constraint names/kinds and foreign-key actions, but a full definition-by-definition comparison with the live catalog remains outstanding.
