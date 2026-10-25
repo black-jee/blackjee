@@ -9,11 +9,11 @@ const mockTestActions = readFileSync(
 
 describe("mock-test server action authentication contract", () => {
   it("derives the caller from Supabase's verified user session", () => {
-    expect(mockTestActions).toMatch(/supabase\\.auth\\.getUser\\(\\)/);
+    expect(mockTestActions).toMatch(/supabase\.auth\.getUser\(\)/);
     expect(mockTestActions).toContain(
       "if (error || !data.user) return { supabase, userId: null }",
     );
-    expect(mockTestActions).not.toMatch(/auth\\.getSession\\(\\)/);
+    expect(mockTestActions).not.toMatch(/auth\.getSession\(\)/);
   });
 
   it.each([
@@ -29,7 +29,7 @@ describe("mock-test server action authentication contract", () => {
       expect(start, `${action} should be exported`).toBeGreaterThanOrEqual(0);
 
       const nextExport = mockTestActions.indexOf(
-        "\\nexport async function ",
+        "\nexport async function ",
         start + 1,
       );
       const body = mockTestActions.slice(
