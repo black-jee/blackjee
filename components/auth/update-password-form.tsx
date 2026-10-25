@@ -27,8 +27,9 @@ export function UpdatePasswordForm() {
       setMessage("Password updated. You can continue to BLACK-JEE.");
       setPassword("");
       setConfirm("");
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Could not update the password.");
+    } catch {
+      // Keep provider/session details out of the user-facing password-reset flow.
+      setError("Could not update the password. Please request a new reset link and try again.");
     } finally {
       setBusy(false);
     }
