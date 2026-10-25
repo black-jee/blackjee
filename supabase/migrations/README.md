@@ -1,6 +1,6 @@
 # Supabase migration discipline
 
-The target Supabase project has **20 applied migration versions** in its live ledger. The repository currently contains 15 SQL migration files, but only 13 exact filename/version matches. Seven applied SQL bodies are missing from the repository; two repository migration files are not recorded as applied. See [the migration chain inventory](../../docs/MIGRATION_CHAIN_INVENTORY.md) for the version-by-version ledger.
+The target Supabase project has **20 applied migration versions** in its live ledger. The repository currently contains 19 SQL migration files: 13 exact filename/version matches, seven applied SQL bodies missing from the repository, and six repository-only migration files not recorded as applied. See [the migration chain inventory](../../docs/MIGRATION_CHAIN_INVENTORY.md) for the version-by-version ledger.
 
 ## Applied versions whose SQL bodies are missing
 
@@ -18,8 +18,14 @@ Do not recreate these under their original version identifiers unless the origin
 
 ## Repository migration files not present in live history
 
+The following six repository SQL files are not recorded as applied in the live ledger:
+
 - `20261024112500_require_pyq_source_page_before_publish.sql`
 - `20261024120000_require_pyq_source_and_solution_before_publish.sql`
+- `20261024130000_harden_mock_test_input_nulls.sql`
+- `20261025100000_enforce_unique_pyq_option_labels.sql`
+- `20261025110000_harden_daily_challenge_authoring_integrity.sql`
+- `20261025120000_add_mock_test_response_question_id_index.sql`
 
 These overlap with the applied publication-gate migration's purpose, but they are not proof of what the applied `20261024112132` body contained. Do not apply, rename, delete, or mark these as applied until their intent and the canonical migration sequence are reviewed.
 
