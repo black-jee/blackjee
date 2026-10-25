@@ -34,7 +34,10 @@ test("password-reset page explains the neutral recovery response", async ({ page
   ).toBeVisible();
   await expect(page.getByLabel("Email address")).toHaveAttribute("type", "email");
   await expect(page.getByRole("button", { name: "Send reset link" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Back to sign in" })).toHaveAttribute("href", "/login");
+  await expect(page.getByRole("link", { name: "Back to sign in" })).toHaveAttribute(
+    "href",
+    "/login",
+  );
 });
 
 test("password update rejects mismatched passwords before contacting auth", async ({ page }) => {
@@ -44,5 +47,7 @@ test("password update rejects mismatched passwords before contacting auth", asyn
   await page.getByLabel("New password").fill("StrongPassword123");
   await page.getByLabel("Confirm password").fill("DifferentPassword456");
   await page.getByRole("button", { name: "Update password" }).click();
-  await expect(page.locator('p[role="alert"]')).toHaveText("The passwords do not match.");
+  await expect(page.locator('p[role="alert"]')).toHaveText(
+    "The passwords do not match.",
+  );
 });
