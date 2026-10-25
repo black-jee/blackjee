@@ -113,12 +113,12 @@ expect_denial \
   "SET ROLE authenticated; SELECT correct_answer FROM private.jee_pyq_answer_keys LIMIT 1;"
 
 # Exercise the successful admin authoring path using only a synthetic challenge.
-# Verify create -> update -> read-back -> cleanup, including its private answer key.
+# Verify create -> update -> read-back -> private answer-key update -> cleanup.
 psql -X -v ON_ERROR_STOP=1 -qAt <<'SQL'
 SET ROLE authenticated;
 SET request.jwt.claim.sub = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
 SET request.jwt.claims = '{"sub":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb","app_metadata":{"role":"admin"}}';
-DO $
+DO $$
 DECLARE
   v_id uuid;
   v_options jsonb := jsonb_build_array(
@@ -148,6 +148,21 @@ BEGIN
   ) THEN
     RAISE EXCEPTION 'Daily challenge authoring update did not persist';
   END IF;
+END;
+$$;
+RESET ROLE;
+DO $$
+DECLARE
+  v_id uuid;
+BEGIN
+  SELECT id INTO v_id
+  FROM public.daily_challenges
+  WHERE title = 'Synthetic authoring update'
+    AND statement = 'Synthetic authoring updated statement';
+
+  IF v_id IS NULL THEN
+    RAISE EXCEPTION 'Synthetic daily challenge fixture was not available for privileged verification';
+  END IF;
 
   IF NOT EXISTS (
     SELECT 1 FROM private.daily_challenge_answer_keys
@@ -165,9 +180,8 @@ BEGIN
     RAISE EXCEPTION 'Synthetic daily challenge fixture cleanup failed';
   END IF;
 END;
-$;
+$$;
 SQL
 echo "PASS: synthetic daily-challenge create/update/read-back/cleanup"
 
-psql -X -v ON_ERROR_STOP=1 -qAt -c "DELETE FROM public.mock_test_attempts WHERE id = '$attempt_id'; DELETE FROM auth.users WHERE id IN ('$user_a', '$user_b');"
 echo "PASS: disposable RPC negative authorization suite"
