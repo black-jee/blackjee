@@ -1,13 +1,15 @@
 # BLACK-JEE session handover
 
-**Updated:** 2026-10-24  
-**Active task:** BJ-DB-001 — recover and reconcile missing applied migration SQL without paid infrastructure  
-**Branch:** `main`  
+**Updated:** 2026-10-25  
+**Active task:** BJ-DB-001 — recover and reconcile missing applied migration SQL; current immediate task is verify CI after auth-test formatting correction  
+**Branch:** `chore/schema-reconstruction`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
 **Production URL supplied by owner:** https://blackjee.vercel.app/ (deployment linkage and runtime not verified)
 
 ## Latest verified state
+
+- Current reconstruction PR #2 HEAD before this handover update: `45832664ac395912257e1c7b5afcd6280c81b44b` (`test: correct auth assertion formatting`). Previous CI run #659 ([40215878244](https://github.com/black-jee/blackjee/actions/runs/40215878244)) failed only at `quality` → `Check formatting`; `reconstruction-replay` passed. The log identified `tests/mock-test-action-auth.test.ts` as the formatting failure. Commit `45832664` restores the assertion to a single Prettier-compatible line; a workflow result for that correction has not yet been observed. Do not call the current HEAD green until both jobs are verified.
 
 - Latest observed `main` HEAD: [`185a0ec9`](https://github.com/black-jee/blackjee/commit/185a0ec9612130980f96caa865df25daaebb31e2) — `docs: correct foundation audit migration counts`.
 - CI run [40103159838](https://github.com/black-jee/blackjee/actions/runs/40103159838) passed on that commit. GitHub Pages workflow [40103159334](https://github.com/black-jee/blackjee/actions/runs/40103159334) also passed. These verify repository workflows only, not Vercel production runtime.
