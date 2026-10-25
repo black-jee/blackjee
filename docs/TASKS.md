@@ -1,13 +1,14 @@
-## Latest checkpoint — 2026-10-26 (CI #703 green; release-gate regression added)
+## Latest checkpoint — 2026-10-26 (CI #708 green; daily-solution release gate tested)
 
-- **Verified test commit:** `617cfe3539869646068c22ff2afecbbf35443ad6`; CI [#703 / 40245915442](https://github.com/black-jee/blackjee/actions/runs/40245915442) passed both `quality` and `reconstruction-replay`.
-- **New regression:** the disposable replay now checks that a live daily challenge's answer and worked solution remain absent from the result RPC until the configured release time, even when another synthetic user has submitted an attempt. This is CI evidence only; it does not represent signed-token Supabase Auth integration.
-- **Quality evidence:** legacy asset-import safety, continuity checks, static security contracts, dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build passed on run #703.
+- **Verified test commit:** `0219fd7b293967d6a7d54d04fdf718df8b5e168f`; CI [#708 / 40246416154](https://github.com/black-jee/blackjee/actions/runs/40246416154) passed both `quality` and `reconstruction-replay`.
+- **New release-gate regression:** disposable replay proves the daily-challenge result omits `correct_answer` and `solution` before release, then exposes the expected synthetic values after release. The authorization suite completed successfully.
+- **Quality evidence:** continuity validation, static security contracts, dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build passed on run #708.
 - **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files.
-- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive has only similar-purpose version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Global commit searches also returned no exact-version source hit; do not substitute the near-match.
-- **Security gap:** replay tests use simulated PostgreSQL JWT claims, not signed tokens. Cross-user mock-test resume/submit/result and daily-challenge session submission are exercised, but real signed-token/authenticated-client integration and broader release-boundary runtime tests remain unverified.
-- **External check:** Vercel still reports a platform build-rate-limit/upgrade failure. Do not create paid resources; this is separate from the green repository CI jobs.
+- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive has only similar-purpose version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Exact-version global commit searches returned no source hit; do not substitute the near-match.
+- **Security gap:** replay uses synthetic fixtures and simulated PostgreSQL JWT claims, not signed Supabase Auth tokens. Cross-user mock-test resume/submit/result and daily-challenge session-submission denials are covered; signed-token/authenticated-client integration and broader release-boundary runtime tests remain unverified.
+- **External check:** Vercel reports a platform build-rate-limit/upgrade failure. Do not create paid resources; this is separate from the green repository CI jobs.
 - **Safety:** no production schema/data/grant/ledger mutation or JEE content import. PR #2 remains draft and unmerged.
+
 
 # BLACK-JEE task ledger
 
