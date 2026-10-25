@@ -7,7 +7,7 @@
 
 # BLACK-JEE task ledger
 
-**Last reconciled:** 2026-10-24. One authoritative entry per task; update this file as evidence changes.
+**Last reconciled:** 2026-10-26. One authoritative entry per task; update this file as evidence changes.
 
 Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENTED`, `TESTED`, `DEPLOYED`, `PRODUCTION_VERIFIED`.
 
@@ -82,3 +82,18 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **Acceptance:** context, status, feature inventory, architecture, database, security, decisions, tasks, test plan, releases, SEO/growth, changelog, continuity startup prompt, session handover, and verification log are present and reconciled; CI checks required files and handover/task consistency.
 - **Evidence:** added `docs/CONTINUITY_SYSTEM_PROMPT.md`, `docs/SESSION_HANDOVER.md`, `docs/VERIFICATION_LOG.md`, `scripts/check-continuity.mjs`, and a CI validation step. Direct Supabase migration listing returned 20 applied versions. CI run `40091830452` passed all configured gates, including the continuity validator, Prettier, and production build; it also committed the formatter corrections as `b6bb46d81ce81b803296aa6c9421ca611b03f8b3`.
 - **Next:** maintain these records after each meaningful change; resume BJ-DB-001 and reconstruct the missing migration baseline only in isolated staging.
+
+
+## Continuation update — 2026-10-26
+
+### BJ-DB-001 — source recovery checkpoint
+
+- **Recovery result:** all five ZIP archives currently visible in the Library were inspected directly. The foundation archive contains only the different-version `20261024081110_numeric_answers_and_admin_review.sql`; the four `BLACK-JEE-main*.zip` archives are byte-identical and contain neither unresolved migration. No original body was recovered.
+- **Unresolved originals:** `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- **Inventory:** 20 live applied versions; 24 repository SQL files; 18 exact version/name matches; two unresolved applied bodies; six repository-only SQL files.
+- **Safety:** no production schema/data/grant/ledger mutation, no migration repair/reset, no paid infrastructure, no JEE content invention, and no PR merge.
+
+### BJ-DOC-001 — current CI follow-up
+
+- CI [run #686 / 40244658935](https://github.com/black-jee/blackjee/actions/runs/40244658935) ran on commit `7cadd5bf14f3e2967644ca68d0abe60949c74967`. `reconstruction-replay` passed; `quality` failed only at Prettier. Job logs name `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, and `docs/SESSION_HANDOVER.md` as the three formatting failures. Lint, typecheck, unit tests, Playwright E2E, dependency audit, and build passed.
+- A formatting-only correction was committed in these three documents; current CI for the corrected HEAD has not yet been verified. Do not report the current branch as green until a matching run passes.
