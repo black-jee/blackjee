@@ -87,8 +87,7 @@ const checks = [
   {
     file: "supabase/tests/public_schedule_rpc_security.sql",
     description: "challenge statement and options are not directly selectable by browser roles",
-    pattern:
-      /Browser roles must not directly read challenge statements or options/,
+    pattern: /Browser roles must not directly read challenge statements or options/,
   },
   {
     file: ".github/workflows/ci.yml",
