@@ -145,6 +145,16 @@ The latest inspected GitHub Actions run is [run 40154165240](https://github.com/
 - **Quality job: PASS.** Static security checks, `npm ci`, production dependency vulnerability audit, lint, typecheck, unit tests, Playwright end-to-end tests, Prettier formatting, and the production build all passed.
 - **Dependency audit scope:** `npm audit --omit=dev --audit-level=high` checks production dependencies and fails on high/critical findings. It does not claim that every development dependency or every lower-severity advisory is absent.
 
+## Publication-gate migration comparison (2026-10-25)
+
+A focused comparison of the applied repository migration `20261024111533_require_pyq_source_and_solution_before_publish.sql`, the local-only `20261024112500_require_pyq_source_page_before_publish.sql`, the local-only `20261024120000_require_pyq_source_and_solution_before_publish.sql`, and the live `public.admin_review_jee_pyq_question` definition produced this result:
+
+- The live function requires a non-empty source document and `source_page >= 1`, a non-empty statement, a private non-empty answer key, a worked solution, and an answer label that matches an option for single-correct questions.
+- The live function body matches the source-page-checking logic in local-only `20261024112500`; the applied `20261024111533` body does not contain the source-page condition.
+- The local-only `20261024120000` implements the same publication checks with formatting/statement-layout differences. Its filename is not in the live ledger.
+- This is strong evidence for the **current behavior** and supports a candidate reconstruction of the missing `20261024112132` migration body. It does **not** recover the exact original SQL bytes or prove which exact file contents were applied at that historical version.
+- Do not rename either local-only file, mark a version applied, or run migration repair on the strength of this comparison. Preserve the ledger; if a canonical replay chain is later assembled, label any reconstructed historical body as reconstructed and separately review it.
+
 ## Read-only production recheck (2026-10-25)
 
 A fresh read-only Supabase check confirmed the live migration ledger still contains 20 applied versions. The seven ledger entries without same-version SQL bodies and the two repository-only migration files remain unresolved; no migration repair or production DDL was run.
