@@ -122,3 +122,15 @@ test("anonymous visitors cannot open the admin PYQ workbench", async ({ page }) 
   await expect(page).toHaveURL(/\/login(?:\?|$)/);
   await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
 });
+
+test("anonymous visitors see a safe sign-in prompt on their profile", async ({ page }) => {
+  await page.goto("/profile");
+  await expect(page.getByRole("heading", { name: "Your profile" })).toBeVisible();
+  await expect(
+    page.getByText("Sign in to see your challenge history and account details."),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Sign in" })).toHaveAttribute(
+    "href",
+    "/login?next=%2Fprofile",
+  );
+});
