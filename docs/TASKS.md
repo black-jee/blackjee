@@ -4,7 +4,7 @@
 - **Quality evidence:** lint, typecheck, unit tests, dependency audit, Playwright E2E (22 tests), formatting, and production build passed on run #698. Reconstruction replay and authorization-denial assertions also passed. This is evidence for this commit/run only.
 - **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files.
 - **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive has only the similar-purpose `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute the near-match.
-- **Security gap:** existing disposable-PostgreSQL authorization tests pass, but they set simulated PostgreSQL JWT claims; signed-token / real authenticated-client integration and student-A-vs-student-B runtime cases remain unverified.
+- **Security gap:** existing disposable-PostgreSQL authorization tests pass, but they set simulated PostgreSQL JWT claims rather than signed tokens. The replay already exercises cross-user denial for mock-test resume/submit/result and daily-challenge session submission; broader endpoint coverage and real signed-token/authenticated-client integration remain unverified.
 - **Safety:** no production schema/data/grant/ledger mutation, paid resources, or question content import. PR #2 remains draft and unmerged.
 
 # BLACK-JEE task ledger
