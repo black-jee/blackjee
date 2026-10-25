@@ -9,18 +9,15 @@
 
 ## Live catalog inventory
 
-| Object                  | Count / result |
-| ----------------------- | -------------: |
-| Tables                  |              9 |
-| Columns                 |             93 |
-| Constraints             |             49 |
-| Indexes                 |             23 |
-| RLS policies            |             10 |
-| Functions               |             12 |
-| Definer functions       |             11 |
-| RLS-enabled tables      |          9 of 9 |
-| FORCE RLS tables        |          0 of 9 |
-| Definer path non-empty  |              0 |
+- Tables: 9
+- Columns: 93
+- Constraints: 49
+- Indexes: 23
+- RLS policies: 10
+- Functions: 12, including 11 `SECURITY DEFINER` functions
+- Tables with RLS enabled: 9 of 9
+- Tables with FORCE ROW LEVEL SECURITY: 0 of 9
+- Definer functions with a non-empty or unset `search_path`: 0
 
 Counts are useful inventory checks only; they do not establish definition-level equivalence.
 
