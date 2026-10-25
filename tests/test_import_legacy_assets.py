@@ -119,6 +119,40 @@ class ImportLegacyAssetsTests(unittest.TestCase):
             self.assertIn("safe relative path", result.stderr)
             self.assertFalse((root / "outside.json").exists())
 
+    def test_rejects_public_directory_symlink_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            archive = self.make_archive(root)
+            repo = root / "repo"
+            repo.mkdir()
+            outside = root / "outside"
+            outside.mkdir()
+            (repo / "public").symlink_to(outside, target_is_directory=True)
+
+            result = self.run_import(archive, repo, "--write-public-assets")
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("outside --repo-root", result.stderr)
+            self.assertFalse((outside / "assets").exists())
+            self.assertFalse((repo / "docs" / "ASSET_IMPORT_REPORT.json").exists())
+
+    def test_rejects_report_parent_symlink_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            archive = self.make_archive(root)
+            repo = root / "repo"
+            repo.mkdir()
+            outside = root / "outside"
+            outside.mkdir()
+            (repo / "docs").symlink_to(outside, target_is_directory=True)
+
+            result = self.run_import(archive, repo, "--write-public-assets")
+
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("report destination resolves outside", result.stderr)
+            self.assertFalse((outside / "ASSET_IMPORT_REPORT.json").exists())
+            self.assertFalse((repo / "public" / "assets").exists())
+
     def test_rejects_invalid_manifest_asset_paths(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
