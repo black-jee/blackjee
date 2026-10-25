@@ -40,7 +40,7 @@ jobs:
       - name: Show Prettier diff when formatting fails
         if: ${{ failure() && steps.format-check.outcome == 'failure' }}
         run: |
-          for file in docs/MIGRATION_RECONCILIATION_2026-10-24.md scripts/check-security-contracts.mjs tests/pyq-authoring-schema.test.ts; do
+          for file in docs/PROJECT_STATUS.md docs/VERIFICATION_LOG.md docs/MIGRATION_RECONCILIATION_2026-10-24.md scripts/check-security-contracts.mjs tests/pyq-authoring-schema.test.ts; do
             npx prettier "$file" | diff -u "$file" - || true
           done
       - name: Build application
