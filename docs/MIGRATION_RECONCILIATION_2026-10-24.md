@@ -226,3 +226,14 @@ Reviewed the live `pg_get_functiondef` output for the eight authenticated non-ad
 - `submit_mock_test(uuid,jsonb)`: requires a signed-in user, validates the answer payload shape and question IDs against the locked attempt's assigned IDs, rejects duplicate question IDs, enforces the time limit, records responses against private answer keys, and returns the submitted result. It locks the attempt row and checks ownership before mutation.
 
 **Next security work:** decide the daily-solution release policy; keep the production NULL-input gap visible; and perform authenticated/unauthenticated real Supabase JWT tests plus a generated live-versus-replay grants/policies/functions diff. This source review does not establish complete authorization safety. No production DDL or grants were changed.
+
+## Focused NULL-input impact check — `start_mock_test` (2026-10-25, read-only)
+
+A second inspection compared the live function's control flow with the live table's column nullability and the branch's forward-only hardening migration.
+
+- Live function checks `p_question_count < 1 OR p_question_count > 75` and duration bounds, but does not first reject either argument being NULL. In PL/pgSQL, an `IF` condition evaluating to NULL does not enter the branch.
+- The focused-selection query uses `LIMIT p_question_count`. When `p_question_count` is NULL, PostgreSQL treats a NULL LIMIT as no limit, so the selection can include all eligible published/approved questions with private answer keys instead of the intended bounded count.
+- The later `cardinality(v_question_ids) < p_question_count` check also evaluates to NULL when the requested count is NULL, so it does not reject the result. The attempt insert then receives the selected IDs and a NULL duration; live catalog metadata confirms `mock_test_attempts.duration_seconds` is NOT NULL, so the insert should fail at that constraint rather than persist a NULL-duration attempt. The earlier selection and question JSON construction can nevertheless be unnecessarily unbounded.
+- The branch migration `20261024130000_harden_mock_test_input_nulls.sql` explicitly rejects NULL mode, question count, and duration before selection. It is repository-only and absent from the live migration ledger, so production remains exposed to this validation/availability defect until a reviewed release is approved.
+
+**Disposition:** treat this as a confirmed production input-validation and potential resource-amplification issue, not as evidence that an attempt with NULL duration can persist. Do not apply the branch migration directly to production or rewrite the migration ledger. Validate the forward-only fix in the disposable replay, prepare a production rollout plan with rollback criteria, and require real authenticated JWT tests before deployment.
