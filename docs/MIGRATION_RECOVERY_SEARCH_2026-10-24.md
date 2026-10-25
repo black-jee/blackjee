@@ -88,3 +88,12 @@ The highest-value next input is an archive, old clone, Termux folder, or backup 
 - **Interpretation:** this establishes that the current public repository path history does not contain these exact files. It does not prove that originals do not exist in private backups, other repositories, local clones, or deployment artifacts. Do not infer SQL from migration names or catalog state and label it original.
 - **CI reference:** [run 40166741350](https://github.com/black-jee/blackjee/actions/runs/40166741350) passed both quality and disposable PostgreSQL reconstruction jobs on commit `bb0d19bb58e09c7dba41892a7d0c571d08155579`. A documentation-only follow-up commit is separately queued for CI; it is not yet verified.
 - **Safety:** all database checks in this recheck were read-only. No migration was applied or repaired, no database rows or schema were changed, no JEE content was added, no paid infrastructure was created, and PR #2 remains draft/unmerged.
+
+
+## Additional public-repository recovery search — 2026-10-25
+
+- **Alternate repository checked:** `black-jee/Sample` is public but currently has repository size `0` and no tracked tree entries; it contains no migration backup to recover from.
+- **Indexed code search:** exact missing filename `20261024080824_foundation_schema.sql` returned no results within the `black-jee` owner scope.
+- **Indexed commit search:** `foundation_schema` returned no matching commits within the `black-jee` owner scope.
+- **Interpretation:** this narrows the public GitHub recovery paths checked, but does not inspect private repositories, local devices, cloud drives, editor backups, or external archives. The missing migration bodies remain **not recovered**.
+- **Safety:** no repository files were created in the empty `Sample` repository; no production database action was taken.
