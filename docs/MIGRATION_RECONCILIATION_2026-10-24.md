@@ -118,11 +118,11 @@ No production SQL was executed for this investigation; the Supabase calls used w
 
 ## Latest verification update (2026-10-25)
 
-The latest inspected GitHub Actions run is [run 40153133970](https://github.com/black-jee/blackjee/actions/runs/40153133970), associated with branch `chore/schema-reconstruction` at commit `860de26ace7ff898e7e73e78a32c0052a9da3984`. Both CI jobs completed successfully.
+The latest inspected GitHub Actions run is [run 40153559507](https://github.com/black-jee/blackjee/actions/runs/40153559507), associated with branch `chore/schema-reconstruction` at commit `7bc9694c5feeba5739a15d6fbcfe7a5a4bd36744`. Both CI jobs completed successfully.
 
 - **Disposable database reconstruction/replay: PASS.** The job completed reconstructed catalog, RLS, RPC, grant, security-regression, mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, mock-test response question-index, application security regression, and RPC authorization-denial checks.
+- **Runtime regression coverage: PASS.** The RPC authorization script called the admin challenge-save function with a NULL challenge date, start time, end time, and solution-release time separately. Each was rejected with the intended required-schedule validation error. Existing authorization and option-integrity negative tests passed as well.
 - **Quality checks: PASS.** Static security-contract checks, `npm ci`, lint, typecheck, unit tests, Playwright E2E, strict Prettier formatting, and the production build all passed on this commit.
-- The daily-challenge authoring RPC now explicitly rejects NULL challenge dates and schedule timestamps before comparing schedule values. A database contract assertion covers the required-values guard; the disposable replay and quality jobs passed with this change.
 - The PR remains draft, open, and unmerged. No production SQL or migration repair was performed, no paid Supabase infrastructure was created, and no JEE questions, answers, or solutions were added.
 
 This green run verifies the current branch's automated checks and disposable PostgreSQL reconstruction. It does not recover missing historical migration bodies, prove production migration-chain replay, establish exact equivalence with the live production catalog, or replace real Supabase-issued user-token tests. The previously observed Vercel deployment-rate-limit/upgrade status is separate from this GitHub Actions result; no paid upgrade was attempted.
