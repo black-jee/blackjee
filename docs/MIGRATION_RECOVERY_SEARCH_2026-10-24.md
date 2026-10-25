@@ -119,7 +119,6 @@ The highest-value next input is an archive, old clone, Termux folder, or backup 
 - **Next action:** preserve the production ledger and keep the reconstruction labelled separately. Do not synthesize historical bodies or run `migration repair`, `db reset`, or production DDL to force parity.
 - **Safety:** all checks were repository/API reads; no production database mutation, paid resource, question/solution addition, or PR merge occurred.
 
-
 ## Read-only continuation — 2026-10-26
 
 - Re-read the branch's reconciliation report, chain inventory, recovery search log, and session handover before continuing; the documented inventory remains 20 live versions, 24 repository SQL files, 18 exact version/name matches, two unresolved applied bodies, and six repository-only files.
@@ -130,7 +129,6 @@ The highest-value next input is an archive, old clone, Termux folder, or backup 
 - No SQL was fabricated or relabelled. No Supabase schema/data/grants/ledger changes, paid resources, PR merge, or question/solution content changes were performed.
 
 **Next action:** search the archive as a concrete Library file / inspect other authoritative attached backups, then compare any candidate source by exact version and Git blob bytes before changing the inventory. If no original appears, prepare a separately labelled reconstruction proposal for review rather than claiming original recovery.
-
 
 ## Direct Library archive inspection — 2026-10-26
 
