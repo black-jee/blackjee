@@ -123,6 +123,25 @@ expect_denial \
   "A daily challenge can have at most 12 options" \
   "${invalid_options_prefix}(SELECT jsonb_agg(jsonb_build_object('label', chr(64 + n), 'text', 'option') ORDER BY n) FROM generate_series(1,13) AS g(n))${invalid_options_suffix}"
 
+# SQL NULLs must not bypass required mock-test input validation.
+null_mode_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\"sub\\":\\"$user_b\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.start_mock_test(NULL::text, NULL::integer, NULL::text, NULL::text, NULL::text, 20, 1800);"
+expect_denial \
+  "mock-test RPC rejects NULL mode at runtime" \
+  "Invalid mock test mode" \
+  "$null_mode_sql"
+
+null_count_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\"sub\\":\\"$user_b\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.start_mock_test('focused', NULL::integer, NULL::text, NULL::text, NULL::text, NULL::integer, 1800);"
+expect_denial \
+  "mock-test RPC rejects NULL question count at runtime" \
+  "Question count or time limit is outside supported bounds" \
+  "$null_count_sql"
+
+null_duration_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\\"sub\\":\\"$user_b\\",\\"app_metadata\\":{\\"role\\":\\"student\\"}}'; SELECT public.start_mock_test('focused', NULL::integer, NULL::text, NULL::text, NULL::text, 20, NULL::integer);"
+expect_denial \
+  "mock-test RPC rejects NULL duration at runtime" \
+  "Question count or time limit is outside supported bounds" \
+  "$null_duration_sql"
+
 cross_user_sql="SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT public.resume_mock_test('$attempt_id'::uuid);"
 expect_denial \
   "user cannot resume another user's mock attempt" \
