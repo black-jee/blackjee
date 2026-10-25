@@ -135,7 +135,6 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Status/safety:** PR #2 remains open, draft, and unmerged. Vercel's status is a platform build-rate-limit/upgrade failure; do not create paid resources. Production Supabase remains read-only; do not apply repository-only migrations or invent historical SQL/JEE content.
 - **Next:** verify CI on the current HEAD, fix only reproducible failures, then continue evidence-backed source recovery or prepare a clearly labelled reconstruction proposal for review. Do not merge PR #2.
 
-
 ## Latest continuation checkpoint — 2026-10-26 (CI #711 green)
 
 - **Verified source/test commit:** `4d0f8d879a1f5c25b332cfae474218e75aee8479` is the branch HEAD at the start of this checkpoint. Its change is documentation-only spacing cleanup in `docs/TASKS.md`.
@@ -144,7 +143,6 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Migration blockers unchanged:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files. Exact originals remain `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute `20261024081110` for the first.
 - **External deployment:** Vercel's build-rate-limit/upgrade blocker is separate from green repository CI. No paid infrastructure is authorized.
 - **Next:** continue free, evidence-backed search for the exact historical migration bodies; meanwhile design real signed-token/authenticated-client tests only with isolated test credentials and fixtures. Do not mutate production Supabase, invent historical SQL or JEE content, or merge PR #2.
-
 
 ## Latest continuation checkpoint — 2026-10-26 (formatting follow-up after CI #713)
 
