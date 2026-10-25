@@ -163,3 +163,13 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Application change:** password-update failures now display a neutral message rather than exposing raw authentication-provider/session errors. The user is directed to request a new reset link.
 - **Limits:** this CI does not recover the seven missing historical migration bodies, prove exact live schema/migration parity, validate real Supabase-issued JWTs, or independently verify deployed authenticated student/admin journeys.
 - **Safety:** repository-only change. No production SQL/DDL/data change, migration repair/reset, content publication, paid infrastructure, deployment action, or PR merge.
+
+## 2026-10-25 — latest reconstruction CI verified
+
+- **Commit tested:** `fb82e5c3dcec4127c11ea9ee2840b4c3d3404dc1` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40175995526](https://github.com/black-jee/blackjee/actions/runs/40175995526) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** static security contract checks, production dependency vulnerability audit, lint, TypeScript typecheck, unit tests, Playwright E2E, Prettier formatting, and production build passed.
+- **Reconstruction scope:** disposable PostgreSQL 17 replay passed table-shape, RLS, RPC, grants, baseline fingerprints, branch-only integrity/index tests, application security assertions, and RPC authorization-denial tests.
+- **Application validation:** PYQ authoring schema now rejects duplicate option IDs, duplicate case-insensitive labels, fewer than two options for single-correct questions, and a correct answer absent from the option labels. Numerical questions with no options remain valid.
+- **Limits / blockers:** this run does not recover the seven missing historical migration bodies, prove complete live-catalog/migration parity, validate real Supabase-issued JWTs, or independently prove current deployed runtime/authenticated student-admin journeys. Branch-only database hardening is not production-applied.
+- **Safety:** no production DDL/data/grant changes, migration repair/reset, question/solution additions, paid resources, deployment action, or PR merge occurred. Draft PR #2 remains open and unmerged.
