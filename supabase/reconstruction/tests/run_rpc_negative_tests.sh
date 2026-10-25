@@ -259,7 +259,7 @@ echo "PASS: daily-challenge answer and solution stay hidden before release"
 
 # Advance only the disposable synthetic fixture past its release time and verify
 # that the result RPC exposes the expected synthetic answer/solution afterwards.
-psql -X -v ON_ERROR_STOP=1 -qAt -c "UPDATE public.daily_challenges SET solution_release_at = now() - interval '1 minute' WHERE id = '$challenge_id'::uuid;"
+psql -X -v ON_ERROR_STOP=1 -qAt -c "UPDATE public.daily_challenges SET starts_at = now() - interval '3 hours', ends_at = now() - interval '2 hours', solution_release_at = now() - interval '1 hour' WHERE id = '$challenge_id'::uuid;"
 released_result="$(psql -X -v ON_ERROR_STOP=1 -qAt -c "SET ROLE authenticated; SET request.jwt.claim.sub = '$user_b'; SET request.jwt.claims = '{\"sub\":\"$user_b\",\"app_metadata\":{\"role\":\"student\"}}'; SELECT (r.result ->> 'solution_released') = 'true' AND r.result ->> 'correct_answer' = 'A' AND r.result ->> 'solution' = 'Synthetic worked solution' FROM (SELECT public.get_daily_challenge_result('$challenge_id'::uuid) AS result) AS r;")"
 if [[ "$released_result" != "t" ]]; then
   echo "FAIL: daily challenge answer/solution not returned after release"
