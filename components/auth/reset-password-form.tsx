@@ -22,8 +22,9 @@ export function ResetPasswordForm() {
       });
       if (requestError) throw requestError;
       setSent(true);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Could not request a password reset.");
+    } catch {
+      // Avoid exposing provider details or account-enumeration hints in user-facing errors.
+      setError("Could not request a password reset. Please try again later.");
     } finally {
       setBusy(false);
     }
