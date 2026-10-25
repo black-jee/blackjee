@@ -30,6 +30,26 @@ test("sign-in renders without browser errors", async ({ page }) => {
   expect(pageErrors).toEqual([]);
 });
 
+test("sign-in provider failures do not expose raw authentication errors", async ({ page }) => {
+  await page.route("**/auth/v1/token*", async (route) => {
+    await route.fulfill({
+      status: 400,
+      contentType: "application/json",
+      body: JSON.stringify({ message: "Invalid login credentials", code: "invalid_credentials" }),
+    });
+  });
+
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("student@example.com");
+  await page.getByLabel("Password").fill("wrong-password");
+  await page.getByRole("button", { name: "Sign in" }).click();
+
+  await expect(page.locator('p[role="alert"]')).toHaveText(
+    "Unable to sign in. Check your credentials and try again.",
+  );
+  await expect(page.getByText("Invalid login credentials")).toHaveCount(0);
+});
+
 test("password-reset page explains the neutral recovery response", async ({ page }) => {
   await page.goto("/auth/reset-password");
   await expect(page.getByRole("heading", { name: "Reset your password" })).toBeVisible();
