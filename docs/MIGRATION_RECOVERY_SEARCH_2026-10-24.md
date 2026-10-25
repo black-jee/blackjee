@@ -130,3 +130,15 @@ The highest-value next input is an archive, old clone, Termux folder, or backup 
 - No SQL was fabricated or relabelled. No Supabase schema/data/grants/ledger changes, paid resources, PR merge, or question/solution content changes were performed.
 
 **Next action:** search the archive as a concrete Library file / inspect other authoritative attached backups, then compare any candidate source by exact version and Git blob bytes before changing the inventory. If no original appears, prepare a separately labelled reconstruction proposal for review rather than claiming original recovery.
+
+
+## Direct Library archive inspection — 2026-10-26
+
+The Library was browsed by filename and the following five ZIP archives were materialized for read-only inspection:
+
+- `blackjee-foundation.zip` — SHA-256 `f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433`; 71 entries. It contains `20261024081110_numeric_answers_and_admin_review.sql`, but no `20261024081337` original and no `20261024112132_require_pyq_source_page_before_publish` path.
+- `BLACK-JEE-main.zip`, `BLACK-JEE-main (1).zip`, `BLACK-JEE-main(1).zip`, and `BLACK-JEE-main(2).zip` — each contains 100 entries and has the same SHA-256 `8e5abd749a3a6dac6f785cf320d1d23f9ba6c2c02d3df311a89cc1bfd939c44e`. None contains a matching path or filename for either unresolved migration.
+
+This closes the direct inspection of all ZIP archives currently visible in the Library. It does not cover local-device folders, private repositories, cloud backups not uploaded to this Library, or external deployment artifacts. No original body was recovered. Do not substitute the near-match or infer historical SQL.
+
+**Next step:** inspect authoritative migration artifacts outside the current Library only if they become available; otherwise prepare a separately labelled reconstruction proposal with provenance and explicit review gates. Keep production untouched.
