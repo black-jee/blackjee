@@ -89,7 +89,6 @@ The highest-value next input is an archive, old clone, Termux folder, or backup 
 - **CI reference:** [run 40166741350](https://github.com/black-jee/blackjee/actions/runs/40166741350) passed both quality and disposable PostgreSQL reconstruction jobs on commit `bb0d19bb58e09c7dba41892a7d0c571d08155579`. A documentation-only follow-up commit is separately queued for CI; it is not yet verified.
 - **Safety:** all database checks in this recheck were read-only. No migration was applied or repaired, no database rows or schema were changed, no JEE content was added, no paid infrastructure was created, and PR #2 remains draft/unmerged.
 
-
 ## Additional public-repository recovery search — 2026-10-25
 
 - **Alternate repository checked:** `black-jee/Sample` is public. Its current `main` tree contains a small `README.md` documenting that the repository was created to test GitHub write access; the tree contains no migration SQL or backup artifacts. Repository metadata reports size `0`, which is inconsistent with the returned tree, so the tree listing and README were used as the content evidence.
