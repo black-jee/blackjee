@@ -59,3 +59,10 @@ Continue with a no-cost, read-only repository review and test-plan preparation w
 - Owner-provided latest green CI remains [run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626). Full job conclusions for the new documentation commits have not been independently verified; the first new commit's Vercel status was pending, which is not a substitute for quality/reconstruction workflow status.
 - Inventory remains: 20 live applied versions, 24 repository SQL files, 18 exact version/name matches, two unresolved applied bodies, and six repository-only files.
 - Next: continue targeted recovery of the actual ZIP and other authoritative backups; if none is available, prepare a separately labelled reconstruction proposal for review. Preserve production schema/data/grants/ledger, keep PR #2 draft/unmerged, and avoid paid infrastructure.
+
+
+### CI evidence correction — 2026-10-26
+
+A direct job-level read of [CI run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626) confirms both `quality` and `reconstruction-replay` completed with conclusion `success`. Quality included lint, typecheck, unit tests, Playwright E2E, formatting, and production build. Reconstruction replay included catalog/RPC/grant assertions and the dedicated security regression checks. This validates that run only; it does not recover the two historical SQL bodies or prove the original historical chain can be replayed as-is.
+
+The current documentation-only commit at the time of this note is `ea8a7cae6e8fe35c9c6ffb5cbed3a39e2331e1b9`; no status checks had appeared for that new commit at the last poll. Do not transfer run #679's result to this later commit without a matching run.
