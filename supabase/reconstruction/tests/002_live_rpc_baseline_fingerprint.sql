@@ -19,3 +19,21 @@ END;
 $test$;
 
 SELECT 'PASS: admin_save_daily_challenge matches the captured live baseline fingerprint' AS baseline_fingerprint_test;
+
+DO $test$
+DECLARE
+  v_actual_md5 text;
+  v_expected_md5 constant text := 'ff76bf83a39b595544fe15f3475cd70b';
+BEGIN
+  SELECT md5(pg_get_functiondef(
+    'public.get_current_daily_challenge()'::regprocedure
+  ))
+  INTO v_actual_md5;
+
+  IF v_actual_md5 <> v_expected_md5 THEN
+    RAISE EXCEPTION 'Live baseline fingerprint mismatch for get_current_daily_challenge: expected %, got %', v_expected_md5, v_actual_md5;
+  END IF;
+END;
+$test$;
+
+SELECT 'PASS: get_current_daily_challenge matches the captured live baseline fingerprint' AS baseline_fingerprint_test;
