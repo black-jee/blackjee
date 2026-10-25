@@ -149,7 +149,7 @@ class ImportLegacyAssetsTests(unittest.TestCase):
             result = self.run_import(archive, repo, "--write-public-assets")
 
             self.assertEqual(result.returncode, 2)
-            self.assertIn("report destination resolves outside", result.stderr)
+            self.assertIn("report destination resolves outside", result.stderr.lower())
             self.assertFalse((outside / "ASSET_IMPORT_REPORT.json").exists())
             self.assertFalse((repo / "public" / "assets").exists())
 
