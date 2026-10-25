@@ -1,3 +1,12 @@
+## 2026-10-25 — CI run #659 and auth-test formatting correction
+
+- **Commit tested by run #659:** `c63f0329806174300682311446af0b420ec927d3`.
+- **GitHub Actions:** [run 40215878244](https://github.com/black-jee/blackjee/actions/runs/40215878244) — **FAIL** overall. `quality` failed at step `Check formatting`; logs named `tests/mock-test-action-auth.test.ts`. Earlier quality steps passed, including dependency audit, lint, typecheck, unit tests, 22 Playwright tests, and application build. `reconstruction-replay` **PASS** with all configured replay steps successful.
+- **Correction:** commit `45832664ac395912257e1c7b5afcd6280c81b44b` (`test: correct auth assertion formatting`) restored the assertion to a single line that fits the repository's Prettier formatting. The follow-up handover commit is `717b53de2f4d90f4530d27efe3bfa20840346f80`.
+- **Current verification:** CI for the corrected code and subsequent documentation commit is **UNVERIFIED** at the time of this entry; do not treat run #659 as a green result for the corrected HEAD.
+- **Other status:** commit combined status showed Vercel pending, not verified deployment success. The older #650/#649 passes apply only to their listed SHAs.
+- **Safety:** no production Supabase changes, migration-ledger repair, content publication, paid infrastructure, or PR merge occurred. PR #2 remains draft/open/unmerged.
+
 # BLACK-JEE verification log
 
 ## 2026-10-25 — commit 4f635a9 / CI run #650
