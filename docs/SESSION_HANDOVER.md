@@ -90,3 +90,10 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Docs updated:** `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, `docs/MIGRATION_RECONCILIATION.md`, and `docs/TASKS.md`; this handover and the PR description now record the CI status accurately.
 - **Next action:** obtain a CI run for the corrected current HEAD and verify Prettier is clean; then continue read-only recovery and the isolated authenticated-JWT test plan. If workflow execution cannot be triggered from this session, state that limitation rather than treating the old green run as current.
 - **Safety:** no production schema/data/grants/migration-history mutation, paid infrastructure, invented question content, or PR merge. Keep the PR draft and production untouched.
+
+
+### CI run #692 follow-up — 2026-10-26
+
+- [Run #692 / 40245119398](https://github.com/black-jee/blackjee/actions/runs/40245119398) started for the corrected formatting changes. `quality` failed early in `scripts/check-continuity.mjs` because the new task-ledger notes repeated permanent IDs `BJ-DB-001` and `BJ-DOC-001`; `reconstruction-replay` was still in progress at the last poll.
+- Corrected `docs/TASKS.md` by making the new evidence headings descriptive instead of assigning duplicate task IDs. No task definitions or project code were changed.
+- The corrected branch needs another CI result. Current Vercel check showed a platform build-rate-limit failure (`upgradeToPro=build-rate-limit`), which is not a source-code verification result.
