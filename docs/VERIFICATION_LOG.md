@@ -120,7 +120,6 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Limits:** this does not recover the seven missing historical migration bodies, prove exact live catalog/migration parity, test real Supabase-issued JWTs, or validate deployed Vercel runtime/authenticated end-to-end flows. Vercel deployment remains separately unverified due to the previously observed build-rate-limit/upgrade status.
 - **Safety:** repository-only test/configuration and documentation changes. No production SQL/DDL, migration repair/reset, data changes, question/solution additions, paid infrastructure, deployment, or PR merge.
 
-
 ## 2026-10-25 — password-reset neutral error handling and browser CI
 
 - **Commit tested:** `703c803be479905ba4f5f7e89c622a182757d401` on `chore/schema-reconstruction`.
