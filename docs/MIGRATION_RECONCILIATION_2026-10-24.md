@@ -171,7 +171,6 @@ This green CI run verifies committed source checks and the disposable PostgreSQL
 
 PR #2 remains open, draft, and unmerged. No production SQL or migration repair was performed, no paid infrastructure was created, and no JEE question/answer/solution content was added.
 
-
 ## Live catalog parity checkpoint — 2026-10-25 (read-only)
 
 A focused read-only query of PostgreSQL catalogs inspected constraints, indexes, table grants, and RLS policy expressions for the current `public` and `private` application tables. This records the observed live state; it is not a claim that the seven missing historical migration bodies have been recovered.
@@ -212,4 +211,3 @@ A fresh catalog query checked every `SECURITY DEFINER` routine in the `public` a
 - The eight non-admin routines are `get_daily_challenge_result`, `get_mock_test_result`, `grade_jee_pyq`, `resume_mock_test`, `start_daily_challenge`, `start_mock_test`, `submit_daily_challenge`, and `submit_mock_test`, plus the three admin routines above (11 total). Their ownership, release timing, and input validation still need function-by-function review alongside real user-token tests.
 
 **Disposition:** retain the current ACLs pending verified per-function authorization and real JWT tests. Do not blindly revoke authenticated execution or change production grants based only on the advisor warning or this inventory. No production DDL or grant changes were made.
-
