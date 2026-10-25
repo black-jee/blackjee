@@ -106,7 +106,6 @@
 - **Remaining release blockers:** recover the seven missing historical migration bodies or approve a separate canonical-baseline strategy; complete real authenticated student/admin browser tests; implement and verify Storage access safely; validate image mapping and source provenance; verify a real staging/production runtime. Source-content gaps remain blocked on authoritative evidence and QA—do not fabricate or publish.
 - **Safety:** all latest Supabase queries were read-only. No live schema/data changes, Storage buckets, migration repair, content publication, paid infrastructure, or PR merge occurred.
 
-
 ## Reconstruction branch checkpoint — 2026-10-25 (verified current HEAD)
 
 - **Branch / PR:** `chore/schema-reconstruction`; draft [PR #2](https://github.com/black-jee/blackjee/pull/2) is open and unmerged at `063cf1480d36f8c4c84efebb41438566122dc8c3`.
