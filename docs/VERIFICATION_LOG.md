@@ -136,3 +136,12 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **GitHub Actions:** [run 40169200820](https://github.com/black-jee/blackjee/actions/runs/40169200820) — **PASS** for both quality and reconstruction replay.
 - **Vercel:** the GitHub commit status now reports **deployment completed** for this commit. The generated preview URL is [blackjee-git-chore-schema-reconstruction-black-jee.vercel.app](https://blackjee-git-chore-schema-reconstruction-black-jee.vercel.app/). Automated page retrieval through the available web reader was inaccessible, so this confirms deployment status and URL availability in Vercel's status—not a manual verification of every live route.
 - **PR state:** PR #2 remains open, draft, and unmerged. No paid upgrade was attempted.
+
+## 2026-10-25 — live Supabase advisor recheck
+
+- **Scope:** read-only Supabase security/performance advisor queries plus `pg_proc` inspection; no DDL, grants, or row changes were made.
+- **Security advisors:** five private-schema tables are RLS-enabled without policies. These tables hold answer keys, answer attempts, mock responses, or private sessions and are intentionally accessed through guarded RPCs; do not add broad policies simply to silence the advisor.
+- **Security-definer RPCs:** the advisor flags 11 public functions as executable by `authenticated`. Read-only catalog inspection confirmed all 11 use an empty `search_path`, none are executable by `anon`, admin authoring/review functions check the signed-in user and `auth.jwt()->app_metadata->role = 'admin'`, and student RPCs check authentication plus relevant ownership/publication/release conditions. This is a reason to retain negative authorization tests, not to revoke all authenticated execution blindly.
+- **Performance advisor:** the live database still reports no covering index for `private.mock_test_responses(question_id)`. A branch-only migration `20261025120000_add_mock_test_response_question_id_index.sql` and disposable-replay regression test already address it, but the migration has **not** been applied to production. Seven indexes are reported unused; do not drop them without workload evidence.
+- **Limits:** catalog source inspection is not a substitute for real Supabase-issued JWT tests and an end-to-end authorization audit. The seven missing historical migration bodies remain unrecovered.
+- **Safety:** no production schema/data/grant changes, no paid infrastructure, no content publication, and no PR merge.
