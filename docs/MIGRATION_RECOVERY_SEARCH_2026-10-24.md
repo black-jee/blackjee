@@ -73,7 +73,6 @@ The live version `20261024112132` must not be replaced by either local-only file
 
 The highest-value next input is an archive, old clone, Termux folder, or backup containing the original `supabase/migrations/` files. Until one is found or a reconstruction is explicitly separated and reviewed, preserve the live migration ledger and do not run `db reset`, `migration repair`, or ad hoc DDL against the target.
 
-
 ## Read-only recovery recheck — 2026-10-25
 
 - **Live ledger:** a fresh Supabase migration-list read returned 20 applied versions. The seven missing source bodies remain ledger entries, not reconstructed SQL.
