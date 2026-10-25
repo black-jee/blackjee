@@ -82,6 +82,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/bootstrap_supabase_compat.sql
       - name: Replay reconstructed table shapes
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/001_reconstructed_table_shapes.sql
+      - name: Assert exact live column-shape snapshot
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/004_live_column_shape_contract.sql
       - name: Replay reconstructed RLS policies
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/002_reconstructed_rls_policies.sql
       - name: Replay reconstructed RPC definitions
