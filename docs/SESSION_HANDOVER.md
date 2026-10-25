@@ -73,10 +73,21 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - Latest documentation commit before this handover update: `9b2150784db14a039570095132e133cb5d6dde61`. CI #679 is confirmed green for its own commit; this newer documentation commit requires its own CI result before it can be called green.
 - Next action: search external/local authoritative artifacts only if they become available; otherwise prepare a clearly labelled reconstruction proposal for review, without changing the live ledger or inventing historical SQL.
 
-
 ### CI run #686 follow-up — 2026-10-26
 
 - Current PR HEAD before this formatting correction: `7cadd5bf14f3e2967644ca68d0abe60949c74967`.
 - CI [run #686 / 40244658935](https://github.com/black-jee/blackjee/actions/runs/40244658935) completed with `reconstruction-replay` **success** and `quality` **failure**. Job logs identify formatting only: Prettier flagged `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, and `docs/SESSION_HANDOVER.md`. Lint, typecheck, unit tests, Playwright E2E, dependency audit, and build all passed in that run.
 - Corrective change: normalized excessive blank lines before Markdown headings in those three files. This is a formatting-only correction; it does not change SQL or database state.
 - The new commit's CI must be checked independently. Keep PR #2 draft/unmerged and production untouched.
+
+
+## Latest handover — 2026-10-26 (supersedes older checkpoints above)
+
+- **Repository / branch:** [black-jee/blackjee](https://github.com/black-jee/blackjee), `chore/schema-reconstruction`.
+- **Latest PR #2 HEAD:** `5953a1a684ec62c68933e8a9fc6c5d9ce895c12b`. PR #2 remains open, draft, and unmerged. Its description was updated so it no longer mislabels run #679 as the current-head CI result.
+- **CI evidence:** [run #679](https://github.com/black-jee/blackjee/actions/runs/40243919626) passed both jobs on its own commit `e3c6292b430fce471884db891a0b60de484183fb`. Later [run #686](https://github.com/black-jee/blackjee/actions/runs/40244658935) on `7cadd5bf14f3e2967644ca68d0abe60949c74967` passed `reconstruction-replay` but failed `quality` only at Prettier for three documentation files. Formatting-only corrections were committed after that run. No matching workflow run was returned for current HEAD `5953a1a...`; current HEAD is **not yet CI-verified**. Vercel status for current HEAD was pending at the last check.
+- **Migration inventory:** 20 live applied versions; 24 repository SQL files; 18 exact filename/version matches; two unresolved applied bodies; six repository-only SQL files.
+- **Source recovery:** all five ZIP archives visible in the Library were directly inspected. No original body was recovered for `20261024081337_numeric_answers_and_admin_review` or `20261024112132_require_pyq_source_page_before_publish`. Do not relabel the `20261024081110` near-match or local publication-gate files.
+- **Docs updated:** `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, `docs/MIGRATION_RECONCILIATION.md`, and `docs/TASKS.md`; this handover and the PR description now record the CI status accurately.
+- **Next action:** obtain a CI run for the corrected current HEAD and verify Prettier is clean; then continue read-only recovery and the isolated authenticated-JWT test plan. If workflow execution cannot be triggered from this session, state that limitation rather than treating the old green run as current.
+- **Safety:** no production schema/data/grants/migration-history mutation, paid infrastructure, invented question content, or PR merge. Keep the PR draft and production untouched.
