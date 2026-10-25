@@ -191,3 +191,13 @@
 - **RPC ACL contract:** all 12 public routine execute matrices are asserted. Only `get_current_daily_challenge()` is executable by `anon`; all 12 are callable by `authenticated` and `service_role`; no routine has a `PUBLIC` execute grant.
 - **Remaining gates:** real Supabase-issued anonymous/student/admin JWT and browser journeys; full live-vs-reconstruction catalog comparison beyond captured contracts; seven missing historical migration bodies; six repository-only migration files; staging/runtime/rollback verification; content import and image review.
 - **Safety:** PR #2 remains draft, open, and unmerged. No production SQL/DDL, grants, data, migration ledger, JEE question/solution content, or paid infrastructure was changed.
+
+## Reconstruction checkpoint — 2026-10-25 (CI run #610)
+
+- **Verified commit:** `2bd3eb8fd83a09766b69bf58c40f1d9b6fb2ca7a` on `chore/schema-reconstruction`.
+- **CI:** [run 40185049181](https://github.com/black-jee/blackjee/actions/runs/40185049181) completed successfully. Both `quality` and `reconstruction-replay` passed. Quality included dependency vulnerability audit, lint, TypeScript, unit tests, 14 browser tests, Prettier, and production build.
+- **Reconstruction replay:** passed the exact catalog assertions for table/column shapes, constraints/indexes, RLS policy definitions, RPC definitions/security attributes, routine execute ACLs, browser-role grants, plus the disposable regression checks for mock-test NULL handling, PYQ option-label integrity, challenge authoring integrity, response question index, and RPC authorization denials.
+- **Migration chain remains blocked:** 20 applied live versions, 19 repository SQL migration files, 13 exact version/name matches, seven applied versions without same-version source bodies, and six repository-only files. Public repository path history and indexed search have not recovered the seven original bodies. Do not infer historical SQL from current catalog state.
+- **Remaining release gates:** real Supabase-issued anonymous/student/admin JWT tests and browser journeys; complete review of live-versus-reconstruction parity beyond existing assertions; authoritative migration recovery or a separately reviewed clean-baseline plan; 70 remaining source question records and 21 image assets; staging/runtime and rollback verification. No question/solution content was added during this checkpoint.
+- **Deployment:** Vercel preview/deployment remains unverified due to the previously reported build-rate-limit status. Do not pay to bypass it.
+- **Safety:** PR #2 remains draft/open/unmerged. No production schema, grants, data, migration ledger, content publication, paid infrastructure, or deployment action was changed.
