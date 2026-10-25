@@ -14,19 +14,19 @@ test("home page explains the platform and its migration status", async ({ page }
 });
 
 test("sign-in renders without browser errors", async ({ page }) => {
-    const pageErrors: string[] = [];
-    page.on("pageerror", (error) => pageErrors.push(error.message));
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
 
-    await page.goto("/login");
-    await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
-    await expect(page.getByLabel("Email address")).toHaveAttribute("type", "email");
-    await expect(page.getByLabel("Password")).toHaveAttribute("type", "password");
-    await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Forgot password?" })).toHaveAttribute(
-      "href",
-      "/auth/reset-password",
-    );
+  await page.goto("/login");
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+  await expect(page.getByLabel("Email address")).toHaveAttribute("type", "email");
+  await expect(page.getByLabel("Password")).toHaveAttribute("type", "password");
+  await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Sign in" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Forgot password?" })).toHaveAttribute(
+    "href",
+    "/auth/reset-password",
+  );
   expect(pageErrors).toEqual([]);
 });
 
