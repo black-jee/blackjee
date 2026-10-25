@@ -13,7 +13,7 @@ export function LoginForm() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const requestedNext = searchParams.get("next");
-  const safeNext = safeInternalRedirectPath(requestedNext, window.location.origin);
+  const safeNext = safeInternalRedirectPath(requestedNext);
 
   async function signIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
