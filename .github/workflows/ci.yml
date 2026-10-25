@@ -88,6 +88,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/005_live_constraint_index_contract.sql
       - name: Replay reconstructed RLS policies
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/002_reconstructed_rls_policies.sql
+      - name: Assert exact live RLS policy definitions
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/007_live_policy_definition_contract.sql
       - name: Replay reconstructed RPC definitions
         run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/003_reconstructed_rpc_definitions.sql
       - name: Assert exact live routine definitions and security attributes
