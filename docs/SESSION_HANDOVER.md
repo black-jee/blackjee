@@ -50,3 +50,12 @@ Continue with a no-cost, read-only repository review and test-plan preparation w
 3. Never fabricate missing migration SQL or question content.
 4. Use free, isolated test environments only; the owner cannot afford a paid Supabase branch.
 5. Update this handover and `docs/TASKS.md` when verified evidence changes.
+
+
+## Continuation checkpoint — 2026-10-26
+
+- Latest documentation commit in this session: `52b2426c5e10a34c8d136744892370c77ec5666a` (reconciliation recheck); prior recovery-log commit: `3657bf634259e47720d77e29c591457da43f7753`.
+- Recovery recheck: both exact unresolved migration paths still return 404 on the active branch; the Library semantic search did not surface the archive ZIP as a directly inspectable result. No original body was recovered and no near-match was substituted.
+- Owner-provided latest green CI remains [run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626). Full job conclusions for the new documentation commits have not been independently verified; the first new commit's Vercel status was pending, which is not a substitute for quality/reconstruction workflow status.
+- Inventory remains: 20 live applied versions, 24 repository SQL files, 18 exact version/name matches, two unresolved applied bodies, and six repository-only files.
+- Next: continue targeted recovery of the actual ZIP and other authoritative backups; if none is available, prepare a separately labelled reconstruction proposal for review. Preserve production schema/data/grants/ledger, keep PR #2 draft/unmerged, and avoid paid infrastructure.
