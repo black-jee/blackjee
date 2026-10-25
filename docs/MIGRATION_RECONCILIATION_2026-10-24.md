@@ -170,3 +170,33 @@ The live `public.admin_save_daily_challenge` definition fingerprint remains `ebd
 This green CI run verifies committed source checks and the disposable PostgreSQL reconstruction. It does not recover the missing historical migration bodies, prove production migration-chain replay, establish full equivalence with the live catalog, or replace real Supabase-issued user-token tests.
 
 PR #2 remains open, draft, and unmerged. No production SQL or migration repair was performed, no paid infrastructure was created, and no JEE question/answer/solution content was added.
+
+
+## Live catalog parity checkpoint — 2026-10-25 (read-only)
+
+A focused read-only query of PostgreSQL catalogs inspected constraints, indexes, table grants, and RLS policy expressions for the current `public` and `private` application tables. This records the observed live state; it is not a claim that the seven missing historical migration bodies have been recovered.
+
+### Constraints observed
+
+- `public.daily_challenges` has a unique challenge date, subject/options/path checks, and a schedule check `starts_at < ends_at AND ends_at <= solution_release_at`. PostgreSQL CHECK constraints accept an UNKNOWN result, so this expression alone does not reject every NULL schedule value; the branch-only authoring RPC NULL guard addresses the RPC input path but is not yet production-deployed.
+- `public.daily_challenge_attempts` has a unique `(challenge_id, user_id)` constraint and elapsed-time bounds.
+- `public.jee_pyq_questions` has source-ID uniqueness, type/year/subject/difficulty/marks/status checks, safe image-path checks, and a constraint preventing publication unless review status is approved. The live table catalog does not show the branch's new unique-option-label trigger.
+- `public.mock_test_attempts` constrains mode, status/submission timestamp consistency, total questions (1–75), and duration (0–10800 seconds).
+- Private answer-key tables require non-empty answer values; attempt/session tables include ownership foreign keys and the recorded primary/unique constraints.
+- This is a focused catalog summary, not a substitute for a complete schema dump or comparison of every constraint against every reconstruction file.
+
+### Index observations
+
+- The live index inventory includes primary/unique indexes, challenge schedule/author indexes, PYQ paper/review/subject lookup indexes, and the user/creation-time mock-attempt index.
+- `private.mock_test_responses` has its primary key on `(attempt_id, question_id)` and a foreign key on `question_id`, but the live index inventory does **not** include the branch's proposed standalone `question_id` index. The migration `20261025120000_add_mock_test_response_question_id_index.sql` remains branch-only. An index may help FK deletes/updates and question-based joins, but deployment should follow the separately reviewed migration plan rather than an ad hoc production DDL action.
+
+### Grants and row-level security observations
+
+- The live public policies include owner-scoped reads for daily and mock-test attempts, an admin override for daily-attempt reads, public reads limited to live challenge schedule metadata, and published/approved PYQ reads with an admin review-queue override. Direct challenge/PYQ writes have admin-role RLS policies.
+- `authenticated` has direct `SELECT` grants on the two attempt tables; the live catalog also reports authenticated table-level `INSERT`/`UPDATE`/`DELETE` grants on the challenge and PYQ authoring tables, constrained by the observed admin RLS policies. Grants and RLS are separate controls and must be reviewed together.
+- The queried table-grant inventory did not show direct `anon` or `authenticated` table grants on the `private` application tables. No direct private-table policies were returned. Do not add broad private-schema grants or policies as a shortcut.
+- The branch's negative RPC tests use synthetic identities in disposable PostgreSQL. Real Supabase-issued JWT/user-token authorization and a dedicated machine-generated live-versus-replay diff remain open gates.
+
+### Decision
+
+The current catalog evidence supports documenting the observed live behavior, not recreating historical SQL byte-for-byte. Keep branch-only NULL guards, option-label enforcement, and the response-question index marked **not production-deployed**. Continue the catalog diff in a separate, reviewable artifact; do not repair migration history, apply migrations, or alter production data as part of reconstruction.
