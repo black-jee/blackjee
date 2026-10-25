@@ -101,7 +101,6 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - CI [run #686 / 40244658935](https://github.com/black-jee/blackjee/actions/runs/40244658935) ran on commit `7cadd5bf14f3e2967644ca68d0abe60949c74967`. `reconstruction-replay` passed; `quality` failed only at Prettier. Job logs name `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, and `docs/SESSION_HANDOVER.md` as the three formatting failures. Lint, typecheck, unit tests, Playwright E2E, dependency audit, and build passed.
 - A formatting-only correction was committed in these three documents. Follow-up [run #692 / 40245119398](https://github.com/black-jee/blackjee/actions/runs/40245119398) failed at the continuity validator because the continuation notes duplicated the permanent IDs `BJ-DB-001` and `BJ-DOC-001`; those headings have since been changed to descriptive headings without task IDs. The reconstruction assertions completed successfully before the overall job was cancelled due to the quality failure. Current HEAD still has no matching CI run and is not yet verified green. Do not report the current branch as green until a matching run passes.
 
-
 ### Latest continuation checkpoint — 2026-10-26 (CI #711 green)
 
 - **Verified source/test commit:** `4d0f8d879a1f5c25b332cfae474218e75aee8479` is the branch HEAD at the start of this checkpoint. Its change is documentation-only spacing cleanup in `docs/TASKS.md`.
