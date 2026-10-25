@@ -129,3 +129,10 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **Quality scope:** dependency audit, lint, typecheck, unit tests, E2E tests, Prettier formatting, and production build passed. Disposable PostgreSQL reconstruction replay and its catalog/security assertions passed.
 - **Limits:** this does not recover the seven missing historical migration bodies, prove exact live catalog parity, validate real Supabase-issued JWTs, or verify the deployed Vercel runtime. The Vercel status remains rate-limited and no paid upgrade was attempted.
 - **Safety:** only repository source, tests, CI configuration, and documentation were changed. No production DDL/data changes, migration repair/reset, question/solution additions, paid infrastructure, deployment, or PR merge occurred.
+
+## 2026-10-25 — follow-up deployment status
+
+- **Commit checked:** `9e7f12c908f6277774d4988a783001d1a124e552` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40169200820](https://github.com/black-jee/blackjee/actions/runs/40169200820) — **PASS** for both quality and reconstruction replay.
+- **Vercel:** the GitHub commit status now reports **deployment completed** for this commit. The generated preview URL is [blackjee-git-chore-schema-reconstruction-black-jee.vercel.app](https://blackjee-git-chore-schema-reconstruction-black-jee.vercel.app/). Automated page retrieval through the available web reader was inaccessible, so this confirms deployment status and URL availability in Vercel's status—not a manual verification of every live route.
+- **PR state:** PR #2 remains open, draft, and unmerged. No paid upgrade was attempted.
