@@ -37,13 +37,13 @@ const checks = [
       /create\s+trigger\s+validate_jee_pyq_option_labels[\s\S]*?before\s+insert\s+or\s+update\s+of\s+question_type\s*,\s*options/i,
   },
   {
-    file: "supabase/reconstruction/003_reconstructed_rpc_definitions.sql",
+    file: "supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql",
     description: "daily challenge RPC rejects live challenges without worked solutions",
     pattern:
       /coalesce\(p_is_live,\s*false\)[\s\S]*?nullif\(btrim\(p_solution\),\s*''\)\s+is\s+null[\s\S]*?A live challenge must include a worked solution/i,
   },
   {
-    file: "supabase/reconstruction/003_reconstructed_rpc_definitions.sql",
+    file: "supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql",
     description: "daily challenge RPC validates option count, unique labels and answer match",
     pattern:
       /jsonb_array_length\(p_options\)\s*>\s*12[\s\S]*?Daily challenge option labels must be unique[\s\S]*?Correct answer must match one of the option labels/i,
