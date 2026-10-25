@@ -1,11 +1,14 @@
-## Latest checkpoint — 2026-10-26 (CI #698 green; two migration bodies remain unresolved)
+## Latest checkpoint — 2026-10-26 (CI #703 green; release-gate regression added)
 
-- **Verified commit:** `6a577d8a952c12829a10e1ba6e95a29a630e2004`; CI [#698 / 40245477264](https://github.com/black-jee/blackjee/actions/runs/40245477264) passed both `quality` and `reconstruction-replay`.
-- **Quality evidence:** lint, typecheck, unit tests, dependency audit, Playwright E2E (22 tests), formatting, and production build passed on run #698. Reconstruction replay and authorization-denial assertions also passed. This is evidence for this commit/run only.
+- **Verified test commit:** `617cfe3539869646068c22ff2afecbbf35443ad6`; CI [#703 / 40245915442](https://github.com/black-jee/blackjee/actions/runs/40245915442) passed both `quality` and `reconstruction-replay`.
+- **New regression:** the disposable replay now checks that a live daily challenge's answer and worked solution remain absent from the result RPC until the configured release time, even when another synthetic user has submitted an attempt. This is CI evidence only; it does not represent signed-token Supabase Auth integration.
+- **Quality evidence:** legacy asset-import safety, continuity checks, static security contracts, dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build passed on run #703.
 - **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files.
-- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive has only the similar-purpose `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute the near-match.
-- **Security gap:** existing disposable-PostgreSQL authorization tests pass, but they set simulated PostgreSQL JWT claims rather than signed tokens. The replay already exercises cross-user denial for mock-test resume/submit/result and daily-challenge session submission; broader endpoint coverage and real signed-token/authenticated-client integration remain unverified.
-- **Safety:** no production schema/data/grant/ledger mutation, paid resources, or question content import. PR #2 remains draft and unmerged.
+- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive has only similar-purpose version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Global commit searches also returned no exact-version source hit; do not substitute the near-match.
+- **Security gap:** replay tests use simulated PostgreSQL JWT claims, not signed tokens. Cross-user mock-test resume/submit/result and daily-challenge session submission are exercised, but real signed-token/authenticated-client integration and broader release-boundary runtime tests remain unverified.
+- **External check:** Vercel still reports a platform build-rate-limit/upgrade failure. Do not create paid resources; this is separate from the green repository CI jobs.
+- **Safety:** no production schema/data/grant/ledger mutation or JEE content import. PR #2 remains draft and unmerged.
+
 
 # BLACK-JEE task ledger
 
