@@ -40,6 +40,25 @@ test("password-reset page explains the neutral recovery response", async ({ page
   );
 });
 
+test("password-reset provider failures stay neutral", async ({ page }) => {
+  await page.route("**/auth/v1/recover*", async (route) => {
+    await route.fulfill({
+      status: 400,
+      contentType: "application/json",
+      body: JSON.stringify({ message: "User not found", code: "user_not_found" }),
+    });
+  });
+
+  await page.goto("/auth/reset-password");
+  await page.getByLabel("Email address").fill("student@example.com");
+  await page.getByRole("button", { name: "Send reset link" }).click();
+
+  await expect(page.locator('p[role="alert"]')).toHaveText(
+    "Could not request a password reset. Please try again later.",
+  );
+  await expect(page.getByText("User not found")).toHaveCount(0);
+});
+
 test("password update rejects mismatched passwords before contacting auth", async ({ page }) => {
   await page.goto("/auth/update-password");
   await expect(page.getByRole("heading", { name: "Choose a new password" })).toBeVisible();
