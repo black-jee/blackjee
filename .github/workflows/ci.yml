@@ -34,6 +34,9 @@ jobs:
       - run: npm run test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:3000
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: test-publishable-key
       - name: Check formatting
         id: format-check
         run: npm run format:check
