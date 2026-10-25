@@ -111,3 +111,14 @@ test("password update rejects mismatched passwords before contacting auth", asyn
   await page.getByRole("button", { name: "Update password" }).click();
   await expect(page.locator('p[role="alert"]')).toHaveText("The passwords do not match.");
 });
+test("anonymous visitors cannot open the admin dashboard", async ({ page }) => {
+  await page.goto("/admin");
+  await expect(page).toHaveURL(/\\/login(?:\\?|$)/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});
+
+test("anonymous visitors cannot open the admin PYQ workbench", async ({ page }) => {
+  await page.goto("/admin/pyq");
+  await expect(page).toHaveURL(/\\/login(?:\\?|$)/);
+  await expect(page.getByRole("heading", { name: "Sign in" })).toBeVisible();
+});
