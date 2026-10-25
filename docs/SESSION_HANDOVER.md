@@ -136,7 +136,6 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Next:** verify CI on the current HEAD, fix only reproducible failures, then continue evidence-backed source recovery or prepare a clearly labelled reconstruction proposal for review. Do not merge PR #2.
 
 
-
 ## Latest continuation checkpoint — 2026-10-26 (CI #711 green)
 
 - **Verified source/test commit:** `4d0f8d879a1f5c25b332cfae474218e75aee8479` is the branch HEAD at the start of this checkpoint. Its change is documentation-only spacing cleanup in `docs/TASKS.md`.
