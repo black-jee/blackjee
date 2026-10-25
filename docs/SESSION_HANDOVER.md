@@ -97,7 +97,6 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - Corrected `docs/TASKS.md` by making the new evidence headings descriptive instead of assigning duplicate task IDs. No task definitions or project code were changed.
 - The corrected branch needs another CI result. The duplicate task IDs were removed from the continuation notes; the current HEAD still has no matching CI result. Current Vercel check showed a platform build-rate-limit failure (`upgradeToPro=build-rate-limit`), which is not a source-code verification result.
 
-
 ### Final continuation checkpoint — 2026-10-26
 
 - Current source branch head at this checkpoint: `3614b506e2294429ad63885470a65c1ab1fbc6df` (task-ledger evidence update). PR #2 remains draft/open/unmerged.
