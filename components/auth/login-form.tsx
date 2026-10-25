@@ -29,7 +29,7 @@ export function LoginForm() {
       router.replace(safeNext);
       router.refresh();
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Unable to sign in. Please try again.");
+      setError("Unable to sign in. Check your credentials and try again.");
     } finally {
       setBusy(false);
     }
@@ -48,7 +48,7 @@ export function LoginForm() {
       });
       if (oauthError) throw oauthError;
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Google sign-in is unavailable.");
+      setError("Google sign-in is unavailable. Please try again.");
       setBusy(false);
     }
   }
