@@ -1,8 +1,10 @@
-## Latest checkpoint — 2026-10-26 (CI #678 green; five migration bodies recovered)
+## Latest checkpoint — 2026-10-26 (CI #698 green; two migration bodies remain unresolved)
 
-- **Verified commit:** `81e979207b39915b94c272780a9b1b810fb16380`; CI [#678 / 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) passed both `quality` and `reconstruction-replay`.
-- **Migration status:** five exact-version bodies restored from `blackjee-foundation.zip`; current inventory is 20 live versions, 24 repository SQL files, 18 exact matches, two unresolved applied bodies, and six repository-only files.
-- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive only has similar-purpose version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`.
+- **Verified commit:** `6a577d8a952c12829a10e1ba6e95a29a630e2004`; CI [#698 / 40245477264](https://github.com/black-jee/blackjee/actions/runs/40245477264) passed both `quality` and `reconstruction-replay`.
+- **Quality evidence:** lint, typecheck, unit tests, dependency audit, Playwright E2E (22 tests), formatting, and production build passed on run #698. Reconstruction replay and authorization-denial assertions also passed. This is evidence for this commit/run only.
+- **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files.
+- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive has only the similar-purpose `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute the near-match.
+- **Security gap:** existing disposable-PostgreSQL authorization tests pass, but they set simulated PostgreSQL JWT claims; signed-token / real authenticated-client integration and student-A-vs-student-B runtime cases remain unverified.
 - **Safety:** no production schema/data/grant/ledger mutation, paid resources, or question content import. PR #2 remains draft and unmerged.
 
 # BLACK-JEE task ledger
