@@ -22,7 +22,7 @@ The ten supplied historical SQL files are evidence of an older schema generation
 
 ## Ledger baseline
 
-Previously recorded: live ledger 20 entries; repo migration files 15; seven live versions lack matching original SQL; two repo migration files do not match the live ledger. Recheck exact version/name pairs before any history repair. Never alter the live ledger during reconstruction. These counts do not establish missing migration contents.
+Current read-only inventory (2026-10-25): live ledger 20 entries; repository migration SQL files 19 (excluding README); 13 exact filename/version matches; seven live versions lack matching SQL bodies; six repository SQL files are not recorded in the live ledger. Recheck exact version/name pairs before any history repair. Never alter the live ledger during reconstruction. These counts do not establish missing migration contents.
 
 ## Security review gates
 
@@ -58,12 +58,16 @@ Live ledger versions without an exact matching repository filename:
 - `20261024081731_restrict_anon_rpc_execution.sql`
 - `20261024112132_require_pyq_source_page_before_publish.sql`
 
-Repository migration files without an exact matching live ledger entry:
+Repository migration files without a matching live ledger entry (six as of 2026-10-25):
 
 - `20261024112500_require_pyq_source_page_before_publish.sql`
 - `20261024120000_require_pyq_source_and_solution_before_publish.sql`
+- `20261024130000_harden_mock_test_input_nulls.sql`
+- `20261025100000_enforce_unique_pyq_option_labels.sql`
+- `20261025110000_harden_daily_challenge_authoring_integrity.sql`
+- `20261025120000_add_mock_test_response_question_id_index.sql`
 
-The 20261024112500 file has the same source-page publication gate as the missing 20261024112132 ledger version, but the version differs; do not silently rename it or treat it as proven original history. The 20261024120000 file implements a similar source/page/answer-key/solution gate to the 20261024111533 migration. This is a potential duplicate/overlap in repository history that requires Git history and intended sequencing review before any repository migration edits. No files were renamed or deleted in this reconciliation.
+The 20261024112500 file has the same source-page publication gate as the missing 20261024112132 ledger version, but the version differs; do not silently rename it or treat it as proven original history. The 20261024120000 file implements a similar source/page/answer-key/solution gate to the 20261024111533 migration. The four later hardening/index files are CI-tested only and are not recorded in the live ledger; they must not be treated as production-applied. This is a potential duplicate/overlap in repository history that requires Git history and intended sequencing review before any repository migration edits. No files were renamed or deleted in this reconciliation.
 
 ## CI snapshot
 
