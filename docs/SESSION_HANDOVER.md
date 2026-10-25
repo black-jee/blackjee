@@ -124,3 +124,13 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Security-test boundary:** replay uses simulated PostgreSQL JWT claims and synthetic fixtures, not signed Supabase Auth tokens. Cross-user mock-test resume/submit/result and daily-challenge session-submission denials are covered; signed-token/authenticated-client integration and broader release-boundary tests remain open.
 - **Status/safety:** PR #2 remains open, draft, and unmerged. Vercel's check still reports a platform build-rate-limit/upgrade failure; no paid resource should be created. Production Supabase remains read-only. Do not alter its migration ledger or apply repository-only migrations.
 - **Next:** verify CI on the current branch HEAD; fix only reproducible failures, then continue evidence-backed migration recovery or design a separately labelled reconstruction proposal. Leave this PR unmerged.
+
+### Latest continuation checkpoint — 2026-10-26 (CI #708 green)
+
+- **Green source/test commit:** [`0219fd7b293967d6a7d54d04fdf718df8b5e168f`](https://github.com/black-jee/blackjee/commit/0219fd7b293967d6a7d54d04fdf718df8b5e168f). [CI run #708 / 40246416154](https://github.com/black-jee/blackjee/actions/runs/40246416154) passed both `quality` and `reconstruction-replay`.
+- **Release-gate evidence:** CI log confirms both synthetic checks passed: answer/solution remain hidden before release and become available after release. The disposable RPC authorization suite passed. No real Supabase Auth signed-token integration is claimed.
+- **Documentation:** `docs/TASKS.md` refreshed in commit `e18bfd697778e2a0a8872f4878df5c86853244e7`. This commit is newer than run #708; check CI for the actual latest HEAD before claiming it is green.
+- **Migration blockers:** originals `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish` remain unresolved. The similarly named `20261024081110` is not an acceptable substitute. Keep the migration ledger and production schema untouched.
+- **Security-test boundary:** tests use synthetic identities and simulated PostgreSQL JWT claims. Real signed-token/authenticated-client integration and broader release-boundary tests remain open.
+- **Status/safety:** PR #2 remains open, draft, and unmerged. Vercel's status is a platform build-rate-limit/upgrade failure; do not create paid resources. Production Supabase remains read-only; do not apply repository-only migrations or invent historical SQL/JEE content.
+- **Next:** verify CI on the current HEAD, fix only reproducible failures, then continue evidence-backed source recovery or prepare a clearly labelled reconstruction proposal for review. Do not merge PR #2.
