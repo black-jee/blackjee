@@ -82,7 +82,7 @@ const checks = [
     file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
     description: "mock-test RPC NULL mode, question count, and duration are rejected at runtime",
     pattern:
-      /mock-test RPC rejects NULL mode at runtime[\\s\\S]*?mock-test RPC rejects NULL question count at runtime[\\s\\S]*?mock-test RPC rejects NULL duration at runtime/i,
+      /mock-test RPC rejects NULL mode at runtime[\s\S]*?mock-test RPC rejects NULL question count at runtime[\s\S]*?mock-test RPC rejects NULL duration at runtime/i,
   },
   {
     file: "supabase/reconstruction/tests/run_rpc_negative_tests.sh",
