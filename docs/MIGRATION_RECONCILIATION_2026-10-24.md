@@ -4,9 +4,11 @@ Date: 2026-10-24
 Scope: repository documentation only. No production SQL applied.
 
 ## Findings
+
 The ten supplied historical SQL files are evidence of an older schema generation, not safe replacements for missing same-version migrations. Legacy objects include `public.daily_questions`, `public.attempt_submissions`, `public.active_question_links`, and `private.challenge_attempt_sessions`. Current reconstructed objects include `public.jee_pyq_questions`, `public.daily_challenges`, `public.daily_challenge_attempts`, `public.mock_test_attempts`, and private answer/session tables.
 
 ## Historical evidence disposition
+
 - `20261021000100_enforce_one_attempt_per_signed_in_user.sql`: single-attempt invariant and owner-scoped policies; do not port blindly.
 - `20261021000200_daily_results_archive.sql`: session lifecycle and archive/result RPC boundaries; signatures differ.
 - `20261021000300_launch_readiness_hardening.sql`: schedule and archive hardening; reuse only verified invariants.
@@ -19,9 +21,11 @@ The ten supplied historical SQL files are evidence of an older schema generation
 - `20261021141955_allow_public_read_of_approved_submission_columns.sql`: narrow public column access; legacy submission table.
 
 ## Ledger baseline
+
 Previously recorded: live ledger 20 entries; repo migration files 15; seven live versions lack matching original SQL; two repo migration files do not match the live ledger. Recheck exact version/name pairs before any history repair. Never alter the live ledger during reconstruction. These counts do not establish missing migration contents.
 
 ## Security review gates
+
 1. Keep answer keys and solutions private; do not trust client-submitted correctness.
 2. RLS and SQL grants are separate; review table/column privileges and function EXECUTE grants together.
 3. Confirm product semantics before changing single-attempt behavior.
@@ -33,6 +37,7 @@ Previously recorded: live ledger 20 entries; repo migration files 15; seven live
 Known open points: `get_daily_challenge_result` was observed to expose released solutions to authenticated callers who know a challenge ID; confirm intent before changing. Five private tables have RLS but no policies and are intentionally inaccessible via direct client grants. The candidate index on `private.mock_test_responses.question_id` needs review. Storage remains design-only. Do not create, import, or publish JEE question/solution content.
 
 ## Next steps
+
 1. Compare exact live ledger version/name pairs with branch migration filenames and classify every mismatch.
 2. Mark each item as original recovered, catalog reconstruction only, different schema generation, or unresolved.
 3. Add repository tests only for behavior supported by current definitions and grants.
@@ -67,6 +72,7 @@ For the previously identified workflow run `40114721534`, the `reconstruction-re
 ## Follow-up Git history review (2026-10-24)
 
 Git history confirms:
+
 - Commit `2c27d5e8dc0eb9be6fe23fece3949726a45ade6d` added `20261024112500_require_pyq_source_page_before_publish.sql` as a new file. Its body enforces source document + source page, private answer key, and worked solution before publication.
 - Commit `190f33bedc0556fe0d7e45d09876d0ba1374ab0e` added `20261024120000_require_pyq_source_and_solution_before_publish.sql` with a source-reference and worked-solution gate.
 - Commit `3ae28e9f795e0a6bdef5168c495def6ea8d42154` later modified the `20261024120000` file to require source page as well, explicitly describing it as keeping the later migration at least as strict as the source-page gate.
@@ -77,6 +83,7 @@ Conclusion: the current branch has two separately versioned migrations with over
 ## Early missing migration history and schema-generation comparison (2026-10-24)
 
 A path-specific GitHub commit-history query returned no commits for each of these six live-ledger paths:
+
 - `20261024080824_foundation_schema.sql`
 - `20261024080924_tighten_rpc_grants_and_policy.sql`
 - `20261024081041_daily_solution_release_rpc.sql`
@@ -122,6 +129,7 @@ The latest inspected completed GitHub Actions run is [run 40148547937](https://g
 The run exercises the forward-only hardening migrations only in the disposable CI PostgreSQL service. It does not recover the missing historical migration bodies, prove production migration-chain replay, or replace real Supabase-issued user-token tests.
 
 New forward-only hardening files present on the working branch:
+
 - `supabase/migrations/20261025100000_enforce_unique_pyq_option_labels.sql`
 - `supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql`
 - `supabase/migrations/20261025120000_add_mock_test_response_question_id_index.sql`
