@@ -1,6 +1,6 @@
 # BLACK-JEE project status
 
-**Last updated:** 2026-10-24
+**Last updated:** 2026-10-25
 **Overall status:** In progress — core application routes and secure database workflows are being built. Not production-ready.
 
 ## Environment
@@ -134,3 +134,14 @@
 - **Production validation gap:** live `start_mock_test` still lacks explicit NULL rejection for question count/duration; branch-only fix is tested in replay but not deployed. A NULL question count can make the selection query's `LIMIT` unbounded before the NOT NULL duration constraint rejects the insert.
 - **Remaining gates:** exact live-vs-reconstruction definition-level diff; real Supabase-issued anonymous/student/admin JWT tests; reviewed deployment and rollback plan. CI green does not substitute for these gates.
 - **Safety:** no production SQL/grants/schema/data or migration-ledger changes, no paid infrastructure, no new JEE content, and no PR merge.
+
+
+## Reconstruction checkpoint — 2026-10-25 (baseline integrity repair verified)
+
+- **Current branch:** `chore/schema-reconstruction`; draft [PR #2](https://github.com/black-jee/blackjee/pull/2) remains open and unmerged.
+- **Verified commit:** `12548bf6bb499ac806124b09dc29af93d3a0cac4`; [GitHub Actions run 40165662614](https://github.com/black-jee/blackjee/actions/runs/40165662614) passed both `quality` and `reconstruction-replay`.
+- **Baseline correction:** restored `public.admin_save_daily_challenge` to the read-only live function definition in the reconstructed baseline and recorded the captured MD5 fingerprint `ebdff78aa677719515c9e500fc576562`. Added a pre-hardening fingerprint assertion to disposable CI and moved static hardening checks to the forward migration where those rules belong.
+- **Fresh live read-only check:** migration ledger remains at 20 entries; the live RPC fingerprint remains `ebdff78aa677719515c9e500fc576562`. The PYQ option-label trigger and standalone `private.mock_test_responses(question_id)` index are both absent from production, confirming those branch migrations remain unapplied.
+- **What the green run proves:** committed source quality gates and the disposable PostgreSQL replay pass, including the captured RPC baseline assertion and branch-only hardening tests. It does not establish full production catalog parity, recover the missing historical migration bodies, or substitute for real Supabase-issued student/admin JWT tests.
+- **Next gates:** definition-level live-vs-reconstruction comparison; review of the seven missing historical migration bodies and repository-only migrations without altering the live ledger; real authenticated workflows; and a no-cost deployment/staging verification path.
+- **Safety:** no production DDL, grants, data, migration-ledger changes, paid infrastructure, question/solution additions, or PR merge were performed.
