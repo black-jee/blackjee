@@ -1,4 +1,4 @@
-## Latest checkpoint — 2026-10-26 (CI #708 green; daily-solution release gate tested)
+## Latest checkpoint — 2026-10-26 (CI #711 green; release gate regression retained)
 
 - **Verified test commit:** `0219fd7b293967d6a7d54d04fdf718df8b5e168f`; CI [#708 / 40246416154](https://github.com/black-jee/blackjee/actions/runs/40246416154) passed both `quality` and `reconstruction-replay`.
 - **New release-gate regression:** disposable replay proves the daily-challenge result omits `correct_answer` and `solution` before release, then exposes the expected synthetic values after release. The authorization suite completed successfully.
@@ -100,3 +100,13 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 
 - CI [run #686 / 40244658935](https://github.com/black-jee/blackjee/actions/runs/40244658935) ran on commit `7cadd5bf14f3e2967644ca68d0abe60949c74967`. `reconstruction-replay` passed; `quality` failed only at Prettier. Job logs name `docs/MIGRATION_RECONCILIATION.md`, `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`, and `docs/SESSION_HANDOVER.md` as the three formatting failures. Lint, typecheck, unit tests, Playwright E2E, dependency audit, and build passed.
 - A formatting-only correction was committed in these three documents. Follow-up [run #692 / 40245119398](https://github.com/black-jee/blackjee/actions/runs/40245119398) failed at the continuity validator because the continuation notes duplicated the permanent IDs `BJ-DB-001` and `BJ-DOC-001`; those headings have since been changed to descriptive headings without task IDs. The reconstruction assertions completed successfully before the overall job was cancelled due to the quality failure. Current HEAD still has no matching CI run and is not yet verified green. Do not report the current branch as green until a matching run passes.
+
+
+### Latest continuation checkpoint — 2026-10-26 (CI #711 green)
+
+- **Verified source/test commit:** `4d0f8d879a1f5c25b332cfae474218e75aee8479` is the branch HEAD at the start of this checkpoint. Its change is documentation-only spacing cleanup in `docs/TASKS.md`.
+- **CI:** [run #711 / 40246608312](https://github.com/black-jee/blackjee/actions/runs/40246608312) completed successfully on the current branch source: `quality` and `reconstruction-replay` both have conclusion `success`. Quality passed dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and build. Replay passed schema/constraint/index, RLS, RPC, ACL, authoring integrity, mock-test validation, and RPC denial checks, including the daily-challenge answer/solution release-boundary regression.
+- **Security precision:** CI's replay uses disposable PostgreSQL, synthetic identities, and simulated JWT claim settings. It is not signed-token or real Supabase Auth integration. Real authenticated-client integration and broader release-boundary runtime tests remain open.
+- **Migration blockers unchanged:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files. Exact originals remain `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute `20261024081110` for the first.
+- **External deployment:** Vercel's build-rate-limit/upgrade blocker is separate from green repository CI. No paid infrastructure is authorized.
+- **Next:** continue free, evidence-backed search for the exact historical migration bodies; meanwhile design real signed-token/authenticated-client tests only with isolated test credentials and fixtures. Do not mutate production Supabase, invent historical SQL or JEE content, or merge PR #2.
