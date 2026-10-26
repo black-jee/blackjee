@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { PyqQuestionList } from "@/components/pyq/pyq-question-list";
 import type { PyqRow } from "@/lib/questions/pyq-adapter";
