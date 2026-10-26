@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="title desc">
+  <title id="title">Simple series circuit</title>
+  <desc id="desc">A 12 volt battery connected in a closed loop with a 4 ohm resistor.</desc>
+  <rect width="900" height="360" rx="24" fill="#f8fafc"/>
+  <text x="450" y="44" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#0f172a">Series circuit</text>
+  <g fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M170 105 H340"/>
+    <path d="M560 105 H730 V270 H170 V205"/>
+    <path d="M170 105 V145"/>
+    <path d="M170 185 V205"/>
+    <path d="M340 105 L355 82 H545 L560 105"/>
+  </g>
+  <rect x="340" y="77" width="220" height="56" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>
+  <text x="450" y="111" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="700" fill="#1d4ed8">4 Ω</text>
+  <path d="M153 145 H187" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+  <path d="M160 185 H180" stroke="#dc2626" stroke-width="8" stroke-linecap="round"/>
+  <text x="108" y="170" text-anchor="middle" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#0f172a">12 V</text>
+  <text x="450" y="229" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#475569">Ideal battery and resistor</text>
+  <path d="M660 270 l-20 -12 v24 z" fill="#0f766e"/>
+  <text x="450" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" fill="#334155">Closed circuit · negligible wire resistance</text>
+</svg>
