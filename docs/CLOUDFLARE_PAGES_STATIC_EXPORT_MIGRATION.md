@@ -25,9 +25,9 @@ Official references:
 
 - The app uses Next.js 16 and Supabase.
 - Server Actions exist in admin, daily challenge, mock-test, and PYQ code.
-- `app/auth/callback/route.ts` was replaced on this branch with a browser-side OAuth callback page; verify PKCE exchange and session restoration end-to-end.
+- The existing `app/auth/callback/route.ts` performs the OAuth PKCE code exchange on the server and writes session cookies to the redirect response. Keep this server route unless a verified adapter limitation requires a replacement; test the full OAuth redirect and cookie persistence end-to-end.
 - `proxy.ts` refreshes Supabase auth cookies. Verify this behavior on the selected Workers adapter before deployment.
-- The practice library routes (`/chapterwise`, `/chapter-practice`, `/pyq`) and `/profile` now render route shells and load their data in the browser. These are compatible with Workers too, but keep RLS protections and clear loading/error states.
+- The practice library routes (`/chapterwise`, `/chapter-practice`, `/pyq`) and `/profile` now render route shells and load their data in the browser. Keep RLS protections and clear loading/error states.
 - PYQ grading calls the `grade_jee_pyq` Supabase RPC. Preserve database-side authorization and attempt ownership.
 - No successful Workers build or production deployment has been verified yet.
 
@@ -38,7 +38,7 @@ Official references:
 3. Add the official Worker config and adapter config, using `nodejs_compat` where required and a current compatibility date. Keep generated `.open-next` output out of Git if OpenNext is selected.
 4. Add separate scripts for adapter build, local Worker preview, and deployment. Keep `next dev` available for the existing development workflow.
 5. Configure Cloudflare **Workers Builds**, not the Pages static build, with the correct install/build commands and environment variables. Configure Supabase public URL/key as appropriate and keep all service-role secrets server-only.
-6. Run lint, typecheck, unit tests, Playwright, Next.js production build, adapter build, and local Worker preview. Test login, OAuth callback, reset password, cookie refresh, PYQ grading, daily challenge, mock-test start/resume/submit, admin authorization, and private profile data.
+6. Run lint, typecheck, unit tests, Playwright, Next.js production build, adapter build, and local Worker preview. Test login, OAuth callback and cookie persistence, reset password, cookie refresh, PYQ grading, daily challenge, mock-test start/resume/submit, admin authorization, and private profile data.
 7. Deploy to a Worker preview URL, verify production-like smoke tests and logs, then configure the custom domain only after acceptance checks pass.
 
 ## Security and release gates
