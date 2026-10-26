@@ -127,7 +127,6 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **No change to outstanding gates:** exact historical bodies `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish` remain unrecovered; real Supabase signed-token Auth tests remain unexecuted; six repository-only migrations, Storage security, asset and JEE source/answer/solution QA, and production-readiness/rollback review remain open.
 - **Safety:** PR #2 remains draft/unmerged. Production Supabase stays read-only; no fabricated migration SQL or JEE content and no paid infrastructure.
 
-
 ## Autonomous 12-phase execution checklist — 2026-10-26
 
 Status legend: [x] verified complete; [~] in progress or partially verified; [ ] not yet verified; [!] blocked.
@@ -146,9 +145,16 @@ Status legend: [x] verified complete; [~] in progress or partially verified; [ ]
 12. [ ] **Release readiness** — full regression, security review, rollback plan, evidence reconciliation, and final handover. Do not merge or deploy to production without explicit authorization.
 
 ### Execution rules
+
 - Continue autonomously through useful, safe tasks and verify each meaningful repository commit with CI.
 - Do not write production Supabase DDL/data/grants or repair/reset its migration ledger.
 - Do not invent historical SQL, source citations, answers, or solutions.
 - Do not buy infrastructure to bypass rate limits.
 - Keep PR #2 open, draft, and unmerged.
 - Report a phase complete only when its acceptance evidence exists; record blockers and continue with independent safe tasks.
+
+
+### Continuation update — 2026-10-26 (CI #737)
+
+- Workflow [#737 / 40252072141](https://github.com/black-jee/blackjee/actions/runs/40252072141) ran on the current documentation tip. `reconstruction-replay` passed; `quality` failed only at Prettier because `docs/TASKS.md` has one extra blank line before the checklist heading and lacks a blank line after `### Execution rules`. Dependency audit, lint, typecheck, unit tests, 22 Playwright tests, and production build passed. These are documentation formatting defects, not application/test failures, but the current tip is not green.
+- Phase 1 is now marked partially verified until the formatting-only correction has a matching successful CI run. Vercel remains separately rate-limited; no deployment retry or paid upgrade.
