@@ -42,18 +42,27 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
   const unlocked = result?.solution_unlocked === true;
 
   return (
-    <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-7">
+    <article
+      aria-labelledby={`pyq-question-${id}`}
+      className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors sm:p-7"
+    >
       <div className="mb-5 flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
-        <span className="rounded-full border border-[var(--border)] px-2.5 py-1">
+        <span className="rounded-full border border-[var(--border)] bg-white/[0.03] px-2.5 py-1 font-semibold text-[var(--text)]">
           {question.subject}
         </span>
-        <span>
-          {exam} {year ?? ""}
+        <span className="rounded-full bg-white/[0.03] px-2.5 py-1">
+          {exam}{year ? ` · ${year}` : ""}
         </span>
-        {question.chapter ? <span>· {question.chapter}</span> : null}
-        <span className="ml-auto">Question {number}</span>
+        {question.chapter ? (
+          <span className="rounded-full bg-white/[0.03] px-2.5 py-1">{question.chapter}</span>
+        ) : null}
+        <span className="ml-auto rounded-full border border-[var(--border)] px-2.5 py-1 font-medium">
+          Q{number}
+        </span>
       </div>
-      <h2 className="mb-4 text-lg font-semibold">{title}</h2>
+      <h2 id={`pyq-question-${id}`} className="mb-4 text-lg font-semibold leading-7 sm:text-xl">
+        {title}
+      </h2>
       <QuestionContent question={{ ...question, options: [] }} />
       {question.options.length ? (
         <fieldset disabled={busy || isCorrect || unlocked} className="mt-5 grid gap-3">
@@ -61,7 +70,7 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
           {question.options.map((option) => (
             <label
               key={option.id}
-              className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors ${answer === option.label ? "border-[var(--accent)] bg-[var(--accent)]/5" : "border-[var(--border)] hover:bg-white/5"}`}
+              className={`flex cursor-pointer items-start gap-3 rounded-xl border p-3 transition-colors focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[var(--accent)] ${answer === option.label ? "border-[var(--accent)] bg-[var(--accent)]/10 shadow-[0_0_0_1px_var(--accent)]" : "border-[var(--border)] hover:border-[var(--muted)]/70 hover:bg-white/[0.04]"}`}
             >
               <input
                 type="radio"
@@ -107,7 +116,8 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
           type="button"
           onClick={submit}
           disabled={busy || !answer.trim()}
-          className="mt-5 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] disabled:opacity-50"
+          aria-busy={busy}
+          className="mt-5 min-h-11 rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {busy ? "Checking…" : "Check answer"}
         </button>
@@ -118,7 +128,7 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
         </p>
       ) : null}
       {result ? (
-        <div className="mt-5 rounded-2xl border border-[var(--border)] bg-black/20 p-4">
+        <div aria-live="polite" aria-atomic="true" className="mt-5 rounded-2xl border border-[var(--border)] bg-black/20 p-4">
           <p className={isCorrect ? "font-semibold text-[var(--accent)]" : "font-semibold"}>
             {isCorrect ? "Correct answer." : "Not quite. Try again."}
           </p>
