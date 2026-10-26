@@ -1,0 +1,180 @@
+"use client";
+
+import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { bulkSavePyqQuestions } from "@/app/admin/pyq/actions";
+
+type ExtractedQuestion = {
+  questionNumber: number;
+  sourcePage?: number;
+  title: string;
+  sourceId: string;
+  exam: string;
+  year: number;
+  session: string;
+  subject: "Physics" | "Chemistry" | "Mathematics";
+  chapter?: string;
+  statement: string;
+  options: { id?: string; label: string; text: string }[];
+  correctAnswer: string;
+  solution?: string;
+  sourcePdf?: string;
+  tags?: string[];
+  reviewNotes?: string[];
+};
+
+type Bundle = { format?: string; questions?: ExtractedQuestion[] };
+
+const inputClass =
+  "block w-full rounded-xl border border-[var(--border)] bg-black/20 px-3 py-2.5 text-sm";
+
+export function PyqBulkImport() {
+  const router = useRouter();
+  const [bundle, setBundle] = useState<Bundle | null>(null);
+  const [fileName, setFileName] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [report, setReport] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
+
+  const questions = useMemo(
+    () => (Array.isArray(bundle?.questions) ? bundle.questions : []),
+    [bundle],
+  );
+  const ready = questions.filter(
+    (q) =>
+      typeof q.statement === "string" &&
+      q.statement.trim().length > 0 &&
+      typeof q.correctAnswer === "string" &&
+      q.correctAnswer.trim().length > 0 &&
+      typeof q.sourceId === "string" &&
+      q.sourceId.trim().length > 0,
+  );
+
+  async function readFile(file?: File) {
+    setError(null);
+    setReport(null);
+    setBundle(null);
+    if (!file) return;
+    try {
+      const parsed = JSON.parse(await file.text()) as Bundle;
+      if (!Array.isArray(parsed.questions) || parsed.questions.length === 0) {
+        throw new Error("This JSON does not contain a non-empty questions array.");
+      }
+      if (parsed.questions.length > 100) {
+        throw new Error("Import at most 100 questions per batch.");
+      }
+      setBundle(parsed);
+      setFileName(file.name);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not read the JSON file.");
+    }
+  }
+
+  function importDrafts() {
+    if (!ready.length) {
+      setError("No valid questions with an answer key are ready to import.");
+      return;
+    }
+    setError(null);
+    setReport(null);
+    startTransition(async () => {
+      const payload = ready.map((q) => {
+        const options = Array.isArray(q.options)
+          ? q.options.map((option, index) => {
+              const label = String(option.label || String.fromCharCode(65 + index)).trim();
+              return {
+                id: String(option.id || label.toLowerCase()),
+                label,
+                text: String(option.text || ""),
+              };
+            })
+          : [];
+        const isMultipleChoice = options.length >= 2;
+        return {
+          questionId: null,
+          sourceId: q.sourceId,
+          title: q.title,
+          exam: q.exam || "JEE Main",
+          year: Number(q.year),
+          session: q.session || "",
+          subject: q.subject,
+          chapter: q.chapter || "",
+          statement: q.statement,
+          statementImagePath: "",
+          options,
+          questionType: isMultipleChoice ? "single_correct" : "numerical",
+          marksCorrect: 4,
+          marksWrong: -1,
+          correctAnswer: q.correctAnswer.trim(),
+          solution: "",
+          sourcePdf: q.sourcePdf || fileName,
+          sourcePage: Number.isInteger(q.sourcePage) ? q.sourcePage : null,
+          tags: [...new Set([...(q.tags || []), "bulk-pdf-extraction", "needs-diagram-review"])],
+          assetPaths: [],
+          reviewNotes: [
+            ...(q.reviewNotes || []),
+            "Bulk-imported draft: verify question text, option mapping and answer key.",
+            "Diagram / graph / reaction placeholder: add manually if required.",
+            "Detailed solution intentionally pending.",
+          ],
+        };
+      });
+      const result = await bulkSavePyqQuestions(payload);
+      setReport(
+        `Saved ${result.saved.length} drafts. ${result.failed.length} failed.` +
+          (result.failed.length
+            ? " Failed rows (1-based within the ready set): " +
+              result.failed.map((item) => `${item.index + 1}: ${item.error}`).join(" · ")
+            : ""),
+      );
+      router.refresh();
+    });
+  }
+
+  return (
+    <section className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-7">
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
+        Bulk import
+      </p>
+      <h2 className="mt-2 text-2xl font-semibold tracking-tight">Import extracted PDF questions</h2>
+      <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--muted)]">
+        Load the JSON bundle generated by the local PDF extractor. Questions are saved as unpublished
+        drafts; diagrams stay manual and detailed solutions remain blank. Import requires an answer
+        key for each question.
+      </p>
+      <label className="mt-5 block space-y-2 text-sm font-medium">
+        Extracted JSON bundle
+        <input
+          type="file"
+          accept=".json,application/json"
+          className={inputClass}
+          onChange={(event) => void readFile(event.currentTarget.files?.[0])}
+        />
+      </label>
+      {fileName ? <p className="mt-2 text-xs text-[var(--muted)]">Selected: {fileName}</p> : null}
+      {bundle ? (
+        <div className="mt-4 rounded-2xl border border-[var(--border)] p-4 text-sm">
+          <p className="font-semibold">{questions.length} question candidates found</p>
+          <p className="mt-1 text-[var(--muted)]">
+            {ready.length} ready to save · {questions.length - ready.length} missing statement, source ID
+            or answer key (will be skipped)
+          </p>
+          <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
+            Each saved record will remain a draft. Check the extracted statement, options, source page,
+            and answer key in the review list before publishing.
+          </p>
+        </div>
+      ) : null}
+      {error ? <p role="alert" className="mt-3 text-sm text-red-300">{error}</p> : null}
+      {report ? <p role="status" className="mt-3 whitespace-pre-wrap text-sm">{report}</p> : null}
+      <button
+        type="button"
+        disabled={pending || ready.length === 0}
+        onClick={importDrafts}
+        className="mt-4 rounded-xl bg-[var(--accent)] px-4 py-2.5 text-sm font-bold text-[var(--accent-foreground)] disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {pending ? "Saving drafts…" : `Save ${ready.length} drafts`}
+      </button>
+    </section>
+  );
+}
