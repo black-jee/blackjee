@@ -126,3 +126,29 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - **Vercel:** current HEAD's provider status is rate-limited (`upgradeToPro=build-rate-limit`). This is not a source CI result. No paid upgrade; live runtime/browser smoke test remains unverified.
 - **No change to outstanding gates:** exact historical bodies `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish` remain unrecovered; real Supabase signed-token Auth tests remain unexecuted; six repository-only migrations, Storage security, asset and JEE source/answer/solution QA, and production-readiness/rollback review remain open.
 - **Safety:** PR #2 remains draft/unmerged. Production Supabase stays read-only; no fabricated migration SQL or JEE content and no paid infrastructure.
+
+
+## Autonomous 12-phase execution checklist — 2026-10-26
+
+Status legend: [x] verified complete; [~] in progress or partially verified; [ ] not yet verified; [!] blocked.
+
+1. [x] **CI and repository health** — CI #734 passed on `a19c59e08b129d622e54c03eb52760d1333bcc0e`; both `quality` and `reconstruction-replay` succeeded. Evidence: https://github.com/black-jee/blackjee/actions/runs/40250654516. Vercel status remains a separate rate-limit failure.
+2. [~] **GitHub and PR** — PR #2 confirmed open, draft, and unmerged. Refresh documentation/PR evidence after current changes; keep draft.
+3. [ ] **Migration recovery** — continue evidence-backed recovery of exact originals `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`; do not fabricate or substitute near-matches.
+4. [ ] **Database integrity** — reconcile 20 applied versions, 24 repository SQL files, 18 exact filename/version matches, and six repository-only SQL files; validate reconstructed schema only in disposable PostgreSQL.
+5. [ ] **Authentication** — prepare isolated tests using genuine Supabase-issued signed tokens and synthetic student/admin users; simulated PostgreSQL claims do not count.
+6. [ ] **Authorization and RLS** — test anonymous denial, student-to-student isolation, admin-only actions, and answer/solution release boundaries in isolation.
+7. [ ] **Storage security** — inspect bucket/policy state and design private asset access; do not create production buckets or policies without an approved, reviewed plan.
+8. [ ] **JEE content quality** — reconcile source manifest, question statements, options, answer keys, worked solutions, citations, and images; keep unverified content unpublished.
+9. [ ] **Application workflows** — verify login, PYQ practice, mock tests, results, daily challenges, and admin workflows, distinguishing automated smoke coverage from real authenticated journeys.
+10. [!] **Deployment** — Vercel status currently links to a build-rate-limit/upgrade page. Recheck later without paying; live runtime/browser smoke testing remains unverified.
+11. [ ] **Performance and reliability** — investigate the unindexed private mock-response question FK and seven unused-index advisories using workload evidence; no speculative production index changes.
+12. [ ] **Release readiness** — full regression, security review, rollback plan, evidence reconciliation, and final handover. Do not merge or deploy to production without explicit authorization.
+
+### Execution rules
+- Continue autonomously through useful, safe tasks and verify each meaningful repository commit with CI.
+- Do not write production Supabase DDL/data/grants or repair/reset its migration ledger.
+- Do not invent historical SQL, source citations, answers, or solutions.
+- Do not buy infrastructure to bypass rate limits.
+- Keep PR #2 open, draft, and unmerged.
+- Report a phase complete only when its acceptance evidence exists; record blockers and continue with independent safe tasks.
