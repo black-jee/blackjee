@@ -208,3 +208,10 @@ The reconstructed numeric-answer candidate and its candidate-only contract check
 The production ledger remains untouched. Six repository-only migration files still need a separate reconciliation decision; matching all 20 applied versions does not imply that those six files should be applied.
 
 The six repository-only migration files have now been reviewed in `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md`. Two are redundant admin-review function rewrites, three are unverified forward hardening changes, and one is an index proposal. No file has been applied to production; other environment ledgers remain unknown, so no file was deleted or renumbered.
+
+
+## Superseding reconciliation status — 2026-10-26
+
+The historical investigation entries above are retained as a dated log. Any earlier statement that the applied bodies for `20261024081337` and `20261024112132` are still missing is superseded: their stored SQL statement text was recovered through a read-only query of `supabase_migrations.schema_migrations.statements[1]` and copied into the exact versioned migration paths. The archive's `20261024081110` file remains a near-match only and was not used as a substitute.
+
+Current inventory is **20 live applied versions, 26 repository SQL migration files, 20 exact filename/version matches, zero applied versions without a matching file, and six repository-only files**. The six local-only migrations have a separate review in `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md`; do not delete, renumber, or apply them until other-environment histories and the intended canonical chain are reviewed. Source-text recovery does not itself prove full clean replay or live catalog parity. CI #783 passed on `a5f8bebf346bb68eb9f3310b928e4f2bc62a961b` ([run](https://github.com/black-jee/blackjee/actions/runs/40285101550)). Production schema/data/grants and migration ledger remain unchanged.

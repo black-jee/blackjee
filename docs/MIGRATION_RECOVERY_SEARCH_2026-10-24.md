@@ -162,3 +162,13 @@ A read-only query confirmed that `supabase_migrations.schema_migrations` has a `
 These are the SQL statement texts recorded for the applied migrations, not inferred SQL from the live catalog and not the similarly named archived 20261024081110 file. The prior labelled numeric-answer candidate is superseded and removed from active CI; its candidate-only replay/assertion is no longer used as evidence.
 
 **Updated inventory:** 20 live applied versions, 26 SQL migration files, 20 exact version/name matches, zero applied versions missing a matching SQL file, and six repository-only migrations. This restores the source text needed for repository replay, but does not authorize changing or repairing the production migration ledger. No production schema, data, grants, or migration history was modified.
+
+
+## Superseding recovery result — 2026-10-26
+
+The earlier archive-search sections accurately describe what those archives contained, but their statements that the two applied SQL bodies remain missing are superseded by a later read-only recovery. The stored statement text was retrieved from `supabase_migrations.schema_migrations.statements[1]` and copied into the exact versioned paths:
+
+- `20261024081337_numeric_answers_and_admin_review.sql` (stored statement: 864 bytes)
+- `20261024112132_require_pyq_source_page_before_publish.sql` (stored statement: 3341 bytes)
+
+These two bodies were **not** recovered from the five ZIP archives. Do not reinterpret the archive findings, rename the `20261024081110` near-match, or claim that the stored statement text proves complete historical replay or catalog parity. Current count: 20 applied versions matched by exact version/name; 26 repository SQL files; six repository-only files remain to reconcile. Production migration history was not modified. CI #783 passed on checkpoint commit `a5f8bebf346bb68eb9f3310b928e4f2bc62a961b` ([run](https://github.com/black-jee/blackjee/actions/runs/40285101550)).

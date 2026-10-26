@@ -118,3 +118,13 @@ The old candidate-based replay is superseded. Do not treat the labelled candidat
 **Current counts:** 20 applied versions; 26 repository SQL files; 20 exact version/name matches; 6 repository-only files; 0 applied versions missing a matching SQL file. The six repository-only files still require explicit review before a canonical chain is chosen.
 
 See `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md` for a file-by-file review of all six repository-only migrations. Two source-page/source-and-solution files are redundant relative to the recovered applied history; three are forward hardening proposals and one is a performance-index proposal. None has been applied to production.
+
+
+## Superseding status correction — 2026-10-26
+
+This note supersedes earlier unresolved-body counts in the dated investigation history above. A later read-only query of `supabase_migrations.schema_migrations.statements[1]` recovered the stored SQL statement text for both applied versions and placed it in the exact versioned files:
+
+- `supabase/migrations/20261024081337_numeric_answers_and_admin_review.sql`
+- `supabase/migrations/20261024112132_require_pyq_source_page_before_publish.sql`
+
+**Current inventory:** 20 applied versions; 26 repository SQL migration files; 20 exact version/name matches; zero applied versions missing a matching repository SQL file; six repository-only files. The five archive-restored files listed earlier are a separate recovery event; the two later bodies came from the read-only migration ledger statement records, not from the ZIP archives. This establishes source-text recovery, not proof that a full original chain replays cleanly or that the repository matches every live catalog object. CI #783 passed on `a5f8bebf346bb68eb9f3310b928e4f2bc62a961b` ([run](https://github.com/black-jee/blackjee/actions/runs/40285101550)). Keep the six local-only files under review and keep production migration history unchanged.
