@@ -1,16 +1,25 @@
 import { expect, test } from "@playwright/test";
 
-test("home page explains the platform and its migration status", async ({ page }) => {
+test("home page presents the redesigned practice routes and honest availability", async ({ page }) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /Every question is a chance to get sharper/i }),
+    page.getByRole("heading", { name: /Practice smarter\.\s*Show up stronger\./i }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: /Built around how students practice/i }),
+    page.getByRole("heading", { name: /Choose your next step/i }),
   ).toBeVisible();
   await expect(
-    page.getByText(/not a claim that the legacy workflows are already migrated/i),
+    page.getByRole("heading", { name: /Find the practice that fits today/i }),
   ).toBeVisible();
+  await expect(page.getByRole("link", { name: /Open daily challenge/i })).toHaveAttribute(
+    "href",
+    "/challenge",
+  );
+  await expect(page.getByRole("link", { name: /Explore previous-year questions/i })).toHaveAttribute(
+    "href",
+    "/pyq",
+  );
+  await expect(page.getByText("Migration queued").first()).toBeVisible();
 });
 
 test("sign-in renders without browser errors", async ({ page }) => {
