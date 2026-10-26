@@ -254,6 +254,11 @@ export function PyqAuthoringForm() {
           />
         </label>
       </div>
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-raised)] p-4 sm:p-5">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 2 · Question</p>
+        <h3 className="mt-1 text-lg font-semibold">Question wording and diagram</h3>
+        <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Use plain text for wording. Inline maths: <code>$...$</code> or <code>\(...\)</code>. Display equation: <code>$...$</code> or <code>\[...\]</code>.</p>
+      </div>
       <label className={labelClass}>
         Question statement
         <textarea
@@ -266,6 +271,10 @@ export function PyqAuthoringForm() {
           className={inputClass}
         />
       </label>
+      <div className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--surface-raised)] p-3 sm:p-4">
+        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Formatted question preview</p>
+        <MathPreview text={statement} />
+      </div>
       <label className={labelClass}>
         Question diagram path (optional)
         <input
