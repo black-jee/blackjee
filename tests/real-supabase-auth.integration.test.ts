@@ -107,7 +107,8 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("prevents student A from resuming student B's in-progress attempt", async () => {
-    const before = await studentB!.from("mock_test_attempts")
+    const before = await studentB!
+      .from("mock_test_attempts")
       .select("id,status,submitted_at,score,attempted_count")
       .eq("id", env.bInProgressAttemptId!)
       .single();
@@ -221,7 +222,8 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
       });
     } finally {
       if (challengeId) {
-        const cleanup = await admin!.from("daily_challenges")
+        const cleanup = await admin!
+          .from("daily_challenges")
           .delete()
           .eq("id", challengeId);
         expect(cleanup.error).toBeNull();

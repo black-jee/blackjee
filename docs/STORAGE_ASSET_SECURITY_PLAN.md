@@ -6,11 +6,11 @@
 
 ## Asset classes and intended access
 
-| Asset class | Suggested bucket | Anonymous/student read | Upload/update/delete |
-| --- | --- | --- | --- |
-| Published PYQ statement/option images | `pyq-question-assets` (private bucket with row-based SELECT policy) | Only when an exact object path is referenced by an approved, published question | Admin-only; validate content and path |
-| Original exam/source PDFs and provenance scans | `pyq-source-documents` (private) | Never | Admin-only; review/audit workflow |
-| Worked-solution images, answer-key scans, moderation evidence | `pyq-review-private` (private) | Never | Admin-only; never exposed through public question payloads |
+| Asset class                                                   | Suggested bucket                                                    | Anonymous/student read                                                          | Upload/update/delete                                       |
+| ------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Published PYQ statement/option images                         | `pyq-question-assets` (private bucket with row-based SELECT policy) | Only when an exact object path is referenced by an approved, published question | Admin-only; validate content and path                      |
+| Original exam/source PDFs and provenance scans                | `pyq-source-documents` (private)                                    | Never                                                                           | Admin-only; review/audit workflow                          |
+| Worked-solution images, answer-key scans, moderation evidence | `pyq-review-private` (private)                                      | Never                                                                           | Admin-only; never exposed through public question payloads |
 
 Do not create these buckets automatically from this plan. First confirm the asset format, expected file sizes, and whether a signed-URL delivery endpoint is required. If public question images are served through a private bucket, use short-lived signed URLs or an explicitly reviewed read policy tied to a published question. Never make source documents or review materials public to simplify rendering.
 
