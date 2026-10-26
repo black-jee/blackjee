@@ -31,6 +31,7 @@ export function PyqAuthoringForm() {
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [statement, setStatement] = useState("");
+  const [solution, setSolution] = useState("");
   const [optionsText, setOptionsText] = useState("A|\nB|\nC|\nD|");
   const [subject, setSubject] = useState("Physics");
   const [questionType, setQuestionType] = useState("single_correct");
@@ -228,15 +229,31 @@ export function PyqAuthoringForm() {
           className={inputClass}
         />
       </label>
-      <label className={labelClass}>
-        Options (one per line: <code>Label|text|optional/image.png</code>)
-        <textarea
-          value={optionsText}
-          onChange={(event) => setOptionsText(event.target.value)}
-          rows={5}
-          className={inputClass}
-        />
-      </label>
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
+        <div className="mb-4">
+          <h3 className="text-base font-semibold">Answer options</h3>
+          <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Enter one option per line using Label|option text|optional image path. Example: A|12 N|. The preview below separates each choice for easy checking.</p>
+        </div>
+        <label className={labelClass}>
+          Options editor
+          <textarea
+            value={optionsText}
+            onChange={(event) => setOptionsText(event.target.value)}
+            rows={6}
+            spellCheck={false}
+            placeholder={"A|First option|\nB|Second option|\nC|Third option|\nD|Fourth option|"}
+            className={inputClass + " font-mono leading-6"}
+          />
+        </label>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {parseOptions(optionsText).map((option) => (
+            <div key={option.label} className="flex min-h-14 gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-3">
+              <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-[var(--border)] font-bold">{option.label}</span>
+              <span className="self-center whitespace-pre-wrap break-words text-sm leading-5">{option.text || (option.imagePath ? "[Image: " + option.imagePath + "]" : <span className="text-[var(--muted)]">Option text is empty</span>)}</span>
+            </div>
+          ))}
+        </div>
+      </section>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className={labelClass}>
           Correct answer / numerical answer
@@ -278,16 +295,25 @@ export function PyqAuthoringForm() {
           />
         </label>
       </div>
-      <label className={labelClass}>
-        Solution
-        <textarea
-          name="solution"
-          maxLength={100000}
-          rows={5}
-          placeholder="Explain the reasoning and calculations."
-          className={inputClass}
-        />
-      </label>
+      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
+        <div className="mb-4">
+          <h3 className="text-base font-semibold">Worked solution</h3>
+          <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Write the formula, substitution, calculation and final result clearly. This is saved with the draft for review.</p>
+        </div>
+        <label className={labelClass}>
+          Step-by-step solution
+          <textarea
+            name="solution"
+            value={solution}
+            onChange={(event) => setSolution(event.target.value)}
+            maxLength={100000}
+            rows={7}
+            placeholder={"Step 1: Write the relevant formula…\nStep 2: Substitute the given values…\nStep 3: Calculate the final answer with units."}
+            className={inputClass + " leading-6"}
+          />
+        </label>
+        {solution.trim() ? <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-4"><p className="mb-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Solution preview</p><p className="whitespace-pre-wrap text-sm leading-6">{solution}</p></div> : null}
+      </section>
       <label className={labelClass}>
         Additional asset paths (one per line)
         <textarea
