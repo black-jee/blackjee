@@ -8,7 +8,7 @@ const staticRouteShells = [
 ];
 
 for (const route of staticRouteShells) {
-  test(`\${route.path} renders its route shell on direct navigation`, async ({ page }) => {
+  test(`${route.path} renders its route shell on direct navigation`, async ({ page }) => {
     await page.goto(route.path);
     await expect(page.getByRole("heading", { name: route.heading }).first()).toBeVisible();
   });
