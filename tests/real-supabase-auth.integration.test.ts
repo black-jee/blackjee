@@ -85,7 +85,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
 
   it("denies anonymous calls to protected mock-test RPCs", async () => {
     const calls = await Promise.all([
-      anonymous.rpc("resume_mock_test", {
+      anonymous!.rpc("resume_mock_test", {
         p_attempt_id: env.bInProgressAttemptId!,
       }),
       anonymous.rpc("get_mock_test_result", {
