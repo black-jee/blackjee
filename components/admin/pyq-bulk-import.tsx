@@ -34,6 +34,13 @@ export function PyqBulkImport() {
   const router = useRouter();
   const [bundle, setBundle] = useState<Bundle | null>(null);
   const [fileName, setFileName] = useState("");
+  const [pdfName, setPdfName] = useState("");
+  const [extracting, setExtracting] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+  const [year, setYear] = useState(String(new Date().getFullYear()));
+  const [subject, setSubject] = useState<ExtractedQuestion["subject"]>("Physics");
+  const [session, setSession] = useState("");
+  const [answerKeyText, setAnswerKeyText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [report, setReport] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -51,6 +58,120 @@ export function PyqBulkImport() {
       typeof q.sourceId === "string" &&
       q.sourceId.trim().length > 0,
   );
+
+  async function readPdf(file?: File) {
+    setPdfError(null);
+    setError(null);
+    setReport(null);
+    if (!file) return;
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      setPdfError("Choose a PDF file.");
+      return;
+    }
+    if (file.size > 40 * 1024 * 1024) {
+      setPdfError("PDF must be 40 MB or smaller.");
+      return;
+    }
+    setExtracting(true);
+    try {
+      const pdfWindow = window as Window & { pdfjsLib?: any };
+      if (!pdfWindow.pdfjsLib) {
+        await new Promise<void>((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+          script.onload = () => resolve();
+          script.onerror = () => reject(new Error("Could not load the PDF reader. Check your connection and try again."));
+          document.head.appendChild(script);
+        });
+      }
+      const pdfjs = pdfWindow.pdfjsLib;
+      if (!pdfjs) throw new Error("PDF reader did not initialize.");
+      pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
+      const pages: { page: number; text: string }[] = [];
+      for (let pageNo = 1; pageNo <= pdf.numPages; pageNo += 1) {
+        const page = await pdf.getPage(pageNo);
+        const content = await page.getTextContent();
+        const rows = new Map<number, string[]>();
+        for (const item of content.items as any[]) {
+          if (typeof item.str !== "string" || !item.str.trim()) continue;
+          const y = Math.round(item.transform?.[5] ?? 0);
+          rows.set(y, [...(rows.get(y) ?? []), item.str.trim()]);
+        }
+        pages.push({
+          page: pageNo,
+          text: [...rows.entries()].sort((a, b) => b[0] - a[0]).map(([, values]) => values.join(" ")).join("\n"),
+        });
+      }
+      const lines = pages.flatMap((page) => page.text.split("\n").map((text) => ({ page: page.page, text: text.trim() })).filter((row) => row.text));
+      const startPattern = /^(?:question\s*)?(\d{1,3})[.)\]:-]\s+(.+)$/i;
+      const optionPattern = /^(?:\(([A-D1-4])\)|([A-D])[.)]|option\s*([A-D1-4])\s*[:.)-])\s*(.*)$/i;
+      const parsed: { questionNumber: number; sourcePage: number; statement: string; options: { label: string; text: string }[] }[] = [];
+      let current: (typeof parsed)[number] | null = null;
+      for (const line of lines) {
+        const qMatch = line.text.match(startPattern);
+        if (qMatch) {
+          if (current) parsed.push(current);
+          current = { questionNumber: Number(qMatch[1]), sourcePage: line.page, statement: qMatch[2], options: [] };
+          continue;
+        }
+        if (!current) continue;
+        const optionMatch = line.text.match(optionPattern);
+        if (optionMatch) {
+          const marker = optionMatch[1] || optionMatch[2] || optionMatch[3] || "";
+          const label = ({ "1": "A", "2": "B", "3": "C", "4": "D" } as Record<string, string>)[marker.toUpperCase()] || marker.toUpperCase();
+          current.options.push({ label, text: optionMatch[4] || "" });
+        } else if (current.options.length) {
+          const last = current.options[current.options.length - 1];
+          last.text = (last.text + " " + line.text).trim();
+        } else {
+          current.statement = (current.statement + "\n" + line.text).trim();
+        }
+      }
+      if (current) parsed.push(current);
+      if (!parsed.length) throw new Error("No numbered questions detected. This may be a scanned PDF; OCR is not included in browser extraction.");
+      const answers: Record<string, string> = {};
+      for (const pair of answerKeyText.split(/[\n,;]+/)) {
+        const match = pair.trim().match(/^(\d{1,3})\s*[:= -]\s*([A-D1-4]|\d+(?:\.\d+)?)$/i);
+        if (match) answers[match[1]] = ({ "1": "A", "2": "B", "3": "C", "4": "D" } as Record<string, string>)[match[2]] || match[2].toUpperCase();
+      }
+      const candidates: ExtractedQuestion[] = parsed.slice(0, 100).map((q) => ({
+        questionNumber: q.questionNumber,
+        sourcePage: q.sourcePage,
+        title: "JEE Main " + year + " " + subject + " Q" + q.questionNumber,
+        sourceId: "jee-main-" + year + "-" + (session.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") || "unspecified") + "-" + subject.toLowerCase() + "-q" + q.questionNumber,
+        exam: "JEE Main",
+        year: Number(year),
+        session,
+        subject,
+        statement: q.statement,
+        options: q.options,
+        correctAnswer: answers[String(q.questionNumber)] || "",
+        solution: "",
+        sourcePdf: file.name,
+        tags: ["browser-pdf-extraction", "needs-manual-review"],
+        reviewNotes: ["Browser PDF text extraction is heuristic; compare every question with the original PDF.", "Check scientific notation, equations, options, and visual elements manually."],
+      }));
+      setBundle({ format: "blackjee-pyq-drafts-v1", questions: candidates });
+      setFileName(file.name.replace(/\.pdf$/i, ".json"));
+      setPdfName(file.name);
+    } catch (cause) {
+      setPdfError(cause instanceof Error ? cause.message : "Could not extract text from this PDF.");
+    } finally {
+      setExtracting(false);
+    }
+  }
+
+  function downloadBundle() {
+    if (!bundle) return;
+    const blob = new Blob([JSON.stringify(bundle, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = fileName || "pyq-drafts.json";
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
 
   async function readFile(file?: File) {
     setError(null);
@@ -146,9 +267,30 @@ export function PyqBulkImport() {
       </p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">Import extracted PDF questions</h2>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--muted)]">
-        Import a JSON bundle created by the PDF extractor. This panel does not accept PDF files yet.
-        Imported questions stay unpublished; diagrams and detailed solutions can be added later.
+        Upload a text-based PDF to extract numbered question candidates in your browser. Extraction is heuristic; review every item against the original. Scanned PDFs need OCR, and diagrams or detailed solutions must be checked separately.
       </p>
+      <div className="mt-5 grid gap-3 rounded-2xl border border-[var(--border)] p-4 sm:grid-cols-2">
+        <label className="space-y-2 text-sm font-medium">PDF file (max 40 MB)
+          <input type="file" accept=".pdf,application/pdf" className={inputClass} disabled={extracting} onChange={(event) => void readPdf(event.currentTarget.files?.[0])} />
+        </label>
+        <label className="space-y-2 text-sm font-medium">Year
+          <input type="number" min="2000" max="2100" value={year} onChange={(event) => setYear(event.currentTarget.value)} className={inputClass} />
+        </label>
+        <label className="space-y-2 text-sm font-medium">Subject
+          <select value={subject} onChange={(event) => setSubject(event.currentTarget.value as ExtractedQuestion["subject"])} className={inputClass}>
+            <option>Physics</option><option>Chemistry</option><option>Mathematics</option>
+          </select>
+        </label>
+        <label className="space-y-2 text-sm font-medium">Session / shift
+          <input value={session} onChange={(event) => setSession(event.currentTarget.value)} placeholder="e.g. 4 April Shift 1" className={inputClass} />
+        </label>
+        <label className="space-y-2 text-sm font-medium sm:col-span-2">Optional answer key (e.g. 1:A, 2:C, 3:12)
+          <textarea value={answerKeyText} onChange={(event) => setAnswerKeyText(event.currentTarget.value)} placeholder="Paste answer key to match question numbers" rows={3} className={inputClass} />
+        </label>
+        {extracting ? <p role="status" className="text-sm text-[var(--muted)] sm:col-span-2">Reading PDF pages and extracting text…</p> : null}
+        {pdfError ? <p role="alert" className="text-sm text-red-300 sm:col-span-2">{pdfError}</p> : null}
+        {pdfName ? <p className="text-xs text-[var(--muted)] sm:col-span-2">Selected PDF: {pdfName}. To apply a changed answer key, reselect the PDF.</p> : null}
+      </div>
       <ol className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
         <li className="rounded-xl border border-[var(--border)] p-3">
           <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">01 · Extract</span>
@@ -164,7 +306,7 @@ export function PyqBulkImport() {
         </li>
       </ol>
       <label className="mt-5 block space-y-2 text-sm font-medium">
-        Extracted JSON bundle
+        Or import an existing JSON bundle
         <input
           type="file"
           accept=".json,application/json"
@@ -186,6 +328,7 @@ export function PyqBulkImport() {
           </p>
         </div>
       ) : null}
+      {bundle ? <button type="button" onClick={downloadBundle} className="mt-3 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold">Download extracted JSON</button> : null}
       {error ? <p role="alert" className="mt-3 text-sm text-red-300">{error}</p> : null}
       {report ? (
         <p role="status" className="mt-3 rounded-xl border border-[var(--border)] p-4 text-sm leading-6">
