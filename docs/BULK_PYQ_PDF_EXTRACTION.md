@@ -1,6 +1,6 @@
 # Bulk PYQ PDF extraction (draft workflow)
 
-This utility turns a locally available, text-based exam PDF into a reviewable JSON bundle. It is designed for fast question entry first: question statement, options, answer key, source page, and shift metadata. It does **not** attempt to recreate diagrams, crop reaction figures, generate explanations, or publish questions.
+The admin workbench now includes a browser-side PDF upload that extracts text from text-based PDFs and creates a reviewable JSON bundle. It is designed for fast question entry first: question statement, options, answer key, source page, and shift metadata. The browser extractor is heuristic and does not perform OCR, reliably reconstruct equations, crop diagrams, recreate reaction figures, generate explanations, or publish questions. The Python script below remains available for local extraction and richer page-level visual signals.
 
 ## Requirements
 
