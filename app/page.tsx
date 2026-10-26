@@ -132,6 +132,12 @@ export default function HomePage() {
             >
               Explore mock tests
             </Link>
+            <Link
+              href="/admin/pyq"
+              className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[var(--accent)]/50 bg-[var(--accent)]/10 px-5 text-sm font-bold text-[var(--accent)] transition-colors hover:bg-[var(--accent)]/15"
+            >
+              Upload PYQs <span className="ml-2" aria-hidden="true">↑</span>
+            </Link>
           </div>
           <div className="mt-9 flex flex-wrap gap-x-6 gap-y-2 text-xs text-[var(--muted)]">
             <span className="inline-flex items-center gap-2">
@@ -230,7 +236,7 @@ export default function HomePage() {
             <Link
               key={module.number}
               href={module.href}
-              className={`group rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:border-[var(--border-strong)] sm:p-6 ${module.featured ? "border-[var(--accent)]/35 bg-[linear-gradient(135deg,rgba(214,251,101,0.07),rgba(17,19,22,0.8)_55%)]" : "border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-raised)]"}`}
+              className={`group rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:border-[var(--border-strong)] sm:p-6 ${module.featured ? "border-[var(--accent)]/35 bg-[linear-gradient(135deg,rgba(255,48,63,0.10),rgba(17,19,22,0.8)_55%)]" : "border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-raised)]"}`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold tracking-[0.18em] text-[var(--accent)]">
