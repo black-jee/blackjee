@@ -68,7 +68,11 @@ export function PyqBulkImport() {
       typeof q.correctAnswer === "string" &&
       q.correctAnswer.trim().length > 0 &&
       typeof q.sourceId === "string" &&
-      q.sourceId.trim().length > 0,
+      q.sourceId.trim().length > 0 &&
+      (q.options.length < 2 ||
+        q.options.some(
+          (option) => option.label.toUpperCase() === q.correctAnswer.trim().toUpperCase(),
+        )),
   );
 
   async function readPdf(file?: File) {
@@ -345,8 +349,7 @@ export function PyqBulkImport() {
         <div className="mt-4 rounded-2xl border border-[var(--border)] p-4 text-sm">
           <p className="font-semibold">{questions.length} question candidates found</p>
           <p className="mt-1 text-[var(--muted)]">
-            {ready.length} ready to save · {questions.length - ready.length} missing statement, source ID
-            or answer key (will be skipped)
+            {ready.length} ready to save · {questions.length - ready.length} missing required fields or have an answer key that does not match detected option labels (will be skipped)
           </p>
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
             Each saved record will remain a draft. Check the extracted statement, options, source page,
