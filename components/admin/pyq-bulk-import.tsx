@@ -15,7 +15,9 @@ type ExtractedQuestion = {
   subject: "Physics" | "Chemistry" | "Mathematics";
   chapter?: string;
   statement: string;
-  options: { id?: string; label: string; text: string }[];
+  options: { id?: string; label: string; text: string; visualPlaceholder?: string }[];
+  visualTypes?: string[];
+  visualSlots?: { question?: { placeholder?: string }; matchTable?: { required?: boolean }; reaction?: { required?: boolean }; circular?: { required?: boolean } };
   correctAnswer: string;
   solution?: string;
   sourcePdf?: string;
@@ -86,6 +88,7 @@ export function PyqBulkImport() {
                 id: String(option.id || label.toLowerCase()),
                 label,
                 text: String(option.text || ""),
+                visualPlaceholder: option.visualPlaceholder || "[OPTION VISUAL SLOT — add/crop image here if required]",
               };
             })
           : [];
@@ -114,7 +117,12 @@ export function PyqBulkImport() {
           reviewNotes: [
             ...(q.reviewNotes || []),
             "Bulk-imported draft: verify question text, option mapping and answer key.",
-            "Diagram / graph / reaction placeholder: add manually if required.",
+            "Visual types detected (heuristic): " + ((q.visualTypes || []).join(", ") || "none detected") + ".",
+            "Question visual placeholder: " + (q.visualSlots?.question?.placeholder || "[QUESTION VISUAL SLOT — check source PDF]"),
+            ...(q.visualSlots?.matchTable?.required ? ["Match-the-following table placeholder required."] : []),
+            ...(q.visualSlots?.reaction?.required ? ["Chemical reaction / structure placeholder required."] : []),
+            ...(q.visualSlots?.circular?.required ? ["Circular / loop diagram placeholder required."] : []),
+            "Diagram, graph, reaction, table, and option visuals must be checked manually.",
             "Detailed solution intentionally pending.",
           ],
         };
