@@ -12,14 +12,19 @@ export function SignOutButton() {
   async function signOut() {
     setBusy(true);
     setError(null);
-    const { error: signOutError } = await createSupabaseBrowserClient().auth.signOut();
-    if (signOutError) {
+    try {
+      const { error: signOutError } = await createSupabaseBrowserClient().auth.signOut();
+      if (signOutError) {
+        setError("Could not sign out. Please try again.");
+        return;
+      }
+      router.replace("/");
+      router.refresh();
+    } catch {
       setError("Could not sign out. Please try again.");
+    } finally {
       setBusy(false);
-      return;
     }
-    router.replace("/");
-    router.refresh();
   }
 
   return (

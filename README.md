@@ -30,7 +30,7 @@ The original Supabase project is reference-only and must not be connected to or 
 - `npm run test:e2e`
 - `npm run build`
 
-CI has passed these configured quality gates on commit `ffc1437b1381bb000c6a1417210e9891182509a0`; see [the successful CI run](https://github.com/black-jee/blackjee/actions/runs/40101661444). The latest documentation commit also passed CI: [run 40101879382](https://github.com/black-jee/blackjee/actions/runs/40101879382). This verifies the configured repository checks, not a production deployment or live Supabase runtime. Production runtime and deployment linkage remain unverified.
+The latest verified branch checkpoint is commit `075b987af3043e3c77bf19e4e3328741b6ab1be8`; [CI run #726](https://github.com/black-jee/blackjee/actions/runs/40249085507) passed the configured quality gates and disposable PostgreSQL reconstruction replay on that exact commit. This does not prove real Supabase-issued JWT/Auth parity. GitHub currently reports the Vercel deployment rate-limited for this SHA (`retry in 24 hours`); no paid upgrade was made. Live runtime and browser smoke tests remain unverified.
 
 ## Project documentation
 

@@ -5,20 +5,28 @@
 **Target:** Supabase project `phdssyexhfyxsmhmmcgb`  
 **Repository HEAD inspected:** `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`
 
+## Current inventory addendum — 2026-10-26
+
+The Library archive `blackjee-foundation.zip` yielded five exact-version migration bodies, restored byte-for-byte to the repository. Current reconciliation is **20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies still missing, and six repository-only SQL files**. The unresolved applied bodies are `20261024081337_numeric_answers_and_admin_review` (archive has only the similar-purpose `20261024081110` file) and `20261024112132_require_pyq_source_page_before_publish`. Older counts below are historical snapshots. See the recovery log and chain inventory for exact hashes and version-by-version details.
+
 ## Findings from read-only inspection
 
 ### Migration history mismatch
 
-The live Supabase migration history contains 20 applied versions. The first six are the missing baseline bodies:
+The live Supabase migration history contains 20 applied versions. Five of the seven bodies previously missing from the repository have now been restored byte-for-byte from `blackjee-foundation.zip`:
 
 - `20261024080824_foundation_schema`
 - `20261024080924_tighten_rpc_grants_and_policy`
 - `20261024081041_daily_solution_release_rpc`
-- `20261024081337_numeric_answers_and_admin_review`
 - `20261024081603_secure_daily_attempt_sessions`
 - `20261024081731_restrict_anon_rpc_execution`
 
-The live history then records these 14 versions, in order:
+Two applied bodies remain unresolved:
+
+- `20261024081337_numeric_answers_and_admin_review` — the archive contains `20261024081110_numeric_answers_and_admin_review.sql`, but the version differs and it is not accepted as the applied body.
+- `20261024112132_require_pyq_source_page_before_publish` — no exact body was found in the inspected archives.
+
+The live history also records the following 14 later versions, in order:
 
 - `20261024095050_harden_public_schedule_rpc_and_index`
 - `20261024100007_daily_challenge_question_assets`
@@ -37,13 +45,16 @@ The live history then records these 14 versions, in order:
 
 ### Repository migration directory drift
 
-The current repository contains 15 SQL files, but only 13 filenames exactly match versions in live migration history. Three discrepancies require resolution:
+The current repository contains 24 SQL migration files, of which 18 match live migration versions exactly. Six repository files are not recorded as applied in the live history:
 
-1. Live version `20261024112132_require_pyq_source_page_before_publish` has no matching repository file. The repository instead contains `20261024112500_require_pyq_source_page_before_publish.sql`, which has the same page-number guard but a different version.
-2. `20261024120000_require_pyq_source_and_solution_before_publish.sql` is present in the repository but is not recorded as applied in the live history. It duplicates the stricter source-page gate and must not be assumed to have run.
-3. The source-page guard appears both under the unapplied `112500` filename and inside the unapplied `120000` file. Do not rename, delete, or apply either file until the repository history and intended release sequence are reviewed.
+1. `20261024112500_require_pyq_source_page_before_publish.sql` — overlaps the applied publication-gate purpose but is not the `20261024112132` original.
+2. `20261024120000_require_pyq_source_and_solution_before_publish.sql` — similar publication checks; not recorded as applied.
+3. `20261024130000_harden_mock_test_input_nulls.sql` — CI-tested only; not verified applied to production.
+4. `20261025100000_enforce_unique_pyq_option_labels.sql` — CI-tested only; not verified applied to production.
+5. `20261025110000_harden_daily_challenge_authoring_integrity.sql` — CI-tested only; not verified applied to production.
+6. `20261025120000_add_mock_test_response_question_id_index.sql` — CI-tested only; not verified applied to production.
 
-This is more than the original six-file gap: the current migration directory is not an exact representation of the live applied chain. A clean replay must use a reviewed, ordered chain and explicitly document how the original six versions and the version drift are represented. Do not rewrite applied version identifiers in the live project.
+The archive's `20261024081110_numeric_answers_and_admin_review.sql` is retained as a near-match, not added to the active migration directory, because it is not the applied `20261024081337` version. Do not rename, delete, or apply local-only files until the canonical sequence is reviewed. Do not alter the production ledger to mask these gaps.
 
 ### Live schema snapshot (read-only)
 
@@ -149,3 +160,57 @@ This inventory confirms the routine-level ACL/configuration summary, but it is n
 - CI run [40098020175](https://github.com/black-jee/blackjee/actions/runs/40098020175) completed successfully on `b4d23d1b6a5d5a3a629e2f32485ce4c233abe824`.
 - GitHub Pages workflow [40098020314](https://github.com/black-jee/blackjee/actions/runs/40098020314) completed successfully for the same commit. This confirms that workflow completed, not that the Vercel production deployment or authenticated application flows are verified.
 - Migration source recovery and clean isolated replay remain unverified. No production DDL, migration repair/apply, reset, data mutation, or paid infrastructure was used.
+
+## Current reconciliation checkpoint — 2026-10-25
+
+This checkpoint supersedes the older file-count statement above; earlier sections are retained as dated investigation history.
+
+- A fresh read of the live migration API reports **20 applied versions**, from `20261024080824` through `20261024112132`.
+- The repository migration directory currently contains **19 SQL files**. **13** have exact version/filename matches in the live ledger.
+- **Seven applied versions lack same-version SQL bodies in the repository:** the six baseline versions listed above, plus live version `20261024112132_require_pyq_source_page_before_publish`.
+- **Six repository migration files are absent from the live ledger:** `20261024112500_require_pyq_source_page_before_publish.sql`, `20261024120000_require_pyq_source_and_solution_before_publish.sql`, `20261024130000_harden_mock_test_input_nulls.sql`, `20261025100000_enforce_unique_pyq_option_labels.sql`, `20261025110000_harden_daily_challenge_authoring_integrity.sql`, and `20261025120000_add_mock_test_response_question_id_index.sql`.
+- The `112500` and `120000` files overlap on the PYQ source/page/solution publishing guard. Do not infer that either ran in production or rename them to make the ledger appear aligned.
+- CI run [40184792445](https://github.com/black-jee/blackjee/actions/runs/40184792445) (#608) completed successfully on branch head `724ad7fed30afe1c4893eb7ba6209afbdb31bdbf`; both `quality` and `reconstruction-replay` passed. This is repository CI evidence, not production migration-history recovery.
+
+**Disposition:** keep the live database and migration ledger unchanged. Recover the seven missing historical bodies from an authoritative backup or source commit if one becomes available. If none can be found, maintain a separately labelled reconstructed baseline and require explicit review of the six repository-only files before selecting a canonical future migration chain.
+
+## Recovery recheck — 2026-10-26 continuation
+
+The exact paths for the two unresolved applied bodies were checked again on `chore/schema-reconstruction` through the GitHub contents API and both are absent (404). A fresh Git commit search showed documentation updates but no evidence of either original SQL body being restored. The Library semantic search did not return the ZIP itself as a directly inspectable result, so this pass recovered no additional source bytes.
+
+The owner's supplied latest green CI reference is [run #679 / 40243919626](https://github.com/black-jee/blackjee/actions/runs/40243919626); its full job conclusions were not independently retrieved during this pass. A documentation-only recovery-log update was committed as `3657bf634259e47720d77e29c591457da43f7753`; its newly reported Vercel status was pending at last check, and the workflow-run lookup returned no PR-triggered runs for that commit. Do not infer the quality/reconstruction CI result from the Vercel status.
+
+**Disposition unchanged:** two applied bodies remain unresolved; do not substitute `20261024081110`, `20261024112500`, or `20261024120000`. No production database change, migration repair, paid resource, PR merge, or content publication was performed.
+
+## Direct archive inspection addendum — 2026-10-26
+
+All five ZIP archives visible in the ChatGPT Library were inspected by entry path. `blackjee-foundation.zip` (SHA-256 `f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433`) contains only the `20261024081110_numeric_answers_and_admin_review.sql` near-match for the numeric/admin migration. The four `BLACK-JEE-main*.zip` files are byte-identical to each other (SHA-256 `8e5abd749a3a6dac6f785cf320d1d23f9ba6c2c02d3df311a89cc1bfd939c44e`) and contain neither missing migration path. Thus no additional original SQL body was recovered from the Library archives inspected.
+
+The inventory and disposition remain unchanged: preserve the two unresolved entries as unresolved, do not relabel near-matches, and do not change production schema/data/grants/migration history. Details and hashes are recorded in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
+
+## Task follow-up — inventory, candidate replay, and current disposition (2026-10-26)
+
+- The read-only ledger counts remain **20 live applied versions**, **24 SQL migration files**, **18 exact version/name matches**, **two unresolved applied bodies**, and **six repository-only files**. No change to production history was made.
+- The two unresolved applied bodies remain `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. The similar-purpose archived `20261024081110` is not the original applied body and must not be relabelled.
+- A non-deployable candidate remains under `docs/reconstructions/`, outside the Supabase migration directory. Its first disposable replay attempt failed because the reconstructed baseline already had the candidate constraint name; CI did not execute the following assertion step. The candidate was adjusted to replace the existing named constraints and candidate policy in the disposable replay. The next matching CI run must verify the correction before it is called passing.
+- The replay is an internal shape check only. Even when green, it does not prove historical provenance or equivalence to the unavailable applied migration body. Do not apply it to production or repair the migration ledger.
+- Storage planning now lives in `docs/STORAGE_ASSET_SECURITY_PLAN.md`. It is design-only: the last recorded read-only catalog inspection found no application Storage buckets or policies. No bucket, policy, or asset upload has been created.
+- A gated real Supabase Auth test harness is present in `tests/real-supabase-auth.integration.test.ts`; it requires pre-seeded synthetic users and fixture IDs in a dedicated disposable environment. The connected project inventory currently exposes only the production project, so real signed-token execution remains blocked. A skipped suite is not a passing security test.
+
+**Safe disposition:** keep production read-only and PR #2 draft/unmerged. Continue with no-cost isolated CI verification; do not create a billable Supabase project/branch, invent original SQL, or treat candidate CI as proof of live parity.
+
+## Authoritative historical SQL recovery — 2026-10-26
+
+The two previously unresolved applied bodies are no longer missing from the repository. A read-only query of `supabase_migrations.schema_migrations` recovered the single stored SQL statement for each version; those strings were copied into their exact versioned paths under `supabase/migrations/`. See the recovery log for names and stored byte lengths.
+
+The reconstructed numeric-answer candidate and its candidate-only contract check are no longer part of active CI. CI should verify the restored migration chain through the repository's normal isolated reconstruction process, not use the candidate as a substitute for historical SQL.
+
+The production ledger remains untouched. Six repository-only migration files still need a separate reconciliation decision; matching all 20 applied versions does not imply that those six files should be applied.
+
+The six repository-only migration files have now been reviewed in `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md`. Two are redundant admin-review function rewrites, three are unverified forward hardening changes, and one is an index proposal. No file has been applied to production; other environment ledgers remain unknown, so no file was deleted or renumbered.
+
+## Superseding reconciliation status — 2026-10-26
+
+The historical investigation entries above are retained as a dated log. Any earlier statement that the applied bodies for `20261024081337` and `20261024112132` are still missing is superseded: their stored SQL statement text was recovered through a read-only query of `supabase_migrations.schema_migrations.statements[1]` and copied into the exact versioned migration paths. The archive's `20261024081110` file remains a near-match only and was not used as a substitute.
+
+Current inventory is **20 live applied versions, 26 repository SQL migration files, 20 exact filename/version matches, zero applied versions without a matching file, and six repository-only files**. The six local-only migrations have a separate review in `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md`; do not delete, renumber, or apply them until other-environment histories and the intended canonical chain are reviewed. Source-text recovery does not itself prove full clean replay or live catalog parity. CI #783 passed on `a5f8bebf346bb68eb9f3310b928e4f2bc62a961b` ([run](https://github.com/black-jee/blackjee/actions/runs/40285101550)). Production schema/data/grants and migration ledger remain unchanged.

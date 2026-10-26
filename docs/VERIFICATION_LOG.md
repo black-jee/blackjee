@@ -1,4 +1,100 @@
+## 2026-10-26 — CI run #726 green on latest branch HEAD
+
+- **Commit tested:** `075b987af3043e3c77bf19e4e3328741b6ab1be8` (`docs: reconcile current CI and deployment status`).
+- **GitHub Actions:** [run 40249085507](https://github.com/black-jee/blackjee/actions/runs/40249085507) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD. Quality passed production dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build.
+- **Security scope:** disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, authoring integrity, indexes, and authorization-denial assertions. It does not prove real Supabase-issued JWT/Auth parity.
+- **Deployment:** GitHub commit status for this HEAD is failing with “Deployment rate limited — retry in 24 hours.” No paid upgrade was purchased. A previous SHA had a completed deployment status; current runtime/browser smoke test remains unverified.
+- **PR #2:** open, draft, unmerged. PR description updated to cite this run and the current Vercel status.
+- **Migration inventory:** 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies unresolved, six repository-only files. Remaining unresolved bodies are `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- **Safety:** no production database/ledger changes, paid infrastructure, or question/answer content import.
+
+## 2026-10-26 — CI run #725 green on latest branch HEAD
+
+- **Commit tested:** `316fe58c007dea45f50cbaced57efd4111231f7e` (`docs: update verified CI and deployment checkpoint`).
+- **GitHub Actions:** [run 40248921846](https://github.com/black-jee/blackjee/actions/runs/40248921846) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD. Quality passed production dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build.
+- **Security scope:** disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, authoring integrity, indexes, and authorization-denial assertions. It does not prove real Supabase-issued JWT/Auth parity.
+- **Deployment:** GitHub commit status for this HEAD is failing with “Deployment rate limited — retry in 24 hours.” No paid upgrade was purchased. A previous SHA had a completed deployment status; current runtime/browser smoke test remains unverified.
+- **PR #2:** open, draft, unmerged. PR description updated to cite this run and the current Vercel status.
+- **Migration inventory:** 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies unresolved, six repository-only files. Remaining unresolved bodies are `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- **Safety:** no production database/ledger changes, paid infrastructure, or question/answer content import.
+
+## 2026-10-26 — CI run #678 green and PR verification refreshed
+
+- **Commit tested:** `81e979207b39915b94c272780a9b1b810fb16380`.
+- **GitHub Actions:** [run 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully; formatting, 22 Playwright checks, production build, and disposable PostgreSQL replay passed.
+- **PR #2:** verification section updated to cite run #678. The PR remains draft and unmerged.
+- **Migration recovery:** five exact-version bodies are restored byte-for-byte from `blackjee-foundation.zip`; two applied bodies remain unresolved. Current inventory: 20 live versions, 24 repository SQL files, 18 exact matches, two missing bodies, six repository-only files.
+- **Safety:** no production database/ledger changes, paid infrastructure, or question/answer content import. Full original-chain replay remains blocked.
+
+## 2026-10-26 — CI run #677 green after recovery-document formatting repair
+
+- **Commit tested:** `f40883f0b5f913843bc388ece559c23ae18e65f0`.
+- **GitHub Actions:** [run 40243544031](https://github.com/black-jee/blackjee/actions/runs/40243544031) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully. Formatting, 22 Playwright checks, production build, and disposable PostgreSQL replay passed.
+- **Recovery milestone:** five exact-version SQL migration bodies were restored in parent commit `0d194fd54667d22ae118ad09bfd11af482ad4293` from Library archive `blackjee-foundation.zip`; their Git blob IDs match the archive bytes. See the recovery log for all hashes.
+- **Current inventory:** 20 live versions; 24 repository SQL files; 18 exact matches; two applied bodies unresolved; six repository-only files. The unresolved bodies are `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- **Safety:** no production database/ledger changes, paid infrastructure, or question/answer content import. Full original-chain replay remains blocked.
+
+## 2026-10-26 — CI run #671 green on current verified HEAD
+
+- **Commit tested:** `8b6d0c0552e071bce08da81b0aa7baa7f9f73e64` (`docs: align project records with green CI run 670`).
+- **GitHub Actions:** [run 40218443473](https://github.com/black-jee/blackjee/actions/runs/40218443473) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD.
+- **Deployment status:** GitHub reports the Vercel status as successful (“Deployment has completed”). Runtime/browser smoke test remains unverified.
+- **Migration inventory:** a fresh read-only Supabase migration listing returned 20 versions; repository tree contains 19 SQL migration files (README excluded), with 13 exact version/name matches, seven live versions lacking same-version SQL bodies, and six repository-only files. No Supabase development branches were listed.
+- **Safety:** no production Supabase changes, migration-history repair, paid infrastructure, or JEE content import occurred. PR #2 remains draft and unmerged.
+
+## 2026-10-25 — CI run #670 green on latest verified HEAD
+
+- **Commit tested:** `a6e4608fac26f60786c9753cbf5947973aed8e77` (`docs: track checkpoint reconciliation commit`).
+- **GitHub Actions:** [run 40218123225](https://github.com/black-jee/blackjee/actions/runs/40218123225) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD.
+- **Scope:** configured quality checks, desktop/mobile Playwright smoke tests, Prettier, production build, and disposable PostgreSQL reconstruction replay all passed.
+- **PR status:** PR #2 verification description cites run #670. PR remains draft and unmerged.
+- **Limits and safety:** CI does not prove historical equivalence of unrecovered migrations, real Supabase-issued JWT parity, full authenticated student/admin workflows, or production deployment health. No production schema/data/grants/migration history changes or paid infrastructure were used.
+
+## 2026-10-25 — CI run #668 green on current PR HEAD
+
+- **Commit tested:** `1a42455e41393c9f66b36d9c9ecb63466223f3b5` (`docs: refresh handover with green CI run 666`).
+- **GitHub Actions:** [run 40217791906](https://github.com/black-jee/blackjee/actions/runs/40217791906) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD.
+- **Scope:** documentation checkpoint updates passed the same full quality and disposable PostgreSQL replay workflow. PR #2's verification description was updated to cite this run.
+- **Limits and safety:** CI does not prove recovered historical migration equivalence, real Supabase-issued JWT parity, full authenticated student/admin workflows, or production deployment health. PR #2 remains draft and unmerged; no production schema/data/grants/migration-history changes or paid infrastructure were used.
+
+## 2026-10-25 — CI run #666 green after Prettier correction
+
+- **Commit tested:** `195d7a6269e9704a73751720bcc7232b3f3c38e4` (`style: apply Prettier formatting to mock auth test`).
+- **GitHub Actions:** [run 40217609671](https://github.com/black-jee/blackjee/actions/runs/40217609671) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same PR head.
+- **Formatting root cause:** CI's Prettier diff showed that `tests/mock-test-action-auth.test.ts` should use compact single-line formatting for the file read, assertion, parameterized callback, and associated expectations. Those exact formatting changes were applied; `Check formatting` passed on run #666.
+- **Quality scope:** configured dependency audit, lint, typecheck, unit tests, 22 Playwright desktop/mobile checks, Prettier, and production build passed in the quality job. Disposable PostgreSQL reconstruction replay passed.
+- **Limits:** this confirms configured CI only; it does not prove historical equivalence of unrecovered migrations, real Supabase-issued JWT parity, authenticated end-to-end student/admin workflows, or production deployment health.
+- **Next:** update PR #2 verification description with run #666; keep PR draft and unmerged. Continue migration-source recovery without mutating production history or inventing SQL.
+- **Safety:** no production schema/data/grants/migration history changes, question publication, paid infrastructure, or deployment action occurred.
+
+## 2026-10-25 — CI run #659 and auth-test formatting correction
+
+- **Commit tested by run #659:** `c63f0329806174300682311446af0b420ec927d3`.
+- **GitHub Actions:** [run 40215878244](https://github.com/black-jee/blackjee/actions/runs/40215878244) — **FAIL** overall. `quality` failed at step `Check formatting`; logs named `tests/mock-test-action-auth.test.ts`. Earlier quality steps passed, including dependency audit, lint, typecheck, unit tests, 22 Playwright tests, and application build. `reconstruction-replay` **PASS** with all configured replay steps successful.
+- **Correction:** commit `45832664ac395912257e1c7b5afcd6280c81b44b` (`test: correct auth assertion formatting`) restored the assertion to a single line that fits the repository's Prettier formatting. The follow-up handover commit is `717b53de2f4d90f4530d27efe3bfa20840346f80`.
+- **Current verification:** CI for the corrected code and subsequent documentation commit is **UNVERIFIED** at the time of this entry; do not treat run #659 as a green result for the corrected HEAD.
+- **Other status:** commit combined status showed Vercel pending, not verified deployment success. The older #650/#649 passes apply only to their listed SHAs.
+- **Safety:** no production Supabase changes, migration-ledger repair, content publication, paid infrastructure, or PR merge occurred. PR #2 remains draft/open/unmerged.
+
 # BLACK-JEE verification log
+
+## 2026-10-25 — commit 4f635a9 / CI run #650
+
+- **Commit tested:** `4f635a9fafde686c14a0a634f9864e24f11dd238` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40214488944](https://github.com/black-jee/blackjee/actions/runs/40214488944) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** continuity validation, static security contracts, production dependency audit, lint, TypeScript typecheck, unit tests, Playwright desktop/mobile browser tests, Prettier formatting, and production build passed.
+- **Reconstruction scope:** disposable PostgreSQL 17 replay and the configured catalog, RLS, RPC/grant, branch-only integrity/index, application-security, and RPC authorization-denial checks passed.
+- **Limits:** this is documentation-only commit verification plus the configured CI suite. The replay does not recover the seven missing historical migration bodies or prove exact historical migration equivalence. Synthetic compatibility auth is not real Supabase-issued JWT verification; complete authenticated student/admin browser workflows and production runtime remain unverified.
+- **Safety:** no production schema/data/grant/migration-ledger changes, question/solution additions, paid infrastructure, deployment action, or PR merge occurred. PR #2 remains open, draft, and unmerged.
+
+## 2026-10-25 — commit f65d12d / CI run #649
+
+- **Commit tested:** `f65d12d1657ca0daa09956442003c5e0cd0d58a9` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40214294126](https://github.com/black-jee/blackjee/actions/runs/40214294126) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** legacy asset-import safety tests, continuity validation, static security contracts, production dependency audit, lint, TypeScript typecheck, unit tests, 22 Playwright desktop/mobile browser checks, Prettier formatting, and production build all passed.
+- **Reconstruction scope:** disposable PostgreSQL 17 replay passed table-shape, constraint/index, RLS policy, routine definition/security, routine execute ACL, browser-role grant, application security, branch-only integrity/index, and RPC authorization-denial checks.
+- **Limits:** the passing disposable replay does not recover the seven missing applied migration bodies or prove exact historical migration equivalence. Synthetic compatibility auth is not real Supabase-issued JWT verification; complete authenticated student/admin browser workflows remain outstanding. The production deployment/runtime is not certified by CI.
+- **Safety:** no production schema/data/grant/migration-ledger changes, question/solution additions, paid infrastructure, deployment action, or PR merge occurred. PR #2 remains open and unmerged.
 
 Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**, **UNVERIFIED**. A successful check applies only to the commit/environment named.
 
@@ -74,3 +170,133 @@ Record only checks that actually ran. Outcomes: **PASS**, **FAIL**, **SKIPPED**,
 - **GitHub Pages workflow:** [run 40101029607](https://github.com/black-jee/blackjee/actions/runs/40101029607) — **PASS** for the same commit. This confirms workflow success only, not Vercel project linkage or authenticated production behavior.
 - **Migration recovery:** `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md` records seven applied migration bodies not found in the checked repository history/indexed search. No SQL was inferred from migration names; clean replay remains **UNVERIFIED**.
 - **Safety:** documentation-only changes. No target DDL/data changes, migration apply/repair/reset, publication, or paid infrastructure.
+
+## 2026-10-24 — current reconstruction branch and live advisor recheck
+
+- **GitHub Actions CI:** [run 40114452358](https://github.com/black-jee/blackjee/actions/runs/40114452358) on reconstruction HEAD `696f965918f18b4629ceca912b00fbf58466b140` — **PASS**. Both `quality` and `reconstruction-replay` jobs completed successfully. The replay uses disposable PostgreSQL in GitHub Actions, not the live Supabase project.
+- **Vercel status:** **FAIL / external deployment blocked** — the commit status points to Vercel's `upgradeToPro=build-rate-limit` page. This does not prove the app itself is broken, but the latest Vercel deployment is not verified and may be blocked by a build-rate limit. No upgrade or paid service was initiated.
+- **Live migration inventory:** **PASS, read-only** — Supabase returned 20 applied migration versions. The same seven historical migration bodies remain missing from Git; the live ledger includes `20261024112132_require_pyq_source_page_before_publish`. No migration was applied or repaired.
+- **Live Supabase security advisor:** **REVIEW REQUIRED, read-only** — five private tables are RLS-enabled without policies; the current model intentionally relies on the private schema being inaccessible to browser roles and controlled RPC access. Eleven authenticated-callable SECURITY DEFINER RPCs remain flagged; catalog regression assertions cover pinned search paths, auth checks, grants and function-definition fingerprints. Re-review these warnings after backend changes rather than suppressing them.
+- **Live Supabase performance advisor:** one unindexed foreign key remains on `private.mock_test_responses.question_id`; seven indexes are reported unused. No index was added or removed because workload evidence is insufficient for a safe performance change.
+- **Edge Function audit:** `one-time-pyq-import` is listed ACTIVE with JWT verification enabled, but the deployed handler responds only with HTTP 410 and the message that the endpoint has been retired. **PASS for retired handler content**; do not treat ACTIVE metadata alone as evidence that import is available.
+- **Safety:** these checks were read-only. No live DDL, data mutation, content publication, Storage bucket creation, paid infrastructure, or deployment action was performed. Authenticated browser journeys and production runtime remain **UNVERIFIED**.
+
+## 2026-10-25 — reconstruction branch HEAD verification
+
+- **Commit tested:** `063cf1480d36f8c4c84efebb41438566122dc8c3`.
+- **GitHub Actions:** [run 40155186509](https://github.com/black-jee/blackjee/actions/runs/40155186509) — **PASS** for both `quality` and `reconstruction-replay` jobs. This is the verified result for that SHA only.
+- **Scope limits:** the replay uses disposable PostgreSQL 17 and a compatibility auth surface; synthetic-identity authorization checks are not equivalent to real Supabase-issued user-token tests. It does not prove that reconstructed SQL is byte-for-byte or historically equivalent to the missing applied migrations.
+- **Deployment status:** the combined GitHub commit status still reports a Vercel build-rate-limit/upgrade-page failure. Deployment/runtime remains **UNVERIFIED**; no paid upgrade was attempted.
+- **Production safety:** no production DDL, migration apply/repair/reset, content publication, or deployment was performed for this verification.
+- **Follow-up documentation:** the current-head checkpoint was added to `docs/PROJECT_STATUS.md` in commit `0758f03385f153d28853a40b33caa40b3331bea8`. That new documentation commit needs its own CI run before it can be called green.
+
+## 2026-10-25 — exact daily-challenge RPC baseline and CI verification
+
+- **GitHub Actions:** [run 40165662614](https://github.com/black-jee/blackjee/actions/runs/40165662614) — **PASS** for both `quality` and `reconstruction-replay` at commit `12548bf6bb499ac806124b09dc29af93d3a0cac4`.
+- **Baseline:** the branch reconstruction now uses the read-only live `pg_get_functiondef` for `public.admin_save_daily_challenge`; captured MD5 is `ebdff78aa677719515c9e500fc576562`. CI asserts this baseline before applying branch-only hardening.
+- **Test correction:** security-contract checks now locate solution/option integrity rules in `20261025110000_harden_daily_challenge_authoring_integrity.sql`, not in the original live baseline.
+- **Fresh live read-only query:** 20 migration ledger rows; live function MD5 matches the captured fingerprint; production has zero `validate_jee_pyq_option_labels` triggers and zero standalone indexes matching `private.mock_test_responses(question_id)`. These two hardening changes remain branch-only.
+- **Limits:** this verifies one RPC baseline and branch CI, not the full production catalog, missing historical SQL bodies, real Auth-issued JWT behavior, or deployment/runtime.
+- **Safety:** no production DDL, grants, row changes, migration repair, publication, paid infrastructure, or PR merge occurred.
+
+## 2026-10-25 — latest verified reconstruction CI
+
+- **Commit tested:** `bb0d19bb58e09c7dba41892a7d0c571d08155579` (`chore/schema-reconstruction`).
+- **GitHub Actions:** [run 40166741350](https://github.com/black-jee/blackjee/actions/runs/40166741350) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully. Quality gates passed: static security contracts, production dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build. Reconstruction replay passed on disposable PostgreSQL 17, including catalog/RLS/RPC/grant assertions, branch-only hardening tests, application security assertions, and RPC authorization-denial tests.
+- **Deployment status:** the commit's combined GitHub status still reports **Vercel failure** linking to the build-rate-limit/upgrade page. Do not treat CI success as deployment success. No paid upgrade was attempted.
+- **Boundaries:** the CI replay does not recover missing historical migration bodies, prove production migration-chain replay or full live-catalog parity, or replace real Supabase-issued JWT/user-token and student/admin browser tests.
+- **Safety:** this verification involved repository CI only. No production SQL/DDL, migration repair, production data changes, content publication, paid infrastructure, or PR merge occurred.
+
+## 2026-10-25 — browser recovery tests and reconstruction CI
+
+- **Commit tested:** `731a835d1ad3e89e343984a043d94c83b3d41b2e` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40168181107](https://github.com/black-jee/blackjee/actions/runs/40168181107) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** static security contracts, production dependency audit, lint, TypeScript, unit tests, Playwright browser smoke tests, Prettier formatting, and production build passed. The password-update mismatch test now targets the form paragraph with `p[role="alert"]`, avoiding ambiguity with framework route-announcer alerts.
+- **Reconstruction scope:** disposable PostgreSQL 17 replay, reconstructed catalog/RLS/RPC/grant assertions, branch-only integrity hardening tests, application security regression assertions, and RPC authorization-denial tests passed.
+- **Limits:** this does not recover the seven missing historical migration bodies, prove exact live catalog/migration parity, test real Supabase-issued JWTs, or validate deployed Vercel runtime/authenticated end-to-end flows. Vercel deployment remains separately unverified due to the previously observed build-rate-limit/upgrade status.
+- **Safety:** repository-only test/configuration and documentation changes. No production SQL/DDL, migration repair/reset, data changes, question/solution additions, paid infrastructure, deployment, or PR merge.
+
+## 2026-10-25 — password-reset neutral error handling and browser CI
+
+- **Commit tested:** `703c803be479905ba4f5f7e89c622a182757d401` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40169013572](https://github.com/black-jee/blackjee/actions/runs/40169013572) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Browser coverage:** all 12 Playwright executions passed across desktop Chromium and mobile Chromium. Coverage includes the home page, sign-in controls, password-reset page, neutral password-reset success, neutral provider-failure handling, and mismatched-password rejection.
+- **Security improvement:** password-reset failures now display a generic message instead of raw provider error text. CI supplies isolated dummy public Supabase configuration to browser tests so reset-flow tests exercise the client request rather than only the missing-configuration fallback. The test asserts the form paragraph specifically to avoid framework route-announcer role ambiguity.
+- **Quality scope:** dependency audit, lint, typecheck, unit tests, E2E tests, Prettier formatting, and production build passed. Disposable PostgreSQL reconstruction replay and its catalog/security assertions passed.
+- **Limits:** this does not recover the seven missing historical migration bodies, prove exact live catalog parity, validate real Supabase-issued JWTs, or verify the deployed Vercel runtime. The Vercel status remains rate-limited and no paid upgrade was attempted.
+- **Safety:** only repository source, tests, CI configuration, and documentation were changed. No production DDL/data changes, migration repair/reset, question/solution additions, paid infrastructure, deployment, or PR merge occurred.
+
+## 2026-10-25 — follow-up deployment status
+
+- **Commit checked:** `9e7f12c908f6277774d4988a783001d1a124e552` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40169200820](https://github.com/black-jee/blackjee/actions/runs/40169200820) — **PASS** for both quality and reconstruction replay.
+- **Vercel:** the GitHub commit status now reports **deployment completed** for this commit. The generated preview URL is [blackjee-git-chore-schema-reconstruction-black-jee.vercel.app](https://blackjee-git-chore-schema-reconstruction-black-jee.vercel.app/). Automated page retrieval through the available web reader was inaccessible, so this confirms deployment status and URL availability in Vercel's status—not a manual verification of every live route.
+- **PR state:** PR #2 remains open, draft, and unmerged. No paid upgrade was attempted.
+
+## 2026-10-25 — live Supabase advisor recheck
+
+- **Scope:** read-only Supabase security/performance advisor queries plus `pg_proc` inspection; no DDL, grants, or row changes were made.
+- **Security advisors:** five private-schema tables are RLS-enabled without policies. These tables hold answer keys, answer attempts, mock responses, or private sessions and are intentionally accessed through guarded RPCs; do not add broad policies simply to silence the advisor.
+- **Security-definer RPCs:** the advisor flags 11 public functions as executable by `authenticated`. Read-only catalog inspection confirmed all 11 use an empty `search_path`, none are executable by `anon`, admin authoring/review functions check the signed-in user and `auth.jwt()->app_metadata->role = 'admin'`, and student RPCs check authentication plus relevant ownership/publication/release conditions. This is a reason to retain negative authorization tests, not to revoke all authenticated execution blindly.
+- **Performance advisor:** the live database still reports no covering index for `private.mock_test_responses(question_id)`. A branch-only migration `20261025120000_add_mock_test_response_question_id_index.sql` and disposable-replay regression test already address it, but the migration has **not** been applied to production. Seven indexes are reported unused; do not drop them without workload evidence.
+- **Limits:** catalog source inspection is not a substitute for real Supabase-issued JWT tests and an end-to-end authorization audit. The seven missing historical migration bodies remain unrecovered.
+- **Safety:** no production schema/data/grant changes, no paid infrastructure, no content publication, and no PR merge.
+
+## 2026-10-25 — daily solution identity guard regression
+
+- **Commit tested:** `4f10136bc4be5e0dd237514715633a7d1968965e` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40171137953](https://github.com/black-jee/blackjee/actions/runs/40171137953) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully; lint, typecheck, unit tests, Playwright E2E, formatting, production build, and disposable PostgreSQL reconstruction/security tests passed.
+- **New runtime regression:** the disposable replay now verifies that a database session using role `authenticated` but carrying no signed-in user identity cannot retrieve daily-challenge solution data. The assertion passed before any challenge lookup. The fixture uses a synthetic UUID and adds no question, answer key, or worked solution.
+- **Deployment status:** GitHub reports the Vercel deployment completed for this commit. This is provider status only, not independent verification of every live route or authenticated flow.
+- **Safety:** no production SQL/DDL or data changes, no migration repair/reset, no new JEE content, no paid upgrade, and no PR merge.
+
+## 2026-10-25 — password-update error handling and latest CI
+
+- **Commit tested:** `2dfcbc8db0fb423bb41897a6f826f325b0b68bb3` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40172747201](https://github.com/black-jee/blackjee/actions/runs/40172747201) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** static security contract checks, production dependency vulnerability audit, lint, TypeScript typecheck, unit tests, Playwright E2E, Prettier format check, and production build all passed.
+- **Database replay scope:** disposable PostgreSQL reconstruction, catalog/RLS/RPC/grant assertions, branch-only mock-test NULL validation, PYQ option-label integrity, daily-challenge authoring integrity, mock-test response question index, application security assertions, and RPC authorization-denial tests all passed.
+- **Application change:** password-update failures now display a neutral message rather than exposing raw authentication-provider/session errors. The user is directed to request a new reset link.
+- **Limits:** this CI does not recover the seven missing historical migration bodies, prove exact live schema/migration parity, validate real Supabase-issued JWTs, or independently verify deployed authenticated student/admin journeys.
+- **Safety:** repository-only change. No production SQL/DDL/data change, migration repair/reset, content publication, paid infrastructure, deployment action, or PR merge.
+
+## 2026-10-25 — latest reconstruction CI verified
+
+- **Commit tested:** `fb82e5c3dcec4127c11ea9ee2840b4c3d3404dc1` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40175995526](https://github.com/black-jee/blackjee/actions/runs/40175995526) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Quality scope:** static security contract checks, production dependency vulnerability audit, lint, TypeScript typecheck, unit tests, Playwright E2E, Prettier formatting, and production build passed.
+- **Reconstruction scope:** disposable PostgreSQL 17 replay passed table-shape, RLS, RPC, grants, baseline fingerprints, branch-only integrity/index tests, application security assertions, and RPC authorization-denial tests.
+- **Application validation:** PYQ authoring schema now rejects duplicate option IDs, duplicate case-insensitive labels, fewer than two options for single-correct questions, and a correct answer absent from the option labels. Numerical questions with no options remain valid.
+- **Limits / blockers:** this run does not recover the seven missing historical migration bodies, prove complete live-catalog/migration parity, validate real Supabase-issued JWTs, or independently prove current deployed runtime/authenticated student-admin journeys. Branch-only database hardening is not production-applied.
+- **Safety:** no production DDL/data/grant changes, migration repair/reset, question/solution additions, paid resources, deployment action, or PR merge occurred. Draft PR #2 remains open and unmerged.
+
+## 2026-10-25 — exact RLS and browser grant contracts
+
+- **Commit tested:** `aa9270785137e4242ba66aaa12b382edaad038d7` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40177773683](https://github.com/black-jee/blackjee/actions/runs/40177773683) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **New RLS contract:** all 10 public policy definitions matched the captured live snapshot, including policy mode, role set, command, `USING`, and `WITH CHECK` expressions.
+- **New grant contract:** browser-role SELECT column boundaries for daily challenges and PYQ questions, attempt-table read privileges, authoring write privileges, anonymous write denial, and public-schema usage/create privileges matched the reviewed contract.
+- **Existing replay scope:** exact column, constraint/index, and routine fingerprints; RPC grant/security assertions; branch-only hardening tests; and synthetic RPC authorization-denial tests all passed.
+- **Quality scope:** dependency audit, lint, TypeScript typecheck, unit tests, 14 Playwright browser tests, Prettier formatting, and production build passed.
+- **Limits:** this remains a disposable replay, not a production mutation. It does not prove real Supabase-issued JWT behavior, every deployed browser journey, or recovery of the seven historical migration bodies. The six repository-only migration files remain unresolved.
+- **Safety:** no production SQL/DDL/data/grant changes, migration repair/reset, JEE content additions, paid resources, deployment action, or PR merge occurred.
+
+## 2026-10-25 — exact table/schema grants and RPC execute ACLs
+
+- **Commit tested:** `0b11db500d37718d736f1b9a84597208fa287e66` on `chore/schema-reconstruction`.
+- **GitHub Actions:** [run 40183570563](https://github.com/black-jee/blackjee/actions/runs/40183570563) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully.
+- **Public grant contract:** exact effective table-level privileges for `anon`, `authenticated`, and `service_role` on all four public application tables; approved column-level SELECT sets for challenge/PYQ tables; public/private schema USAGE/CREATE boundaries; and no direct privileges on private tables for browser/service roles.
+- **Routine execute contract:** all 12 public RPCs checked for effective EXECUTE privileges and absence of `PUBLIC` EXECUTE. Only the schedule RPC is anonymously callable; all 12 are available to authenticated and service roles.
+- **Quality scope:** dependency audit, lint, TypeScript typecheck, unit tests, Playwright browser tests, formatting, and production build passed.
+- **Limits:** replay remains disposable PostgreSQL with stub auth functions; this is not a substitute for real Supabase-issued JWT/browser authorization testing or a complete catalog parity comparison.
+- **Safety:** no production SQL/DDL/data/grant changes, migration repair/reset, JEE content additions, paid resources, deployment action, or PR merge occurred.
+
+## 2026-10-25 — current branch CI run #611
+
+- **Commit tested:** `c79d5b3d6b7a2cb9773823e4c6ab023e35194171`.
+- **CI:** [run 40185258884](https://github.com/black-jee/blackjee/actions/runs/40185258884) — **PASS** for both `quality` and `reconstruction-replay`.
+- **Quality scope:** continuity/static security checks, `npm ci`, production dependency audit, lint, typecheck, unit tests, Playwright browser tests, Prettier check, and production build all passed.
+- **Replay scope:** disposable PostgreSQL replay passed captured table/column, constraint/index, RLS policy, routine definition/security attributes, routine ACL, browser-role grants, and catalog contracts. Runtime negative tests passed for anonymous/admin RPC denials, student/admin claim separation, mock-test NULL input rejection, cross-user mock-attempt resume/submit/result denial, private schema isolation, and synthetic challenge authoring integrity.
+- **Limits:** these tests use a disposable PostgreSQL compatibility auth surface and synthetic identities; they are not a real Supabase-issued JWT/browser verification and do not establish historical equivalence of missing migration bodies.
+- **Outstanding release gates:** seven applied migration bodies remain unrecovered, six repository-only migrations remain unreconciled, real authenticated student/admin journeys remain unverified, remaining question/image migration and review are incomplete, and deployment/runtime/rollback remain unverified.
+- **Safety:** PR #2 remains draft/open/unmerged. No production schema/data/grants/migration ledger changes, question/solution additions, paid infrastructure, or deployment action occurred in this verification.

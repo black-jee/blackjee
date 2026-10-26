@@ -17,8 +17,12 @@ MAX_FILE_BYTES = 15 * 1024 * 1024
 
 
 def safe_archive_path(value: str) -> bool:
+    if not value or "\x00" in value or "\\" in value or ":" in value:
+        return False
     path = PurePosixPath(value)
-    return not path.is_absolute() and all(part not in {"", ".", ".."} for part in path.parts)
+    return bool(path.parts) and not path.is_absolute() and all(
+        part not in {"", ".", ".."} for part in path.parts
+    )
 
 
 def sha256(content: bytes) -> str:
@@ -30,8 +34,18 @@ def main() -> int:
     parser.add_argument("zip_file", type=Path, help="Path to BLACK-JEE-main.zip")
     parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="New repository root")
     parser.add_argument("--dry-run", action="store_true", help="Validate and report without copying")
+    parser.add_argument(
+        "--write-public-assets",
+        action="store_true",
+        help="Explicitly allow copying assets into public/ (makes them publicly accessible)",
+    )
     parser.add_argument("--report", type=Path, default=Path("docs/ASSET_IMPORT_REPORT.json"), help="Report path relative to repo root")
     args = parser.parse_args()
+
+    if not args.dry_run and not args.write_public_assets:
+        parser.error("Refusing to write question assets into public/ without --write-public-assets; use --dry-run to validate only.")
+    if args.report.is_absolute() or not safe_archive_path(args.report.as_posix()):
+        parser.error("--report must be a safe relative path inside --repo-root.")
 
     if not args.zip_file.is_file():
         parser.error(f"ZIP file not found: {args.zip_file}")
@@ -53,10 +67,21 @@ def main() -> int:
 
             referenced: set[str] = set()
             for question in manifest:
-                for asset in question.get("assets", []) or []:
+                if not isinstance(question, dict):
+                    raise ValueError("Each manifest entry must be a JSON object.")
+                assets = question.get("assets", []) or []
+                if not isinstance(assets, list):
+                    raise ValueError("Each question assets field must be a JSON array.")
+                for asset in assets:
+                    if not isinstance(asset, dict):
+                        raise ValueError("Each asset reference must be a JSON object.")
                     filename = asset.get("filename")
-                    if not isinstance(filename, str) or not safe_archive_path(filename) or "/" in filename:
-                        continue
+                    if (
+                        not isinstance(filename, str)
+                        or not safe_archive_path(filename)
+                        or "/" in filename
+                    ):
+                        raise ValueError("Manifest contains an invalid asset filename.")
                     referenced.add(filename)
 
             image_dir = package_prefix + "images/"
@@ -67,20 +92,47 @@ def main() -> int:
                 and Path(name).suffix.lower() in SUPPORTED
                 and safe_archive_path(name)
             )
-            archive_by_name = {Path(name).name: name for name in archive_images}
+            archive_by_name: dict[str, str] = {}
+            for archive_name in archive_images:
+                filename = Path(archive_name).name
+                if filename in archive_by_name:
+                    raise ValueError(f"Duplicate image basename is ambiguous in the archive: {filename}")
+                archive_by_name[filename] = archive_name
 
             for filename in sorted(referenced):
                 if filename not in archive_by_name:
                     missing.append(filename)
+            if missing:
+                raise ValueError(
+                    "Referenced image files are missing; refusing partial import: "
+                    + ", ".join(missing)
+                )
+
+            repo_root = args.repo_root.resolve()
+            public_root = (repo_root / "public").resolve()
+            if not public_root.is_relative_to(repo_root):
+                raise ValueError("Public asset destination resolves outside --repo-root.")
+
+            # Validate the report destination before writing any assets so a symlink
+            # escape cannot leave a partially imported public directory behind.
+            report_path = repo_root / args.report
+            if not report_path.resolve().is_relative_to(repo_root):
+                raise ValueError("Report destination resolves outside --repo-root.")
 
             for filename, archive_name in archive_by_name.items():
+                if archive.getinfo(archive_name).file_size > MAX_FILE_BYTES:
+                    raise ValueError(f"Image exceeds {MAX_FILE_BYTES} bytes: {filename}")
                 content = archive.read(archive_name)
                 if len(content) > MAX_FILE_BYTES:
                     raise ValueError(f"Image exceeds {MAX_FILE_BYTES} bytes: {filename}")
                 relative = PACKAGE + "images/" + filename
-                destination = args.repo_root / "public" / relative
+                destination = repo_root / "public" / relative
+                if not destination.resolve().is_relative_to(public_root):
+                    raise ValueError(f"Asset destination resolves outside public/: {filename}")
                 if not args.dry_run:
                     destination.parent.mkdir(parents=True, exist_ok=True)
+                    if not destination.resolve().is_relative_to(public_root):
+                        raise ValueError(f"Asset destination resolves outside public/: {filename}")
                     destination.write_bytes(content)
                 copied.append({
                     "path": relative,
@@ -107,9 +159,15 @@ def main() -> int:
         "warning": "Copying assets does not verify question wording, answer keys, diagram correctness, or publication approval.",
     }
 
-    report_path = args.repo_root / args.report
+    report_path = args.repo_root.resolve() / args.report
+    if not report_path.resolve().is_relative_to(args.repo_root.resolve()):
+        print("Asset import failed: report destination resolves outside --repo-root.", file=sys.stderr)
+        return 2
     if not args.dry_run:
         report_path.parent.mkdir(parents=True, exist_ok=True)
+        if not report_path.resolve().is_relative_to(args.repo_root.resolve()):
+            print("Asset import failed: report destination resolves outside --repo-root.", file=sys.stderr)
+            return 2
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + os.linesep, encoding="utf-8")
 
     print(json.dumps({

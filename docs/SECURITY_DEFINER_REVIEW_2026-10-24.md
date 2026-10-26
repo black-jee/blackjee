@@ -63,3 +63,24 @@ Do not tighten or loosen this behavior without confirming the intended post-rele
 ## Foreign-key index check
 
 The live catalog shows `private.mock_test_responses` has only the composite primary-key index `(attempt_id, question_id)`. That supports lookups beginning with `attempt_id`, but does not provide a leading-key index for `question_id`, whose validated foreign key uses `ON DELETE RESTRICT`. The table currently has **zero rows**, so there is no demonstrated workload benefit yet. Keep this as a reviewed performance candidate: after the migration chain is reconciled, decide whether to add a versioned `question_id` index based on expected question deletion/update checks and response volume. Do not run ad hoc DDL on production or add another local-only migration before the canonical chain is fixed.
+
+## Live advisor recheck — 2026-10-26 (read-only)
+
+The Supabase advisor endpoints were re-run read-only against project `phdssyexhfyxsmhmmcgb` on 2026-10-26. No schema, grant, row, or migration-history changes were made.
+
+- **Security advisor:** reports five `private` tables with RLS enabled and no policies, plus 11 authenticated-callable `SECURITY DEFINER` RPCs. These findings match the documented design: private tables are intended to be accessed through guarded RPCs, and the public RPCs have server-side identity/admin checks. The advisor warnings are not themselves proof of a bypass; preserve them as a runtime-test obligation, not as a reason to remove the guards or grant direct table access.
+- **Performance advisor:** reports one unindexed foreign key, `private.mock_test_responses.question_id`, and seven unused-index candidates. The table's currently observed zero-row state and low/young workload mean the unused-index notices do not justify index removal. The FK index remains a candidate to review after migration lineage is reconciled; no ad hoc production DDL was applied.
+- **Migration ledger:** the current read-only migration listing still returns 20 applied versions, including `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. This confirms the versions are recorded as applied, not the original SQL bodies. The two exact source bodies remain unresolved in the repository/archive evidence.
+- **Next test design:** in an isolated disposable Supabase Auth environment, create synthetic student A, student B, and admin users; obtain real signed sessions through Auth rather than hand-built JWT claims; test anonymous RPC denial, ordinary-user admin denial, cross-user attempt/session isolation, safe draft-only authoring, and solution/PYQ release boundaries. Keep all fixtures synthetic and never publish production content. If a no-cost disposable Auth environment is unavailable, document the blocker rather than using production or creating billable infrastructure.
+
+## Read-only advisor recheck — 2026-10-26 (task follow-up)
+
+The Supabase advisors were queried again without changing the project:
+
+- Security advisor returned five informational `rls_enabled_no_policy` findings for the five private answer/session/response tables and eleven warnings for authenticated-callable `SECURITY DEFINER` RPCs. These warnings require runtime authorization evidence; they are not by themselves proof of an exploit. Preserve private-schema isolation and do not add broad policies or revoke intended RPC execution without a reviewed access-model change.
+- Performance advisor returned one unindexed foreign key (`private.mock_test_responses.question_id`) and seven unused-index notices. Keep the index-removal suggestions informational until workload data justifies action; do not change production indexes during migration reconciliation.
+- Current catalog counts are unchanged: the live migration ledger lists 20 applied versions. Real signed-token authorization tests have not run.
+
+A gated test suite was added at `tests/real-supabase-auth.integration.test.ts`. It signs in synthetic student A, student B, and admin users through Supabase Auth; checks anonymous denial, cross-user resume/submit/result, unchanged victim attempt state after denied resume/submit, ordinary-user admin denial, admin-only synthetic non-live challenge creation and cleanup, pre-release answer withholding, and direct private-schema denial. It refuses to run when the URL contains the production project ref. The suite remains **unexecuted** because no isolated test project/fixtures are available; absence of a run is not a pass.
+
+No production schema, grant, row, migration history, Storage bucket, or Storage policy was changed during this recheck.

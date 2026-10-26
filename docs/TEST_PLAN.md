@@ -1,8 +1,23 @@
 # Test plan
 
-## Test status
+## Test status — refreshed 2026-10-25
 
-CI run `40086464478` passed ESLint, strict TypeScript, both Vitest test files, both Playwright browser tests, and the Next.js production build. The Prettier gate failed because 41 tracked files need formatting. The SQL regression assertions for the public schedule RPC, restricted anonymous column grants, private-table browser-role privileges, admin challenge-save RPC, and mock-test ownership/private-response privileges also passed against the target Supabase project. Mock-test start/resume/submit were exercised against an empty bank and correctly rejected unavailable attempts. Authenticated student/admin browser workflows and database-backed seeded question workflows have not yet been tested. The legacy ZIP contains static security checks, inline-JS checks, question-manifest audits, a crop processor and a SQL regression test; these are useful references but do not replace end-to-end coverage.
+The latest verified fully green CI run is [40196563553](https://github.com/black-jee/blackjee/actions/runs/40196563553) (run #618): `quality` and `reconstruction-replay` passed. Quality includes dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and application build. The disposable PostgreSQL replay also runs synthetic authorization/input-integrity regression cases. These synthetic compatibility-auth checks are not equivalent to real Supabase Auth or Supabase-issued JWT validation.
+
+Read-only checks against the configured target Supabase project previously exercised the public schedule RPC, restricted anonymous column grants, private-table browser-role privileges, admin challenge-save RPC, and mock-test ownership/private-response privileges. Mock-test start/resume/submit were exercised against an empty bank and correctly rejected unavailable attempts. Authenticated student/admin browser workflows and database-backed seeded question workflows remain unverified. Do not treat old CI notes below as current pipeline status.
+
+## Real Supabase Auth/JWT validation gate
+
+Do this only in an owner-approved staging Supabase project with disposable test accounts and synthetic records; never use production student data or real JEE content for security fixtures. Required prerequisites: a dedicated staging project or explicitly approved isolated test environment, test-only student A/student B/admin accounts, supported way to obtain genuine Supabase-issued access tokens, and a cleanup plan limited to test-owned fixtures. Never paste service-role keys or user tokens into repository files, logs, CI output, or chat.
+
+1. Obtain real access tokens through the normal Supabase Auth sign-in flow for each test identity.
+2. With anonymous access, assert admin RPCs are denied and private answer/session/response tables cannot be queried.
+3. With student A, assert own permitted challenge/mock-test operations work and student B's session, responses, results, and attempts remain inaccessible and unmodifiable.
+4. Repeat spoofed-admin checks with `user_metadata.role=admin`; assert it grants no administrative privileges. Separately verify the actual approved admin claim path using a dedicated admin account.
+5. Check answer-key/solution withholding before the release boundary and ownership checks on every result/read/write path.
+6. Record sanitized pass/fail outcomes and cleanup evidence; do not log JWTs, secrets, answer keys, or personal data.
+
+Until this gate runs successfully, mark real Supabase JWT parity and authenticated student/admin workflows **not verified**. Do not create a paid project/branch or modify production to perform these tests.
 
 ## Automated gates
 
@@ -32,7 +47,11 @@ CI run `40086464478` passed ESLint, strict TypeScript, both Vitest test files, b
 - Accessibility basics: keyboard operation, focus visibility, labels, contrast and reduced-motion behavior.
 - Recovery from API errors, offline/network interruption, empty datasets and stale sessions.
 
-## Recent CI observation\n\nCI run `40088044408` passed the complete pipeline: `npm ci`, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build. The lockfile is committed and CI uses `npm ci`. The new admin PYQ UI and server actions still require authenticated end-to-end tests.\n\n## Content verification
+## Historical CI observation
+
+CI run `40088044408` passed the complete pipeline: `npm ci`, ESLint, strict TypeScript, Vitest, Playwright E2E smoke tests, Prettier check, and Next.js production build. The lockfile is committed and CI uses `npm ci`. The new admin PYQ UI and server actions still require authenticated end-to-end tests.
+
+## Content verification
 
 For each imported question, verify source wording, options, correct answer, solution, subject/chapter metadata, all asset references, alt text and mobile rendering. Structural manifest checks cannot prove factual accuracy. The April 4 Shift 1 unresolved items stay blocked until an authoritative source image/PDF is available and checked.
 

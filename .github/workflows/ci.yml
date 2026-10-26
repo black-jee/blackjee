@@ -19,16 +19,119 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Test legacy asset import safety
+        run: python -m unittest discover -s tests -p 'test_import_legacy_assets.py'
       - name: Validate continuity records
         run: node scripts/check-continuity.mjs
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Fast static security contract checks
+        run: node scripts/check-security-contracts.mjs
       - run: npm ci
+      - name: Audit production dependency vulnerabilities
+        run: npm audit --omit=dev --audit-level=high
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
-      - run: npm run format:check
-      - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:3000
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: test-publishable-key
+      - name: Check formatting
+        id: format-check
+        run: npm run format:check
+      - name: Show Prettier diff when formatting fails
+        if: ${{ failure() && steps.format-check.outcome == 'failure' }}
+        run: |
+          for file in docs/PROJECT_STATUS.md docs/SESSION_HANDOVER.md docs/TASKS.md docs/VERIFICATION_LOG.md supabase/reconstruction/README.md docs/LIVE_CATALOG_AUDIT_2026-10-25.md docs/MIGRATION_RECONCILIATION_2026-10-24.md docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md docs/MIGRATION_CHAIN_INVENTORY.md docs/MIGRATION_RECONCILIATION.md docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md supabase/migrations/README.md scripts/check-security-contracts.mjs tests/pyq-authoring-schema.test.ts tests/mock-test-action-auth.test.ts tests/real-supabase-auth.integration.test.ts; do
+            npx prettier "$file" | diff -u "$file" - || true
+          done
+      - name: Build application
+        if: success() || steps.format-check.outcome == 'failure'
+        run: npm run build
+
+  reconstruction-replay:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: blackjee_reconstruction
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d blackjee_reconstruction"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: blackjee_reconstruction
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      - name: Bootstrap disposable Supabase auth surface
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/bootstrap_supabase_compat.sql
+      - name: Replay reconstructed table shapes
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/001_reconstructed_table_shapes.sql
+      - name: Assert exact live column-shape snapshot
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/004_live_column_shape_contract.sql
+      - name: Assert exact live constraint and index definitions
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/005_live_constraint_index_contract.sql
+      - name: Replay reconstructed RLS policies
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/002_reconstructed_rls_policies.sql
+      - name: Assert exact live RLS policy definitions
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/007_live_policy_definition_contract.sql
+      - name: Replay reconstructed RPC definitions
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/003_reconstructed_rpc_definitions.sql
+      - name: Assert exact live routine definitions and security attributes
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/006_live_routine_definition_contract.sql
+      - name: Assert exact live routine execute ACLs
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/009_live_routine_execute_acl_contract.sql
+      - name: Assert exact live RPC baseline before hardening
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/002_live_rpc_baseline_fingerprint.sql
+      - name: Replay reconstructed access grants
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/004_reconstructed_access_grants.sql
+      - name: Assert exact public browser-role grant contract
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/008_live_public_grant_contract.sql
+      - name: Run dedicated SECURITY DEFINER RPC contract
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/security_definer_rpc_contracts.sql
+      - name: Assert reconstructed catalog
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/001_reconstruction_catalog_smoke.sql
+      - name: Assert reconstructed RPC and access security
+        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/003_security_regression_assertions.sql
+      - name: Apply mock-test NULL validation hardening
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261024130000_harden_mock_test_input_nulls.sql
+      - name: Test mock-test NULL validation
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/mock_test_null_validation.sql
+      - name: Apply PYQ option-label integrity guard
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025100000_enforce_unique_pyq_option_labels.sql
+      - name: Test PYQ option-label integrity
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/pyq_option_label_validation.sql
+      - name: Apply daily-challenge authoring integrity hardening
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025110000_harden_daily_challenge_authoring_integrity.sql
+      - name: Test daily-challenge authoring integrity contract
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/daily_challenge_authoring_integrity.sql
+      - name: Add mock-test response question FK index
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025120000_add_mock_test_response_question_id_index.sql
+      - name: Test mock-test response question FK index
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/mock_test_response_question_id_index.sql
+      - name: Run application security regression assertions
+        run: |
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/private_table_access.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/public_schedule_rpc_security.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/jee_pyq_publish_gate.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/mock_test_security.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_save_challenge_authorization.sql
+      - name: Test RPC authorization denials
+        run: bash supabase/reconstruction/tests/run_rpc_negative_tests.sh

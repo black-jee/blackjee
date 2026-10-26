@@ -1,0 +1,247 @@
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+/**
+ * Optional real-Supabase-Auth integration suite.
+ *
+ * It is skipped unless every required environment variable points to an
+ * isolated disposable Supabase project with pre-seeded synthetic fixtures.
+ * Never point these variables at the production project.
+ */
+const env = {
+  url: process.env.BLACKJEE_AUTH_TEST_URL,
+  key: process.env.BLACKJEE_AUTH_TEST_PUBLISHABLE_KEY,
+  studentAEmail: process.env.BLACKJEE_AUTH_TEST_STUDENT_A_EMAIL,
+  studentAPassword: process.env.BLACKJEE_AUTH_TEST_STUDENT_A_PASSWORD,
+  studentBEmail: process.env.BLACKJEE_AUTH_TEST_STUDENT_B_EMAIL,
+  studentBPassword: process.env.BLACKJEE_AUTH_TEST_STUDENT_B_PASSWORD,
+  adminEmail: process.env.BLACKJEE_AUTH_TEST_ADMIN_EMAIL,
+  adminPassword: process.env.BLACKJEE_AUTH_TEST_ADMIN_PASSWORD,
+  bInProgressAttemptId: process.env.BLACKJEE_AUTH_TEST_B_IN_PROGRESS_ATTEMPT_ID,
+  bSubmittedAttemptId: process.env.BLACKJEE_AUTH_TEST_B_SUBMITTED_ATTEMPT_ID,
+  unreleasedChallengeId: process.env.BLACKJEE_AUTH_TEST_UNRELEASED_CHALLENGE_ID,
+};
+
+const enabled = Object.values(env).every((value) => Boolean(value?.trim()));
+
+function makeClient(): SupabaseClient {
+  if (env.url?.includes("phdssyexhfyxsmhmmcgb")) {
+    throw new Error("Refusing to run integration tests against the production Supabase project.");
+  }
+
+  if (!env.url || !env.key) {
+    throw new Error("Real Supabase Auth integration environment is incomplete.");
+  }
+
+  return createClient(env.url, env.key, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+      detectSessionInUrl: false,
+    },
+  });
+}
+
+describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => {
+  let anonymous: SupabaseClient | undefined;
+  let studentA: SupabaseClient | undefined;
+  let studentB: SupabaseClient | undefined;
+  let admin: SupabaseClient | undefined;
+
+  beforeAll(async () => {
+    anonymous = makeClient();
+    studentA = makeClient();
+    studentB = makeClient();
+    admin = makeClient();
+
+    const signIns = await Promise.all([
+      studentA.auth.signInWithPassword({
+        email: env.studentAEmail!,
+        password: env.studentAPassword!,
+      }),
+      studentB.auth.signInWithPassword({
+        email: env.studentBEmail!,
+        password: env.studentBPassword!,
+      }),
+      admin.auth.signInWithPassword({
+        email: env.adminEmail!,
+        password: env.adminPassword!,
+      }),
+    ]);
+
+    for (const result of signIns) {
+      expect(result.error, "Synthetic test user must sign in through Supabase Auth").toBeNull();
+      expect(result.data.session?.access_token).toBeTruthy();
+    }
+
+    const adminUser = await admin!.auth.getUser();
+    expect(adminUser.error).toBeNull();
+    expect(adminUser.data.user?.app_metadata?.role).toBe("admin");
+  });
+
+  afterAll(async () => {
+    await Promise.all([studentA?.auth.signOut(), studentB?.auth.signOut(), admin?.auth.signOut()]);
+  });
+
+  it("denies anonymous calls to protected mock-test RPCs", async () => {
+    const calls = await Promise.all([
+      anonymous!.rpc("resume_mock_test", {
+        p_attempt_id: env.bInProgressAttemptId!,
+      }),
+      anonymous!.rpc("get_mock_test_result", {
+        p_attempt_id: env.bSubmittedAttemptId!,
+      }),
+    ]);
+
+    expect(calls.every((result) => result.error !== null)).toBe(true);
+    expect(calls.every((result) => result.data === null)).toBe(true);
+  });
+
+  it("prevents student A from resuming student B's in-progress attempt", async () => {
+    const before = await studentB!
+      .from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(before.error).toBeNull();
+
+    const result = await studentA!.rpc("resume_mock_test", {
+      p_attempt_id: env.bInProgressAttemptId!,
+    });
+
+    expect(result.error).not.toBeNull();
+    expect(result.data).toBeNull();
+
+    const after = await studentB!
+      .from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(after.error).toBeNull();
+    expect(after.data).toEqual(before.data);
+  });
+
+  it("prevents student A from submitting to student B's attempt", async () => {
+    const before = await studentB!
+      .from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(before.error).toBeNull();
+
+    const result = await studentA!.rpc("submit_mock_test", {
+      p_attempt_id: env.bInProgressAttemptId!,
+      p_answers: [],
+    });
+
+    expect(result.error).not.toBeNull();
+    expect(result.data).toBeNull();
+
+    const after = await studentB!
+      .from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(after.error).toBeNull();
+    expect(after.data).toEqual(before.data);
+  });
+
+  it("prevents student A from reading student B's submitted result", async () => {
+    const result = await studentA!.rpc("get_mock_test_result", {
+      p_attempt_id: env.bSubmittedAttemptId!,
+    });
+
+    expect(result.error).not.toBeNull();
+    expect(result.data).toBeNull();
+  });
+
+  it("rejects admin authoring by an ordinary authenticated student", async () => {
+    const result = await studentA!.rpc("admin_save_daily_challenge", {
+      p_challenge_id: null,
+      p_challenge_date: null,
+      p_title: null,
+      p_subject: null,
+      p_statement: null,
+      p_statement_image_path: null,
+      p_options: null,
+      p_starts_at: null,
+      p_ends_at: null,
+      p_solution_release_at: null,
+      p_correct_answer: null,
+      p_solution: null,
+      p_is_live: false,
+    });
+
+    expect(result.error).not.toBeNull();
+    expect(result.data).toBeNull();
+  });
+
+  it("allows the admin to save and clean up a synthetic non-live challenge", async () => {
+    let challengeId: string | null = null;
+
+    try {
+      const now = Date.now();
+      const result = await admin!.rpc("admin_save_daily_challenge", {
+        p_challenge_id: null,
+        p_challenge_date: new Date(now).toISOString().slice(0, 10),
+        p_title: "Synthetic Auth Integration Fixture",
+        p_subject: "Physics",
+        p_statement: "Synthetic-only integration test statement",
+        p_statement_image_path: null,
+        p_options: [
+          { label: "A", text: "Synthetic option A" },
+          { label: "B", text: "Synthetic option B" },
+        ],
+        p_starts_at: new Date(now + 60 * 60 * 1000).toISOString(),
+        p_ends_at: new Date(now + 2 * 60 * 60 * 1000).toISOString(),
+        p_solution_release_at: new Date(now + 3 * 60 * 60 * 1000).toISOString(),
+        p_correct_answer: "A",
+        p_solution: "Synthetic worked solution",
+        p_is_live: false,
+      });
+
+      expect(result.error).toBeNull();
+      expect(result.data).toBeTruthy();
+      challengeId = result.data;
+
+      const saved = await admin!
+        .from("daily_challenges")
+        .select("id,title,is_live")
+        .eq("id", challengeId)
+        .single();
+      expect(saved.error).toBeNull();
+      expect(saved.data).toMatchObject({
+        id: challengeId,
+        title: "Synthetic Auth Integration Fixture",
+        is_live: false,
+      });
+    } finally {
+      if (challengeId) {
+        const cleanup = await admin!.from("daily_challenges").delete().eq("id", challengeId);
+        expect(cleanup.error).toBeNull();
+      }
+    }
+  });
+
+  it("does not reveal an unreleased daily-challenge answer or solution", async () => {
+    const result = await studentA!.rpc("get_daily_challenge_result", {
+      p_challenge_id: env.unreleasedChallengeId!,
+    });
+
+    expect(result.error).toBeNull();
+    expect(result.data).toMatchObject({ solution_released: false });
+    expect(result.data).not.toHaveProperty("correct_answer");
+    expect(result.data).not.toHaveProperty("solution");
+  });
+
+  it("does not grant direct browser access to the private answer-key schema", async () => {
+    const result = await studentA!
+      .schema("private")
+      .from("jee_pyq_answer_keys")
+      .select("correct_answer")
+      .limit(1);
+
+    expect(result.error).not.toBeNull();
+    expect(result.data).toBeNull();
+  });
+});
