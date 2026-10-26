@@ -27,28 +27,32 @@ const inputClass =
 const labelClass = "block min-w-0 space-y-1.5 text-sm font-medium";
 
 function MathPreview({ text }: { text: string }) {
-  const tokens = text.split(/(\\$\\$[\\s\\S]+?\\$\\$|\\\\\\[[\\s\\S]+?\\\\\\]|\\$[^$\\n]+\\$|\\\\\\([\\s\\S]+?\\\\\\))/g);
-  if (!text.trim()) return <span className="text-sm text-[var(--muted)]">Preview will appear here as you type.</span>;
+  const tokens = text.split(/(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\$[^$\n]+\$|\\\([\s\S]+?\\\))/g);
+  if (!text.trim()) return <span className="text-sm text-[var(--muted)]">Your formatted preview will appear here.</span>;
   return (
     <div className="whitespace-pre-wrap break-words text-sm leading-7">
       {tokens.map((token, index) => {
-        const display = token.startsWith("$") || token.startsWith("\\\\[");
-        const math = (token.startsWith("$") && token.endsWith("$"))
-          ? token.slice(2, -2)
-          : (token.startsWith("\\\\[") && token.endsWith("\\\\]"))
-            ? token.slice(2, -2)
-            : (token.startsWith("$") && token.endsWith("$"))
-              ? token.slice(1, -1)
-              : (token.startsWith("\\\\(") && token.endsWith("\\\\)"))
-                ? token.slice(2, -2)
-                : null;
+        let math: string | null = null;
+        let display = false;
+        if (token.startsWith("$") && token.endsWith("$")) {
+          math = token.slice(2, -2);
+          display = true;
+        } else if (token.startsWith("\\[") && token.endsWith("\\]")) {
+          math = token.slice(2, -2);
+          display = true;
+        } else if (token.startsWith("$") && token.endsWith("$")) {
+          math = token.slice(1, -1);
+        } else if (token.startsWith("\\(") && token.endsWith("\\)")) {
+          math = token.slice(2, -2);
+        }
         if (math === null) return <span key={index}>{token}</span>;
         const html = katex.renderToString(math, { displayMode: display, throwOnError: false, strict: "ignore" });
-        return <span key={index} className={display ? "my-2 block overflow-x-auto" : "inline-block max-w-full align-middle"} dangerouslySetInnerHTML={{ __html: html }} />;
+        return <span key={index} className={display ? "my-2 block max-w-full overflow-x-auto" : "inline-block max-w-full align-middle"} dangerouslySetInnerHTML={{ __html: html }} />;
       })}
     </div>
   );
 }
+
 
 export function PyqAuthoringForm() {
   const router = useRouter();
@@ -144,7 +148,7 @@ export function PyqAuthoringForm() {
       }}
       className="space-y-5"
     >
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-raised)] p-4 sm:p-5">\n        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 1 · Paper setup</p>\n        <h3 className="mt-1 text-lg font-semibold">Exam, subject and numbering</h3>\n        <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Choose the correct PCM subject and use a stable source ID. Paper slot numbers should stay consistent from 001 to 075.</p>\n      </div>\n      <div className="grid gap-4 sm:grid-cols-2">
         <label className={labelClass}>
           Question title
           <input
@@ -377,7 +381,7 @@ export function PyqAuthoringForm() {
           placeholder="Source checked; formula and answer independently verified."
         />
       </label>
-      </section>\n      {notice ? (
+      {notice ? (
         <p role="status" className="rounded-xl border border-[var(--accent)]/30 p-3 text-sm">
           {notice}
         </p>
