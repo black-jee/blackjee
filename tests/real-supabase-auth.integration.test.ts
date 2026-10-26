@@ -88,7 +88,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
       anonymous!.rpc("resume_mock_test", {
         p_attempt_id: env.bInProgressAttemptId!,
       }),
-      anonymous.rpc("get_mock_test_result", {
+      anonymous!.rpc("get_mock_test_result", {
         p_attempt_id: env.bSubmittedAttemptId!,
       }),
     ]);
@@ -143,7 +143,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("prevents student A from reading student B's submitted result", async () => {
-    const result = await studentA.rpc("get_mock_test_result", {
+    const result = await studentA!.rpc("get_mock_test_result", {
       p_attempt_id: env.bSubmittedAttemptId!,
     });
 
@@ -152,7 +152,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("rejects admin authoring by an ordinary authenticated student", async () => {
-    const result = await studentA.rpc("admin_save_daily_challenge", {
+    const result = await studentA!.rpc("admin_save_daily_challenge", {
       p_challenge_id: null,
       p_challenge_date: null,
       p_title: null,
@@ -173,7 +173,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("does not reveal an unreleased daily-challenge answer or solution", async () => {
-    const result = await studentA.rpc("get_daily_challenge_result", {
+    const result = await studentA!.rpc("get_daily_challenge_result", {
       p_challenge_id: env.unreleasedChallengeId!,
     });
 
