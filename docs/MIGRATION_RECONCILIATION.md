@@ -209,7 +209,6 @@ The production ledger remains untouched. Six repository-only migration files sti
 
 The six repository-only migration files have now been reviewed in `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md`. Two are redundant admin-review function rewrites, three are unverified forward hardening changes, and one is an index proposal. No file has been applied to production; other environment ledgers remain unknown, so no file was deleted or renumbered.
 
-
 ## Superseding reconciliation status — 2026-10-26
 
 The historical investigation entries above are retained as a dated log. Any earlier statement that the applied bodies for `20261024081337` and `20261024112132` are still missing is superseded: their stored SQL statement text was recovered through a read-only query of `supabase_migrations.schema_migrations.statements[1]` and copied into the exact versioned migration paths. The archive's `20261024081110` file remains a near-match only and was not used as a substitute.

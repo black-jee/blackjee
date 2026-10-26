@@ -163,7 +163,6 @@ These are the SQL statement texts recorded for the applied migrations, not infer
 
 **Updated inventory:** 20 live applied versions, 26 SQL migration files, 20 exact version/name matches, zero applied versions missing a matching SQL file, and six repository-only migrations. This restores the source text needed for repository replay, but does not authorize changing or repairing the production migration ledger. No production schema, data, grants, or migration history was modified.
 
-
 ## Superseding recovery result — 2026-10-26
 
 The earlier archive-search sections accurately describe what those archives contained, but their statements that the two applied SQL bodies remain missing are superseded by a later read-only recovery. The stored statement text was retrieved from `supabase_migrations.schema_migrations.statements[1]` and copied into the exact versioned paths:

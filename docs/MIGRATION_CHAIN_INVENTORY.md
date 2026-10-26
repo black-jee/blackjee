@@ -119,7 +119,6 @@ The old candidate-based replay is superseded. Do not treat the labelled candidat
 
 See `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md` for a file-by-file review of all six repository-only migrations. Two source-page/source-and-solution files are redundant relative to the recovered applied history; three are forward hardening proposals and one is a performance-index proposal. None has been applied to production.
 
-
 ## Superseding status correction — 2026-10-26
 
 This note supersedes earlier unresolved-body counts in the dated investigation history above. A later read-only query of `supabase_migrations.schema_migrations.statements[1]` recovered the stored SQL statement text for both applied versions and placed it in the exact versioned files:
