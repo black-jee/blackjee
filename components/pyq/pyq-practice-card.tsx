@@ -26,6 +26,10 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
 
   function submit() {
     setError(null);
+    if (!answer.trim() || answer.trim().length > 100) {
+      setError("Choose an answer first (maximum 100 characters).");
+      return;
+    }
     startTransition(async () => {
       try {
         const supabase = createSupabaseBrowserClient();
@@ -108,6 +112,7 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
           Your answer
           <input
             value={answer}
+            maxLength={100}
             onChange={(event) => setAnswer(event.target.value)}
             disabled={busy || isCorrect || unlocked}
             className="mt-2 w-full rounded-xl border border-[var(--border)] bg-black/20 px-3 py-3"
