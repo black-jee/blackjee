@@ -116,3 +116,6 @@ The two previously missing applied migration SQL statement texts have been resto
 The old candidate-based replay is superseded. Do not treat the labelled candidate as historical evidence; the active migration files now use the SQL text recorded for the applied versions.
 
 **Current counts:** 20 applied versions; 26 repository SQL files; 20 exact version/name matches; 6 repository-only files; 0 applied versions missing a matching SQL file. The six repository-only files still require explicit review before a canonical chain is chosen.
+
+
+See `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md` for a file-by-file review of all six repository-only migrations. Two source-page/source-and-solution files are redundant relative to the recovered applied history; three are forward hardening proposals and one is a performance-index proposal. None has been applied to production.

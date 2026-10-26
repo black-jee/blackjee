@@ -206,3 +206,6 @@ The two previously unresolved applied bodies are no longer missing from the repo
 The reconstructed numeric-answer candidate and its candidate-only contract check are no longer part of active CI. CI should verify the restored migration chain through the repository's normal isolated reconstruction process, not use the candidate as a substitute for historical SQL.
 
 The production ledger remains untouched. Six repository-only migration files still need a separate reconciliation decision; matching all 20 applied versions does not imply that those six files should be applied.
+
+
+The six repository-only migration files have now been reviewed in `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md`. Two are redundant admin-review function rewrites, three are unverified forward hardening changes, and one is an index proposal. No file has been applied to production; other environment ledgers remain unknown, so no file was deleted or renumbered.
