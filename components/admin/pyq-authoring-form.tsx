@@ -317,6 +317,11 @@ export function PyqAuthoringForm() {
           ))}
         </div>
       </section>
+      <div className="mb-1">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 4 · Answer key and source</p>
+        <h3 className="mt-1 text-lg font-semibold">Verify the answer and source</h3>
+        <p className="mt-1 text-sm leading-5 text-[var(--muted)]">For single-correct questions enter A/B/C/D; for numerical questions enter the exact numeric answer.</p>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className={labelClass}>
           Correct answer / numerical answer
@@ -377,6 +382,10 @@ export function PyqAuthoringForm() {
         </label>
         {solution.trim() ? <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-4"><p className="mb-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Solution preview</p><MathPreview text={solution} /></div> : null}
       </section>
+      <div className="mb-1">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 6 · Review</p>
+        <h3 className="mt-1 text-lg font-semibold">Assets and review notes</h3>
+      </div>
       <label className={labelClass}>
         Additional asset paths (one per line)
         <textarea
