@@ -131,7 +131,7 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 
 Status legend: [x] verified complete; [~] in progress or partially verified; [ ] not yet verified; [!] blocked.
 
-1. [x] **CI and repository health** — CI #734 passed on `a19c59e08b129d622e54c03eb52760d1333bcc0e`; both `quality` and `reconstruction-replay` succeeded. Evidence: https://github.com/black-jee/blackjee/actions/runs/40250654516. Vercel status remains a separate rate-limit failure.
+1. [~] **CI and repository health** — CI #734 passed on `a19c59e08b129d622e54c03eb52760d1333bcc0e`; both `quality` and `reconstruction-replay` succeeded. Evidence: https://github.com/black-jee/blackjee/actions/runs/40250654516. Vercel status remains a separate rate-limit failure.
 2. [~] **GitHub and PR** — PR #2 confirmed open, draft, and unmerged. Refresh documentation/PR evidence after current changes; keep draft.
 3. [ ] **Migration recovery** — continue evidence-backed recovery of exact originals `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`; do not fabricate or substitute near-matches.
 4. [ ] **Database integrity** — reconcile 20 applied versions, 24 repository SQL files, 18 exact filename/version matches, and six repository-only SQL files; validate reconstructed schema only in disposable PostgreSQL.
