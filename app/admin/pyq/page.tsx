@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
 import { PyqAuthoringForm } from "@/components/admin/pyq-authoring-form";
 import { PyqBulkImport } from "@/components/admin/pyq-bulk-import";
 import { PyqReviewActions } from "@/components/admin/pyq-review-actions";
@@ -39,18 +40,7 @@ export default async function AdminPyqPage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-5 py-6 sm:px-8 lg:py-12">
-      <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border)] pb-5">
-        <Link href="/admin" className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">
-            BJ
-          </span>
-          <span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE ADMIN</span>
-        </Link>
-        <nav className="flex gap-4 text-sm text-[var(--muted)]">
-          <Link href="/admin">Daily challenges</Link>
-          <Link href="/pyq">Student PYQs</Link>
-        </nav>
-      </header>
+      <SiteHeader variant="admin" />
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
         Content workbench
       </p>
