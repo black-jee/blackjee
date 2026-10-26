@@ -37,14 +37,14 @@ Each extracted candidate includes:
 - exam, year, shift, subject, question number, title, source PDF and page;
 - statement and detected options (where recognizable);
 - correct-answer field, if a supplied answer-key file maps to that question number;
-- `diagramSignal` (`likely`, `possible`, or `not_detected`) plus `diagramPlaceholder` for manual diagram / graph / reaction work;
+- `diagramSignal`, `visualTypes`, and `visualSlots` for likely question visuals, match-the-following tables, chemical reactions/structures, circular figures, and per-option visual placeholders;
 - blank `solution`, `solutionStatus: "pending"`, `reviewStatus: "draft"`, and `isPublished: false`;
 - review notes when options or answer keys are missing or extraction looks uncertain.
 
 ## Important limits
 
 - The parser reads the PDF's embedded text layer. Scanned/image-only PDFs require OCR before this script can extract text.
-- PDF layouts vary. The extractor is heuristic; check question boundaries, option labels, mathematical notation, and answer mapping before importing. Diagram detection is only a hint: it checks text cues and whether the question's page contains images/vector drawings. It cannot reliably tell which question owns a visual, and `not_detected` does not prove there is no diagram. Always review source pages.
+- PDF layouts vary. The extractor is heuristic; check question boundaries, option labels, mathematical notation, and answer mapping before importing. Visual classification is only a hint: it checks text cues and whether the question's page contains images/vector drawings. It cannot reliably tell which question or option owns a visual. Match tables, reactions, circles, graphs, circuits, geometry/ray diagrams, and molecular structures get separate slot hints when text cues match; every option gets a reviewable visual placeholder. `not_detected` does not prove there is no diagram. Always review source pages and all four options.
 - Embedded answer-key parsing is best-effort and depends on a clearly labelled, text-readable answer-key section. The admin PYQ page now accepts the generated JSON bundle and saves validated records through the existing admin-only save action.
 - This script only writes a local JSON file. It does not connect to Supabase, bypass admin permissions, alter database records, or publish content.
 - The admin importer maps records into the existing single-question validation and save workflow. It skips records with missing question text, source IDs, or answer keys; review the extraction report and saved drafts before publishing.
