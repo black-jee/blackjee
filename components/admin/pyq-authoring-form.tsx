@@ -36,6 +36,17 @@ export function PyqAuthoringForm() {
   const [subject, setSubject] = useState("Physics");
   const [questionType, setQuestionType] = useState("single_correct");
 
+  function updateOptionLine(index: number, field: "label" | "text" | "imagePath", value: string) {
+    const rows = optionsText.split("\\n");
+    while (rows.length <= index) rows.push("||");
+    const parts = (rows[index] ?? "").split("|");
+    while (parts.length < 3) parts.push("");
+    const fieldIndex = field === "label" ? 0 : field === "text" ? 1 : 2;
+    parts[fieldIndex] = value;
+    rows[index] = parts.slice(0, 3).join("|");
+    setOptionsText(rows.join("\\n"));
+  }
+
   function submit(formData: FormData) {
     setError(null);
     setNotice(null);
@@ -234,17 +245,25 @@ export function PyqAuthoringForm() {
           <h3 className="text-base font-semibold">Answer options</h3>
           <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Enter one option per line using Label|option text|optional image path. Example: A|12 N|. The preview below separates each choice for easy checking.</p>
         </div>
-        <label className={labelClass}>
-          Options editor
-          <textarea
-            value={optionsText}
-            onChange={(event) => setOptionsText(event.target.value)}
-            rows={6}
-            spellCheck={false}
-            placeholder={"A|First option|\nB|Second option|\nC|Third option|\nD|Fourth option|"}
-            className={inputClass + " font-mono leading-6"}
-          />
-        </label>
+        <div className="space-y-3">
+          {parseOptions(optionsText).map((option, index) => (
+            <div key={index} className="rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-3 sm:p-4">
+              <div className="mb-3 flex items-center gap-3">
+                <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface)] font-bold">{option.label}</span>
+                <p className="text-sm font-semibold">Option {option.label}</p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                <label className={labelClass}>Option label<input value={option.label} onChange={(event) => updateOptionLine(index, "label", event.target.value)} maxLength={4} className={inputClass} placeholder="A" /></label>
+                <label className={labelClass}>Option image path <span className="font-normal text-[var(--muted)]">Optional</span><input value={option.imagePath ?? ""} onChange={(event) => updateOptionLine(index, "imagePath", event.target.value)} maxLength={500} className={inputClass} placeholder="assets/questions/q1-option-a.png" /></label>
+              </div>
+              <label className={labelClass + " mt-3"}>Option text<textarea value={option.text} onChange={(event) => updateOptionLine(index, "text", event.target.value)} rows={2} className={inputClass + " leading-6"} placeholder={"Enter the full text for option " + option.label} /></label>
+            </div>
+          ))}
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => { const current = parseOptions(optionsText); if (current.length < 8) setOptionsText(optionsText + (optionsText.endsWith("\\n") ? "" : "\\n") + String.fromCharCode(65 + current.length) + "||"); }} disabled={parseOptions(optionsText).length >= 8} className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold disabled:opacity-40">+ Add option</button>
+            <button type="button" onClick={() => { const rows = optionsText.split("\\n"); if (rows.length > 2) setOptionsText(rows.slice(0, -1).join("\\n")); }} disabled={parseOptions(optionsText).length <= 2} className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold disabled:opacity-40">Remove last option</button>
+          </div>
+        </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
           {parseOptions(optionsText).map((option) => (
             <div key={option.label} className="flex min-h-14 gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-3">
