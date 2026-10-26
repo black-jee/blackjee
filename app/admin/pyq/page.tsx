@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PyqAuthoringForm } from "@/components/admin/pyq-authoring-form";
+import { MathPreview, PyqAuthoringForm } from "@/components/admin/pyq-authoring-form";
 import { PyqReviewActions } from "@/components/admin/pyq-review-actions";
 import { requireAdmin } from "@/lib/auth/require-admin";
 
@@ -199,14 +199,14 @@ export default async function AdminPyqPage() {
                               <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-[var(--muted)]">
                                 Paper slot {slot !== null ? String(slot).padStart(3, "0") : "not assigned"} · {subject} Q{qNumber}
                               </p>
-                              <p className="whitespace-pre-wrap break-words text-sm leading-6">{question.statement || "Question statement not entered."}</p>
+                              <MathPreview text={question.statement || "Question statement not entered."} />
                             </div>
                             {options.length > 0 ? (
                               <div className="mt-3 grid min-w-0 gap-2 sm:grid-cols-2">
                                 {options.map((option, optionIndex) => (
                                   <div key={(option.label ?? String(optionIndex)) + "-" + optionIndex} className="flex min-w-0 items-start gap-2.5 rounded-xl border border-[var(--border)] p-3">
                                     <span className="grid size-7 shrink-0 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] text-xs font-bold">{option.label ?? String.fromCharCode(65 + optionIndex)}</span>
-                                    <span className="min-w-0 whitespace-pre-wrap break-words text-sm leading-5">{option.text || (option.imagePath ? "Image: " + option.imagePath : "Option text empty")}</span>
+                                    <span className="min-w-0 flex-1">{option.text ? <MathPreview text={option.text} /> : option.imagePath ? <span className="break-words text-sm">Image: {option.imagePath}</span> : <span className="text-sm text-[var(--muted)]">Option text empty</span>}</span>
                                   </div>
                                 ))}
                               </div>
@@ -219,7 +219,7 @@ export default async function AdminPyqPage() {
                               </summary>
                               <div className="border-t border-[var(--border)] px-3 py-4 sm:px-4">
                                 {question.solution ? (
-                                  <p className="whitespace-pre-wrap break-words text-sm leading-7">{question.solution}</p>
+                                  <MathPreview text={question.solution} />
                                 ) : (
                                   <p className="text-sm text-[var(--muted)]">No solution has been entered for this draft yet.</p>
                                 )}
