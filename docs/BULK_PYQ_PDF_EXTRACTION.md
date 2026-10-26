@@ -48,3 +48,10 @@ Each extracted candidate includes:
 - Embedded answer-key parsing is best-effort and depends on a clearly labelled, text-readable answer-key section. The admin PYQ page now accepts the generated JSON bundle and saves validated records through the existing admin-only save action.
 - This script only writes a local JSON file. It does not connect to Supabase, bypass admin permissions, alter database records, or publish content.
 - The admin importer maps records into the existing single-question validation and save workflow. It skips records with missing question text, source IDs, or answer keys; review the extraction report and saved drafts before publishing.
+
+
+## PCM notation and question formats
+
+The JSON draft preserves extracted question and option text without trying to normalize or typeset it. It adds review hints for mathematical symbols, powers/superscripts, subscripts/indices, fractions, calculus, vectors/matrices, chemical formulae/ionic notation, reaction arrows/equilibrium, and common physical units. It also labels likely match-the-following, assertion-reason, and numerical/expression formats.
+
+These are regex-based hints, not a guarantee of correct mathematical or chemical rendering. PDF text extraction can lose two-dimensional layout, subscripts, superscripts, stacked fractions, matrix alignment, and symbols. Compare the extracted text with the source page; visual/equation crops may be needed to preserve exact notation.
