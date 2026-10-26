@@ -103,6 +103,7 @@ export function PyqAuthoringForm() {
       }
       setNotice("Saved as a draft. It is not visible to students until reviewed and published.");
       setStatement("");
+      setSolution("");
       setOptionsText("A|\nB|\nC|\nD|");
       (document.querySelector("form[data-pyq-authoring]") as HTMLFormElement | null)?.reset();
       router.refresh();
