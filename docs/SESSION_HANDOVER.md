@@ -1,20 +1,22 @@
 # BLACK-JEE session handover
 
 **Updated:** 2026-10-26  
-**Active task:** BJ-DB-001 — continue recovery of the two remaining applied migration bodies; CI run #678 is green and PR #2 verification metadata is current  
+**Active task:** BJ-DB-001 — continue authoritative recovery of the two unresolved applied migration bodies and verify current CI/deployment state  
 **Branch:** `chore/schema-reconstruction`  
 **Repository:** https://github.com/black-jee/blackjee  
 **Supabase target:** `phdssyexhfyxsmhmmcgb`  
-**Production URL supplied by owner:** https://blackjee.vercel.app/ (deployment linkage and runtime not verified)
+**Production URL supplied by owner:** https://blackjee.vercel.app/ (provider deployment status is available; live runtime/browser smoke test remains unverified)
 
 ## Latest verified state
 
-- Current PR #2 HEAD: `81e979207b39915b94c272780a9b1b810fb16380`; CI [#678 / 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) passed both `quality` and `reconstruction-replay`.
-- Five missing applied migration bodies were recovered byte-for-byte from Library archive `blackjee-foundation.zip` and restored under exact versioned filenames. Hashes and provenance are in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
-- Current inventory: 20 live migration versions; 24 repository SQL files; 18 exact filename/version matches; two applied bodies remain missing; six repository-only files remain absent from live history.
-- Unresolved: `20261024081337_numeric_answers_and_admin_review` (archive only has near-match version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Do not relabel either near-match.
-- Vercel GitHub status reports deployment completed for the current commit; live runtime/browser smoke test remains unverified.
-- PR #2 verification section cites run #678. PR remains draft/open/unmerged. No production schema/data/grants/migration-history changes or paid infrastructure were used.
+- **Verified HEAD:** `c65f9030215f5f43579733a99405263719d49b51`; CI [#730 / 40249961892](https://github.com/black-jee/blackjee/actions/runs/40249961892) passed both `quality` and `reconstruction-replay` on this exact commit.
+- **Quality evidence:** dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build passed. The disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, indexes, authoring integrity, and authorization-denial checks.
+- **Current Vercel status:** failure — “Deployment rate limited — retry in 24 hours” on HEAD `c65f9030215f5f43579733a99405263719d49b51`. The previous parent commit `6e1ab0a7ab8c8cdff5c3f7493957f639b7c5ad3e` briefly reported “Deployment has completed.” Do not buy an upgrade. External HTTP fetches could not resolve the hostname from this session; this is inconclusive about app health.
+- **PR #2:** open, draft, unmerged. Current PR body cites CI #730. Keep it draft and do not merge.
+- **Migration inventory:** live ledger 20 versions; repository 24 SQL files; 18 exact filename/version matches; two unresolved applied bodies; six repository-only SQL files. Five applied bodies were restored byte-for-byte from `blackjee-foundation.zip`.
+- **Archive recheck:** the four `BLACK-JEE-main*.zip` copies have identical SHA-256 hashes and contain only the legacy-generation migration set; none has either exact unresolved filename. The foundation archive has the near-match `20261024081110_numeric_answers_and_admin_review.sql`, not the applied `20261024081337`, and has no exact `20261024112132_require_pyq_source_page_before_publish.sql`. See `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
+- **Real Auth boundary:** disposable PostgreSQL tests use simulated identity claims, not real Supabase-issued signed JWTs. The isolated real-auth plan remains unexecuted.
+- **Safety:** no production SQL/data/grant/ledger changes, paid resources, or fabricated JEE content. Do not reset/repair production migration history.
 
 ## Current work and blockers
 
