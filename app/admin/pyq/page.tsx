@@ -17,6 +17,7 @@ type QuestionRow = {
   chapter: string | null;
   statement: string;
   options: unknown;
+  solution: string | null;
   source_pdf: string | null;
   source_page: number | null;
   source_status: string;
@@ -30,7 +31,7 @@ export default async function AdminPyqPage() {
   const { data, error } = await supabase
     .from("jee_pyq_questions")
     .select(
-      "id,source_id,title,subject,year,session,chapter,statement,options,source_pdf,source_page,source_status,review_status,is_published,updated_at",
+      "id,source_id,title,subject,year,session,chapter,statement,options,solution,source_pdf,source_page,source_status,review_status,is_published,updated_at",
     )
     .order("updated_at", { ascending: false })
     .limit(100);
@@ -136,6 +137,18 @@ export default async function AdminPyqPage() {
                     ))}
                   </ul>
                 ) : null}
+                <details className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)]">
+                  <summary className="cursor-pointer px-4 py-3 text-sm font-semibold">
+                    View worked solution {question.solution ? "" : "· not entered"}
+                  </summary>
+                  <div className="border-t border-[var(--border)] px-4 py-4">
+                    {question.solution ? (
+                      <p className="whitespace-pre-wrap text-sm leading-6">{question.solution}</p>
+                    ) : (
+                      <p className="text-sm text-[var(--muted)]">No solution has been entered for this draft yet.</p>
+                    )}
+                  </div>
+                </details>
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] pt-4">
                   <p className="text-xs text-[var(--muted)]">
                     {question.source_pdf
