@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { MockTestRunner } from "@/components/mock-tests/mock-test-runner";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
