@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -55,26 +56,21 @@ export default async function ProfilePage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-4xl px-5 py-6 sm:px-8 lg:py-12">
-      <header className="mb-8 flex items-center justify-between border-b border-[var(--border)] pb-5">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">
-            BJ
-          </span>
-          <span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE</span>
-        </Link>
-        <SignOutButton />
-      </header>
+      <SiteHeader />
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--muted)]">
         Student account
       </p>
       <h1 className="mt-2 text-4xl font-semibold tracking-tight">Your profile</h1>
-      <section className="mt-7 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-        <p className="text-xs uppercase tracking-widest text-[var(--muted)]">Signed-in email</p>
-        <p className="mt-2 break-all font-medium">{user.email ?? "Email not available"}</p>
-        <p className="mt-2 text-xs text-[var(--muted)]">
-          Your private attempt history is loaded under your authenticated user identity and database
-          row-level security.
-        </p>
+      <section className="mt-7 flex flex-col gap-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-widest text-[var(--muted)]">Signed-in email</p>
+          <p className="mt-2 break-all font-medium">{user.email ?? "Email not available"}</p>
+          <p className="mt-2 max-w-2xl text-xs leading-5 text-[var(--muted)]">
+            Your private attempt history is loaded under your authenticated user identity and
+            database row-level security.
+          </p>
+        </div>
+        <SignOutButton />
       </section>
       <section className="mt-8">
         <div className="flex items-end justify-between gap-4">

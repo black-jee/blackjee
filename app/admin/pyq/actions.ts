@@ -67,6 +67,25 @@ export async function savePyqQuestion(input: unknown): Promise<PyqActionResult> 
   return { ok: true, id: data };
 }
 
+export async function bulkSavePyqQuestions(
+  input: unknown,
+): Promise<{ saved: string[]; failed: { index: number; error: string }[] }> {
+  if (!Array.isArray(input) || input.length < 1 || input.length > 100) {
+    return {
+      saved: [],
+      failed: [{ index: -1, error: "Choose between 1 and 100 draft questions." }],
+    };
+  }
+  const saved: string[] = [];
+  const failed: { index: number; error: string }[] = [];
+  for (let index = 0; index < input.length; index += 1) {
+    const result = await savePyqQuestion(input[index]);
+    if (result.ok && result.id) saved.push(result.id);
+    else failed.push({ index, error: result.ok ? "Saved without a returned ID." : result.error });
+  }
+  return { saved, failed };
+}
+
 export async function reviewPyqQuestion(input: unknown): Promise<PyqActionResult> {
   const parsed = z
     .object({

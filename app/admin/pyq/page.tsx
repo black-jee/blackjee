@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
 import { PyqAuthoringForm } from "@/components/admin/pyq-authoring-form";
+import { PyqBulkImport } from "@/components/admin/pyq-bulk-import";
 import { PyqReviewActions } from "@/components/admin/pyq-review-actions";
 import { requireAdmin } from "@/lib/auth/require-admin";
 
@@ -38,34 +39,36 @@ export default async function AdminPyqPage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-5 py-6 sm:px-8 lg:py-12">
-      <header className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border)] pb-5">
-        <Link href="/admin" className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">
-            BJ
-          </span>
-          <span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE ADMIN</span>
-        </Link>
-        <nav className="flex gap-4 text-sm text-[var(--muted)]">
-          <Link href="/admin">Daily challenges</Link>
-          <Link href="/pyq">Student PYQs</Link>
-        </nav>
-      </header>
+      <SiteHeader variant="admin" />
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
         Content workbench
       </p>
       <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
         PYQ authoring & review
       </h1>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--muted)]">
-        Create source-tracked questions, keep answer keys private, review drafts, and publish only
-        after the source, solution and assets have been checked. Saving a question never publishes
-        it.
-      </p>
+      <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
+        <p className="max-w-3xl text-sm leading-6 text-[var(--muted)]">
+          Create source-tracked questions, keep answer keys private, review drafts, and publish only
+          after the source, solution and assets have been checked. Saving a question never publishes
+          it.
+        </p>
+        <a
+          href="#bulk-pdf-upload"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-bold text-[var(--accent-foreground)] shadow-sm"
+        >
+          <span aria-hidden="true">↑</span>
+          Upload PDF
+        </a>
+      </div>
 
       <section className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-7">
         <h2 className="mb-5 text-2xl font-semibold tracking-tight">Create question draft</h2>
         <PyqAuthoringForm />
       </section>
+
+      <div id="bulk-pdf-upload" className="mt-8 scroll-mt-6">
+        <PyqBulkImport />
+      </div>
 
       <section className="mt-10">
         <div className="flex flex-wrap items-end justify-between gap-3">
