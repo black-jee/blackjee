@@ -3,19 +3,19 @@
 
 :root {
   color-scheme: dark;
-  --background: #090a0c;
-  --surface: #111316;
-  --surface-raised: #191c20;
-  --surface-soft: #14171a;
-  --border: #2a2e32;
-  --border-strong: #3b4146;
-  --text: #f4f5f2;
-  --muted: #a2a8a2;
-  --muted-strong: #c5cac3;
-  --accent: #d6fb65;
-  --accent-foreground: #14190a;
+  --background: #070708;
+  --surface: #101012;
+  --surface-raised: #19191c;
+  --surface-soft: #141416;
+  --border: #2c2022;
+  --border-strong: #513034;
+  --text: #f7f4f4;
+  --muted: #aaa1a2;
+  --muted-strong: #d0c5c6;
+  --accent: #ff303f;
+  --accent-foreground: #09090a;
   --success: #a8e6a1;
-  --danger: #ff9c9c;
+  --danger: #ff858d;
 }
 
 * {
@@ -32,7 +32,7 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(ellipse at 82% -16%, rgb(214 251 101 / 7%), transparent 38%), var(--background);
+    radial-gradient(ellipse at 82% -16%, rgb(255 48 63 / 10%), transparent 38%), var(--background);
   color: var(--text);
   font-family:
     Inter,
@@ -78,7 +78,7 @@ select {
 }
 
 ::placeholder {
-  color: #777f78;
+  color: #817779;
 }
 
 @media (prefers-reduced-motion: reduce) {
