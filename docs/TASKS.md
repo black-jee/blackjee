@@ -119,3 +119,10 @@ Status vocabulary: `DISCOVERED`, `PLANNED`, `IN_PROGRESS`, `BLOCKED`, `IMPLEMENT
 - Run #712 / 40246842441 was cancelled; it is not a code failure and does not verify either job.
 - No application or SQL changes were made in this formatting follow-up. Migration blockers and security-test limitations remain as recorded above. PR #2 must remain draft/unmerged; production Supabase stays read-only; no paid infrastructure or invented migration/question content.
 - Next action: obtain and inspect a workflow run on `5d6219a734b918e78552f9cb4052316d358043a2`. If formatting passes, resume evidence-backed recovery and isolated real-auth test design.
+
+## Latest verification update — 2026-10-26 (CI #731)
+
+- **HEAD at verification:** `961fd61a05460b7efff01503e05efb48ace302ea`; [CI #731 / 40250098420](https://github.com/black-jee/blackjee/actions/runs/40250098420) passed both `quality` and `reconstruction-replay` on that exact commit. Playwright E2E, lint, typecheck, unit tests, dependency audit, Prettier, build, and disposable PostgreSQL reconstruction/security assertions all passed.
+- **Vercel:** current HEAD's provider status is rate-limited (`upgradeToPro=build-rate-limit`). This is not a source CI result. No paid upgrade; live runtime/browser smoke test remains unverified.
+- **No change to outstanding gates:** exact historical bodies `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish` remain unrecovered; real Supabase signed-token Auth tests remain unexecuted; six repository-only migrations, Storage security, asset and JEE source/answer/solution QA, and production-readiness/rollback review remain open.
+- **Safety:** PR #2 remains draft/unmerged. Production Supabase stays read-only; no fabricated migration SQL or JEE content and no paid infrastructure.
