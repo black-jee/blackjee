@@ -67,7 +67,9 @@ export async function savePyqQuestion(input: unknown): Promise<PyqActionResult> 
   return { ok: true, id: data };
 }
 
-export async function bulkSavePyqQuestions(input: unknown): Promise<{ saved: string[]; failed: { index: number; error: string }[] }> {
+export async function bulkSavePyqQuestions(
+  input: unknown,
+): Promise<{ saved: string[]; failed: { index: number; error: string }[] }> {
   if (!Array.isArray(input) || input.length < 1 || input.length > 100) {
     return { saved: [], failed: [{ index: -1, error: "Choose between 1 and 100 draft questions." }] };
   }
