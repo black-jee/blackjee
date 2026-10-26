@@ -61,7 +61,14 @@ def extract_text(pdf_path: Path) -> list[dict[str, Any]]:
     pages: list[dict[str, Any]] = []
     with fitz.open(pdf_path) as document:
         for page_number, page in enumerate(document, start=1):
-            pages.append({"page": page_number, "text": page.get_text("text", sort=True)})
+            pages.append({
+                "page": page_number,
+                "text": page.get_text("text", sort=True),
+                # Raster images and vector drawings are page-level signals, not proof
+                # that a particular question contains a diagram.
+                "image_count": len(page.get_images(full=True)),
+                "drawing_count": len(page.get_drawings()),
+            })
     return pages
 
 
@@ -154,7 +161,29 @@ def split_questions(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
             {"id": item["label"].lower(), "label": item["label"], "text": item["text"]}
             for item in q["options"]
         ]
-        q["diagramPlaceholder"] = "[Add diagram / graph / reaction manually if required]"
+        page_info = next((p for p in pages if p["page"] == q["sourcePage"]), {})
+        visual_cue = bool(re.search(
+            r"\b(?:figure|diagram|graph|plot|shown below|shown above|given below|given above|"
+            r"following figure|circuit diagram|schematic|structure shown|reaction scheme|"
+            r"as shown|refer to the figure|curve shown)\b",
+            q["statement"], re.IGNORECASE,
+        ))
+        page_has_visuals = bool(page_info.get("image_count", 0) or page_info.get("drawing_count", 0))
+        q["diagramSignal"] = (
+            "likely" if visual_cue else "possible" if page_has_visuals else "not_detected"
+        )
+        q["diagramStatus"] = "needs_manual_check" if q["diagramSignal"] != "not_detected" else "not_confirmed"
+        q["pageImageCount"] = int(page_info.get("image_count", 0))
+        q["pageDrawingCount"] = int(page_info.get("drawing_count", 0))
+        q["diagramPlaceholder"] = (
+            "[DIAGRAM / GRAPH / REACTION MAY BE REQUIRED — CHECK SOURCE PAGE]"
+            if q["diagramSignal"] != "not_detected"
+            else "[No diagram detected automatically — check source page]"
+        )
+        if q["diagramSignal"] == "not_detected":
+            q["reviewNotes"].append("No diagram signal detected; this is not proof that the question has no figure.")
+        else:
+            q["reviewNotes"].append("Possible visual detected by text/page heuristic; confirm whether it belongs to this question.")
         q["solution"] = ""
         q["solutionStatus"] = "pending"
         q["reviewStatus"] = "draft"
@@ -212,7 +241,8 @@ def main() -> int:
         "version": 1,
         "sourcePdf": args.pdf.name,
         "metadata": {"exam": args.exam, "year": args.year, "shift": args.shift, "subject": args.subject},
-        "extraction": {"pageCount": len(pages), "questionCount": len(questions), "engine": "PyMuPDF text layer"},
+        "extraction": {"pageCount": len(pages), "questionCount": len(questions), "engine": "PyMuPDF text layer + page visual-signal heuristic",
+                      "diagramDetection": "heuristic only; page images/vector drawings can be shared by multiple questions and some diagrams are vector/text encoded"},
         "policy": {"solutions": "pending", "diagrams": "manual placeholder", "publish": False},
         "answerKey": {"matchedCount": sum(bool(q.get("correctAnswer")) for q in questions), "source": "sidecar overrides embedded key when supplied"},
         "questions": questions,
