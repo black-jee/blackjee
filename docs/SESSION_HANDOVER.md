@@ -159,3 +159,10 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Current CI caveat:** run #717 verifies `8aa3aef...` only. The test-plan commit and any subsequent handover update require their own matching workflow result before the branch HEAD can be called green.
 - **Still blocked:** exact originals for `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish` remain unrecovered. Inventory remains 20 live versions, 24 repo SQL files, 18 exact matches, two unresolved applied bodies, six repository-only files. Do not relabel near-matches.
 - **Next:** check CI for the latest HEAD; then continue with a separately labelled reconstruction proposal only if exact source recovery remains unavailable, and identify a no-cost isolated Supabase Auth test environment. No production writes, paid resources, fabricated SQL/question content, or PR merge.
+
+
+## Latest verification — 2026-10-26
+
+- HEAD `dfb2d16681d9504d8edabc811a20b27cf00d5449` is verified green by [CI #722](https://github.com/black-jee/blackjee/actions/runs/40248171571): `quality` and `reconstruction-replay` both passed, including Playwright, Prettier, and production build.
+- PR #2 remains open/draft/unmerged. The PR description has been corrected to report the successful run.
+- The real Supabase-issued JWT/browser tests, exact originals of `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`, no-cost deployment/runtime check, and content/source QA remain unresolved. Do not fabricate migration SQL or JEE content; production Supabase remains read-only.
