@@ -2,18 +2,19 @@
 
 ## Decision
 
-**Source acquisition is now unblocked; verified import and publication remain blocked.** The official NTA question-paper PDF has been located, alongside two useful third-party cross-check sources. A previously archived BLACK-JEE staging ZIP is also available in the project working library and contains a 75-slot manifest with question text, options, answer/solution fields, source references, and review flags. That staged data is not yet in the current repository branch and must not be treated as release-ready.
+**Source acquisition is unblocked; verified import and publication remain blocked.** The official NTA question-paper PDF and official Session-II final answer-key PDF have been located. Two third-party sources are also available for readable question wording and worked-solution cross-checking. A previously archived BLACK-JEE staging ZIP is available in the project working library and contains a 75-slot manifest with question text, options, answer/solution fields, source references, and review flags. That staged data is not yet in the current repository branch and is not release-ready.
 
 ## Sources
 
-- **Official NTA question-paper PDF:** https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/202604091916616339.pdf
-- **Official NTA JEE Main site / question-paper listings:** https://jeemain.nta.nic.in/sitemap/
-- **Official NTA Session-I final answer keys page:** https://jeemain.nta.nic.in/document/final-answer-keys-of-jeemain-2026-session-i-paper-i-b-e-b-tech/
+- **Official NTA question-paper PDF — B Tech 4 April 2026 Shift 1:** https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/202604091916616339.pdf
+- **Official NTA Session-II final answer key PDF — Paper I (B.E./B.Tech):** https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260420409057044.pdf
+- Official NTA documents page: https://jeemain.nta.nic.in/documents/
 - Third-party worked-solutions PDF: https://static.zollege.in/public/image/JEE_Mains_2026_April_4_Shift_1_Question_paper_with_Solutions_30d076fa40189dad6ca3185f7ff72379.pdf
 - Third-party online question bank: https://hive.pracbee.com/jee-main/papers/jee-main-2026-online-4th-april-morning-shift
-- Independent shift analysis reporting one dropped question: https://lumineet.com/past-papers/jee-main/2026/apr-04-shift-1
 
-The NTA-hosted PDF identifies the paper as “B Tech 4th Apr 2026 Shift 1.” It exposes the official question IDs and answer-option IDs; use it as the authoritative source for paper identity, ordering, and source IDs. Use the NTA final key for official answer verification where the necessary question/option ID mapping is available. The third-party sources are helpful for reading full question text and worked explanations, but must not override the official key without a documented reason.
+The NTA question-paper PDF identifies the paper as “B Tech 4th Apr 2026 Shift 1.” The Session-II final answer key contains the April 4 Shift 1 section and maps NTA question IDs to correct option IDs or numeric answers. It explicitly marks NTA question ID `695278261` as **Dropped**; this corresponds to Physics question number 36 in the original paper numbering. Keep this slot for traceability but flag it as dropped/not scored. Therefore the paper has 75 original slots but 74 countable questions, subject to the official key's scoring treatment.
+
+Use NTA question/option IDs as the authoritative answer-key mapping. Use Zollege and PracBee for readable stems and solutions only as cross-check sources; third-party explanations must not override the official key without a documented reason.
 
 ## Staging inventory recovered
 
@@ -21,24 +22,20 @@ The archived workbench ZIP contains a `shift-manifest.json` with 75 slots: 25 Ph
 
 - 47 marked `content_added`.
 - 28 marked `needs_review`.
-- One question (Chemistry Q64) has no answer recorded and remains blocked.
+- Chemistry Q64 has no answer recorded and remains blocked.
 - 19 image files are mapped to 15 question IDs, including 4 option images.
 - Complete question crops: 0.
 - Source-fidelity-verified visual questions: 0.
 - Student-render-verified visual questions: 0.
 
-Known review issues include Physics Q38, Chemistry Q64, Chemistry Q72, Mathematics Q19, and several answer/solution derivations. Some later audit notes report that Mathematics Q19 and Chemistry Q72 have had their calculations/content improved, but they remain held for rendering and official-key confirmation. Preserve the exact latest per-question manifest state rather than relying only on older audit summaries.
+Known review issues include Physics Q38, Chemistry Q64, Chemistry Q72, Mathematics Q19, and several answer/solution derivations. Later audit notes report improvements to Mathematics Q19 and Chemistry Q72, but they remain held for rendering and official-key confirmation. Preserve the latest per-question manifest state rather than relying only on older audit summaries.
 
-The staging manifest is not yet in the inspected current repository tree. The archived ZIP's asset files are not currently verified against the official NTA paper or the student UI. Do not infer that a question is ready merely because its status is `content_added`.
-
-## Count and dropped-question handling
-
-The NTA paper is structured with 75 slots (25 per subject), while a third-party analysis reports 74 countable questions because one was dropped by NTA. Preserve the original NTA question ID/number and record the official dropped-question or scoring treatment from the final key. Do not silently delete or renumber a slot to force a 74- or 75-question count.
+The staging manifest is not yet in the inspected current repository tree. The archived ZIP's asset files are not verified against the official NTA paper or the student UI. Do not infer that a question is ready merely because its status is `content_added`.
 
 ## Required before import/publication
 
-1. Reconcile every question stem, option, original NTA question ID, answer, and solution against the official NTA PDF and final key; cross-check text against Zollege/PracBee where useful.
-2. Verify the dropped-question/bonus treatment and capture it as explicit metadata.
+1. Reconcile every question stem, option, original NTA question ID, answer, and solution against the official NTA PDF and Session-II final key; cross-check readable text against Zollege/PracBee where useful.
+2. Record Physics Q36 / NTA ID `695278261` as dropped, preserving the original slot and question ID without scoring it.
 3. Resolve the full `needs_review` queue and independently validate answer-key mappings and calculations.
 4. Match every diagram and option image to the official source; verify image fidelity and student-page rendering on mobile and desktop.
 5. Prepare an idempotent import manifest with stable source IDs, subject, original question number, question type, options, source page/question ID, review status, and dropped-question status.
