@@ -1,7 +1,10 @@
 -- RECONSTRUCTION CANDIDATE ONLY — NOT AN ORIGINAL HISTORICAL MIGRATION.
 -- Applied ledger version 20261024081337 is missing from available sources.
--- This candidate is a verbatim copy of the similar-purpose archived file
--- 20261024081110_numeric_answers_and_admin_review.sql from blackjee-foundation.zip.
+-- The core DDL is derived from the similar-purpose archived file
+-- 20261024081110_numeric_answers_and_admin_review.sql in blackjee-foundation.zip.
+-- Replay-only DROP statements also remove the legacy and reconstructed object
+-- names so the candidate can be exercised against the disposable baseline; this
+-- file is not byte-for-byte identical to the archived source.
 -- Source archive SHA-256: f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433
 -- This file is deliberately outside supabase/migrations/ so Supabase CLI will not
 -- treat it as an applied migration. Do not run against production or use to repair
