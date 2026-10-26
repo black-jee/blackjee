@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
 import { DailyChallengeForm } from "@/components/admin/daily-challenge-form";
 import { requireAdmin } from "@/lib/auth/require-admin";
 
@@ -29,22 +30,7 @@ export default async function AdminPage() {
 
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-5 py-6 sm:px-8 lg:py-12">
-      <header className="mb-8 flex items-center justify-between border-b border-[var(--border)] pb-5">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="grid size-9 place-items-center rounded-lg bg-[var(--accent)] text-xs font-black text-[var(--accent-foreground)]">
-            BJ
-          </span>
-          <span className="text-sm font-bold tracking-[0.18em]">BLACK-JEE ADMIN</span>
-        </Link>
-        <nav className="flex gap-4 text-sm text-[var(--muted)]">
-          <Link href="/admin/pyq" className="underline underline-offset-4">
-            PYQ workbench
-          </Link>
-          <a href="/profile" className="underline underline-offset-4">
-            Account
-          </a>
-        </nav>
-      </header>
+      <SiteHeader variant="admin" />
       <p className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
         Restricted workspace
       </p>
