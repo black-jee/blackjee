@@ -35,4 +35,4 @@ Deploy BLACK-JEE on Cloudflare Pages as a static Next.js export (`out/`). Do not
 
 ## Current status
 
-This document records the verified blockers and safe migration order. It does not claim that the application has been migrated, built as a static export, or deployed successfully. The configuration change must remain the final step, not a speculative one-line fix.
+Initial incremental refactor committed on this branch: `/chapterwise` now statically renders its route shell and loads approved/published chapter metadata in the browser using the existing public Supabase client. It has loading and error states and does not query private answer-key tables. This is not yet build-verified, and the rest of the application still has server-only blockers. Do not enable `output: "export"` until those blockers are addressed. No successful static-export build or deployment is claimed.
