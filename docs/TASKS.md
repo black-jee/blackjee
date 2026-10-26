@@ -1,3 +1,31 @@
+# Latest verified checkpoint — 2026-10-26 (CI #782 passed)
+
+- **Verified branch commit:** `7bc322b2a19aa238ab4776a793a346e078751d6c`.
+- **CI:** [run #782 / 40284744797](https://github.com/black-jee/blackjee/actions/runs/40284744797) passed both `quality` and `reconstruction-replay` on this exact commit. Quality passed dependency audit, lint, typecheck, unit tests, all 22 Playwright E2E tests, Prettier, and production build. Disposable PostgreSQL replay passed reconstructed catalog, RLS, routine security/ACL, integrity hardening, and authorization-denial checks.
+- **Important boundary:** this is repository CI and disposable database evidence, not a real Supabase-issued JWT/Auth test or live production browser verification.
+- **Migration source status:** both formerly missing applied bodies were restored at their exact versioned paths from authoritative `supabase_migrations.schema_migrations.statements` records and are present in the current branch. The near-match `20261024081110_numeric_answers_and_admin_review.sql` was not substituted for `20261024081337`. Current inventory is 20 live versions, 26 repository SQL files, 20 exact filename/version matches, and six repository-only SQL files. The six local-only migrations remain under review and must not be applied or deleted solely on this evidence.
+- **Vercel:** the current commit's Vercel status is still `failure`, linking to a build-rate-limit/upgrade page. No paid upgrade was attempted. A live HTTP/browser smoke test remains unverified.
+- **Real Auth and user journeys:** the opt-in signed-token harness exists, but no isolated non-production Supabase Auth project and synthetic fixtures are available. Do not run write tests against production.
+- **Safety:** PR #2 remains open, draft, and unmerged. No production schema/data/grant/migration-ledger changes, paid infrastructure, or fabricated JEE content.
+- **Next actions:** keep pursuing no-cost isolated Auth/browser verification; reconcile the six repository-only migrations; preserve source/image/answer/solution QA gates; refresh this checkpoint only with exact-commit evidence.
+
+## Current 12-phase status (strict evidence-based snapshot)
+
+1. [x] **CI and repository health** — CI #782 passed on the exact branch commit above.
+2. [x] **GitHub branch and draft PR** — PR #2 is open, draft, and unmerged.
+3. [x] **Recover applied migration bodies** — the two previously missing bodies are now present from authoritative migration-statement records; do not treat the similar-version archive file as a substitute.
+4. [~] **Migration inventory and repository-only reconciliation** — 20 exact matches; six repository-only files still need cross-environment ledger review and disposition.
+5. [~] **Real Supabase Auth test setup** — opt-in harness implemented; isolated test credentials and synthetic fixtures unavailable.
+6. [~] **Authorization/RLS** — disposable SQL replay passes; real signed-token and cross-user runtime evidence pending.
+7. [~] **Storage and assets** — security plan and file-integrity inventory exist; Storage policy tests, source-fidelity review, and upload are pending.
+8. [!] **JEE question/source quality** — official-source reconciliation for the 75-slot manifest is incomplete; unverified content must remain unpublished.
+9. [~] **Application workflows** — 22 Playwright E2E tests pass; real authenticated student/admin journeys remain unverified.
+10. [!] **Deployment/live runtime** — Vercel build is rate-limited; live browser/HTTP smoke test is not verified. Do not pay to bypass the limit.
+11. [~] **Performance/reliability** — FK index candidate is covered by disposable CI; production workload evidence and any change remain pending.
+12. [!] **Release readiness** — blocked on live runtime/Auth evidence, source-content QA, final migration disposition, and rollback review.
+
+---
+
 ## Latest checkpoint — 2026-10-26 (CI #729 green; Vercel deployment completed)
 
 - **Verified HEAD:** `6e1ab0a7ab8c8cdff5c3f7493957f639b7c5ad3e`; [CI #729 / 40249786034](https://github.com/black-jee/blackjee/actions/runs/40249786034) passed both `quality` and `reconstruction-replay` on this exact commit.
