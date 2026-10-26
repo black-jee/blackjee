@@ -26,6 +26,17 @@ type ExtractedQuestion = {
 };
 
 type Bundle = { format?: string; questions?: ExtractedQuestion[] };
+type PdfTextItem = { str?: string; transform?: number[] };
+type PdfJsDocument = {
+  numPages: number;
+  getPage: (page: number) => Promise<{
+    getTextContent: () => Promise<{ items: PdfTextItem[] }>;
+  }>;
+};
+type PdfJsApi = {
+  GlobalWorkerOptions: { workerSrc: string };
+  getDocument: (args: { data: ArrayBuffer }) => { promise: Promise<PdfJsDocument> };
+};
 
 const inputClass =
   "block w-full rounded-xl border border-[var(--border)] bg-black/20 px-3 py-2.5 text-sm";
@@ -80,7 +91,7 @@ export function PyqBulkImport() {
     }
     setExtracting(true);
     try {
-      const pdfWindow = window as Window & { pdfjsLib?: any };
+      const pdfWindow = window as Window & { pdfjsLib?: PdfJsApi };
       if (!pdfWindow.pdfjsLib) {
         await new Promise<void>((resolve, reject) => {
           const script = document.createElement("script");
@@ -99,7 +110,7 @@ export function PyqBulkImport() {
         const page = await pdf.getPage(pageNo);
         const content = await page.getTextContent();
         const rows = new Map<number, string[]>();
-        for (const item of content.items as any[]) {
+        for (const item of content.items) {
           if (typeof item.str !== "string" || !item.str.trim()) continue;
           const y = Math.round(item.transform?.[5] ?? 0);
           rows.set(y, [...(rows.get(y) ?? []), item.str.trim()]);
