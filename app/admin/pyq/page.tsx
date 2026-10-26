@@ -46,18 +46,27 @@ export default async function AdminPyqPage() {
       <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
         PYQ authoring & review
       </h1>
-      <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--muted)]">
-        Create source-tracked questions, keep answer keys private, review drafts, and publish only
-        after the source, solution and assets have been checked. Saving a question never publishes
-        it.
-      </p>
+      <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
+        <p className="max-w-3xl text-sm leading-6 text-[var(--muted)]">
+          Create source-tracked questions, keep answer keys private, review drafts, and publish only
+          after the source, solution and assets have been checked. Saving a question never publishes
+          it.
+        </p>
+        <a
+          href="#bulk-pdf-upload"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-bold text-[var(--accent-foreground)] shadow-sm"
+        >
+          <span aria-hidden="true">↑</span>
+          Upload PDF
+        </a>
+      </div>
 
       <section className="mt-8 rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-7">
         <h2 className="mb-5 text-2xl font-semibold tracking-tight">Create question draft</h2>
         <PyqAuthoringForm />
       </section>
 
-      <div className="mt-8">
+      <div id="bulk-pdf-upload" className="mt-8 scroll-mt-6">
         <PyqBulkImport />
       </div>
 
