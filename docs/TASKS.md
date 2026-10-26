@@ -1,13 +1,13 @@
-# Latest verified checkpoint — 2026-10-26 (CI #782 passed)
+# Latest verified checkpoint — 2026-10-26 (CI #785 passed)
 
-- **Verified branch commit:** `7bc322b2a19aa238ab4776a793a346e078751d6c`.
-- **CI:** [run #782 / 40284744797](https://github.com/black-jee/blackjee/actions/runs/40284744797) passed both `quality` and `reconstruction-replay` on this exact commit. Quality passed dependency audit, lint, typecheck, unit tests, all 22 Playwright E2E tests, Prettier, and production build. Disposable PostgreSQL replay passed reconstructed catalog, RLS, routine security/ACL, integrity hardening, and authorization-denial checks.
+- **Verified branch commit:** `5731a1fb3d890e7ab29fa035fc2b30a194262870`.
+- **CI:** [run #785 / 40288371762](https://github.com/black-jee/blackjee/actions/runs/40288371762) passed both `quality` and `reconstruction-replay` on this exact commit. Quality passed dependency installation and production dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build. Disposable PostgreSQL replay passed reconstructed table/catalog shape, constraints/indexes, RLS policies, routine definitions/security attributes, execute ACLs/grants, integrity-hardening regressions, and authorization-denial checks.
 - **Important boundary:** this is repository CI and disposable database evidence, not a real Supabase-issued JWT/Auth test or live production browser verification.
 - **Migration source status:** both formerly missing applied bodies were restored at their exact versioned paths from authoritative `supabase_migrations.schema_migrations.statements` records and are present in the current branch. The near-match `20261024081110_numeric_answers_and_admin_review.sql` was not substituted for `20261024081337`. Current inventory is 20 live versions, 26 repository SQL files, 20 exact filename/version matches, and six repository-only SQL files. The six local-only migrations remain under review and must not be applied or deleted solely on this evidence.
-- **Vercel:** the current commit's Vercel status is still `failure`, linking to a build-rate-limit/upgrade page. No paid upgrade was attempted. A live HTTP/browser smoke test remains unverified.
+- **Vercel:** a build-rate-limit/upgrade-page failure was reported; no paid upgrade was attempted. A live HTTP/browser smoke test remains unverified.
 - **Real Auth and user journeys:** the opt-in signed-token harness exists, but no isolated non-production Supabase Auth project and synthetic fixtures are available. Do not run write tests against production.
 - **Safety:** PR #2 remains open, draft, and unmerged. No production schema/data/grant/migration-ledger changes, paid infrastructure, or fabricated JEE content.
-- **Next actions:** keep pursuing no-cost isolated Auth/browser verification; reconcile the six repository-only migrations; preserve source/image/answer/solution QA gates; refresh this checkpoint only with exact-commit evidence.
+- **Next actions:** pursue no-cost isolated Auth/browser verification; reconcile the six repository-only migrations; preserve source/image/answer/solution QA gates; refresh checkpoints only with exact-commit evidence.
 
 ## Current 12-phase status (strict evidence-based snapshot)
 
