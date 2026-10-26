@@ -14,21 +14,21 @@
 
 ## Test matrix
 
-| ID | Actor / setup | Operation | Required result |
-|---|---|---|---|
-| AUTH-01 | No session | Invoke each exposed RPC | Denied; no private answer or attempt data returned |
-| AUTH-02 | User A owns attempt A; user B owns attempt B | User A requests B's mock-test result | No B data returned; denial/error matches the documented API contract |
-| AUTH-03 | User A owns attempt A; user B owns attempt B | A resumes B's attempt | Denied; B's attempt remains unchanged |
-| AUTH-04 | User A owns attempt A; user B owns attempt B | A submits against B's attempt ID | Denied; no response or score mutation for B |
-| AUTH-05 | User A owns attempt A; user B owns attempt B | A submits question IDs not belonging to A's attempt | Rejected; no partial mutation |
-| AUTH-06 | Ordinary authenticated user | Call each admin save/review RPC | Denied; no draft mutation |
-| AUTH-07 | Dedicated admin | Save and review a synthetic PYQ as draft | Allowed only for valid synthetic data; remains unpublished |
-| REL-01 | Before solution release time | Fetch daily challenge result | No correct answer or solution in response |
-| REL-02 | At and after release boundary | Fetch daily challenge result | Verify exact documented release semantics and absence of early leakage |
-| REL-03 | Authenticated user without a challenge session | Request a released challenge result | Record actual behavior; confirm whether post-release learning is intentionally public to all authenticated users before changing policy |
-| PYQ-01 | Anonymous and ordinary student | Read a draft PYQ through public-facing paths | Draft answer/solution and unpublished content remain inaccessible |
-| PYQ-02 | Admin with incomplete synthetic draft | Attempt publish | Rejected unless all source provenance, source page, statement, options, answer key, and solution requirements are satisfied |
-| CLEAN-01 | All test actors | End run | Remove only synthetic fixtures in the disposable environment; never run cleanup against production |
+| ID       | Actor / setup                                  | Operation                                           | Required result                                                                                                                         |
+| -------- | ---------------------------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| AUTH-01  | No session                                     | Invoke each exposed RPC                             | Denied; no private answer or attempt data returned                                                                                      |
+| AUTH-02  | User A owns attempt A; user B owns attempt B   | User A requests B's mock-test result                | No B data returned; denial/error matches the documented API contract                                                                    |
+| AUTH-03  | User A owns attempt A; user B owns attempt B   | A resumes B's attempt                               | Denied; B's attempt remains unchanged                                                                                                   |
+| AUTH-04  | User A owns attempt A; user B owns attempt B   | A submits against B's attempt ID                    | Denied; no response or score mutation for B                                                                                             |
+| AUTH-05  | User A owns attempt A; user B owns attempt B   | A submits question IDs not belonging to A's attempt | Rejected; no partial mutation                                                                                                           |
+| AUTH-06  | Ordinary authenticated user                    | Call each admin save/review RPC                     | Denied; no draft mutation                                                                                                               |
+| AUTH-07  | Dedicated admin                                | Save and review a synthetic PYQ as draft            | Allowed only for valid synthetic data; remains unpublished                                                                              |
+| REL-01   | Before solution release time                   | Fetch daily challenge result                        | No correct answer or solution in response                                                                                               |
+| REL-02   | At and after release boundary                  | Fetch daily challenge result                        | Verify exact documented release semantics and absence of early leakage                                                                  |
+| REL-03   | Authenticated user without a challenge session | Request a released challenge result                 | Record actual behavior; confirm whether post-release learning is intentionally public to all authenticated users before changing policy |
+| PYQ-01   | Anonymous and ordinary student                 | Read a draft PYQ through public-facing paths        | Draft answer/solution and unpublished content remain inaccessible                                                                       |
+| PYQ-02   | Admin with incomplete synthetic draft          | Attempt publish                                     | Rejected unless all source provenance, source page, statement, options, answer key, and solution requirements are satisfied             |
+| CLEAN-01 | All test actors                                | End run                                             | Remove only synthetic fixtures in the disposable environment; never run cleanup against production                                      |
 
 ## Execution approach
 
