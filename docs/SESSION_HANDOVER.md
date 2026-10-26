@@ -9,14 +9,15 @@
 
 ## Latest verified state
 
-- **Verified HEAD:** `c65f9030215f5f43579733a99405263719d49b51`; CI [#730 / 40249961892](https://github.com/black-jee/blackjee/actions/runs/40249961892) passed both `quality` and `reconstruction-replay` on this exact commit.
-- **Quality evidence:** dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build passed. The disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, indexes, authoring integrity, and authorization-denial checks.
-- **Current Vercel status:** failure — “Deployment rate limited — retry in 24 hours” on HEAD `c65f9030215f5f43579733a99405263719d49b51`. The previous parent commit `6e1ab0a7ab8c8cdff5c3f7493957f639b7c5ad3e` briefly reported “Deployment has completed.” Do not buy an upgrade. External HTTP fetches could not resolve the hostname from this session; this is inconclusive about app health.
-- **PR #2:** open, draft, unmerged. Current PR body cites CI #730. Keep it draft and do not merge.
-- **Migration inventory:** live ledger 20 versions; repository 24 SQL files; 18 exact filename/version matches; two unresolved applied bodies; six repository-only SQL files. Five applied bodies were restored byte-for-byte from `blackjee-foundation.zip`.
-- **Archive recheck:** the four `BLACK-JEE-main*.zip` copies have identical SHA-256 hashes and contain only the legacy-generation migration set; none has either exact unresolved filename. The foundation archive has the near-match `20261024081110_numeric_answers_and_admin_review.sql`, not the applied `20261024081337`, and has no exact `20261024112132_require_pyq_source_page_before_publish.sql`. See `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
-- **Real Auth boundary:** disposable PostgreSQL tests use simulated identity claims, not real Supabase-issued signed JWTs. The isolated real-auth plan remains unexecuted.
-- **Safety:** no production SQL/data/grant/ledger changes, paid resources, or fabricated JEE content. Do not reset/repair production migration history.
+- **Last fully verified code/docs checkpoint:** `a19c59e08b129d622e54c03eb52760d1333bcc0e`; CI [#734 / 40250654516](https://github.com/black-jee/blackjee/actions/runs/40250654516) passed both `quality` and `reconstruction-replay` on that exact SHA.
+- **Latest branch tip:** `9b31893e851180860b9e61537207783201dcb872`, a documentation-only update adding an explicit autonomous 12-phase checklist to `docs/TASKS.md`. A matching CI run was not yet visible when this handover was refreshed; do not call this newer tip green until verified.
+- **Quality evidence on CI #734:** dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build passed. Disposable PostgreSQL replay passed reconstructed schema/catalog, constraints/indexes, RLS, RPC/security attributes, execute ACLs, grants, authoring integrity, and authorization-denial assertions.
+- **PR #2:** [open, draft, unmerged](https://github.com/black-jee/blackjee/pull/2); its description has been refreshed to cite CI #734 and the checklist commit. Keep it draft and do not merge.
+- **Vercel:** current combined status reports failure with the build-rate-limit/upgrade-page URL. Do not pay to bypass it. Live runtime/browser smoke testing remains unverified; external fetch failure is inconclusive about site health.
+- **Auth evidence boundary:** replay tests use disposable PostgreSQL and simulated identity claims. They do not establish validation of genuine Supabase-signed JWTs or real Auth session behavior.
+- **Migration inventory:** live ledger 20 versions; repository 24 SQL files; 18 exact filename/version matches; two unresolved applied bodies; six repository-only SQL files. Unresolved originals: `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Five exact bodies were restored byte-for-byte from `blackjee-foundation.zip`; the `20261024081110` near-match is not a substitute. A repository-wide exact-name search returned no matches.
+- **Current checklist:** phase 1 (CI/repository health) verified complete on the prior exact SHA; phase 2 (GitHub/PR) partially verified; phase 10 (deployment) blocked by Vercel rate limit. Phases 3–9 and 11–12 remain open or unverified; see `docs/TASKS.md`.
+- **Safety:** no production schema/data/grant/ledger changes, paid resources, fabricated migration SQL/JEE content, or PR merge. Do not reset/repair production migration history.
 
 ## Current work and blockers
 
