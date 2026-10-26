@@ -187,14 +187,13 @@ Status legend: [x] verified complete; [~] in progress or partially verified; [ ]
 
 Production Supabase was queried read-only only; no production schema/data/grant/ledger change, paid resource, or PR merge occurred.
 
-
 ## Repository-only migration review — 2026-10-26
 
 - [x] Review all six repository-only migrations against the connected production ledger/catalog.
 - [x] Identify two redundant admin-review RPC rewrites; one is byte-identical to the recovered applied source-page migration.
 - [x] Classify three forward hardening migrations and one index proposal; document test gates and risks in `docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md`.
-- [ ] Run the corrected formatting commit's CI to completion.
-- [ ] Add/verify focused negative tests for the three forward hardening proposals in a disposable database.
+- [ ] Run CI to completion for the current branch head, including formatting and the new malformed-options regression.
+- [x] Verify existing disposable negative tests for NULL handling, option labels, challenge authoring and the FK index; add the malformed non-array options regression.
 - [ ] Inventory other environment migration ledgers before deleting or renumbering redundant migration files.
 
 No production changes were made.
