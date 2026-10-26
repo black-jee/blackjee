@@ -17,7 +17,12 @@ type ExtractedQuestion = {
   statement: string;
   options: { id?: string; label: string; text: string; visualPlaceholder?: string }[];
   visualTypes?: string[];
-  visualSlots?: { question?: { placeholder?: string }; matchTable?: { required?: boolean }; reaction?: { required?: boolean }; circular?: { required?: boolean } };
+  visualSlots?: {
+    question?: { placeholder?: string };
+    matchTable?: { required?: boolean };
+    reaction?: { required?: boolean };
+    circular?: { required?: boolean };
+  };
   correctAnswer: string;
   solution?: string;
   sourcePdf?: string;
@@ -101,13 +106,17 @@ export function PyqBulkImport() {
           const script = document.createElement("script");
           script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
           script.onload = () => resolve();
-          script.onerror = () => reject(new Error("Could not load the PDF reader. Check your connection and try again."));
+          script.onerror = () =>
+            reject(
+              new Error("Could not load the PDF reader. Check your connection and try again."),
+            );
           document.head.appendChild(script);
         });
       }
       const pdfjs = pdfWindow.pdfjsLib;
       if (!pdfjs) throw new Error("PDF reader did not initialize.");
-      pdfjs.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      pdfjs.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
       const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
       const pages: { page: number; text: string }[] = [];
       for (let pageNo = 1; pageNo <= pdf.numPages; pageNo += 1) {
@@ -121,26 +130,47 @@ export function PyqBulkImport() {
         }
         pages.push({
           page: pageNo,
-          text: [...rows.entries()].sort((a, b) => b[0] - a[0]).map(([, values]) => values.join(" ")).join("\n"),
+          text: [...rows.entries()]
+            .sort((a, b) => b[0] - a[0])
+            .map(([, values]) => values.join(" "))
+            .join("\n"),
         });
       }
-      const lines = pages.flatMap((page) => page.text.split("\n").map((text) => ({ page: page.page, text: text.trim() })).filter((row) => row.text));
+      const lines = pages.flatMap((page) =>
+        page.text
+          .split("\n")
+          .map((text) => ({ page: page.page, text: text.trim() }))
+          .filter((row) => row.text),
+      );
       const startPattern = /^(?:question\s*)?(\d{1,3})[.)\]:-]\s+(.+)$/i;
       const optionPattern = /^(?:\(([A-D1-4])\)|([A-D])[.)]|option\s*([A-D1-4])\s*[:.)-])\s*(.*)$/i;
-      const parsed: { questionNumber: number; sourcePage: number; statement: string; options: { label: string; text: string }[] }[] = [];
+      const parsed: {
+        questionNumber: number;
+        sourcePage: number;
+        statement: string;
+        options: { label: string; text: string }[];
+      }[] = [];
       let current: (typeof parsed)[number] | null = null;
       for (const line of lines) {
         const qMatch = line.text.match(startPattern);
         if (qMatch) {
           if (current) parsed.push(current);
-          current = { questionNumber: Number(qMatch[1]), sourcePage: line.page, statement: qMatch[2], options: [] };
+          current = {
+            questionNumber: Number(qMatch[1]),
+            sourcePage: line.page,
+            statement: qMatch[2],
+            options: [],
+          };
           continue;
         }
         if (!current) continue;
         const optionMatch = line.text.match(optionPattern);
         if (optionMatch) {
           const marker = optionMatch[1] || optionMatch[2] || optionMatch[3] || "";
-          const label = ({ "1": "A", "2": "B", "3": "C", "4": "D" } as Record<string, string>)[marker.toUpperCase()] || marker.toUpperCase();
+          const label =
+            ({ "1": "A", "2": "B", "3": "C", "4": "D" } as Record<string, string>)[
+              marker.toUpperCase()
+            ] || marker.toUpperCase();
           current.options.push({ label, text: optionMatch[4] || "" });
         } else if (current.options.length) {
           const last = current.options[current.options.length - 1];
@@ -150,18 +180,40 @@ export function PyqBulkImport() {
         }
       }
       if (current) parsed.push(current);
-      if (!parsed.length) throw new Error("No numbered questions detected. This may be a scanned PDF; OCR is not included in browser extraction.");
-      if (parsed.length > 100) throw new Error("Detected " + parsed.length + " question candidates. Split the PDF into batches of 100 questions or fewer, then retry.");
+      if (!parsed.length)
+        throw new Error(
+          "No numbered questions detected. This may be a scanned PDF; OCR is not included in browser extraction.",
+        );
+      if (parsed.length > 100)
+        throw new Error(
+          "Detected " +
+            parsed.length +
+            " question candidates. Split the PDF into batches of 100 questions or fewer, then retry.",
+        );
       const answers: Record<string, string> = {};
       for (const pair of answerKeyText.split(/[\n,;]+/)) {
         const match = pair.trim().match(/^(\d{1,3})\s*[:= -]\s*([A-D1-4]|\d+(?:\.\d+)?)$/i);
-        if (match) answers[match[1]] = ({ "1": "A", "2": "B", "3": "C", "4": "D" } as Record<string, string>)[match[2]] || match[2].toUpperCase();
+        if (match)
+          answers[match[1]] =
+            ({ "1": "A", "2": "B", "3": "C", "4": "D" } as Record<string, string>)[match[2]] ||
+            match[2].toUpperCase();
       }
       const candidates: ExtractedQuestion[] = parsed.slice(0, 100).map((q) => ({
         questionNumber: q.questionNumber,
         sourcePage: q.sourcePage,
         title: "JEE Main " + year + " " + subject + " Q" + q.questionNumber,
-        sourceId: "jee-main-" + year + "-" + (session.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-") || "unspecified") + "-" + subject.toLowerCase() + "-q" + q.questionNumber,
+        sourceId:
+          "jee-main-" +
+          year +
+          "-" +
+          (session
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-") || "unspecified") +
+          "-" +
+          subject.toLowerCase() +
+          "-q" +
+          q.questionNumber,
         exam: "JEE Main",
         year: Number(year),
         session,
@@ -172,7 +224,10 @@ export function PyqBulkImport() {
         solution: "",
         sourcePdf: file.name,
         tags: ["browser-pdf-extraction", "needs-manual-review"],
-        reviewNotes: ["Browser PDF text extraction is heuristic; compare every question with the original PDF.", "Check scientific notation, equations, options, and visual elements manually."],
+        reviewNotes: [
+          "Browser PDF text extraction is heuristic; compare every question with the original PDF.",
+          "Check scientific notation, equations, options, and visual elements manually.",
+        ],
       }));
       setBundle({ format: "blackjee-pyq-drafts-v1", questions: candidates });
       setFileName(file.name.replace(/\.pdf$/i, ".json"));
@@ -231,7 +286,9 @@ export function PyqBulkImport() {
                 id: String(option.id || label.toLowerCase()),
                 label,
                 text: String(option.text || ""),
-                visualPlaceholder: option.visualPlaceholder || "[OPTION VISUAL SLOT — add/crop image here if required]",
+                visualPlaceholder:
+                  option.visualPlaceholder ||
+                  "[OPTION VISUAL SLOT — add/crop image here if required]",
               };
             })
           : [];
@@ -263,11 +320,20 @@ export function PyqBulkImport() {
           reviewNotes: [
             ...(q.reviewNotes || []),
             "Bulk-imported draft: verify question text, option mapping and answer key.",
-            "Visual types detected (heuristic): " + ((q.visualTypes || []).join(", ") || "none detected") + ".",
-            "Question visual placeholder: " + (q.visualSlots?.question?.placeholder || "[QUESTION VISUAL SLOT — check source PDF]"),
-            ...(q.visualSlots?.matchTable?.required ? ["Match-the-following table placeholder required."] : []),
-            ...(q.visualSlots?.reaction?.required ? ["Chemical reaction / structure placeholder required."] : []),
-            ...(q.visualSlots?.circular?.required ? ["Circular / loop diagram placeholder required."] : []),
+            "Visual types detected (heuristic): " +
+              ((q.visualTypes || []).join(", ") || "none detected") +
+              ".",
+            "Question visual placeholder: " +
+              (q.visualSlots?.question?.placeholder || "[QUESTION VISUAL SLOT — check source PDF]"),
+            ...(q.visualSlots?.matchTable?.required
+              ? ["Match-the-following table placeholder required."]
+              : []),
+            ...(q.visualSlots?.reaction?.required
+              ? ["Chemical reaction / structure placeholder required."]
+              : []),
+            ...(q.visualSlots?.circular?.required
+              ? ["Circular / loop diagram placeholder required."]
+              : []),
             "Diagram, graph, reaction, table, and option visuals must be checked manually.",
             "Detailed solution intentionally pending.",
           ],
@@ -292,47 +358,113 @@ export function PyqBulkImport() {
       </p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">Import extracted PDF questions</h2>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--muted)]">
-        Upload a text-based PDF to extract numbered question candidates in your browser. Extraction is heuristic; review every item against the original. Scanned PDFs need OCR, and diagrams or detailed solutions must be checked separately.
+        Upload a text-based PDF to extract numbered question candidates in your browser. Extraction
+        is heuristic; review every item against the original. Scanned PDFs need OCR, and diagrams or
+        detailed solutions must be checked separately.
       </p>
       <div className="mt-5 grid gap-3 rounded-2xl border border-[var(--border)] p-4 sm:grid-cols-2">
-        <label className="space-y-2 text-sm font-medium">PDF file (max 40 MB)
-          <input type="file" accept=".pdf,application/pdf" className={inputClass} disabled={extracting} onChange={(event) => void readPdf(event.currentTarget.files?.[0])} />
+        <label className="space-y-2 text-sm font-medium">
+          PDF file (max 40 MB)
+          <input
+            type="file"
+            accept=".pdf,application/pdf"
+            className={inputClass}
+            disabled={extracting}
+            onChange={(event) => void readPdf(event.currentTarget.files?.[0])}
+          />
         </label>
-        <label className="space-y-2 text-sm font-medium">Year
-          <input type="number" min="2000" max="2100" value={year} onChange={(event) => setYear(event.currentTarget.value)} className={inputClass} />
+        <label className="space-y-2 text-sm font-medium">
+          Year
+          <input
+            type="number"
+            min="2000"
+            max="2100"
+            value={year}
+            onChange={(event) => setYear(event.currentTarget.value)}
+            className={inputClass}
+          />
         </label>
-        <label className="space-y-2 text-sm font-medium">Subject
-          <select value={subject} onChange={(event) => setSubject(event.currentTarget.value as ExtractedQuestion["subject"])} className={inputClass}>
-            <option>Physics</option><option>Chemistry</option><option>Mathematics</option>
+        <label className="space-y-2 text-sm font-medium">
+          Subject
+          <select
+            value={subject}
+            onChange={(event) =>
+              setSubject(event.currentTarget.value as ExtractedQuestion["subject"])
+            }
+            className={inputClass}
+          >
+            <option>Physics</option>
+            <option>Chemistry</option>
+            <option>Mathematics</option>
           </select>
         </label>
-        <label className="space-y-2 text-sm font-medium">Session / shift
-          <input value={session} onChange={(event) => setSession(event.currentTarget.value)} placeholder="e.g. 4 April Shift 1" className={inputClass} />
+        <label className="space-y-2 text-sm font-medium">
+          Session / shift
+          <input
+            value={session}
+            onChange={(event) => setSession(event.currentTarget.value)}
+            placeholder="e.g. 4 April Shift 1"
+            className={inputClass}
+          />
         </label>
-        <label className="space-y-2 text-sm font-medium sm:col-span-2">Optional answer key (e.g. 1:A, 2:C, 3:12)
-          <textarea value={answerKeyText} onChange={(event) => setAnswerKeyText(event.currentTarget.value)} placeholder="Paste answer key to match question numbers" rows={3} className={inputClass} />
+        <label className="space-y-2 text-sm font-medium sm:col-span-2">
+          Optional answer key (e.g. 1:A, 2:C, 3:12)
+          <textarea
+            value={answerKeyText}
+            onChange={(event) => setAnswerKeyText(event.currentTarget.value)}
+            placeholder="Paste answer key to match question numbers"
+            rows={3}
+            className={inputClass}
+          />
         </label>
-        {extracting ? <p role="status" className="text-sm text-[var(--muted)] sm:col-span-2">Reading PDF pages and extracting text…</p> : null}
-        {pdfError ? <p role="alert" className="text-sm text-red-300 sm:col-span-2">{pdfError}</p> : null}
+        {extracting ? (
+          <p role="status" className="text-sm text-[var(--muted)] sm:col-span-2">
+            Reading PDF pages and extracting text…
+          </p>
+        ) : null}
+        {pdfError ? (
+          <p role="alert" className="text-sm text-red-300 sm:col-span-2">
+            {pdfError}
+          </p>
+        ) : null}
         {pdfName ? (
           <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--muted)] sm:col-span-2">
             <span>Selected PDF: {pdfName}</span>
-            <button type="button" disabled={extracting || !pdfFile} onClick={() => void readPdf(pdfFile ?? undefined)} className="rounded-lg border border-[var(--border)] px-3 py-2 font-semibold">Re-extract with current metadata / answer key</button>
+            <button
+              type="button"
+              disabled={extracting || !pdfFile}
+              onClick={() => void readPdf(pdfFile ?? undefined)}
+              className="rounded-lg border border-[var(--border)] px-3 py-2 font-semibold"
+            >
+              Re-extract with current metadata / answer key
+            </button>
           </div>
         ) : null}
       </div>
       <ol className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
         <li className="rounded-xl border border-[var(--border)] p-3">
-          <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">01 · Extract</span>
-          <span className="mt-1 block">Upload a text-based PDF above; extraction runs in your browser.</span>
+          <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">
+            01 · Extract
+          </span>
+          <span className="mt-1 block">
+            Upload a text-based PDF above; extraction runs in your browser.
+          </span>
         </li>
         <li className="rounded-xl border border-[var(--border)] p-3">
-          <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">02 · Check</span>
-          <span className="mt-1 block">Review the extracted candidates and compare them with the source PDF.</span>
+          <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">
+            02 · Check
+          </span>
+          <span className="mt-1 block">
+            Review the extracted candidates and compare them with the source PDF.
+          </span>
         </li>
         <li className="rounded-xl border border-[var(--border)] p-3">
-          <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">03 · Import</span>
-          <span className="mt-1 block">Save up to 100 questions per batch as unpublished drafts.</span>
+          <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">
+            03 · Import
+          </span>
+          <span className="mt-1 block">
+            Save up to 100 questions per batch as unpublished drafts.
+          </span>
         </li>
       </ol>
       <label className="mt-5 block space-y-2 text-sm font-medium">
@@ -349,27 +481,45 @@ export function PyqBulkImport() {
         <div className="mt-4 rounded-2xl border border-[var(--border)] p-4 text-sm">
           <p className="font-semibold">{questions.length} question candidates found</p>
           <p className="mt-1 text-[var(--muted)]">
-            {ready.length} ready to save · {questions.length - ready.length} missing required fields or have an answer key that does not match detected option labels (will be skipped)
+            {ready.length} ready to save · {questions.length - ready.length} missing required fields
+            or have an answer key that does not match detected option labels (will be skipped)
           </p>
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
-            Each saved record will remain a draft. Check the extracted statement, options, source page,
-            and answer key in the review list before publishing. Candidates without a matched answer key can be downloaded, but current authoring validation will not save them.
+            Each saved record will remain a draft. Check the extracted statement, options, source
+            page, and answer key in the review list before publishing. Candidates without a matched
+            answer key can be downloaded, but current authoring validation will not save them.
           </p>
         </div>
       ) : null}
-      {bundle ? <button type="button" onClick={downloadBundle} className="mt-3 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold">Download extracted JSON</button> : null}
+      {bundle ? (
+        <button
+          type="button"
+          onClick={downloadBundle}
+          className="mt-3 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold"
+        >
+          Download extracted JSON
+        </button>
+      ) : null}
       {bundle ? (
         <div className="mt-4 space-y-3" aria-label="Extracted question review list">
           <h3 className="text-lg font-semibold">Review extracted questions</h3>
           <p className="text-xs leading-5 text-[var(--muted)]">
-            This is a quick inspection list, not an editor. Download the JSON if you need to correct text or option labels before importing.
+            This is a quick inspection list, not an editor. Download the JSON if you need to correct
+            text or option labels before importing.
           </p>
           {questions.map((question, index) => (
-            <article key={question.sourceId || index} className="rounded-xl border border-[var(--border)] p-3">
+            <article
+              key={question.sourceId || index}
+              className="rounded-xl border border-[var(--border)] p-3"
+            >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="text-sm font-semibold">Q{question.questionNumber} · page {question.sourcePage ?? "?"}</p>
+                <p className="text-sm font-semibold">
+                  Q{question.questionNumber} · page {question.sourcePage ?? "?"}
+                </p>
                 <span className="text-xs text-[var(--muted)]">
-                  {question.correctAnswer ? `Answer: ${question.correctAnswer}` : "Answer key missing"}
+                  {question.correctAnswer
+                    ? `Answer: ${question.correctAnswer}`
+                    : "Answer key missing"}
                 </span>
               </div>
               <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{question.statement}</p>
@@ -377,20 +527,33 @@ export function PyqBulkImport() {
                 <ul className="mt-2 grid gap-1 text-xs text-[var(--muted)] sm:grid-cols-2">
                   {question.options.map((option, optionIndex) => (
                     <li key={option.id || option.label || optionIndex}>
-                      <span className="font-semibold">{option.label || String(optionIndex + 1)}.</span> {option.text || "[empty option — check source PDF]"}
+                      <span className="font-semibold">
+                        {option.label || String(optionIndex + 1)}.
+                      </span>{" "}
+                      {option.text || "[empty option — check source PDF]"}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="mt-2 text-xs text-[var(--muted)]">No options detected; check whether this is a numerical or missed multiple-choice question.</p>
+                <p className="mt-2 text-xs text-[var(--muted)]">
+                  No options detected; check whether this is a numerical or missed multiple-choice
+                  question.
+                </p>
               )}
             </article>
           ))}
         </div>
       ) : null}
-      {error ? <p role="alert" className="mt-3 text-sm text-red-300">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="mt-3 text-sm text-red-300">
+          {error}
+        </p>
+      ) : null}
       {report ? (
-        <p role="status" className="mt-3 rounded-xl border border-[var(--border)] p-4 text-sm leading-6">
+        <p
+          role="status"
+          className="mt-3 rounded-xl border border-[var(--border)] p-4 text-sm leading-6"
+        >
           {report}
         </p>
       ) : null}
