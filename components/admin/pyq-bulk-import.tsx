@@ -231,7 +231,10 @@ export function PyqBulkImport() {
               };
             })
           : [];
-        const isMultipleChoice = options.length >= 2;
+        const answerMatchesOption = options.some(
+          (option) => option.label.toUpperCase() === q.correctAnswer.trim().toUpperCase(),
+        );
+        const isMultipleChoice = options.length >= 2 && answerMatchesOption;
         return {
           questionId: null,
           sourceId: q.sourceId,
@@ -352,6 +355,36 @@ export function PyqBulkImport() {
         </div>
       ) : null}
       {bundle ? <button type="button" onClick={downloadBundle} className="mt-3 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold">Download extracted JSON</button> : null}
+      {bundle ? (
+        <div className="mt-4 space-y-3" aria-label="Extracted question review list">
+          <h3 className="text-lg font-semibold">Review extracted questions</h3>
+          <p className="text-xs leading-5 text-[var(--muted)]">
+            This is a quick inspection list, not an editor. Download the JSON if you need to correct text or option labels before importing.
+          </p>
+          {questions.map((question, index) => (
+            <article key={question.sourceId || index} className="rounded-xl border border-[var(--border)] p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-semibold">Q{question.questionNumber} · page {question.sourcePage ?? "?"}</p>
+                <span className="text-xs text-[var(--muted)]">
+                  {question.correctAnswer ? `Answer: ${question.correctAnswer}` : "Answer key missing"}
+                </span>
+              </div>
+              <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{question.statement}</p>
+              {question.options.length ? (
+                <ul className="mt-2 grid gap-1 text-xs text-[var(--muted)] sm:grid-cols-2">
+                  {question.options.map((option, optionIndex) => (
+                    <li key={option.id || option.label || optionIndex}>
+                      <span className="font-semibold">{option.label || String(optionIndex + 1)}.</span> {option.text || "[empty option — check source PDF]"}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-2 text-xs text-[var(--muted)]">No options detected; check whether this is a numerical or missed multiple-choice question.</p>
+              )}
+            </article>
+          ))}
+        </div>
+      ) : null}
       {error ? <p role="alert" className="mt-3 text-sm text-red-300">{error}</p> : null}
       {report ? (
         <p role="status" className="mt-3 rounded-xl border border-[var(--border)] p-4 text-sm leading-6">
