@@ -64,7 +64,7 @@ function shiftInfo(question: QuestionRow) {
     }).format(date);
     return {
       key: "jee-main-" + raw + "-shift-" + match[2],
-      title: (question.exam || "JEE Main") + " · " + dateLabel + " · Shift " + match[2],
+      title: "JEE Main · " + dateLabel + " · Shift " + match[2],
       date: dateLabel,
       shift: Number(match[2]),
     };
@@ -72,8 +72,8 @@ function shiftInfo(question: QuestionRow) {
   const session = question.session?.trim() || "Shift not specified";
   const year = question.year ? String(question.year) : "";
   return {
-    key: (question.exam || "JEE Main") + "-" + year + "-" + session,
-    title: [question.exam || "JEE Main", year, session].filter(Boolean).join(" · "),
+    key: "JEE Main-" + year + "-" + session,
+    title: ["JEE Main", year, session].filter(Boolean).join(" · "),
     date: session,
     shift: 999,
   };
