@@ -19,6 +19,10 @@ export default async function PyqPage({ searchParams }: { searchParams: SearchPa
     .trim()
     .slice(0, 80);
   const hasFilters = Boolean(subject || search);
+  const retryParams = new URLSearchParams();
+  if (search) retryParams.set("q", search);
+  if (subject) retryParams.set("subject", subject);
+  const retryHref = retryParams.size ? `/pyq?${retryParams.toString()}` : "/pyq";
   const supabase = await createSupabaseServerClient();
 
   let query = supabase
@@ -159,7 +163,7 @@ export default async function PyqPage({ searchParams }: { searchParams: SearchPa
             Your filters are still here. Please try your search again in a moment.
           </p>
           <Link
-            href={hasFilters ? `/pyq${subject ? `?subject=${encodeURIComponent(subject)}` : ""}` : "/pyq"}
+            href={retryHref}
             className="mt-4 inline-flex min-h-10 items-center rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-semibold transition-colors hover:border-[var(--accent)]"
           >
             Try again
