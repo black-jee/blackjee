@@ -121,7 +121,8 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
     expect(result.error).not.toBeNull();
     expect(result.data).toBeNull();
 
-    const after = await studentB!.from("mock_test_attempts")
+    const after = await studentB!
+      .from("mock_test_attempts")
       .select("id,status,submitted_at,score,attempted_count")
       .eq("id", env.bInProgressAttemptId!)
       .single();
@@ -130,7 +131,8 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("prevents student A from submitting to student B's attempt", async () => {
-    const before = await studentB!.from("mock_test_attempts")
+    const before = await studentB!
+      .from("mock_test_attempts")
       .select("id,status,submitted_at,score,attempted_count")
       .eq("id", env.bInProgressAttemptId!)
       .single();
@@ -144,7 +146,8 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
     expect(result.error).not.toBeNull();
     expect(result.data).toBeNull();
 
-    const after = await studentB!.from("mock_test_attempts")
+    const after = await studentB!
+      .from("mock_test_attempts")
       .select("id,status,submitted_at,score,attempted_count")
       .eq("id", env.bInProgressAttemptId!)
       .single();
@@ -210,7 +213,8 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
       expect(result.data).toBeTruthy();
       challengeId = result.data;
 
-      const saved = await admin!.from("daily_challenges")
+      const saved = await admin!
+        .from("daily_challenges")
         .select("id,title,is_live")
         .eq("id", challengeId)
         .single();
