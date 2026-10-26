@@ -108,3 +108,12 @@ The non-deployable candidate under docs/reconstructions/ is a test artifact, not
 The production Storage catalog was also checked read-only: zero application buckets, zero objects, zero Storage policies. An aggregate question-asset check found five PYQ rows and no statement-image, option-image, or asset_paths references. See docs/STORAGE_ASSET_SECURITY_PLAN.md. No Storage setup or asset upload was performed.
 
 The optional real Supabase Auth suite is now in tests/real-supabase-auth.integration.test.ts. It requires three pre-provisioned synthetic users and isolated fixture IDs; it is skipped unless all test-only environment variables are present. The connected project inventory currently exposes only production, so signed-token execution remains blocked and must not be redirected to production.
+
+
+## Historical migration body recovery — 2026-10-26
+
+The two previously missing applied migration SQL statement texts have been restored from `supabase_migrations.schema_migrations.statements[1]` using a read-only query. The ledger contained one stored statement for each version (864 bytes and 3341 bytes respectively). See `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md` for the source and limits.
+
+The old candidate-based replay is superseded. Do not treat the labelled candidate as historical evidence; the active migration files now use the SQL text recorded for the applied versions.
+
+**Current counts:** 20 applied versions; 26 repository SQL files; 20 exact version/name matches; 6 repository-only files; 0 applied versions missing a matching SQL file. The six repository-only files still require explicit review before a canonical chain is chosen.

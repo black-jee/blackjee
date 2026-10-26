@@ -135,7 +135,3 @@ jobs:
           psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_save_challenge_authorization.sql
       - name: Test RPC authorization denials
         run: bash supabase/reconstruction/tests/run_rpc_negative_tests.sh
-      - name: Replay labelled numeric-answer/admin-review candidate in disposable PostgreSQL
-        run: psql -v ON_ERROR_STOP=1 -f docs/reconstructions/20261024081337_numeric_answers_and_admin_review.candidate.sql
-      - name: Assert numeric-answer/admin-review candidate contract
-        run: psql -v ON_ERROR_STOP=1 -f supabase/reconstruction/tests/010_numeric_answers_admin_review_candidate_contract.sql

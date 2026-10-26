@@ -149,3 +149,17 @@ The Library was browsed by filename and the following five ZIP archives were mat
 This closes the direct inspection of all ZIP archives currently visible in the Library. It does not cover local-device folders, private repositories, cloud backups not uploaded to this Library, or external deployment artifacts. No original body was recovered. Do not substitute the near-match or infer historical SQL.
 
 **Next step:** inspect authoritative migration artifacts outside the current Library only if they become available; otherwise prepare a separately labelled reconstruction proposal with provenance and explicit review gates. Keep production untouched.
+
+
+## Authoritative SQL recovered from applied migration history — 2026-10-26
+
+**Both previously missing applied migration bodies have now been recovered from the live migration ledger's stored SQL text.** This supersedes the earlier archive-only conclusion above.
+
+A read-only query confirmed that `supabase_migrations.schema_migrations` has a `statements text[]` column. For each unresolved version, the ledger returned exactly one stored statement. The following files were restored from `statements[1]` without reconstruction:
+
+- `supabase/migrations/20261024081337_numeric_answers_and_admin_review.sql` — ledger name `numeric_answers_and_admin_review`; stored statement length 864 bytes.
+- `supabase/migrations/20261024112132_require_pyq_source_page_before_publish.sql` — ledger name `require_pyq_source_page_before_publish`; stored statement length 3341 bytes.
+
+These are the SQL statement texts recorded for the applied migrations, not inferred SQL from the live catalog and not the similarly named archived 20261024081110 file. The prior labelled numeric-answer candidate is superseded and removed from active CI; its candidate-only replay/assertion is no longer used as evidence.
+
+**Updated inventory:** 20 live applied versions, 26 SQL migration files, 20 exact version/name matches, zero applied versions missing a matching SQL file, and six repository-only migrations. This restores the source text needed for repository replay, but does not authorize changing or repairing the production migration ledger. No production schema, data, grants, or migration history was modified.

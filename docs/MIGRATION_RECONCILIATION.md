@@ -198,3 +198,12 @@ The inventory and disposition remain unchanged: preserve the two unresolved entr
 - A gated real Supabase Auth test harness is present in `tests/real-supabase-auth.integration.test.ts`; it requires pre-seeded synthetic users and fixture IDs in a dedicated disposable environment. The connected project inventory currently exposes only the production project, so real signed-token execution remains blocked. A skipped suite is not a passing security test.
 
 **Safe disposition:** keep production read-only and PR #2 draft/unmerged. Continue with no-cost isolated CI verification; do not create a billable Supabase project/branch, invent original SQL, or treat candidate CI as proof of live parity.
+
+
+## Authoritative historical SQL recovery — 2026-10-26
+
+The two previously unresolved applied bodies are no longer missing from the repository. A read-only query of `supabase_migrations.schema_migrations` recovered the single stored SQL statement for each version; those strings were copied into their exact versioned paths under `supabase/migrations/`. See the recovery log for names and stored byte lengths.
+
+The reconstructed numeric-answer candidate and its candidate-only contract check are no longer part of active CI. CI should verify the restored migration chain through the repository's normal isolated reconstruction process, not use the candidate as a substitute for historical SQL.
+
+The production ledger remains untouched. Six repository-only migration files still need a separate reconciliation decision; matching all 20 applied versions does not imply that those six files should be applied.

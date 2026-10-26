@@ -176,3 +176,14 @@ Status legend: [x] verified complete; [~] in progress or partially verified; [ ]
 - The real Auth suite remains unexecuted: no isolated disposable Supabase Auth project and synthetic fixture IDs are available. CI #748 still records the first candidate-replay failure; later candidate corrections and test changes have no matching workflow result returned by the current workflow lookup.
 - **Current repository tip:** see PR #2 for the exact current head SHA. Do not treat any commit after CI #748 as verified until a matching CI run passes.
 - No production DDL/data/grant/ledger changes, Storage configuration, asset upload, paid infrastructure, or merge occurred. PR #2 remains draft/unmerged.
+
+
+## Migration source recovery update — 2026-10-26
+
+- [x] Recover the two missing applied SQL bodies from the authoritative `supabase_migrations.schema_migrations.statements` values.
+- [x] Restore them at the exact versioned paths in `supabase/migrations/`; stored SQL statement lengths were 864 and 3341 bytes.
+- [x] Remove the candidate-only SQL replay/assertion from active CI so it is no longer treated as historical evidence.
+- [ ] Run CI against this commit and confirm the restored migration chain and formatting.
+- [ ] Review the six repository-only migrations separately before choosing any canonical migration chain.
+
+Production Supabase was queried read-only only; no production schema/data/grant/ledger change, paid resource, or PR merge occurred.
