@@ -66,8 +66,8 @@ export default async function ProfilePage() {
           <p className="text-xs uppercase tracking-widest text-[var(--muted)]">Signed-in email</p>
           <p className="mt-2 break-all font-medium">{user.email ?? "Email not available"}</p>
           <p className="mt-2 max-w-2xl text-xs leading-5 text-[var(--muted)]">
-            Your private attempt history is loaded under your authenticated user identity and database
-            row-level security.
+            Your private attempt history is loaded under your authenticated user identity and
+            database row-level security.
           </p>
         </div>
         <SignOutButton />
