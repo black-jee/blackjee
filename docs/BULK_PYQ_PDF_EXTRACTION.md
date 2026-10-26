@@ -59,7 +59,6 @@ Each extracted candidate includes:
 - This script only writes a local JSON file. It does not connect to Supabase, bypass admin permissions, alter database records, or publish content.
 - The admin importer maps records into the existing single-question validation and save workflow. It skips records with missing question text, source IDs, or answer keys; review the extraction report and saved drafts before publishing.
 
-
 ## PCM notation and question formats
 
 The JSON draft preserves extracted question and option text without trying to normalize or typeset it. It adds review hints for mathematical symbols, powers/superscripts, subscripts/indices, fractions, calculus, vectors/matrices, chemical formulae/ionic notation, reaction arrows/equilibrium, and common physical units. It also labels likely match-the-following, assertion-reason, and numerical/expression formats.
