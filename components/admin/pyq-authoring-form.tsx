@@ -37,14 +37,14 @@ export function PyqAuthoringForm() {
   const [questionType, setQuestionType] = useState("single_correct");
 
   function updateOptionLine(index: number, field: "label" | "text" | "imagePath", value: string) {
-    const rows = optionsText.split("\\n");
+    const rows = optionsText.split("\n");
     while (rows.length <= index) rows.push("||");
     const parts = (rows[index] ?? "").split("|");
     while (parts.length < 3) parts.push("");
     const fieldIndex = field === "label" ? 0 : field === "text" ? 1 : 2;
     parts[fieldIndex] = value;
     rows[index] = parts.slice(0, 3).join("|");
-    setOptionsText(rows.join("\\n"));
+    setOptionsText(rows.join("\n"));
   }
 
   function submit(formData: FormData) {
@@ -261,8 +261,8 @@ export function PyqAuthoringForm() {
             </div>
           ))}
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => { const current = parseOptions(optionsText); if (current.length < 8) setOptionsText(optionsText + (optionsText.endsWith("\\n") ? "" : "\\n") + String.fromCharCode(65 + current.length) + "||"); }} disabled={parseOptions(optionsText).length >= 8} className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold disabled:opacity-40">+ Add option</button>
-            <button type="button" onClick={() => { const rows = optionsText.split("\\n"); if (rows.length > 2) setOptionsText(rows.slice(0, -1).join("\\n")); }} disabled={parseOptions(optionsText).length <= 2} className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold disabled:opacity-40">Remove last option</button>
+            <button type="button" onClick={() => { const current = parseOptions(optionsText); if (current.length < 8) setOptionsText(optionsText + (optionsText.endsWith("\n") ? "" : "\n") + String.fromCharCode(65 + current.length) + "||"); }} disabled={parseOptions(optionsText).length >= 8} className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold disabled:opacity-40">+ Add option</button>
+            <button type="button" onClick={() => { const rows = optionsText.split("\n"); if (rows.length > 2) setOptionsText(rows.slice(0, -1).join("\n")); }} disabled={parseOptions(optionsText).length <= 2} className="rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold disabled:opacity-40">Remove last option</button>
           </div>
         </div>
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
