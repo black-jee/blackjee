@@ -1,3 +1,5 @@
+import { expect, test } from "@playwright/test";
+
 test("home page presents the redesigned JEE practice entry points", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: /Put in the work\. Know your edge\./i })).toBeVisible();
