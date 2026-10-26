@@ -26,6 +26,8 @@ alter table private.daily_challenge_answer_keys
 
 drop policy if exists "Published and approved PYQs are readable"
   on public.jee_pyq_questions;
+drop policy if exists "Published PYQs and admin review queue are readable"
+  on public.jee_pyq_questions;
 
 create policy "Published PYQs and admin review queue are readable"
   on public.jee_pyq_questions
