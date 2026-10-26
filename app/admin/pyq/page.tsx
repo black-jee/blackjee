@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { MathPreview, PyqAuthoringForm } from "@/components/admin/pyq-authoring-form";
 import { PyqReviewActions } from "@/components/admin/pyq-review-actions";
 import { requireAdmin } from "@/lib/auth/require-admin";
@@ -16,6 +17,7 @@ type QuestionRow = {
   session: string | null;
   chapter: string | null;
   statement: string;
+  statement_image_path: string | null;
   options: unknown;
   source_pdf: string | null;
   source_page: number | null;
@@ -101,7 +103,7 @@ export default async function AdminPyqPage() {
   const { data, error } = await supabase
     .from("jee_pyq_questions")
     .select(
-      "id,source_id,title,subject,year,session,chapter,statement,options,source_pdf,source_page,source_status,review_status,is_published,updated_at",
+      "id,source_id,title,subject,year,session,chapter,statement,statement_image_path,options,source_pdf,source_page,source_status,review_status,is_published,updated_at",
     )
     .order("updated_at", { ascending: false })
     .limit(500);
@@ -266,6 +268,11 @@ export default async function AdminPyqPage() {
                                           {placeholder ? <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-2 py-1 text-[10px] font-semibold text-amber-200">Content pending</span> : null}
                                         </div>
                                         <MathPreview text={question.statement || "Question statement not entered."} />
+                                        {question.statement_image_path ? (
+                                          <figure className="mt-4 overflow-hidden rounded-xl border border-[var(--border)] bg-white p-2 sm:p-3">
+                                            <Image src={"/" + question.statement_image_path} alt={"Diagram for " + question.title} width={900} height={360} className="h-auto w-full object-contain" />
+                                          </figure>
+                                        ) : null}
                                       </div>
                                       {options.length > 0 ? (
                                         <div className="mt-3 grid min-w-0 gap-2 sm:grid-cols-2">
@@ -305,7 +312,10 @@ export default async function AdminPyqPage() {
                               <span className="rounded-full border border-[var(--border)] px-2 py-1 text-[10px]">{question.subject}</span>
                             </div>
                             <p className="mt-1 break-all text-[11px] text-[var(--muted)]">{question.source_id}</p>
-                            <div className="mt-3"><MathPreview text={question.statement || "Question statement not entered."} /></div>
+                            <div className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-3"><MathPreview text={question.statement || "Question statement not entered."} />
+                              {question.statement_image_path ? <figure className="mt-3 overflow-hidden rounded-xl border border-[var(--border)] bg-white p-2"><Image src={"/" + question.statement_image_path} alt={"Diagram for " + question.title} width={900} height={360} className="h-auto w-full object-contain" /></figure> : null}
+                            </div>
+                            {safeOptions(question.options).length ? <div className="mt-3 grid gap-2 sm:grid-cols-2">{safeOptions(question.options).map((option, optionIndex) => <div key={(option.label ?? String(optionIndex)) + "-" + optionIndex} className="flex items-start gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-3"><span className="grid size-7 shrink-0 place-items-center rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] text-xs font-bold">{option.label ?? String.fromCharCode(65 + optionIndex)}</span><div className="min-w-0 flex-1">{option.text ? <MathPreview text={option.text} /> : <span className="text-sm text-[var(--muted)]">Option text not entered</span>}</div></div>)}</div> : null}
                             <div className="mt-3"><PyqReviewActions id={question.id} isPublished={question.is_published} reviewStatus={question.review_status} /></div>
                           </article>
                         ))}
