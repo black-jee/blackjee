@@ -155,9 +155,14 @@ export default async function AdminPyqPage() {
           <p className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 text-sm text-[var(--muted)]">No question records yet. Add a draft above or import verified source content.</p>
         ) : null}
 
+        <nav aria-label="Jump to subject" className="mb-5 flex flex-wrap gap-2">
+          <a href="#subject-physics" className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-semibold hover:border-[var(--accent)]">Physics · 1–25</a>
+          <a href="#subject-chemistry" className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-semibold hover:border-[var(--accent)]">Chemistry · 26–50</a>
+          <a href="#subject-mathematics" className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-sm font-semibold hover:border-[var(--accent)]">Mathematics · 51–75</a>
+        </nav>
         <div className="space-y-7">
           {grouped.map(({ subject, rows }) => (
-            <section key={subject} className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] sm:rounded-3xl">
+            <section id={"subject-" + subject.toLowerCase()} key={subject} className="scroll-mt-4 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] sm:rounded-3xl">
               <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] bg-[var(--surface-raised)] px-4 py-4 sm:px-5">
                 <div>
                   <h3 className="text-lg font-semibold sm:text-xl">{subject}</h3>
