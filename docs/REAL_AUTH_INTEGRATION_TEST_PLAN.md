@@ -6,9 +6,9 @@
 ## Entry conditions
 
 - Use a dedicated Supabase test project or disposable local Supabase stack with no production data.
-- Never use the production project ref \`phdssyexhfyxsmhmmcgb\` for test writes.
+- Never use the production project ref `phdssyexhfyxsmhmmcgb` for test writes.
 - Configure test-only URL and publishable key as ordinary test secrets. Do not place a service-role/secret key in browser variables, logs, fixtures, or screenshots.
-- Create two ordinary test users (A and B) and one admin test user using the documented server-managed \`app_metadata.role = admin\` claim. Do not grant admin by editing user-controlled \`user_metadata\`.
+- Create two ordinary test users (A and B) and one admin test user using the documented server-managed `app_metadata.role = admin` claim. Do not grant admin by editing user-controlled `user_metadata`.
 - Seed only synthetic mock-test, daily-challenge, and PYQ draft records. Use deterministic IDs and cleanup in the disposable environment.
 - If test credentials or an isolated Supabase environment are unavailable, leave these tests blocked; do not substitute simulated SQL claims and call them real-auth tests.
 
@@ -33,11 +33,11 @@
 ## Execution approach
 
 1. Use the official Supabase client with a real password/OTP sign-in flow to obtain signed access tokens for A, B, and admin.
-2. Call the RPCs through the normal authenticated client using each user's own token. Do not manually set \`request.jwt.claims\` or forge JWTs.
+2. Call the RPCs through the normal authenticated client using each user's own token. Do not manually set `request.jwt.claims` or forge JWTs.
 3. Capture only test IDs, operation, status/error code, and pass/fail. Never log access/refresh tokens or secret keys.
 4. Assert both the response and persisted state after every denied mutation.
 5. Run the matrix in CI only when a dedicated isolated test project and its credentials are configured as protected test secrets. Keep the normal no-secret CI path deterministic.
-6. Save the run URL and commit SHA in \`docs/VERIFICATION_LOG.md\`; distinguish real-token integration results from disposable PostgreSQL tests that simulate JWT claims.
+6. Save the run URL and commit SHA in `docs/VERIFICATION_LOG.md`; distinguish real-token integration results from disposable PostgreSQL tests that simulate JWT claims.
 
 ## Acceptance criteria
 
@@ -49,4 +49,4 @@
 
 ## Known product-policy question
 
-The read-only review of \`get_daily_challenge_result\` indicates that any authenticated caller who knows a challenge ID may receive its answer/solution after \`solution_release_at\`, without proving prior participation. This could be intentional post-release learning behavior. Do not change it until the product rule is confirmed; keep REL-03 as an explicit decision.
+The read-only review of `get_daily_challenge_result` indicates that any authenticated caller who knows a challenge ID may receive its answer/solution after `solution_release_at`, without proving prior participation. This could be intentional post-release learning behavior. Do not change it until the product rule is confirmed; keep REL-03 as an explicit decision.
