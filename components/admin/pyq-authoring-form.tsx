@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { savePyqQuestion } from "@/app/admin/pyq/actions";
+import katex from "katex";
 
 function parseOptions(raw: string) {
   return raw
@@ -23,7 +24,31 @@ function parseOptions(raw: string) {
 
 const inputClass =
   "w-full rounded-xl border border-[var(--border)] bg-black/20 px-3 py-2.5 text-sm";
-const labelClass = "block space-y-1.5 text-sm font-medium";
+const labelClass = "block min-w-0 space-y-1.5 text-sm font-medium";
+
+function MathPreview({ text }: { text: string }) {
+  const tokens = text.split(/(\\$\\$[\\s\\S]+?\\$\\$|\\\\\\[[\\s\\S]+?\\\\\\]|\\$[^$\\n]+\\$|\\\\\\([\\s\\S]+?\\\\\\))/g);
+  if (!text.trim()) return <span className="text-sm text-[var(--muted)]">Preview will appear here as you type.</span>;
+  return (
+    <div className="whitespace-pre-wrap break-words text-sm leading-7">
+      {tokens.map((token, index) => {
+        const display = token.startsWith("$") || token.startsWith("\\\\[");
+        const math = (token.startsWith("$") && token.endsWith("$"))
+          ? token.slice(2, -2)
+          : (token.startsWith("\\\\[") && token.endsWith("\\\\]"))
+            ? token.slice(2, -2)
+            : (token.startsWith("$") && token.endsWith("$"))
+              ? token.slice(1, -1)
+              : (token.startsWith("\\\\(") && token.endsWith("\\\\)"))
+                ? token.slice(2, -2)
+                : null;
+        if (math === null) return <span key={index}>{token}</span>;
+        const html = katex.renderToString(math, { displayMode: display, throwOnError: false, strict: "ignore" });
+        return <span key={index} className={display ? "my-2 block overflow-x-auto" : "inline-block max-w-full align-middle"} dangerouslySetInnerHTML={{ __html: html }} />;
+      })}
+    </div>
+  );
+}
 
 export function PyqAuthoringForm() {
   const router = useRouter();
@@ -269,7 +294,7 @@ export function PyqAuthoringForm() {
           {parseOptions(optionsText).map((option) => (
             <div key={option.label} className="flex min-h-14 gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-3">
               <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-[var(--border)] font-bold">{option.label}</span>
-              <span className="self-center whitespace-pre-wrap break-words text-sm leading-5">{option.text || (option.imagePath ? "[Image: " + option.imagePath + "]" : <span className="text-[var(--muted)]">Option text is empty</span>)}</span>
+              <span className="min-w-0 flex-1 self-center">{option.text ? <MathPreview text={option.text} /> : option.imagePath ? <span className="break-words text-sm text-[var(--muted)]">Image: {option.imagePath}</span> : <span className="text-sm text-[var(--muted)]">Option text is empty</span>}</span>
             </div>
           ))}
         </div>
@@ -332,7 +357,7 @@ export function PyqAuthoringForm() {
             className={inputClass + " leading-6"}
           />
         </label>
-        {solution.trim() ? <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-4"><p className="mb-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Solution preview</p><p className="whitespace-pre-wrap text-sm leading-6">{solution}</p></div> : null}
+        {solution.trim() ? <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-raised)] p-4"><p className="mb-2 text-xs font-bold uppercase tracking-wider text-[var(--muted)]">Solution preview</p><MathPreview text={solution} /></div> : null}
       </section>
       <label className={labelClass}>
         Additional asset paths (one per line)
@@ -352,7 +377,7 @@ export function PyqAuthoringForm() {
           placeholder="Source checked; formula and answer independently verified."
         />
       </label>
-      {notice ? (
+      </section>\n      {notice ? (
         <p role="status" className="rounded-xl border border-[var(--accent)]/30 p-3 text-sm">
           {notice}
         </p>
@@ -368,7 +393,7 @@ export function PyqAuthoringForm() {
       <button
         type="submit"
         disabled={pending}
-        className="rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] disabled:opacity-50"
+        className="sticky bottom-3 z-10 w-full rounded-xl bg-[var(--accent)] px-5 py-3.5 text-sm font-bold text-[var(--accent-foreground)] shadow-lg disabled:opacity-50 sm:static sm:w-auto"
       >
         {pending ? "Saving draft…" : "Save question as draft"}
       </button>
