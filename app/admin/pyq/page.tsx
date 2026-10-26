@@ -20,18 +20,17 @@ type QuestionRow = {
   source_pdf: string | null;
   source_page: number | null;
   source_status: string;
-  publication_block_reason: string | null;
   review_status: string;
   is_published: boolean;
   updated_at: string;
 };
 
 export default async function AdminPyqPage() {
-  const { supabase } = await requireAdmin();
+  const { supabase } = await requireAdmin("/admin/pyq");
   const { data, error } = await supabase
     .from("jee_pyq_questions")
     .select(
-      "id,source_id,title,subject,year,session,chapter,statement,options,source_pdf,source_page,source_status,publication_block_reason,review_status,is_published,updated_at",
+      "id,source_id,title,subject,year,session,chapter,statement,options,source_pdf,source_page,source_status,review_status,is_published,updated_at",
     )
     .order("updated_at", { ascending: false })
     .limit(100);
@@ -142,9 +141,6 @@ export default async function AdminPyqPage() {
                     {question.source_pdf
                       ? `${question.source_pdf}${question.source_page ? ` · page ${question.source_page}` : ""}`
                       : "Source reference not recorded"}
-                    {question.publication_block_reason
-                      ? ` · ${question.publication_block_reason}`
-                      : ""}
                   </p>
                   <PyqReviewActions
                     id={question.id}
