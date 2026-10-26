@@ -20,7 +20,7 @@ python scripts/extract-pyq-pdf.py paper.pdf \
   --out pyq-drafts.json
 ```
 
-If the answer key is in a separate file, provide a CSV with headers `question,answer`:
+The extractor attempts to read a clearly labelled answer-key section from the same PDF. If that layout is not recognized or the answer key is in a separate file, provide a CSV with headers `question,answer`:
 
 ```csv
 question,answer
@@ -43,8 +43,8 @@ Each extracted candidate includes:
 
 ## Important limits
 
-- The current parser reads the PDF's embedded text layer. Scanned/image-only PDFs require OCR before this script can extract text.
+- The parser reads the PDF's embedded text layer. Scanned/image-only PDFs require OCR before this script can extract text.
 - PDF layouts vary. The extractor is heuristic; check question boundaries, option labels, mathematical notation, and answer mapping before importing.
-- This first version accepts the answer key as a sidecar CSV/JSON. Embedded answer-key parsing and a direct authenticated admin bulk-import screen are follow-up work.
+- Embedded answer-key parsing is best-effort and depends on a clearly labelled, text-readable answer-key section. The admin PYQ page now accepts the generated JSON bundle and saves validated records through the existing admin-only save action.
 - This script only writes a local JSON file. It does not connect to Supabase, bypass admin permissions, alter database records, or publish content.
-- The output is a draft interchange format, not yet the exact payload accepted by the current single-question admin action. A future importer should validate and map every record through the existing admin save workflow.
+- The admin importer maps records into the existing single-question validation and save workflow. It skips records with missing question text, source IDs, or answer keys; review the extraction report and saved drafts before publishing.
