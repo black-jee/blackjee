@@ -177,7 +177,6 @@ Status legend: [x] verified complete; [~] in progress or partially verified; [ ]
 - **Current repository tip:** see PR #2 for the exact current head SHA. Do not treat any commit after CI #748 as verified until a matching CI run passes.
 - No production DDL/data/grant/ledger changes, Storage configuration, asset upload, paid infrastructure, or merge occurred. PR #2 remains draft/unmerged.
 
-
 ## Migration source recovery update — 2026-10-26
 
 - [x] Recover the two missing applied SQL bodies from the authoritative `supabase_migrations.schema_migrations.statements` values.

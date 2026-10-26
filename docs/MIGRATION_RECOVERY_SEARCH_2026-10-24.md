@@ -150,7 +150,6 @@ This closes the direct inspection of all ZIP archives currently visible in the L
 
 **Next step:** inspect authoritative migration artifacts outside the current Library only if they become available; otherwise prepare a separately labelled reconstruction proposal with provenance and explicit review gates. Keep production untouched.
 
-
 ## Authoritative SQL recovered from applied migration history — 2026-10-26
 
 **Both previously missing applied migration bodies have now been recovered from the live migration ledger's stored SQL text.** This supersedes the earlier archive-only conclusion above.

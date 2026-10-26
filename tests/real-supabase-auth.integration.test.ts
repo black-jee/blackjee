@@ -26,9 +26,7 @@ const enabled = Object.values(env).every((value) => Boolean(value?.trim()));
 
 function makeClient(): SupabaseClient {
   if (env.url?.includes("phdssyexhfyxsmhmmcgb")) {
-    throw new Error(
-      "Refusing to run integration tests against the production Supabase project.",
-    );
+    throw new Error("Refusing to run integration tests against the production Supabase project.");
   }
 
   if (!env.url || !env.key) {
@@ -72,10 +70,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
     ]);
 
     for (const result of signIns) {
-      expect(
-        result.error,
-        "Synthetic test user must sign in through Supabase Auth",
-      ).toBeNull();
+      expect(result.error, "Synthetic test user must sign in through Supabase Auth").toBeNull();
       expect(result.data.session?.access_token).toBeTruthy();
     }
 
@@ -85,11 +80,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   afterAll(async () => {
-    await Promise.all([
-      studentA?.auth.signOut(),
-      studentB?.auth.signOut(),
-      admin?.auth.signOut(),
-    ]);
+    await Promise.all([studentA?.auth.signOut(), studentB?.auth.signOut(), admin?.auth.signOut()]);
   });
 
   it("denies anonymous calls to protected mock-test RPCs", async () => {
@@ -226,10 +217,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
       });
     } finally {
       if (challengeId) {
-        const cleanup = await admin!
-          .from("daily_challenges")
-          .delete()
-          .eq("id", challengeId);
+        const cleanup = await admin!.from("daily_challenges").delete().eq("id", challengeId);
         expect(cleanup.error).toBeNull();
       }
     }

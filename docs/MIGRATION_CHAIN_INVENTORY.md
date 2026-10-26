@@ -109,7 +109,6 @@ The production Storage catalog was also checked read-only: zero application buck
 
 The optional real Supabase Auth suite is now in tests/real-supabase-auth.integration.test.ts. It requires three pre-provisioned synthetic users and isolated fixture IDs; it is skipped unless all test-only environment variables are present. The connected project inventory currently exposes only production, so signed-token execution remains blocked and must not be redirected to production.
 
-
 ## Historical migration body recovery — 2026-10-26
 
 The two previously missing applied migration SQL statement texts have been restored from `supabase_migrations.schema_migrations.statements[1]` using a read-only query. The ledger contained one stored statement for each version (864 bytes and 3341 bytes respectively). See `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md` for the source and limits.

@@ -199,7 +199,6 @@ The inventory and disposition remain unchanged: preserve the two unresolved entr
 
 **Safe disposition:** keep production read-only and PR #2 draft/unmerged. Continue with no-cost isolated CI verification; do not create a billable Supabase project/branch, invent original SQL, or treat candidate CI as proof of live parity.
 
-
 ## Authoritative historical SQL recovery — 2026-10-26
 
 The two previously unresolved applied bodies are no longer missing from the repository. A read-only query of `supabase_migrations.schema_migrations` recovered the single stored SQL statement for each version; those strings were copied into their exact versioned paths under `supabase/migrations/`. See the recovery log for names and stored byte lengths.
