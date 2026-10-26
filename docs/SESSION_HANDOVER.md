@@ -187,7 +187,6 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - **Safety:** no production schema/data/grant/ledger changes, paid infrastructure, fabricated SQL/JEE content, or PR merge.
 - **Next:** keep searching only authoritative artifacts; otherwise prepare a clearly labelled reconstruction proposal for review. Continue design for real signed-token tests in an isolated no-cost disposable environment, recheck Vercel after the rate limit window, and reconcile repository-only migrations/Storage/content QA. Do not call the app production-verified until an external runtime smoke test succeeds.
 
-
 ## Autonomous continuation handover — 2026-10-26 (CI #737 formatting follow-up)
 
 - **Current source tip before this handover note:** `61e965d84951ff822b58153c1862998c68b3763a`; CI [#737 / 40252072141](https://github.com/black-jee/blackjee/actions/runs/40252072141) ran on that commit. `reconstruction-replay` succeeded. `quality` failed only at Prettier for `docs/TASKS.md`: one extra blank line before the 12-phase checklist and a missing blank line after `### Execution rules`. Dependency audit, lint, typecheck, unit tests, all 22 Playwright tests, and production build passed.
