@@ -35,12 +35,6 @@ OPTION_START = re.compile(
     r"^\s*(?:\(([A-D1-4])\)|([A-D])[.)]|Option\s*([A-D1-4])\s*[:.)-])\s*(.*)$",
     re.IGNORECASE,
 )
-ANSWER_LINE = re.compile(
-    r"^\s*(?:answer\s*key|correct\s*answer|answer)\s*[:=-]\s*(.+)$",
-    re.IGNORECASE,
-)
-
-
 def load_answer_key(path: Path | None) -> dict[str, str]:
     if path is None:
         return {}
