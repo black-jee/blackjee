@@ -151,3 +151,12 @@ The current documentation-only commit at the time of this note is `ea8a7cae6e8fe
 - Run #712 / 40246842441 was cancelled; it is not a code failure and does not verify either job.
 - No application or SQL changes were made in this formatting follow-up. Migration blockers and security-test limitations remain as recorded above. PR #2 must remain draft/unmerged; production Supabase stays read-only; no paid infrastructure or invented migration/question content.
 - Next action: obtain and inspect a workflow run on `5d6219a734b918e78552f9cb4052316d358043a2`. If formatting passes, resume evidence-backed recovery and isolated real-auth test design.
+
+
+## Autonomous continuation checkpoint — 2026-10-26 (CI #717 verified)
+
+- **Latest verified CI run:** [#717 / 40247075370](https://github.com/black-jee/blackjee/actions/runs/40247075370) passed both `quality` and `reconstruction-replay` on commit `8aa3aef7f3937e57edece085c9d1d31f8153d665`. Quality passed continuity validation, static security checks, dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build. Reconstruction replay passed its catalog, grants, RPC security, authoring-integrity, and authorization-denial assertions. This run does not cover later commits.
+- **New test-plan artifact:** `docs/REAL_AUTH_INTEGRATION_TEST_PLAN.md`, added in commit `b08065a964dc51e8511020211697377327e06627`. It defines real signed-token tests for anonymous denial, cross-user attempt isolation, admin-only authoring, release boundaries, safe synthetic drafts, and explicit acceptance criteria. It is a plan, not executed integration evidence.
+- **Current CI caveat:** run #717 verifies `8aa3aef...` only. The test-plan commit and any subsequent handover update require their own matching workflow result before the branch HEAD can be called green.
+- **Still blocked:** exact originals for `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish` remain unrecovered. Inventory remains 20 live versions, 24 repo SQL files, 18 exact matches, two unresolved applied bodies, six repository-only files. Do not relabel near-matches.
+- **Next:** check CI for the latest HEAD; then continue with a separately labelled reconstruction proposal only if exact source recovery remains unavailable, and identify a no-cost isolated Supabase Auth test environment. No production writes, paid resources, fabricated SQL/question content, or PR merge.
