@@ -72,6 +72,10 @@ export function PyqBulkImport() {
       setPdfError("PDF must be 40 MB or smaller.");
       return;
     }
+    if (!Number.isInteger(Number(year)) || Number(year) < 2000 || Number(year) > 2100) {
+      setPdfError("Enter a valid exam year between 2000 and 2100.");
+      return;
+    }
     setExtracting(true);
     try {
       const pdfWindow = window as Window & { pdfjsLib?: any };
@@ -130,6 +134,7 @@ export function PyqBulkImport() {
       }
       if (current) parsed.push(current);
       if (!parsed.length) throw new Error("No numbered questions detected. This may be a scanned PDF; OCR is not included in browser extraction.");
+      if (parsed.length > 100) throw new Error("Detected " + parsed.length + " question candidates. Split the PDF into batches of 100 questions or fewer, then retry.");
       const answers: Record<string, string> = {};
       for (const pair of answerKeyText.split(/[\n,;]+/)) {
         const match = pair.trim().match(/^(\d{1,3})\s*[:= -]\s*([A-D1-4]|\d+(?:\.\d+)?)$/i);
@@ -324,7 +329,7 @@ export function PyqBulkImport() {
           </p>
           <p className="mt-2 text-xs leading-5 text-[var(--muted)]">
             Each saved record will remain a draft. Check the extracted statement, options, source page,
-            and answer key in the review list before publishing.
+            and answer key in the review list before publishing. Candidates without a matched answer key can be downloaded, but current authoring validation will not save them.
           </p>
         </div>
       ) : null}
