@@ -286,7 +286,7 @@ export function PyqAuthoringForm() {
       </label>
       <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
         <div className="mb-4">
-          <h3 className="text-base font-semibold">Answer options</h3>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 3 · Choices</p>\n          <h3 className="mt-1 text-lg font-semibold">Answer options</h3>
           <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Fill each option in its own labelled card below. Use the same maths delimiters as the question; each option has its own formatted preview.</p>
         </div>
         <div className="space-y-3">
@@ -360,7 +360,7 @@ export function PyqAuthoringForm() {
       </div>
       <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
         <div className="mb-4">
-          <h3 className="text-base font-semibold">Worked solution</h3>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 5 · Explanation</p>\n          <h3 className="mt-1 text-lg font-semibold">Worked solution</h3>
           <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Write the formula, substitution, calculation and final result clearly. This is saved with the draft for review.</p>
         </div>
         <label className={labelClass}>
