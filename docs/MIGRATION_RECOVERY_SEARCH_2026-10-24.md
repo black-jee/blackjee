@@ -1,3 +1,12 @@
+## Archive recheck — 2026-10-26 (all currently listed Library ZIPs)
+
+A fresh byte-level inspection of the five currently listed Library archives was performed after materializing the original ZIP bytes into the working environment. This was read-only; no archive or repository migration was modified.
+
+- `blackjee-foundation.zip` SHA-256: `f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433`. Its migration directory contains six SQL files; the only filename matching the unresolved numeric-answer topic is `20261024081110_numeric_answers_and_admin_review.sql`, not the applied ledger version `20261024081337`. No `20261024112132_require_pyq_source_page_before_publish.sql` exists in that archive.
+- The four `BLACK-JEE-main` ZIP variants all have identical SHA-256 `8e5abd749a3a6dac6f785cf320d1d23f9ba6c2c02d3df311a89cc1bfd939c44e` and each contains 17 legacy-generation migration files. None contains either unresolved exact filename.
+- These duplicate archives add no new historical evidence. The public repo path-history checks and archive checks remain negative; private/unuploaded backups and owner-device files are outside the checked scope.
+- Do not relabel the `20261024081110` near-match, infer exact historical SQL from catalog state, or alter the production ledger. If no other source appears, the safe next option is a separately labeled, catalog-derived baseline reconstruction reviewed in isolation.
+
 ## Recovery status update — 2026-10-26 (five archived bodies restored)
 
 The Library archive `blackjee-foundation.zip` (SHA-256 `f0bfe458bdf81f7f84f34ef00e4e1d33c734f231eb31777c9397f659c9ce0433`) supplied five SQL migration files whose Git blob IDs match the archived bytes exactly. They were restored unchanged into `supabase/migrations/`:

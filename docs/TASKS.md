@@ -1,14 +1,15 @@
-## Latest checkpoint — 2026-10-26 (CI #728 passed; Vercel deployment rate-limited)
+## Latest checkpoint — 2026-10-26 (CI #729 green; Vercel deployment completed)
 
-- **Verified CI HEAD:** `0b31d5669886b8348509f330eaa7bd402352fcb6`; [CI #728 / 40249483825](https://github.com/black-jee/blackjee/actions/runs/40249483825) completed successfully with both `quality` and `reconstruction-replay` passed on this exact commit.
+- **Verified HEAD:** `6e1ab0a7ab8c8cdff5c3f7493957f639b7c5ad3e`; [CI #729 / 40249786034](https://github.com/black-jee/blackjee/actions/runs/40249786034) passed both `quality` and `reconstruction-replay` on this exact commit.
 - **Quality evidence:** dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build passed. Disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, indexes, authoring integrity, and authorization-denial checks.
+- **Deployment status:** GitHub's Vercel commit status now reports `success`, “Deployment has completed,” for this HEAD. This is deployment-provider evidence only; an external HTTP smoke test could not be completed from this session because the available web/container fetches could not resolve `blackjee.vercel.app`. Do not infer the app is down or claim runtime health is verified from that tool limitation.
 - **Evidence boundary:** simulated PostgreSQL identity claims are not real Supabase-issued JWT/Auth tests. The real-auth plan remains PLANNED and requires an isolated disposable environment with synthetic users.
-- **Deployment:** Vercel commit status reports “Deployment rate limited — retry in 24 hours.” Do not buy an upgrade. Live runtime/browser smoke test remains unverified.
 - **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies unresolved, six repository-only SQL files. Missing exact bodies: `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Five exact bodies were restored from `blackjee-foundation.zip`; the `20261024081110` file is not a substitute for `20261024081337`.
+- **Archive recheck:** the four `BLACK-JEE-main*.zip` Library copies have identical SHA-256 hashes and contain only the legacy-generation migration set; none contains either exact missing filename. The foundation archive contains only the near-match `20261024081110` and no exact `20261024112132` body. Details are in `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
 - **PR #2:** open, draft, unmerged. No production schema/data/grant/migration-ledger changes, paid infrastructure, or fabricated JEE content.
-- **Remaining release gates:** signed-token Auth/student/admin tests, no-cost live runtime smoke test, six repository-only migration reconciliation, source/image/answer/solution QA, Storage security validation, and production-readiness/rollback review.
+- **Remaining release gates:** signed-token Auth/student/admin tests, successful external live runtime smoke test, six repository-only migration reconciliation, source/image/answer/solution QA, Storage security validation, and production-readiness/rollback review.
 - **Dependency note:** one low-severity KaTeX prototype-pollution advisory remains; suggested remediation is breaking. No unreviewed dependency upgrade was made.
-- **This document-only checkpoint refresh creates a new commit; CI on that new HEAD must be checked separately before it is called green.**
+- **This checkpoint refresh is documentation-only; verify CI on the new commit before calling it green.**
 
 # BLACK-JEE task ledger
 
