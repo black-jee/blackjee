@@ -3,7 +3,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { gradePyqQuestion } from "@/app/pyq/actions";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { QuestionContent } from "@/components/questions/question-content";
 import { renderQuestionText } from "@/lib/questions/render";
 import { isSafeAssetPath, type QuestionContent as QuestionData } from "@/lib/questions/schema";
@@ -27,14 +27,26 @@ export function PyqPracticeCard({ id, number, title, exam, year, question }: Pro
   function submit() {
     setError(null);
     startTransition(async () => {
-      const response = await gradePyqQuestion(id, answer);
-      if (!response.ok) {
-        if (response.code === "AUTH_REQUIRED")
+      try {
+        const supabase = createSupabaseBrowserClient();
+        const { data: auth, error: authError } = await supabase.auth.getUser();
+        if (authError || !auth.user) {
           router.push(`/login?next=${encodeURIComponent("/pyq")}`);
-        else setError(response.error);
-        return;
+          return;
+        }
+
+        const { data, error: gradeError } = await supabase.rpc("grade_jee_pyq", {
+          p_question_id: id,
+          p_answer: answer.trim(),
+        });
+        if (gradeError || !data || typeof data !== "object" || Array.isArray(data)) {
+          setError("The answer could not be graded. Please retry.");
+          return;
+        }
+        setResult(data as Record<string, unknown>);
+      } catch {
+        setError("The answer could not be graded. Please retry.");
       }
-      setResult(response.data);
     });
   }
 
