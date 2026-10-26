@@ -158,7 +158,6 @@ Status legend: [x] verified complete; [~] in progress or partially verified; [ ]
 - Workflow [#737 / 40252072141](https://github.com/black-jee/blackjee/actions/runs/40252072141) ran on the current documentation tip. `reconstruction-replay` passed; `quality` failed only at Prettier because `docs/TASKS.md` has one extra blank line before the checklist heading and lacks a blank line after `### Execution rules`. Dependency audit, lint, typecheck, unit tests, 22 Playwright tests, and production build passed. These are documentation formatting defects, not application/test failures, but the current tip is not green.
 - Phase 1 is now marked partially verified until the formatting-only correction has a matching successful CI run. Vercel remains separately rate-limited; no deployment retry or paid upgrade.
 
-
 ### Task 5–8 follow-up — 2026-10-26
 
 - **Migration inventory:** updated `docs/MIGRATION_RECONCILIATION.md` with the current inventory and explicit candidate provenance/verification boundary. The two missing historical SQL bodies and six repository-only migration files remain unresolved.

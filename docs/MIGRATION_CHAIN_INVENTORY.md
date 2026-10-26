@@ -98,6 +98,7 @@ The applied version `20261024112132` and the two publication-gate files with dif
 A follow-up query checked GitHub commit history for each of the seven expected missing migration paths (the six baseline files and the live `20261024112132_require_pyq_source_page_before_publish.sql` path). All seven exact-path history queries returned no commits. Commit-message searches for `foundation_schema`, `tighten_rpc_grants_and_policy`, and `20261024112132` also returned no matches in this repository. The other accessible branch, `chore/sql-security-test-plan`, was also checked for the seven exact missing paths; none was present. This makes recovery from the currently accessible GitHub repository less likely; it does **not** rule out an external backup, local clone, artifact, or another repository. CI run `40114187027` (#357) has passed the reconstruction replay job; its quality job was still in progress at the time of this update.
 
 No SQL was inferred or fabricated from these names. The clean-replay gate remains blocked until authoritative bodies are recovered or separately labelled reconstructed equivalents are assembled and reviewed.
+
 ## Read-only reconciliation recheck — 2026-10-26
 
 The Supabase migration listing was queried again during task follow-up. It returned the same 20 applied versions, including 20261024081337 and 20261024112132. The source-file inventory remains 24 SQL files, 18 exact matches, two unresolved applied bodies, and six repository-only files. No migration history was repaired or changed.

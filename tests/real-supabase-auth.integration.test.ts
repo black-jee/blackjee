@@ -26,7 +26,9 @@ const enabled = Object.values(env).every((value) => Boolean(value?.trim()));
 
 function makeClient(): SupabaseClient {
   if (env.url?.includes("phdssyexhfyxsmhmmcgb")) {
-    throw new Error("Refusing to run integration tests against the production Supabase project.");
+    throw new Error(
+      "Refusing to run integration tests against the production Supabase project.",
+    );
   }
 
   if (!env.url || !env.key) {
@@ -70,7 +72,10 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
     ]);
 
     for (const result of signIns) {
-      expect(result.error, "Synthetic test user must sign in through Supabase Auth").toBeNull();
+      expect(
+        result.error,
+        "Synthetic test user must sign in through Supabase Auth",
+      ).toBeNull();
       expect(result.data.session?.access_token).toBeTruthy();
     }
 
