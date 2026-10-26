@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { ChallengeAttempt } from "@/components/challenge/challenge-attempt";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
