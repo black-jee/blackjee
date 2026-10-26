@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260" role="img" aria-labelledby="title desc">
+<title id="title">Rod along the principal axis of a concave mirror</title>
+<desc id="desc">A 10 centimetre rod lies on the principal axis, from 30 centimetres to 20 centimetres in front of a concave mirror of focal length 10 centimetres. The centre of curvature C is 20 centimetres from the pole P and focus F is 10 centimetres from P.</desc>
+<rect width="900" height="260" fill="#ffffff"/>
+<g stroke="#202938" stroke-width="2" fill="none">
+  <line x1="70" y1="130" x2="825" y2="130"/>
+  <path d="M790 45 Q735 130 790 215" stroke="#2563eb" stroke-width="5"/>
+  <path d="M798 48 l12 8 M790 61 l12 8 M784 75 l12 8 M780 91 l12 8 M778 108 l12 8 M778 142 l12 -8 M780 159 l12 -8 M784 175 l12 -8 M790 191 l12 -8 M798 204 l12 -8" stroke="#2563eb" stroke-width="1.5"/>
+  <line x1="330" y1="104" x2="330" y2="156" stroke="#111827" stroke-width="4"/>
+  <line x1="500" y1="104" x2="500" y2="156" stroke="#111827" stroke-width="4"/>
+  <line x1="330" y1="91" x2="500" y2="91" stroke="#111827" stroke-width="4"/>
+  <line x1="330" y1="82" x2="330" y2="100" stroke="#111827" stroke-width="2"/>
+  <line x1="500" y1="82" x2="500" y2="100" stroke="#111827" stroke-width="2"/>
+  <line x1="620" y1="115" x2="620" y2="145" stroke="#6b7280" stroke-dasharray="4 4"/>
+  <line x1="705" y1="115" x2="705" y2="145" stroke="#6b7280" stroke-dasharray="4 4"/>
+  <line x1="790" y1="115" x2="790" y2="145" stroke="#6b7280" stroke-dasharray="4 4"/>
+</g>
+<g font-family="Arial, Helvetica, sans-serif" fill="#111827" text-anchor="middle">
+  <text x="415" y="68" font-size="20" font-weight="700">Rod = 10 cm</text>
+  <text x="330" y="181" font-size="19" font-weight="700">B</text>
+  <text x="500" y="181" font-size="19" font-weight="700">A</text>
+  <text x="330" y="211" font-size="17">30 cm</text>
+  <text x="500" y="211" font-size="17">20 cm (C)</text>
+  <text x="620" y="166" font-size="17">F</text>
+  <text x="620" y="190" font-size="15">10 cm</text>
+  <text x="790" y="166" font-size="17">P</text>
+  <text x="790" y="237" font-size="17">Concave mirror</text>
+  <text x="450" y="25" font-size="15" fill="#4b5563">Schematic diagram (not to scale)</text>
+</g>
+</svg>
