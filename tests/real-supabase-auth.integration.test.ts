@@ -25,6 +25,10 @@ const env = {
 const enabled = Object.values(env).every((value) => Boolean(value?.trim()));
 
 function makeClient(): SupabaseClient {
+  if (env.url?.includes("phdssyexhfyxsmhmmcgb")) {
+    throw new Error("Refusing to run integration tests against the production Supabase project.");
+  }
+
   if (!env.url || !env.key) {
     throw new Error("Real Supabase Auth integration environment is incomplete.");
   }
