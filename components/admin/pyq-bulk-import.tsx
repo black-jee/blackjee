@@ -35,6 +35,7 @@ export function PyqBulkImport() {
   const [bundle, setBundle] = useState<Bundle | null>(null);
   const [fileName, setFileName] = useState("");
   const [pdfName, setPdfName] = useState("");
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [extracting, setExtracting] = useState(false);
   const [pdfError, setPdfError] = useState<string | null>(null);
   const [year, setYear] = useState(String(new Date().getFullYear()));
@@ -64,6 +65,7 @@ export function PyqBulkImport() {
     setError(null);
     setReport(null);
     if (!file) return;
+    setPdfFile(file);
     if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
       setPdfError("Choose a PDF file.");
       return;
@@ -294,16 +296,21 @@ export function PyqBulkImport() {
         </label>
         {extracting ? <p role="status" className="text-sm text-[var(--muted)] sm:col-span-2">Reading PDF pages and extracting text…</p> : null}
         {pdfError ? <p role="alert" className="text-sm text-red-300 sm:col-span-2">{pdfError}</p> : null}
-        {pdfName ? <p className="text-xs text-[var(--muted)] sm:col-span-2">Selected PDF: {pdfName}. To apply a changed answer key, reselect the PDF.</p> : null}
+        {pdfName ? (
+          <div className="flex flex-wrap items-center gap-3 text-xs text-[var(--muted)] sm:col-span-2">
+            <span>Selected PDF: {pdfName}</span>
+            <button type="button" disabled={extracting || !pdfFile} onClick={() => void readPdf(pdfFile ?? undefined)} className="rounded-lg border border-[var(--border)] px-3 py-2 font-semibold">Re-extract with current metadata / answer key</button>
+          </div>
+        ) : null}
       </div>
       <ol className="mt-4 grid gap-3 text-sm sm:grid-cols-3">
         <li className="rounded-xl border border-[var(--border)] p-3">
           <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">01 · Extract</span>
-          <span className="mt-1 block">Run the local Python extractor on your PDF.</span>
+          <span className="mt-1 block">Upload a text-based PDF above; extraction runs in your browser.</span>
         </li>
         <li className="rounded-xl border border-[var(--border)] p-3">
           <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">02 · Check</span>
-          <span className="mt-1 block">Review question count, subject, shift and answer-key matches.</span>
+          <span className="mt-1 block">Review the extracted candidates and compare them with the source PDF.</span>
         </li>
         <li className="rounded-xl border border-[var(--border)] p-3">
           <span className="block text-xs font-bold uppercase tracking-wide text-[var(--accent)]">03 · Import</span>
