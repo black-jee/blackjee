@@ -61,13 +61,16 @@ export default async function ProfilePage() {
         Student account
       </p>
       <h1 className="mt-2 text-4xl font-semibold tracking-tight">Your profile</h1>
-      <section className="mt-7 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-        <p className="text-xs uppercase tracking-widest text-[var(--muted)]">Signed-in email</p>
-        <p className="mt-2 break-all font-medium">{user.email ?? "Email not available"}</p>
-        <p className="mt-2 text-xs text-[var(--muted)]">
-          Your private attempt history is loaded under your authenticated user identity and database
-          row-level security.
-        </p>
+      <section className="mt-7 flex flex-col gap-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-widest text-[var(--muted)]">Signed-in email</p>
+          <p className="mt-2 break-all font-medium">{user.email ?? "Email not available"}</p>
+          <p className="mt-2 max-w-2xl text-xs leading-5 text-[var(--muted)]">
+            Your private attempt history is loaded under your authenticated user identity and database
+            row-level security.
+          </p>
+        </div>
+        <SignOutButton />
       </section>
       <section className="mt-8">
         <div className="flex items-end justify-between gap-4">
