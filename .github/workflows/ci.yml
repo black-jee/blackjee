@@ -45,7 +45,7 @@ jobs:
       - name: Show Prettier diff when formatting fails
         if: ${{ failure() && steps.format-check.outcome == 'failure' }}
         run: |
-          for file in docs/PROJECT_STATUS.md docs/SESSION_HANDOVER.md docs/TASKS.md docs/VERIFICATION_LOG.md supabase/reconstruction/README.md docs/LIVE_CATALOG_AUDIT_2026-10-25.md docs/MIGRATION_RECONCILIATION_2026-10-24.md docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md docs/MIGRATION_CHAIN_INVENTORY.md docs/MIGRATION_RECONCILIATION.md docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md supabase/migrations/README.md scripts/check-security-contracts.mjs tests/pyq-authoring-schema.test.ts tests/mock-test-action-auth.test.ts tests/real-supabase-auth.integration.test.ts; do
+          for file in app/admin/pyq/actions.ts components/admin/pyq-bulk-import.tsx docs/BULK_PYQ_PDF_EXTRACTION.md docs/PROJECT_STATUS.md docs/SESSION_HANDOVER.md docs/TASKS.md docs/VERIFICATION_LOG.md supabase/reconstruction/README.md docs/LIVE_CATALOG_AUDIT_2026-10-25.md docs/MIGRATION_RECONCILIATION_2026-10-24.md docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md docs/MIGRATION_CHAIN_INVENTORY.md docs/MIGRATION_RECONCILIATION.md docs/MIGRATION_REPO_ONLY_REVIEW_2026-10-26.md supabase/migrations/README.md scripts/check-security-contracts.mjs tests/pyq-authoring-schema.test.ts tests/mock-test-action-auth.test.ts tests/real-supabase-auth.integration.test.ts; do
             npx prettier "$file" | diff -u "$file" - || true
           done
       - name: Build application
