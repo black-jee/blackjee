@@ -1,13 +1,14 @@
-## Latest checkpoint — 2026-10-26 (CI #727 green; Vercel deployment rate-limited)
+## Latest checkpoint — 2026-10-26 (CI #728 passed; Vercel deployment rate-limited)
 
-- **Verified HEAD:** `4a72b5bedaa437fdbf051cf0b1ebee44efbdec78`; [CI #727 / 40249285684](https://github.com/black-jee/blackjee/actions/runs/40249285684) passed both `quality` and `reconstruction-replay` on this exact commit.
-- **Quality evidence:** production dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build passed. Disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, indexes, authoring integrity, and authorization-denial checks.
-- **Evidence boundary:** simulated PostgreSQL identity claims are not real Supabase-issued JWT/Auth tests. The real-auth plan remains PLANNED and requires a disposable isolated environment with synthetic users.
-- **Deployment:** current Vercel commit status fails with “Deployment rate limited — retry in 24 hours.” Do not buy an upgrade. Live runtime/browser smoke test remains unverified.
+- **Verified CI HEAD:** `0b31d5669886b8348509f330eaa7bd402352fcb6`; [CI #728 / 40249483825](https://github.com/black-jee/blackjee/actions/runs/40249483825) completed successfully with both `quality` and `reconstruction-replay` passed on this exact commit.
+- **Quality evidence:** dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build passed. Disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, indexes, authoring integrity, and authorization-denial checks.
+- **Evidence boundary:** simulated PostgreSQL identity claims are not real Supabase-issued JWT/Auth tests. The real-auth plan remains PLANNED and requires an isolated disposable environment with synthetic users.
+- **Deployment:** Vercel commit status reports “Deployment rate limited — retry in 24 hours.” Do not buy an upgrade. Live runtime/browser smoke test remains unverified.
 - **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies unresolved, six repository-only SQL files. Missing exact bodies: `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Five exact bodies were restored from `blackjee-foundation.zip`; the `20261024081110` file is not a substitute for `20261024081337`.
 - **PR #2:** open, draft, unmerged. No production schema/data/grant/migration-ledger changes, paid infrastructure, or fabricated JEE content.
-- **Remaining release gates:** signed-token Auth/student/admin tests, no-cost live runtime smoke test, six repository-only migration reconciliation, source/image/answer/solution QA, Storage implementation/design validation, and production-readiness/rollback review.
+- **Remaining release gates:** signed-token Auth/student/admin tests, no-cost live runtime smoke test, six repository-only migration reconciliation, source/image/answer/solution QA, Storage security validation, and production-readiness/rollback review.
 - **Dependency note:** one low-severity KaTeX prototype-pollution advisory remains; suggested remediation is breaking. No unreviewed dependency upgrade was made.
+- **This document-only checkpoint refresh creates a new commit; CI on that new HEAD must be checked separately before it is called green.**
 
 # BLACK-JEE task ledger
 
