@@ -148,7 +148,12 @@ export function PyqAuthoringForm() {
       }}
       className="space-y-5"
     >
-      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-raised)] p-4 sm:p-5">\n        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 1 · Paper setup</p>\n        <h3 className="mt-1 text-lg font-semibold">Exam, subject and numbering</h3>\n        <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Choose the correct PCM subject and use a stable source ID. Paper slot numbers should stay consistent from 001 to 075.</p>\n      </div>\n      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface-raised)] p-4 sm:p-5">
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">Step 1 · Paper setup</p>
+        <h3 className="mt-1 text-lg font-semibold">Exam, subject and numbering</h3>
+        <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Choose the correct PCM subject and use a stable source ID. Paper slot numbers should stay consistent from 001 to 075.</p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
         <label className={labelClass}>
           Question title
           <input
