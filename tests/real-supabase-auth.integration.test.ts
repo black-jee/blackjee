@@ -172,6 +172,54 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
     expect(result.data).toBeNull();
   });
 
+  it("allows the admin to save and clean up a synthetic non-live challenge", async () => {
+    let challengeId: string | null = null;
+
+    try {
+      const now = Date.now();
+      const result = await admin!.rpc("admin_save_daily_challenge", {
+        p_challenge_id: null,
+        p_challenge_date: new Date(now).toISOString().slice(0, 10),
+        p_title: "Synthetic Auth Integration Fixture",
+        p_subject: "Physics",
+        p_statement: "Synthetic-only integration test statement",
+        p_statement_image_path: null,
+        p_options: [
+          { label: "A", text: "Synthetic option A" },
+          { label: "B", text: "Synthetic option B" },
+        ],
+        p_starts_at: new Date(now + 60 * 60 * 1000).toISOString(),
+        p_ends_at: new Date(now + 2 * 60 * 60 * 1000).toISOString(),
+        p_solution_release_at: new Date(now + 3 * 60 * 60 * 1000).toISOString(),
+        p_correct_answer: "A",
+        p_solution: "Synthetic worked solution",
+        p_is_live: false,
+      });
+
+      expect(result.error).toBeNull();
+      expect(result.data).toBeTruthy();
+      challengeId = result.data;
+
+      const saved = await admin!.from("daily_challenges")
+        .select("id,title,is_live")
+        .eq("id", challengeId)
+        .single();
+      expect(saved.error).toBeNull();
+      expect(saved.data).toMatchObject({
+        id: challengeId,
+        title: "Synthetic Auth Integration Fixture",
+        is_live: false,
+      });
+    } finally {
+      if (challengeId) {
+        const cleanup = await admin!.from("daily_challenges")
+          .delete()
+          .eq("id", challengeId);
+        expect(cleanup.error).toBeNull();
+      }
+    }
+  });
+
   it("does not reveal an unreleased daily-challenge answer or solution", async () => {
     const result = await studentA!.rpc("get_daily_challenge_result", {
       p_challenge_id: env.unreleasedChallengeId!,
