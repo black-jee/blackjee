@@ -1,32 +1,34 @@
 # JEE Main 2026 — 4 April Shift 1 Import Readiness
 
-## Decision
+## Source rule
 
-**Do not publish or bulk-import this shift into the student-facing question bank yet.** The source archive contains a 75-slot workbench manifest, but the official source PDF is not included and the visual assets have not been verified against it or in the student UI.
+Use only this Zollege PDF for this task:
+https://static.zollege.in/public/image/JEE_Mains_2026_April_4_Shift_1_Question_paper_with_Solutions_30d076fa40189dad6ca3185f7ff72379.pdf
 
-## Inventory found in the supplied source archive
+Do not search for, use, or require another source. Preserve what Zollege prints and flag any ambiguity visible within the PDF itself rather than silently changing it.
 
-- Expected questions: 75 total — 25 Physics, 25 Chemistry, 25 Mathematics.
-- Workbench status: 47 marked `content_added`; 28 marked `needs_review`.
-- Visual assets: 19 image files mapped to 15 question IDs, including 4 answer-option images.
-- Complete question crops: 0.
-- Missing referenced asset files: 0.
-- Source-verified visual questions: 0.
-- Render-verified visual questions: 0.
-- Official source PDF supplied in the archive: no.
-- The manifest explicitly records unresolved content/key issues, including Physics Q38, Chemistry Q64 and Q72, and OCR corruption for Mathematics Q19. It also notes some mathematics solutions still need stronger derivations.
+## Limited task completed — 75 draft slots created
 
-These counts describe the source archive's own manifests; they are not independent proof that the answers or wording are correct.
+The live Supabase database now contains a dedicated set of 75 slot records for JEE Main 2026, 4 April Shift 1:
 
-## Required before import/publication
+- Physics: 25 slots (1 populated, 24 placeholders).
+- Chemistry: 25 placeholders.
+- Mathematics: 25 placeholders.
+- All 75 new records remain unpublished and in draft status.
+- Slots 2–75 contain placeholder text only, have no options or answer keys, and are marked `awaiting_source`.
+- Slot 1 is Physics Q1 from Zollege PDF page 2, with its four options. The answer key and worked solution are stored in the private answer-key table, not in the public question row.
+- Database read-back confirmed 75 new slots, 25 per subject, one populated question, 74 placeholders, and zero published records in this new slot set.
 
-1. Obtain the official source PDF and verify the exact paper/date/shift.
-2. Reconcile all 75 question statements, options, answer keys, and solutions against the source.
-3. Resolve every `needs_review` item and all explicit blockers; independently verify answer-key mappings.
-4. Match every image to its source question and option, then check image and math rendering on mobile and desktop.
-5. Import only as unpublished drafts with stable source IDs and source page references; keep answer keys in the private schema.
-6. Run database access tests as anonymous, ordinary authenticated, and administrator roles before approving any publication.
+Stable slot IDs use the prefix `BJ-JM-20260404-S1-SLOT-` followed by the three-digit slot number.
 
-## Current new-project state
+## Slot 1 source note
 
-The new Supabase project previously contained five PYQ draft records and five private answer-key records, with zero published PYQs. This readiness note does not import or publish additional records. Keep that state unchanged until the verification steps above are complete.
+Zollege's PDF lists option A, `542.6 × 10⁻⁶ J`, as the answer. Its worked calculation gives approximately `542.9 × 10⁻⁶ J`; the discrepancy is recorded in the private solution/review note for later review. The source-listed key was retained; no other source was consulted.
+
+## Existing records kept untouched
+
+Five older draft records for this same shift were already present before this limited task. They were left unchanged rather than overwriting or deleting their content. They are separate legacy records and are not part of the new 75-slot set; reconcile them only during a later cleanup if requested.
+
+## Scope boundary
+
+This task did not import the remaining 74 questions, add diagrams, publish content, modify migrations, or change UI code. Keep all records unpublished until their source content and any required visuals have been reviewed.
