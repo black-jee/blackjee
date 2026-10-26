@@ -63,35 +63,35 @@ begin
     (title, subject, statement, options, source_pdf, source_page)
   values
     ('Synthetic publish gate: no source', 'Physics', 'Synthetic test statement',
-     '[{"label":"A","text":"Synthetic option"}]'::jsonb, null, 1)
+     '[{"label":"A","text":"Synthetic option A"},{"label":"B","text":"Synthetic option B"}]'::jsonb, null, 1)
   returning id into q_no_source;
 
   insert into public.jee_pyq_questions
     (title, subject, statement, options, source_pdf, source_page)
   values
     ('Synthetic publish gate: no page', 'Physics', 'Synthetic test statement',
-     '[{"label":"A","text":"Synthetic option"}]'::jsonb, 'synthetic-source.pdf', null)
+     '[{"label":"A","text":"Synthetic option A"},{"label":"B","text":"Synthetic option B"}]'::jsonb, 'synthetic-source.pdf', null)
   returning id into q_no_page;
 
   insert into public.jee_pyq_questions
     (title, subject, statement, options, source_pdf, source_page)
   values
     ('Synthetic publish gate: no key', 'Physics', 'Synthetic test statement',
-     '[{"label":"A","text":"Synthetic option"}]'::jsonb, 'synthetic-source.pdf', 1)
+     '[{"label":"A","text":"Synthetic option A"},{"label":"B","text":"Synthetic option B"}]'::jsonb, 'synthetic-source.pdf', 1)
   returning id into q_no_key;
 
   insert into public.jee_pyq_questions
     (title, subject, statement, options, source_pdf, source_page)
   values
     ('Synthetic publish gate: no solution', 'Physics', 'Synthetic test statement',
-     '[{"label":"A","text":"Synthetic option"}]'::jsonb, 'synthetic-source.pdf', 1)
+     '[{"label":"A","text":"Synthetic option A"},{"label":"B","text":"Synthetic option B"}]'::jsonb, 'synthetic-source.pdf', 1)
   returning id into q_no_solution;
 
   insert into public.jee_pyq_questions
     (title, subject, statement, options, source_pdf, source_page)
   values
     ('Synthetic publish gate: bad answer label', 'Physics', 'Synthetic test statement',
-     '[{"label":"A","text":"Synthetic option"}]'::jsonb, 'synthetic-source.pdf', 1)
+     '[{"label":"A","text":"Synthetic option A"},{"label":"B","text":"Synthetic option B"}]'::jsonb, 'synthetic-source.pdf', 1)
   returning id into q_bad_answer;
 
   insert into private.jee_pyq_answer_keys(question_id, correct_answer, solution)
