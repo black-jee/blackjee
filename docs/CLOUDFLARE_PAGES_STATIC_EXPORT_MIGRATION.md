@@ -60,3 +60,16 @@ This is a Worker configuration/deployment failure, not a Next.js compilation fai
 3. Review why `WORKER_SELF_REFERENCE` is present. The standard OpenNext setup does not require adding it indiscriminately; retain it only if the selected features/cache configuration need it, and if retained its `service` must exactly match an existing Worker name. Do not change names by guesswork.
 4. Install `@opennextjs/cloudflare` and `wrangler` as project dev dependencies using npm, then commit `package.json` and the regenerated `package-lock.json` together. Do not rely on `npx` downloading undeclared packages during deployment.
 5. Preview locally and verify the deployed Worker, especially Supabase auth-cookie refresh through `proxy.ts`; OpenNext emitted an experimental Node.js middleware warning in this build.
+
+## Explicit Cloudflare Workers build configuration
+
+A committed `wrangler.jsonc` now defines the Worker name as `blackjee`, the OpenNext entrypoint and assets directory, `nodejs_compat`, the `IMAGES` binding, observability, and a self-reference service binding whose service name exactly matches `blackjee`. This directly addresses the mismatch shown in the deployment log (the generated binding targeted `black-jee`, while the Worker name was `blackjee`).
+
+The package scripts now include `worker:build`, `worker:preview`, and `worker:deploy`. Configure Cloudflare Workers Builds to run:
+
+- Build command: `npm run worker:build`
+- Deploy command: `npm run worker:deploy`
+
+Do not keep the old combination of `npm run build` followed by `npx wrangler deploy`: that builds only the ordinary Next.js output and bypasses the explicit OpenNext adapter workflow once a project-owned Wrangler configuration exists.
+
+The scripts currently invoke the adapter through `npx`, so the adapter and Wrangler are not yet pinned as project dev dependencies in `package.json` / `package-lock.json`. A follow-up hardening step is to add both using npm and commit the regenerated lockfile; until then, adapter versions are not reproducibly pinned. After configuration changes, rerun the Workers build and deployment, then verify the deployed URL and Supabase auth-cookie refresh. The local build log alone does not establish that deployment now succeeds.
