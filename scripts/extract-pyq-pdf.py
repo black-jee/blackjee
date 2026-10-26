@@ -71,18 +71,46 @@ def extract_text(pdf_path: Path) -> list[dict[str, Any]]:
     return pages
 
 
+def extract_embedded_answer_key(pages: list[dict[str, Any]]) -> dict[str, str]:
+    """Best-effort parser for a clearly labelled answer-key section in the same PDF."""
+    answers: dict[str, str] = {}
+    in_key = False
+    row_pattern = re.compile(
+        r"^\s*(?:Q(?:uestion)?\s*)?(\d{1,3})\s*[.)|:-]?\s+(?:option\s*)?([A-D1-4])\b",
+        re.IGNORECASE,
+    )
+    for page in pages:
+        for raw_line in page["text"].splitlines():
+            line = raw_line.strip()
+            if re.search(r"(?:answer\s*key|correct\s*options?|answer\s*sheet)", line, re.I):
+                in_key = True
+                continue
+            if not in_key:
+                continue
+            match = row_pattern.match(line)
+            if match:
+                number, answer = match.groups()
+                answers[number] = {"1": "A", "2": "B", "3": "C", "4": "D"}.get(answer.upper(), answer.upper())
+    return answers
+
+
 def split_questions(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     questions: list[dict[str, Any]] = []
     current: dict[str, Any] | None = None
+    in_answer_key = False
     for page in pages:
         for raw_line in page["text"].splitlines():
             line = raw_line.strip()
             if not line:
                 continue
-            # Avoid treating answer-key rows and common page counters as questions.
-            if re.search(r"answer\s*key|correct\s*option|solutions?\b", line, re.I):
+            if re.search(r"(?:answer\s*key|correct\s*options?|answer\s*sheet)", line, re.I):
+                in_answer_key = True
+                continue
+            if in_answer_key:
+                continue
+            if re.search(r"^solutions?\b", line, re.I):
                 if current is not None:
-                    current["reviewNotes"].append("Check whether answer-key/solution text entered this question.")
+                    current["reviewNotes"].append("Solution section detected; confirm question boundary.")
                 continue
             match = QUESTION_START.match(line)
             if match:
@@ -157,8 +185,9 @@ def main() -> int:
         parser.error(f"PDF not found: {args.pdf}")
 
     try:
-        answer_key = load_answer_key(args.answer_key)
         pages = extract_text(args.pdf)
+        answer_key = extract_embedded_answer_key(pages)
+        answer_key.update(load_answer_key(args.answer_key))
         questions = split_questions(pages)
     except (ValueError, OSError, RuntimeError, json.JSONDecodeError) as exc:
         print(f"Extraction failed: {exc}", file=sys.stderr)
@@ -191,6 +220,7 @@ def main() -> int:
         "metadata": {"exam": args.exam, "year": args.year, "shift": args.shift, "subject": args.subject},
         "extraction": {"pageCount": len(pages), "questionCount": len(questions), "engine": "PyMuPDF text layer"},
         "policy": {"solutions": "pending", "diagrams": "manual placeholder", "publish": False},
+        "answerKey": {"matchedCount": sum(bool(q.get("correctAnswer")) for q in questions), "source": "sidecar overrides embedded key when supplied"},
         "questions": questions,
     }
     args.out.write_text(json.dumps(bundle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
