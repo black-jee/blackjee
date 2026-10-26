@@ -82,7 +82,7 @@ export default function HomePage() {
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="/challenge"
-              className="rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-bold text-[var(--accent-foreground)] transition-opacity hover:opacity-90"
+              className="rounded-xl bg-[#6366f1] px-5 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-950/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#4f46e5] hover:shadow-indigo-900/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-300"
             >
               Open daily challenge <span aria-hidden="true">↗</span>
             </a>
