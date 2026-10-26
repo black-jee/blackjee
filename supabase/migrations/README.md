@@ -6,6 +6,14 @@ The target Supabase project has **20 applied migration versions** in its live le
 
 Five exact-version bodies were restored byte-for-byte from Library archive `blackjee-foundation.zip`: `20261024080824_foundation_schema.sql`, `20261024080924_tighten_rpc_grants_and_policy.sql`, `20261024081041_daily_solution_release_rpc.sql`, `20261024081603_secure_daily_attempt_sessions.sql`, and `20261024081731_restrict_anon_rpc_execution.sql`. Their Git blob IDs match the source archive exactly; see `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
 
+## Reconstruction candidate — 2026-10-26
+
+A **non-deployable, explicitly labelled candidate** was added at
+[`docs/reconstructions/20261024081337_numeric_answers_and_admin_review.candidate.sql`](../../docs/reconstructions/20261024081337_numeric_answers_and_admin_review.candidate.sql).
+It copies the SQL body from the archived near-match `20261024081110_numeric_answers_and_admin_review.sql`; it does **not** claim to be the missing `20261024081337` original. It is outside `supabase/migrations/`, so it is not part of the deployable migration chain.
+
+This is progress toward an isolated comparison, **not completion**: the candidate still needs replay in a disposable PostgreSQL database and a definition-level comparison of both answer-key constraints and the PYQ SELECT policy against the recorded live snapshot. Until those checks pass and the canonical sequence is reviewed, keep the applied body marked unresolved. Never run this candidate against production or use it to repair the migration ledger.
+
 ## Applied versions whose SQL bodies remain missing
 
 - `20261024081337_numeric_answers_and_admin_review` — archive has a similar-purpose `20261024081110_numeric_answers_and_admin_review.sql`, but the version differs; do not relabel it.
