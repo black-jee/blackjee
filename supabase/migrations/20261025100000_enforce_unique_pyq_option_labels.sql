@@ -7,8 +7,12 @@ SET search_path TO ''
 AS $function$
 BEGIN
   IF NEW.question_type = 'single_correct' THEN
-    IF jsonb_typeof(NEW.options) IS DISTINCT FROM 'array'
-       OR jsonb_array_length(NEW.options) < 2 THEN
+    IF jsonb_typeof(NEW.options) IS DISTINCT FROM 'array' THEN
+      RAISE EXCEPTION 'Single-correct questions need an options array'
+        USING ERRCODE = '22023';
+    END IF;
+
+    IF jsonb_array_length(NEW.options) < 2 THEN
       RAISE EXCEPTION 'Single-correct questions need at least two options'
         USING ERRCODE = '22023';
     END IF;

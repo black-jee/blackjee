@@ -9,6 +9,21 @@ BEGIN
     INSERT INTO public.jee_pyq_questions
       (source_id, title, statement, subject, question_type, options)
     VALUES
+      ('BJ-CI-NON-ARRAY-' || gen_random_uuid()::text, 'Synthetic validation fixture',
+       'Synthetic validation fixture only', 'Physics', 'single_correct',
+       '{"label":"A"}'::jsonb);
+    RAISE EXCEPTION 'Non-array options unexpectedly succeeded';
+  EXCEPTION WHEN SQLSTATE '22023' THEN
+    GET STACKED DIAGNOSTICS v_message = MESSAGE_TEXT;
+    IF v_message <> 'Single-correct questions need an options array' THEN
+      RAISE EXCEPTION 'Unexpected non-array options error: %', v_message;
+    END IF;
+  END;
+
+  BEGIN
+    INSERT INTO public.jee_pyq_questions
+      (source_id, title, statement, subject, question_type, options)
+    VALUES
       ('BJ-CI-DUPLICATE-' || gen_random_uuid()::text, 'Synthetic validation fixture',
        'Synthetic validation fixture only', 'Physics', 'single_correct',
        '[{"label":"A","text":"first"},{"label":"a","text":"duplicate"}]'::jsonb);
