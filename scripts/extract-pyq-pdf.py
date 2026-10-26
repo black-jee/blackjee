@@ -162,28 +162,57 @@ def split_questions(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
             for item in q["options"]
         ]
         page_info = next((p for p in pages if p["page"] == q["sourcePage"]), {})
-        visual_cue = bool(re.search(
-            r"\b(?:figure|diagram|graph|plot|shown below|shown above|given below|given above|"
-            r"following figure|circuit diagram|schematic|structure shown|reaction scheme|"
-            r"as shown|refer to the figure|curve shown)\b",
-            q["statement"], re.IGNORECASE,
-        ))
+        stem = q["statement"]
+        cues = [
+            ("match_the_following", r"\bmatch\s+(?:the\s+)?following\b|column\s*(?:i|1)\s*(?:and|&)\s*column\s*(?:ii|2)|list\s*[-–]?\s*i\b"),
+            ("chemical_reaction", r"\b(?:reaction|reacts? with|product[s]? formed|reagent|mechanism|reaction scheme|conversion of)\b|\b[A-Z][a-z]?\s*\+\s*[A-Z]"),
+            ("circular_diagram", r"\b(?:circular motion|circle|circular loop|circular ring|circular track|radius|centripetal|semicircle)\b"),
+            ("graph_or_plot", r"\b(?:graph|plot|curve|v[- ]?t graph|x[- ]?t graph|p[- ]?v graph|slope of the graph)\b"),
+            ("circuit_diagram", r"\b(?:circuit|resistor|capacitor|inductor|battery connected|electric network)\b"),
+            ("geometry_or_ray_diagram", r"\b(?:ray diagram|lens|mirror|triangle|angle of incidence|refraction|geometry|figure shown)\b"),
+            ("molecular_structure", r"\b(?:structure of|structural formula|molecular structure|organic compound|benzene ring)\b"),
+            ("table_or_matrix", r"\b(?:table|matrix|column\s*[i1]|column\s*[ii2]|row\s*[i1])\b"),
+            ("diagram_generic", r"\b(?:figure|diagram|shown below|shown above|given below|given above|schematic|as shown|refer to the figure|curve shown)\b"),
+        ]
+        visual_types = [name for name, pattern in cues if re.search(pattern, stem, re.IGNORECASE)]
         page_has_visuals = bool(page_info.get("image_count", 0) or page_info.get("drawing_count", 0))
-        q["diagramSignal"] = (
-            "likely" if visual_cue else "possible" if page_has_visuals else "not_detected"
-        )
-        q["diagramStatus"] = "needs_manual_check" if q["diagramSignal"] != "not_detected" else "not_confirmed"
+        if page_has_visuals and not visual_types:
+            visual_types.append("unknown_visual_on_source_page")
+        q["visualTypes"] = visual_types
+        q["diagramSignal"] = "likely" if visual_types and visual_types[0] != "unknown_visual_on_source_page" else "possible" if page_has_visuals else "not_detected"
+        q["diagramStatus"] = "needs_manual_check"
         q["pageImageCount"] = int(page_info.get("image_count", 0))
         q["pageDrawingCount"] = int(page_info.get("drawing_count", 0))
-        q["diagramPlaceholder"] = (
-            "[DIAGRAM / GRAPH / REACTION MAY BE REQUIRED — CHECK SOURCE PAGE]"
-            if q["diagramSignal"] != "not_detected"
-            else "[No diagram detected automatically — check source page]"
-        )
-        if q["diagramSignal"] == "not_detected":
-            q["reviewNotes"].append("No diagram signal detected; this is not proof that the question has no figure.")
-        else:
-            q["reviewNotes"].append("Possible visual detected by text/page heuristic; confirm whether it belongs to this question.")
+        q["visualSlots"] = {
+            "question": {
+                "types": visual_types,
+                "placeholder": "[QUESTION VISUAL SLOT — add/crop diagram, graph, circle, table, or reaction if required]",
+                "needsReview": True,
+            },
+            "options": [
+                {
+                    "label": option["label"],
+                    "types": (["option_visual"] if re.search(r"\b(?:figure|diagram|graph|plot|structure|reaction|circle|shown)\b", option["text"], re.IGNORECASE) else (["possible_option_visual"] if page_has_visuals and not option["text"].strip() else [])),
+                    "placeholder": "[OPTION VISUAL SLOT — add/crop image here if this option contains a visual]",
+                    "needsReview": True,
+                }
+                for option in q["options"]
+            ],
+            "matchTable": {
+                "required": "match_the_following" in visual_types,
+                "placeholder": "[MATCH-THE-FOLLOWING TABLE SLOT — preserve both columns and connector mapping]",
+            },
+            "reaction": {
+                "required": "chemical_reaction" in visual_types,
+                "placeholder": "[CHEMICAL REACTION / STRUCTURE SLOT — add manually]",
+            },
+            "circular": {
+                "required": "circular_diagram" in visual_types,
+                "placeholder": "[CIRCULAR / LOOP DIAGRAM SLOT — add manually]",
+            },
+        }
+        q["diagramPlaceholder"] = q["visualSlots"]["question"]["placeholder"]
+        q["reviewNotes"].append("Visual type and placement are heuristic hints only; check question and every option against the source PDF.")
         q["solution"] = ""
         q["solutionStatus"] = "pending"
         q["reviewStatus"] = "draft"
