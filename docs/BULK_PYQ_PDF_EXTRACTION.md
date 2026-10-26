@@ -43,6 +43,7 @@ Then add `--answer-key answer-key.csv`. JSON answer keys are also accepted as an
 ## Output contract
 
 Each extracted candidate includes:
+
 - exam, year, shift, subject, question number, title, source PDF and page;
 - statement and detected options (where recognizable);
 - correct-answer field, if a supplied answer-key file maps to that question number;
