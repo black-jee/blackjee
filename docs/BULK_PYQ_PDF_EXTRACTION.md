@@ -2,7 +2,16 @@
 
 The admin workbench now includes a browser-side PDF upload that extracts text from text-based PDFs and creates a reviewable JSON bundle. It is designed for fast question entry first: question statement, options, answer key, source page, and shift metadata. The browser extractor is heuristic and does not perform OCR, reliably reconstruct equations, crop diagrams, recreate reaction figures, generate explanations, or publish questions. The Python script below remains available for local extraction and richer page-level visual signals.
 
-## Requirements
+## Browser upload in BLACK-JEE
+
+1. Sign in with an administrator account and open `/admin/pyq`.
+2. Under **Bulk import**, choose a text-based PDF (maximum 40 MB), then set the year, subject, and session/shift.
+3. If available, enter the answer key before extraction using entries such as `1:A, 2:C, 3:12`. The parser matches answers by question number.
+4. Review the candidates against the source PDF. Download the JSON bundle if you want to inspect or correct it before importing.
+
+The browser loads PDF.js from cdnjs, so an internet connection is required. The PDF text is extracted in the browser; the original PDF is not sent to that CDN. Scanned/image-only PDFs need OCR, which is not included. The current authoring schema requires an answer key to save a question, so candidates without matched answers can be exported but cannot yet be saved as drafts.
+
+## Local Python extraction
 
 - Python 3.10+
 - PyMuPDF: `python -m pip install pymupdf`
