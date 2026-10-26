@@ -1,16 +1,11 @@
-import { expect, test } from "@playwright/test";
-
-test("home page explains the platform and its migration status", async ({ page }) => {
+test("home page presents the redesigned JEE practice entry points", async ({ page }) => {
   await page.goto("/");
-  await expect(
-    page.getByRole("heading", { name: /Every question is a chance to get sharper/i }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: /Built around how students practice/i }),
-  ).toBeVisible();
-  await expect(
-    page.getByText(/not a claim that the legacy workflows are already migrated/i),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Put in the work\. Know your edge\./i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Choose a subject\./i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Everything starts with practice\./i })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Start PYQ practice/i })).toHaveAttribute("href", "/pyq");
+  await expect(page.getByRole("link", { name: /Explore mock tests/i }).first()).toHaveAttribute("href", "/mock-tests");
+  await expect(page.getByRole("link", { name: /Daily challenge/i }).first()).toHaveAttribute("href", "/challenge");
 });
 
 test("sign-in renders without browser errors", async ({ page }) => {
