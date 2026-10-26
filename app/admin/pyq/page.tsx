@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PyqAuthoringForm } from "@/components/admin/pyq-authoring-form";
+import { PyqBulkImport } from "@/components/admin/pyq-bulk-import";
 import { PyqReviewActions } from "@/components/admin/pyq-review-actions";
 import { requireAdmin } from "@/lib/auth/require-admin";
 
@@ -66,6 +67,10 @@ export default async function AdminPyqPage() {
         <h2 className="mb-5 text-2xl font-semibold tracking-tight">Create question draft</h2>
         <PyqAuthoringForm />
       </section>
+
+      <div className="mt-8">
+        <PyqBulkImport />
+      </div>
 
       <section className="mt-10">
         <div className="flex flex-wrap items-end justify-between gap-3">
