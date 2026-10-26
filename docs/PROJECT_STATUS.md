@@ -1,22 +1,13 @@
-## Latest checkpoint — 2026-10-26 (CI #726 green; Vercel rate-limited)
+## Latest checkpoint — 2026-10-26 (CI #734 verified on parent SHA; documentation follow-ups pending CI)
 
-- **Verified commit:** `075b987af3043e3c77bf19e4e3328741b6ab1be8`; CI [#726 / 40249085507](https://github.com/black-jee/blackjee/actions/runs/40249085507) passed both `quality` and `reconstruction-replay` on this exact HEAD.
-- **Quality evidence:** production dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build passed. Disposable PostgreSQL replay passed schema/catalog, RLS, routine/ACL, grants, authoring-integrity, index, and authorization-denial checks. This is not real Supabase-issued JWT/Auth integration.
-- **Vercel:** current HEAD status is failing with “Deployment rate limited — retry in 24 hours.” Do not pay to bypass it. A prior SHA had a completed deployment status; live runtime/browser smoke test remains unverified.
-- **Migration recovery:** five exact-version SQL bodies were restored byte-for-byte from `blackjee-foundation.zip`; two applied bodies remain unresolved. Current inventory: 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two missing bodies, six repository-only files.
-- **Unresolved bodies:** `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute near-matches or invent SQL.
-- **PR #2:** open, draft, unmerged; its description cites CI #726 and current deployment status.
-- **Remaining:** real signed-token/authenticated student/admin journeys, no-cost runtime smoke test, six repository-only migration reconciliation, Storage access/asset work, JEE source/answer/solution/image QA, and rollback/readiness review.
-- **Safety:** no production schema/data/grant/migration-ledger changes, paid resources, or JEE question/answer import. Do not merge.
-
-## Reconstruction checkpoint — 2026-10-25 (CI run #670 green)
-
-- **Latest verified HEAD:** `a6e4608fac26f60786c9753cbf5947973aed8e77` (`docs: track checkpoint reconciliation commit`).
-- **CI:** [run #670](https://github.com/black-jee/blackjee/actions/runs/40218123225) completed successfully on current HEAD: both `quality` and `reconstruction-replay` passed. Run #666 also confirmed the actual formatter correction in `tests/mock-test-action-auth.test.ts`; formatting, production build, and disposable PostgreSQL replay are green.
-- **PR #2:** open, draft, unmerged. PR #2 verification description has been refreshed to cite run #668. The four project checkpoint records were reconciled together in commit `f2d9be30083b7d2b266b82050d8425e2c6ee7a23`; this documentation-only follow-up still needs its own CI result. Do not merge.
-- **Vercel:** a prior status showed a build-rate-limit/upgrade prompt. Deployment/runtime remains unverified; do not upgrade or incur charges.
-- **Unchanged release blockers:** seven applied migration SQL bodies remain unrecovered; six repository-only migration files remain unreconciled; real Supabase-issued JWT and authenticated student/admin journeys remain unverified; 70 question slots and 21 assets still require reconciliation/review; staging/runtime and rollback readiness remain incomplete.
-- **Safety:** no production schema/data/grant/migration-ledger change, publication, paid infrastructure, or deployment action was performed.
+- **Last fully verified SHA:** `a19c59e08b129d622e54c03eb52760d1333bcc0e`; [CI #734 / 40250654516](https://github.com/black-jee/blackjee/actions/runs/40250654516) passed `quality` and `reconstruction-replay` on that exact commit.
+- **Later documentation commits:** `9b31893e851180860b9e61537207783201dcb872` adds the 12-phase checklist to `docs/TASKS.md`; `ac012fc1d02f1897d5d81f2bac7476ecdd3129b1` reconciles `docs/SESSION_HANDOVER.md`. Matching CI for these newer documentation commits was not visible at the time of this update. Do not call the branch tip green until confirmed.
+- **CI #734 scope:** dependency audit, lint, TypeScript, unit tests, Playwright E2E, formatting, production build, and disposable PostgreSQL schema/RLS/RPC/grant/authoring-integrity/authorization-denial replay passed.
+- **Vercel:** current combined status reports a build-rate-limit/upgrade-page failure. No paid upgrade; live runtime/browser smoke test remains unverified.
+- **Migration inventory:** 20 applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, six repository-only files. Exact unresolved originals: `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Five bodies were restored byte-for-byte from the foundation archive. A repository search for both exact unresolved names returned no matches.
+- **Security evidence boundary:** replay uses disposable PostgreSQL and simulated identity claims, not genuine Supabase-issued signed JWTs. Real Auth/student/admin journeys remain unverified.
+- **PR #2:** open, draft, unmerged. Do not merge.
+- **Safety:** production Supabase remains read-only; no migration ledger repair/reset, fabricated SQL/JEE content, or paid infrastructure.
 
 # BLACK-JEE project status
 
