@@ -179,6 +179,38 @@ def split_questions(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if page_has_visuals and not visual_types:
             visual_types.append("unknown_visual_on_source_page")
         q["visualTypes"] = visual_types
+        # Preserve extracted notation verbatim; add PCM syntax hints without rewriting text.
+        notation_patterns = [
+            ("mathematical_symbols", r"[∑∏∫√∞≈≠≤≥∝∈∉⊂⊆∪∩∠⊥∥∴∵→⇒↔±×÷]"),
+            ("superscripts_or_powers", r"[⁰¹²³⁴⁵⁶⁷⁸⁹]|\b[A-Za-z0-9)]\s*\^\s*\{?[-+]?\d"),
+            ("subscripts_or_indices", r"[₀₁₂₃₄₅₆₇₈₉]|\b[A-Za-z]\s*_\s*\{?\w"),
+            ("fractions_or_ratios", r"\\frac\s*\{|\b\d+\s*/\s*\d+|\b(?:ratio|proportion)\b"),
+            ("calculus", r"[∫∂∇]|\b(?:integral|differentiat(?:e|ion)|d/dx|dy/dx|lim\b)"),
+            ("vectors_or_matrices", r"[⃗]|\b(?:vector|matrix|determinant|unit vector)\b"),
+            ("chemical_formula_or_ionic_notation", r"\b(?:[A-Z][a-z]?\d*\s*){2,}|[⁺⁻]|\b(?:mol|molarity|pH|oxidation state)\b"),
+            ("reaction_arrows_or_equilibrium", r"[⇌↔⟶⟹]|(?:->|<=>|=>)|\b(?:equilibrium|yields|catalyst)\b"),
+            ("units_or_physical_quantities", r"\b(?:m/s|km/h|eV|mol/L|Pa|tesla|weber|joule|newton|ampere)\b"),
+        ]
+        q["notationHints"] = [name for name, pattern in notation_patterns if re.search(pattern, stem, re.IGNORECASE)]
+        q["questionFormat"] = (
+            "match_the_following" if "match_the_following" in visual_types
+            else "assertion_reason" if re.search(r"assertion\s*[:\-]|reason\s*[:\-]|both assertion and reason", stem, re.IGNORECASE)
+            else "numerical_or_expression" if re.search(r"[=∑∫√]|\\frac|\\sqrt|\b(?:calculate|evaluate|find the value|numerical value)\b", stem, re.IGNORECASE)
+            else "mcq_or_other"
+        )
+        q["syntaxPreservation"] = {
+            "policy": "preserve_extracted_source_text_verbatim",
+            "reviewRequired": True,
+            "warning": "PDF text extraction may lose superscript/subscript positioning, equation alignment, or symbols; compare with source PDF.",
+        }
+        q["options"] = [
+            {
+                **option,
+                "notationHints": [name for name, pattern in notation_patterns if re.search(pattern, option["text"], re.IGNORECASE)],
+                "visualPlaceholder": "[OPTION VISUAL SLOT — check for diagram, graph, reaction, structure, or equation layout]",
+            }
+            for option in q["options"]
+        ]
         q["diagramSignal"] = "likely" if visual_types and visual_types[0] != "unknown_visual_on_source_page" else "possible" if page_has_visuals else "not_detected"
         q["diagramStatus"] = "needs_manual_check"
         q["pageImageCount"] = int(page_info.get("image_count", 0))
