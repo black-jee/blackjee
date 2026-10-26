@@ -1,21 +1,29 @@
 # JEE Main 2026 — 4 April Shift 1 Import Readiness
 
-## Approved sources
+## Approved sources — only these two
 
-Use only these two sources for this import:
-- Zollege PDF: https://static.zollege.in/public/image/JEE_Mains_2026_April_4_Shift_1_Question_paper_with_Solutions_30d076fa40189dad6ca3185f7ff72379.pdf
-- PracBee question bank: https://hive.pracbee.com/jee-main/papers/jee-main-2026-online-4th-april-morning-shift
+1. Zollege PDF: https://static.zollege.in/public/image/JEE_Mains_2026_April_4_Shift_1_Question_paper_with_Solutions_30d076fa40189dad6ca3185f7ff72379.pdf
+2. PracBee question bank: https://hive.pracbee.com/jee-main/papers/jee-main-2026-online-4th-april-morning-shift
 
-Do not seek or require checks against any other source. Compare question wording, options, answers, and solutions between these two. If either source is missing information or they disagree, mark it for review rather than guessing.
+Do not use, search for, or require any other source. Compare wording, options, answer keys, worked solutions, and visual assets between these two only. If content is missing or they disagree, flag it rather than guessing.
 
-## Existing staging inventory
+## Work started — source access and staging audit
 
-The archived staging ZIP contains 75 slots (25 per subject): 47 marked `content_added` and 28 marked `needs_review`. Chemistry Q64 has no answer recorded. There are 19 image files mapped to 15 question IDs, including four option images. Complete question crops, source-verified visual questions, and student-render-verified visual questions are all recorded as zero. Known review items include Physics Q38, Chemistry Q64 and Q72, Mathematics Q19, and several solution derivations.
+- Zollege PDF opens as a 97-page document and its extracted text explicitly says the paper contains 75 compulsory questions, 25 per subject.
+- PracBee currently fails to load in the available retrieval session (cache miss). Until it becomes accessible, no question can be marked as cross-checked against both approved sources.
+- The archived staging manifest contains 75 slots, with 47 marked `content_added` and 28 marked `needs_review`; these labels are not evidence of source fidelity.
+- A numbering/order discrepancy needs reconciliation: the archived Physics slot 1 contains a screw-gauge question mapped to paper question 26, while the Zollege PDF begins its Physics section with a soap-bubble question. Do not assume existing slot order or IDs map correctly; match each item by exact content across the two approved sources.
+- The archive records 19 image files mapped to 15 question IDs, four option-image files, zero complete question crops, zero source-verified visual questions, and zero student-render-verified visual questions. These assets must not be assumed to match the Zollege diagrams until checked.
+- Existing archive metadata contains references to sources outside the user's approved pair. Those references must not be used as evidence for this task; update or remove them during reconciliation.
 
-A `content_added` flag does not prove correctness. Reconcile every field against only the two approved sources. Preserve original subject/question numbering and stable internal IDs. Do not create placeholder images.
+## Required fast workflow
+
+1. Extract the Zollege question text/options/solutions in batches, preserving source page and original question number.
+2. Retry the same PracBee URL; match every question by content rather than relying on slot numbering.
+3. Reuse original diagram/image assets wherever possible. Verify each diagram-bearing question against the source and its student-facing render; do not redraw or fabricate an image and call it exact.
+4. Track each of the 75 slots as `verified_both_sources`, `needs_review`, or `source_unavailable`.
+5. Prepare a draft-only import and validate stable IDs, 25-per-subject counts, asset paths, and private answer/solution access.
 
 ## Import and release boundary
 
-Keep all imported records unpublished. Store answer keys and solutions in the private schema. Before import, run a dry-run to confirm stable IDs, expected counts, and no unintended updates. Keep disagreements and missing content flagged for review. Test anonymous, ordinary authenticated, and administrator access before any publication decision.
-
-The new Supabase project previously contained five PYQ draft records and five private answer-key records, with zero published PYQs. This document update does not change database rows, migrations, or publication state.
+Keep records unpublished. Keep answer keys and solutions private. Do not modify database rows, migrations, or publication state during source reconciliation. No question should be called verified until both approved sources and any required visual asset have been checked.
