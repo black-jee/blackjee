@@ -167,3 +167,13 @@ Status legend: [x] verified complete; [~] in progress or partially verified; [ ]
 - **Storage:** added `docs/STORAGE_ASSET_SECURITY_PLAN.md` with asset classes, private-bucket/policy design, upload validation, and the required denial/allow test matrix. This is a plan only; no production Storage configuration changed.
 - **Safety:** production Supabase remains read-only; no paid project/branch was created, no JEE content was fabricated, and PR #2 remains draft/unmerged.
 - **Next:** verify the newest CI run and fix reproducible failures; continue only after that with no-cost isolated replay and a disposable Auth/Storage environment.
+
+### Continued work on tasks 5–8 — 2026-10-26
+
+- Rechecked live Supabase migration history read-only: still 20 applied versions. The repository reconciliation remains 24 SQL files, 18 exact filename/version matches, two unresolved historical bodies, and six repository-only files.
+- Rechecked Storage catalog read-only: 0 buckets, 0 objects, 0 Storage policies. Aggregate PYQ inventory: 5 rows and zero statement-image, option-image, or asset-path references.
+- Re-ran Supabase advisors read-only: five informational private-table RLS/no-policy findings, 11 authenticated-callable SECURITY DEFINER warnings, one unindexed foreign key on private.mock_test_responses.question_id, and seven unused-index notices. No advisor finding was addressed with production DDL; private tables are intended to remain behind guarded RPCs.
+- Extended the opt-in real Auth harness to verify that denied cross-user resume/submit calls leave the victim's attempt state unchanged, and that a signed-in admin can create then clean up a synthetic non-live challenge. Added a hard guard that refuses to run against production project ref phdssyexhfyxsmhmmcgb.
+- The real Auth suite remains unexecuted: no isolated disposable Supabase Auth project and synthetic fixture IDs are available. CI #748 still records the first candidate-replay failure; later candidate corrections and test changes have no matching workflow result returned by the current workflow lookup.
+- **Current repository tip:** see PR #2 for the exact current head SHA. Do not treat any commit after CI #748 as verified until a matching CI run passes.
+- No production DDL/data/grant/ledger changes, Storage configuration, asset upload, paid infrastructure, or merge occurred. PR #2 remains draft/unmerged.
