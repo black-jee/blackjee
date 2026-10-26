@@ -34,7 +34,7 @@ function MathPreview({ text }: { text: string }) {
       {tokens.map((token, index) => {
         let math: string | null = null;
         let display = false;
-        if (token.startsWith("$") && token.endsWith("$")) {
+        if (token.startsWith("$$") && token.endsWith("$$")) {
           math = token.slice(2, -2);
           display = true;
         } else if (token.startsWith("\\[") && token.endsWith("\\]")) {
