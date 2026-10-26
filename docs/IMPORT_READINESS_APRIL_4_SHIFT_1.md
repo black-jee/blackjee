@@ -1,29 +1,34 @@
 # JEE Main 2026 — 4 April Shift 1 Import Readiness
 
-## Approved sources — only these two
+## Source rule
 
-1. Zollege PDF: https://static.zollege.in/public/image/JEE_Mains_2026_April_4_Shift_1_Question_paper_with_Solutions_30d076fa40189dad6ca3185f7ff72379.pdf
-2. PracBee question bank: https://hive.pracbee.com/jee-main/papers/jee-main-2026-online-4th-april-morning-shift
+Use only this Zollege PDF for this task:
+https://static.zollege.in/public/image/JEE_Mains_2026_April_4_Shift_1_Question_paper_with_Solutions_30d076fa40189dad6ca3185f7ff72379.pdf
 
-Do not use, search for, or require any other source. Compare wording, options, answer keys, worked solutions, and visual assets between these two only. If content is missing or they disagree, flag it rather than guessing.
+Do not search for, use, or require another source. Preserve what Zollege prints and flag any ambiguity visible within the PDF itself rather than silently changing it.
 
-## Work started — source access and staging audit
+## Limited task completed — 75 draft slots created
 
-- Zollege PDF opens as a 97-page document and its extracted text explicitly says the paper contains 75 compulsory questions, 25 per subject.
-- PracBee currently fails to load in the available retrieval session (cache miss). Until it becomes accessible, no question can be marked as cross-checked against both approved sources.
-- The archived staging manifest contains 75 slots, with 47 marked `content_added` and 28 marked `needs_review`; these labels are not evidence of source fidelity.
-- A numbering/order discrepancy needs reconciliation: the archived Physics slot 1 contains a screw-gauge question mapped to paper question 26, while the Zollege PDF begins its Physics section with a soap-bubble question. Do not assume existing slot order or IDs map correctly; match each item by exact content across the two approved sources.
-- The archive records 19 image files mapped to 15 question IDs, four option-image files, zero complete question crops, zero source-verified visual questions, and zero student-render-verified visual questions. These assets must not be assumed to match the Zollege diagrams until checked.
-- Existing archive metadata contains references to sources outside the user's approved pair. Those references must not be used as evidence for this task; update or remove them during reconciliation.
+The live Supabase database now contains a dedicated set of 75 slot records for JEE Main 2026, 4 April Shift 1:
 
-## Required fast workflow
+- Physics: 25 slots (1 populated, 24 placeholders).
+- Chemistry: 25 placeholders.
+- Mathematics: 25 placeholders.
+- All 75 new records remain unpublished and in draft status.
+- Slots 2–75 contain placeholder text only, have no options or answer keys, and are marked `awaiting_source`.
+- Slot 1 is Physics Q1 from Zollege PDF page 2, with its four options. The answer key and worked solution are stored in the private answer-key table, not in the public question row.
+- Database read-back confirmed 75 new slots, 25 per subject, one populated question, 74 placeholders, and zero published records in this new slot set.
 
-1. Extract the Zollege question text/options/solutions in batches, preserving source page and original question number.
-2. Retry the same PracBee URL; match every question by content rather than relying on slot numbering.
-3. Reuse original diagram/image assets wherever possible. Verify each diagram-bearing question against the source and its student-facing render; do not redraw or fabricate an image and call it exact.
-4. Track each of the 75 slots as `verified_both_sources`, `needs_review`, or `source_unavailable`.
-5. Prepare a draft-only import and validate stable IDs, 25-per-subject counts, asset paths, and private answer/solution access.
+Stable slot IDs use the prefix `BJ-JM-20260404-S1-SLOT-` followed by the three-digit slot number.
 
-## Import and release boundary
+## Slot 1 source note
 
-Keep records unpublished. Keep answer keys and solutions private. Do not modify database rows, migrations, or publication state during source reconciliation. No question should be called verified until both approved sources and any required visual asset have been checked.
+Zollege's PDF lists option A, `542.6 × 10⁻⁶ J`, as the answer. Its worked calculation gives approximately `542.9 × 10⁻⁶ J`; the discrepancy is recorded in the private solution/review note for later review. The source-listed key was retained; no other source was consulted.
+
+## Existing records kept untouched
+
+Five older draft records for this same shift were already present before this limited task. They were left unchanged rather than overwriting or deleting their content. They are separate legacy records and are not part of the new 75-slot set; reconcile them only during a later cleanup if requested.
+
+## Scope boundary
+
+This task did not import the remaining 74 questions, add diagrams, publish content, modify migrations, or change UI code. Keep all records unpublished until their source content and any required visuals have been reviewed.
