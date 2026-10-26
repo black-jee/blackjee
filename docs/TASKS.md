@@ -1,13 +1,13 @@
-## Latest checkpoint — 2026-10-26 (CI #711 green; release gate regression retained)
+## Latest checkpoint — 2026-10-26 (CI #727 green; Vercel deployment rate-limited)
 
-- **Verified test commit:** `0219fd7b293967d6a7d54d04fdf718df8b5e168f`; CI [#708 / 40246416154](https://github.com/black-jee/blackjee/actions/runs/40246416154) passed both `quality` and `reconstruction-replay`.
-- **New release-gate regression:** disposable replay proves the daily-challenge result omits `correct_answer` and `solution` before release, then exposes the expected synthetic values after release. The authorization suite completed successfully.
-- **Quality evidence:** continuity validation, static security contracts, dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build passed on run #708.
-- **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two unresolved applied bodies, and six repository-only SQL files.
-- **Remaining source recovery:** `20261024081337_numeric_answers_and_admin_review` (archive has only similar-purpose version `20261024081110`) and `20261024112132_require_pyq_source_page_before_publish`. Exact-version global commit searches returned no source hit; do not substitute the near-match.
-- **Security gap:** replay uses synthetic fixtures and simulated PostgreSQL JWT claims, not signed Supabase Auth tokens. Cross-user mock-test resume/submit/result and daily-challenge session-submission denials are covered; signed-token/authenticated-client integration and broader release-boundary runtime tests remain unverified.
-- **External check:** Vercel reports a platform build-rate-limit/upgrade failure. Do not create paid resources; this is separate from the green repository CI jobs.
-- **Safety:** no production schema/data/grant/ledger mutation or JEE content import. PR #2 remains draft and unmerged.
+- **Verified HEAD:** `4a72b5bedaa437fdbf051cf0b1ebee44efbdec78`; [CI #727 / 40249285684](https://github.com/black-jee/blackjee/actions/runs/40249285684) passed both `quality` and `reconstruction-replay` on this exact commit.
+- **Quality evidence:** production dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build passed. Disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, indexes, authoring integrity, and authorization-denial checks.
+- **Evidence boundary:** simulated PostgreSQL identity claims are not real Supabase-issued JWT/Auth tests. The real-auth plan remains PLANNED and requires a disposable isolated environment with synthetic users.
+- **Deployment:** current Vercel commit status fails with “Deployment rate limited — retry in 24 hours.” Do not buy an upgrade. Live runtime/browser smoke test remains unverified.
+- **Migration status:** 20 live applied versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies unresolved, six repository-only SQL files. Missing exact bodies: `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Five exact bodies were restored from `blackjee-foundation.zip`; the `20261024081110` file is not a substitute for `20261024081337`.
+- **PR #2:** open, draft, unmerged. No production schema/data/grant/migration-ledger changes, paid infrastructure, or fabricated JEE content.
+- **Remaining release gates:** signed-token Auth/student/admin tests, no-cost live runtime smoke test, six repository-only migration reconciliation, source/image/answer/solution QA, Storage implementation/design validation, and production-readiness/rollback review.
+- **Dependency note:** one low-severity KaTeX prototype-pollution advisory remains; suggested remediation is breaking. No unreviewed dependency upgrade was made.
 
 # BLACK-JEE task ledger
 
