@@ -1,12 +1,13 @@
-## Latest checkpoint — 2026-10-26 (CI #678 green; five migration bodies recovered)
+## Latest checkpoint — 2026-10-26 (CI #725 green; Vercel rate-limited)
 
-- **Verified commit:** `81e979207b39915b94c272780a9b1b810fb16380`; CI [#678 / 40243723958](https://github.com/black-jee/blackjee/actions/runs/40243723958) passed both `quality` and `reconstruction-replay`.
-- **Migration recovery:** five exact-version SQL bodies were restored from `blackjee-foundation.zip`; archived bytes and Git blob IDs match exactly. See `docs/MIGRATION_RECOVERY_SEARCH_2026-10-24.md`.
-- **Current inventory:** 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies still missing, and six repository-only files.
-- **Remaining unresolved bodies:** `20261024081337_numeric_answers_and_admin_review` (only similar-purpose `20261024081110` archive file found) and `20261024112132_require_pyq_source_page_before_publish`. Do not rename near-matches or invent SQL.
-- **Vercel:** GitHub status reports deployment completed; live runtime/browser smoke test remains unverified.
-- **PR #2:** open, draft, unmerged. Its verification section now cites run #678. Do not merge.
-- **Safety:** no production schema/data/grant/migration-ledger changes, paid resources, or JEE question/answer import.
+- **Verified commit:** `316fe58c007dea45f50cbaced57efd4111231f7e`; CI [#725 / 40248921846](https://github.com/black-jee/blackjee/actions/runs/40248921846) passed both `quality` and `reconstruction-replay` on this exact HEAD.
+- **Quality evidence:** production dependency audit, lint, typecheck, unit tests, Playwright E2E, Prettier, and production build passed. The disposable PostgreSQL replay passed schema/catalog, RLS, routine/ACL, grants, authoring-integrity, index, and authorization-denial checks. This is not real Supabase-issued JWT/Auth integration.
+- **Vercel:** current HEAD status is failing with “Deployment rate limited — retry in 24 hours.” Do not pay to bypass it. Previous SHA `d1d23a8` had a completed deployment status, but the current SHA does not; live runtime/browser smoke test remains unverified.
+- **Migration recovery:** five exact-version SQL bodies were restored byte-for-byte from `blackjee-foundation.zip`; two applied bodies remain unresolved. Current inventory: 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two missing bodies, six repository-only files.
+- **Unresolved bodies:** `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`. Do not substitute near-matches or invent SQL.
+- **PR #2:** open, draft, unmerged; its description cites CI #725 and current deployment status.
+- **Remaining:** real signed-token/authenticated student/admin journeys, no-cost runtime smoke test, six repository-only migration reconciliation, Storage access/asset work, JEE source/answer/solution/image QA, and rollback/readiness review.
+- **Safety:** no production schema/data/grant/migration-ledger changes, paid resources, or JEE question/answer import. Do not merge.
 
 ## Reconstruction checkpoint — 2026-10-25 (CI run #670 green)
 

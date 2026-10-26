@@ -1,3 +1,13 @@
+## 2026-10-26 — CI run #725 green on latest branch HEAD
+
+- **Commit tested:** `316fe58c007dea45f50cbaced57efd4111231f7e` (`docs: update verified CI and deployment checkpoint`).
+- **GitHub Actions:** [run 40248921846](https://github.com/black-jee/blackjee/actions/runs/40248921846) — **PASS**. Both `quality` and `reconstruction-replay` completed successfully on the same HEAD. Quality passed production dependency audit, lint, typecheck, unit tests, Playwright E2E, formatting, and production build.
+- **Security scope:** disposable PostgreSQL replay passed reconstructed schema/catalog, RLS, routine/security attributes, execute ACLs, grants, authoring integrity, indexes, and authorization-denial assertions. It does not prove real Supabase-issued JWT/Auth parity.
+- **Deployment:** GitHub commit status for this HEAD is failing with “Deployment rate limited — retry in 24 hours.” No paid upgrade was purchased. A previous SHA had a completed deployment status; current runtime/browser smoke test remains unverified.
+- **PR #2:** open, draft, unmerged. PR description updated to cite this run and the current Vercel status.
+- **Migration inventory:** 20 live versions, 24 repository SQL files, 18 exact filename/version matches, two applied bodies unresolved, six repository-only files. Remaining unresolved bodies are `20261024081337_numeric_answers_and_admin_review` and `20261024112132_require_pyq_source_page_before_publish`.
+- **Safety:** no production database/ledger changes, paid infrastructure, or question/answer content import.
+
 ## 2026-10-26 — CI run #678 green and PR verification refreshed
 
 - **Commit tested:** `81e979207b39915b94c272780a9b1b810fb16380`.
