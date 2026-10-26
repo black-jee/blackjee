@@ -48,3 +48,15 @@ Official references:
 - Confirm private tables and RPCs enforce authorization in Postgres/Supabase.
 - Do not claim success until the Worker build and critical browser journeys pass.
 - Vercel's reported deployment-quota failure is separate from Cloudflare Workers. The latest Cloudflare Pages failure also does not validate a Workers build; switch deployment configuration only after the selected Worker adapter builds and previews successfully.
+
+## Deployment log finding (2026-10-26)
+
+The Cloudflare Workers build log confirms that `npm run build` and the OpenNext adapter build both succeeded. OpenNext generated `.open-next/worker.js`, and Cloudflare accepted all 86 static assets. Deployment then failed with Wrangler error `10143`: the `WORKER_SELF_REFERENCE` service binding pointed to a Worker named `black-jee` that Cloudflare could not find, while the auto-detected Worker name was `blackjee`.
+
+This is a Worker configuration/deployment failure, not a Next.js compilation failure. Before retrying:
+
+1. Commit a project-owned `wrangler.jsonc` and `open-next.config.ts`; do not depend on the transient automatic migration in a Workers Builds job.
+2. Make the Wrangler `name` the canonical Worker name (`blackjee`) and set `main` to `.open-next/worker.js`, `assets.directory` to `.open-next/assets`, and `assets.binding` to `ASSETS`. Enable `nodejs_compat` and observability.
+3. Review why `WORKER_SELF_REFERENCE` is present. The standard OpenNext setup does not require adding it indiscriminately; retain it only if the selected features/cache configuration need it, and if retained its `service` must exactly match an existing Worker name. Do not change names by guesswork.
+4. Install `@opennextjs/cloudflare` and `wrangler` as project dev dependencies using npm, then commit `package.json` and the regenerated `package-lock.json` together. Do not rely on `npx` downloading undeclared packages during deployment.
+5. Preview locally and verify the deployed Worker, especially Supabase auth-cookie refresh through `proxy.ts`; OpenNext emitted an experimental Node.js middleware warning in this build.
