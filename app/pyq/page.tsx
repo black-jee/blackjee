@@ -23,23 +23,33 @@ export default async function PyqPage({ searchParams }: { searchParams: SearchPa
   if (search) retryParams.set("q", search);
   if (subject) retryParams.set("subject", subject);
   const retryHref = retryParams.size ? `/pyq?${retryParams.toString()}` : "/pyq";
-  const supabase = await createSupabaseServerClient();
+  let rows: Row[] = [];
+  let loadError: unknown = null;
 
-  let query = supabase
-    .from("jee_pyq_questions")
-    .select(
-      "id, source_id, title, exam, year, subject, chapter, difficulty, statement, statement_image_path, options, tags, asset_paths",
-    )
-    .eq("is_published", true)
-    .eq("review_status", "approved")
-    .order("year", { ascending: false })
-    .range(0, 19);
+  try {
+    const supabase = await createSupabaseServerClient();
 
-  if (subject) query = query.eq("subject", subject);
-  if (search) query = query.ilike("statement", `%${search}%`);
+    let query = supabase
+      .from("jee_pyq_questions")
+      .select(
+        "id, source_id, title, exam, year, subject, chapter, difficulty, statement, statement_image_path, options, tags, asset_paths",
+      )
+      .eq("is_published", true)
+      .eq("review_status", "approved")
+      .order("year", { ascending: false })
+      .range(0, 19);
 
-  const { data, error } = await query;
-  const rows = (data ?? []) as unknown as Row[];
+    if (subject) query = query.eq("subject", subject);
+    if (search) query = query.ilike("statement", `%${search}%`);
+
+    const { data, error } = await query;
+    if (error) throw error;
+    rows = (data ?? []) as unknown as Row[];
+  } catch {
+    // Preview deployments may not have Supabase environment variables or database access.
+    // Keep the page available and show the existing safe, user-facing retry state.
+    loadError = true;
+  }
 
   return (
     <main className="mx-auto min-h-screen max-w-6xl px-4 pb-16 pt-4 sm:px-8 sm:pt-7 lg:pt-10">
@@ -153,7 +163,7 @@ export default async function PyqPage({ searchParams }: { searchParams: SearchPa
         ) : null}
       </section>
 
-      {error ? (
+      {loadError ? (
         <section
           role="alert"
           className="mt-7 rounded-2xl border border-red-400/30 bg-red-400/[0.07] p-5 sm:p-6"
@@ -212,7 +222,7 @@ export default async function PyqPage({ searchParams }: { searchParams: SearchPa
           ) : (
             <PyqQuestionList rows={rows} />
           )}
-          {!error && rows.length === 20 ? (
+          {!loadError && rows.length === 20 ? (
             <p className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-center text-xs leading-5 text-[var(--muted)]">
               You’re viewing the first 20 matching questions. More results can be added when
               pagination is implemented.
