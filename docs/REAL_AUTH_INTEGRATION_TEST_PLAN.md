@@ -51,7 +51,6 @@
 
 The read-only review of `get_daily_challenge_result` indicates that any authenticated caller who knows a challenge ID may receive its answer/solution after `solution_release_at`, without proving prior participation. This could be intentional post-release learning behavior. Do not change it until the product rule is confirmed; keep REL-03 as an explicit decision.
 
-
 ## Repository test harness added — 2026-10-26
 
 The optional Vitest suite `tests/real-supabase-auth.integration.test.ts` now signs in three pre-provisioned synthetic users through the official Supabase client and checks anonymous RPC denial, student-to-student mock-attempt isolation, ordinary-student admin denial, pre-release solution withholding, and direct private-schema denial. It is automatically skipped unless every variable below is configured. A skipped test is not a pass.
