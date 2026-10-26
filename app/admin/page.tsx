@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { DailyChallengeForm } from "@/components/admin/daily-challenge-form";
 import { requireAdmin } from "@/lib/auth/require-admin";
