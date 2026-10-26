@@ -73,3 +73,8 @@ The package scripts now include `worker:build`, `worker:preview`, and `worker:de
 Do not keep the old combination of `npm run build` followed by `npx wrangler deploy`: that builds only the ordinary Next.js output and bypasses the explicit OpenNext adapter workflow once a project-owned Wrangler configuration exists.
 
 The scripts currently invoke the adapter through `npx`, so the adapter and Wrangler are not yet pinned as project dev dependencies in `package.json` / `package-lock.json`. A follow-up hardening step is to add both using npm and commit the regenerated lockfile; until then, adapter versions are not reproducibly pinned. After configuration changes, rerun the Workers build and deployment, then verify the deployed URL and Supabase auth-cookie refresh. The local build log alone does not establish that deployment now succeeds.
+
+
+### Dependency and CI limitation
+
+The adapter configuration file `open-next.config.ts` is intentionally not committed yet: it imports `@opennextjs/cloudflare`, which is absent from the committed dependency tree, and a clean `npm ci` would not resolve that import. The Worker scripts currently use `npx --yes` to fetch the CLI at runtime. This is a transitional, unpinned setup, not a reproducible production build. Before treating the migration as complete, install `@opennextjs/cloudflare` and `wrangler` as dev dependencies using npm, commit the matching regenerated `package-lock.json`, restore a typed OpenNext config if needed, and require CI to run the Worker build. The current GitHub Actions CI run is pending; no result is inferred from its pending state.
