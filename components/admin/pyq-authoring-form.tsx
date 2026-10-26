@@ -26,7 +26,7 @@ const inputClass =
   "w-full rounded-xl border border-[var(--border)] bg-black/20 px-3 py-2.5 text-sm";
 const labelClass = "block min-w-0 space-y-1.5 text-sm font-medium";
 
-function MathPreview({ text }: { text: string }) {
+export function MathPreview({ text }: { text: string }) {
   const tokens = text.split(/(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\$[^$\n]+\$|\\\([\s\S]+?\\\))/g);
   if (!text.trim()) return <span className="text-sm text-[var(--muted)]">Your formatted preview will appear here.</span>;
   return (
@@ -287,7 +287,7 @@ export function PyqAuthoringForm() {
       <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5">
         <div className="mb-4">
           <h3 className="text-base font-semibold">Answer options</h3>
-          <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Enter one option per line using Label|option text|optional image path. Example: A|12 N|. The preview below separates each choice for easy checking.</p>
+          <p className="mt-1 text-sm leading-5 text-[var(--muted)]">Fill each option in its own labelled card below. Use the same maths delimiters as the question; each option has its own formatted preview.</p>
         </div>
         <div className="space-y-3">
           {parseOptions(optionsText).map((option, index) => (
@@ -300,7 +300,7 @@ export function PyqAuthoringForm() {
                 <label className={labelClass}>Option label<input value={option.label} onChange={(event) => updateOptionLine(index, "label", event.target.value)} maxLength={4} className={inputClass} placeholder="A" /></label>
                 <label className={labelClass}>Option image path <span className="font-normal text-[var(--muted)]">Optional</span><input value={option.imagePath ?? ""} onChange={(event) => updateOptionLine(index, "imagePath", event.target.value)} maxLength={500} className={inputClass} placeholder="assets/questions/q1-option-a.png" /></label>
               </div>
-              <label className={labelClass + " mt-3"}>Option text<textarea value={option.text} onChange={(event) => updateOptionLine(index, "text", event.target.value)} rows={2} className={inputClass + " leading-6"} placeholder={"Enter the full text for option " + option.label} /></label>
+              <label className={labelClass + " mt-3"}>Option text<textarea value={option.text} onChange={(event) => updateOptionLine(index, "text", event.target.value)} rows={2} maxLength={4000} className={inputClass + " leading-6"} placeholder={"Enter the full text for option " + option.label} /></label>
             </div>
           ))}
           <div className="flex flex-wrap gap-2">
