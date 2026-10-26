@@ -1,7 +1,7 @@
 # Storage and asset security plan
 
 **Status:** DESIGN ONLY — no bucket or Storage policy has been created.
-**Environment:** Production Supabase project `phdssyexhfyxsmhmmcgb` was inspected read-only. The last recorded catalog inventory found zero application rows in `storage.buckets` and no application Storage policies. Recheck before provisioning.
+**Environment:** Production Supabase project `phdssyexhfyxsmhmmcgb` was inspected read-only. A fresh read-only SQL query on 2026-10-26 returned **0 rows in `storage.buckets`, 0 rows in `storage.objects`, and 0 policies in schema `storage`** (the same query found 10 application policies in `public`/`private`). Recheck before provisioning.
 **Rule:** Do not use production to test uploads, do not store source PDFs/answer keys in a public bucket, and do not invent or upload unverified JEE assets.
 
 ## Asset classes and intended access
