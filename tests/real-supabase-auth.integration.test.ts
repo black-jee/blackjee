@@ -39,10 +39,10 @@ function makeClient(): SupabaseClient {
 }
 
 describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => {
-  let anonymous: SupabaseClient;
-  let studentA: SupabaseClient;
-  let studentB: SupabaseClient;
-  let admin: SupabaseClient;
+  let anonymous: SupabaseClient | undefined;
+  let studentA: SupabaseClient | undefined;
+  let studentB: SupabaseClient | undefined;
+  let admin: SupabaseClient | undefined;
 
   beforeAll(async () => {
     anonymous = makeClient();
@@ -70,7 +70,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
       expect(result.data.session?.access_token).toBeTruthy();
     }
 
-    const adminUser = await admin.auth.getUser();
+    const adminUser = await admin!.auth.getUser();
     expect(adminUser.error).toBeNull();
     expect(adminUser.data.user?.app_metadata?.role).toBe("admin");
   });
@@ -98,7 +98,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("prevents student A from resuming student B's in-progress attempt", async () => {
-    const result = await studentA.rpc("resume_mock_test", {
+    const result = await studentA!.rpc("resume_mock_test", {
       p_attempt_id: env.bInProgressAttemptId!,
     });
 
@@ -158,7 +158,7 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("does not grant direct browser access to the private answer-key schema", async () => {
-    const result = await studentA
+    const result = await studentA!
       .schema("private")
       .from("jee_pyq_answer_keys")
       .select("correct_answer")
