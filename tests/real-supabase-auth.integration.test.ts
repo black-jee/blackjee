@@ -98,22 +98,48 @@ describe.skipIf(!enabled)("real Supabase Auth authorization integration", () => 
   });
 
   it("prevents student A from resuming student B's in-progress attempt", async () => {
+    const before = await studentB!.from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(before.error).toBeNull();
+
     const result = await studentA!.rpc("resume_mock_test", {
       p_attempt_id: env.bInProgressAttemptId!,
     });
 
     expect(result.error).not.toBeNull();
     expect(result.data).toBeNull();
+
+    const after = await studentB!.from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(after.error).toBeNull();
+    expect(after.data).toEqual(before.data);
   });
 
   it("prevents student A from submitting to student B's attempt", async () => {
-    const result = await studentA.rpc("submit_mock_test", {
+    const before = await studentB!.from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(before.error).toBeNull();
+
+    const result = await studentA!.rpc("submit_mock_test", {
       p_attempt_id: env.bInProgressAttemptId!,
       p_answers: [],
     });
 
     expect(result.error).not.toBeNull();
     expect(result.data).toBeNull();
+
+    const after = await studentB!.from("mock_test_attempts")
+      .select("id,status,submitted_at,score,attempted_count")
+      .eq("id", env.bInProgressAttemptId!)
+      .single();
+    expect(after.error).toBeNull();
+    expect(after.data).toEqual(before.data);
   });
 
   it("prevents student A from reading student B's submitted result", async () => {
